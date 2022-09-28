@@ -1,0 +1,8 @@
+{
+  "name": "BuddyNUS",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react",
+  "id": "e24cfa6f"
+}
