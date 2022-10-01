@@ -84,5 +84,19 @@
       "last 1 safari version"
     ]
   },
-  "description": "An Ionic project"
+  "description": "BuddyNUS application",
+  "lint-staged": {
+    "*.ts": [
+      "eslint --fix"
+    ],
+    "*.tsx": [
+      "eslint --fix"
+    ],
+    "**/*": [
+      "prettier --write --ignore-unknown"
+    ],
+    "*.css": [
+      "stylelint --fix --allow-empty-input"
+    ]
+  }
 }
