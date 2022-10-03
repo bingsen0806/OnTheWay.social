@@ -1,0 +1,33 @@
+/* Ionic Variables and Theming. For more info, please see:
+http://ionicframework.com/docs/theming/ */
+
+/** Ionic CSS Variables **/
+:root {
+  --ion-color-primary: #ff735c;
+  --ion-color-primary-rgb: 255, 115, 92;
+  --ion-color-primary-contrast: #000000;
+  --ion-color-primary-contrast-rgb: 0, 0, 0;
+  --ion-color-primary-shade: #e06551;
+  --ion-color-primary-tint: #ff816c;
+
+  --ion-color-success: #4bb543;
+  --ion-color-success-rgb: 75, 181, 67;
+  --ion-color-success-contrast: #000000;
+  --ion-color-success-contrast-rgb: 0, 0, 0;
+  --ion-color-success-shade: #429f3b;
+  --ion-color-success-tint: #5dbc56;
+
+  --ion-color-warning: #fab732;
+  --ion-color-warning-rgb: 250, 183, 50;
+  --ion-color-warning-contrast: #000000;
+  --ion-color-warning-contrast-rgb: 0, 0, 0;
+  --ion-color-warning-shade: #dca12c;
+  --ion-color-warning-tint: #fbbe47;
+
+  --ion-color-danger: #de4a4a;
+  --ion-color-danger-rgb: 222, 74, 74;
+  --ion-color-danger-contrast: #ffffff;
+  --ion-color-danger-contrast-rgb: 255, 255, 255;
+  --ion-color-danger-shade: #c34141;
+  --ion-color-danger-tint: #e15c5c;
+}
