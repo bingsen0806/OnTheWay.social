@@ -35,45 +35,48 @@ import '@ionic/react/css/display.css';
 import './theme/variables.scss';
 import styles from './styles.module.scss';
 
-import { HOME, POSTS, PROFILE } from './routes';
+import { HOME, LOGIN, POSTS, PROFILE } from './routes';
+import { AuthProvider } from './util/authentication';
+import AuthenticatedRoute from './util/authentication/AuthenticatedRoute';
+import UnauthenticatedRoute from './util/authentication/UnauthenticatedRoute';
+import LoginPage from './pages/authentication/LoginPage';
 
 setupIonicReact();
 
-const App: React.FC = () => (
-  <IonApp>
-    <IonReactRouter>
-      <IonTabs>
-        <IonRouterOutlet>
-          <Route exact path={HOME}>
-            <Home />
-          </Route>
-          <Route exact path={POSTS}>
-            <Posts />
-          </Route>
-          <Route path={PROFILE}>
-            <Profile />
-          </Route>
-          <Route exact path="/">
-            <Redirect to={HOME} />
-          </Route>
-        </IonRouterOutlet>
-        <IonTabBar slot="bottom">
-          <IonTabButton tab="home" href={HOME}>
-            <IonIcon icon={home} />
-            <IonLabel className={styles['tab-button-text']}>Home</IonLabel>
-          </IonTabButton>
-          <IonTabButton tab="posts" href={POSTS}>
-            <IonIcon icon={search} />
-            <IonLabel className={styles['tab-button-text']}>Posts</IonLabel>
-          </IonTabButton>
-          <IonTabButton tab="profile" href={PROFILE}>
-            <IonIcon icon={person} />
-            <IonLabel className={styles['tab-button-text']}>Profile</IonLabel>
-          </IonTabButton>
-        </IonTabBar>
-      </IonTabs>
-    </IonReactRouter>
-  </IonApp>
-);
-
-export default App;
+export default function App() {
+  return (
+    <AuthProvider>
+      <IonApp>
+        <IonReactRouter>
+          <IonTabs>
+            <IonRouterOutlet>
+              <UnauthenticatedRoute exact path={LOGIN} component={LoginPage} />
+              <AuthenticatedRoute exact path={HOME} component={Home} />
+              <AuthenticatedRoute exact path={POSTS} component={Posts} />
+              <AuthenticatedRoute path={PROFILE} component={Profile} />
+              <Route exact path="/">
+                <Redirect to={HOME} />
+              </Route>
+            </IonRouterOutlet>
+            <IonTabBar slot="bottom">
+              <IonTabButton tab="home" href={HOME}>
+                <IonIcon icon={home} />
+                <IonLabel className={styles['tab-button-text']}>Home</IonLabel>
+              </IonTabButton>
+              <IonTabButton tab="posts" href={POSTS}>
+                <IonIcon icon={search} />
+                <IonLabel className={styles['tab-button-text']}>Posts</IonLabel>
+              </IonTabButton>
+              <IonTabButton tab="profile" href={PROFILE}>
+                <IonIcon icon={person} />
+                <IonLabel className={styles['tab-button-text']}>
+                  Profile
+                </IonLabel>
+              </IonTabButton>
+            </IonTabBar>
+          </IonTabs>
+        </IonReactRouter>
+      </IonApp>
+    </AuthProvider>
+  );
+}

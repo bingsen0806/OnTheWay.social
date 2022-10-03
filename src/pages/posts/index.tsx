@@ -5,10 +5,11 @@ import {
   IonTitle,
   IonToolbar,
 } from '@ionic/react';
-import ExploreContainer from '../../components/ExploreContainer';
+import useAuth from '../../util/hooks/useAuth';
 import styles from './styles.module.scss';
 
-const Tab2: React.FC = () => {
+export default function PostsPage() {
+  useAuth();
   return (
     <IonPage>
       <IonHeader>
@@ -22,10 +23,7 @@ const Tab2: React.FC = () => {
             <IonTitle size="large">Posts</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <ExploreContainer name="Tab 2 page" />
       </IonContent>
     </IonPage>
   );
-};
-
-export default Tab2;
+}
