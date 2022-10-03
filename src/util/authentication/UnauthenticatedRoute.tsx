@@ -1,18 +1,18 @@
 import { Redirect, Route } from 'react-router-dom';
 import { useAuthState } from '.';
-import { LOGIN } from '../../routes';
+import { HOME } from '../../routes';
 
-interface AuthenticatedRouteProps {
+interface UnauthenticatedRouteProps {
   exact?: boolean;
   path: string;
   component: React.ComponentType<any>;
 }
 
-export default function AuthenticatedRoute({
+export default function UnauthenticatedRoute({
   exact,
   path,
   component,
-}: AuthenticatedRouteProps) {
+}: UnauthenticatedRouteProps) {
   const { isAuthenticated } = useAuthState();
   return (
     <Route
@@ -25,7 +25,7 @@ export default function AuthenticatedRoute({
           return (
             <Redirect
               to={{
-                pathname: LOGIN,
+                pathname: HOME,
                 state: { from: props.location },
               }}
             />

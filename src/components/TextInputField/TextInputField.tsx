@@ -30,11 +30,11 @@ export default function TextInputField({
     <IonItem lines="none" className={styles['input-container']}>
       {errorMessage ? (
         <IonLabel color="danger" position="stacked">
-          <h2>{errorMessage}</h2>
+          <h6>{errorMessage}</h6>
         </IonLabel>
       ) : (
         <IonLabel color="default " position="floating">
-          <h2>{label}</h2>
+          <h6>{label}</h6>
         </IonLabel>
       )}
 
