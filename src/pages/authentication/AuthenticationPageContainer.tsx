@@ -17,7 +17,7 @@ export default function AuthenticationPageContainer({
       <IonContent>
         <IonGrid fixed className="ion-no-padding">
           <IonRow className="ion-justify-content-center ion-no-padding">
-            <IonCol size-lg="10" className="ion-no-padding">
+            <IonCol size-lg="8" className="ion-no-padding">
               <img
                 className={styles['header']}
                 src="assets/images/login_background.jpg"
@@ -26,7 +26,7 @@ export default function AuthenticationPageContainer({
             </IonCol>
           </IonRow>
           <IonRow className="ion-justify-content-center ion-no-padding">
-            <IonCol size-lg="10" className="ion-no-padding">
+            <IonCol size-lg="8" className="ion-no-padding">
               {children}
             </IonCol>
           </IonRow>

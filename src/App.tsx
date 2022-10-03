@@ -35,11 +35,12 @@ import '@ionic/react/css/display.css';
 import './theme/variables.scss';
 import styles from './styles.module.scss';
 
-import { HOME, LOGIN, POSTS, PROFILE } from './routes';
+import { HOME, LOGIN, POSTS, PROFILE, REGISTER } from './routes';
 import { AuthProvider } from './util/authentication';
 import AuthenticatedRoute from './util/authentication/AuthenticatedRoute';
 import UnauthenticatedRoute from './util/authentication/UnauthenticatedRoute';
 import LoginPage from './pages/authentication/LoginPage';
+import RegisterPage from './pages/authentication/RegisterPage';
 
 setupIonicReact();
 
@@ -51,6 +52,11 @@ export default function App() {
           <IonTabs>
             <IonRouterOutlet>
               <UnauthenticatedRoute exact path={LOGIN} component={LoginPage} />
+              <UnauthenticatedRoute
+                exact
+                path={REGISTER}
+                component={RegisterPage}
+              />
               <AuthenticatedRoute exact path={HOME} component={Home} />
               <AuthenticatedRoute exact path={POSTS} component={Posts} />
               <AuthenticatedRoute path={PROFILE} component={Profile} />

@@ -1,10 +1,8 @@
-import { IonButton, IonCol, IonRow } from '@ionic/react';
+import { IonButton, IonCol, IonLoading, IonRow } from '@ionic/react';
 import { useState } from 'react';
-import { useHistory } from 'react-router';
-import { REGISTER } from 'redux-persist';
 import { login, LoginDetails } from '../../api/authentication';
 import TextInputField from '../../components/TextInputField/TextInputField';
-import { HOME } from '../../routes';
+import { HOME, REGISTER } from '../../routes';
 import AuthenticationPageContainer from './AuthenticationPageContainer';
 import { isValidNUSEmail } from './constants';
 import styles from './styles.module.scss';
@@ -19,7 +17,7 @@ interface LoginErrorMessages {
  * TODO: forgot password functionality after MVP.
  */
 export default function LoginPage() {
-  const history = useHistory();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [loginDetails, setLoginDetails] = useState<LoginDetails>({
     email: '',
     password: '',
@@ -36,7 +34,7 @@ export default function LoginPage() {
       password: '',
     };
     if (!loginDetails.email) {
-      newErrorMessages.email = 'Email cannot be left blank.';
+      newErrorMessages.email = 'Please enter your NUS email.';
       haveError = true;
     } else if (!isValidNUSEmail(loginDetails.email)) {
       newErrorMessages.email = 'Email must be a NUS email.';
@@ -44,7 +42,7 @@ export default function LoginPage() {
     }
 
     if (!loginDetails.password) {
-      newErrorMessages.password = 'Password cannot be left blank.';
+      newErrorMessages.password = 'Please enter your password.';
       haveError = true;
     }
 
@@ -58,22 +56,25 @@ export default function LoginPage() {
       return;
     }
 
+    setIsLoading(true);
+
     try {
       await login(loginDetails);
-      history.replace(HOME);
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   }
 
   return (
     <AuthenticationPageContainer>
-      <IonRow className="ion-justify-content-center ion-padding-vertical">
+      <IonRow className="ion-justify-content-center ion-padding-bottom">
         <IonCol>
           <h1 className={styles['page-header-text']}>Login</h1>
         </IonCol>
       </IonRow>
-      <IonRow className="ion-padding-vertical ion-justify-content-center">
+      <IonRow className="ion-padding-bottom ion-justify-content-center">
         <IonCol size="10" className={styles['input-field-col']}>
           <TextInputField
             label="Email"
@@ -86,7 +87,7 @@ export default function LoginPage() {
           />
         </IonCol>
       </IonRow>
-      <IonRow className="ion-padding-vertical ion-justify-content-center">
+      <IonRow className="ion-padding-bottom ion-justify-content-center">
         <IonCol size="10">
           <TextInputField
             label="Password"
@@ -100,9 +101,9 @@ export default function LoginPage() {
           />
         </IonCol>
       </IonRow>
-      <IonRow className="ion-padding-vertical ion-justify-content-center">
+      <IonRow className="ion-padding-bottom ion-justify-content-center">
         <IonCol size="10">
-          <IonButton onClick={submitLogin} expand="block" color="warning">
+          <IonButton onClick={submitLogin} expand="block">
             Login
           </IonButton>
         </IonCol>
@@ -117,6 +118,7 @@ export default function LoginPage() {
           </p>
         </IonCol>
       </IonRow>
+      <IonLoading isOpen={isLoading}></IonLoading>
     </AuthenticationPageContainer>
   );
 }

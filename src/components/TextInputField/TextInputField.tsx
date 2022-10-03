@@ -27,19 +27,18 @@ export default function TextInputField({
   type,
 }: TextInputFieldProps) {
   return (
-    <IonItem lines="none" className={styles['input-container']}>
-      {errorMessage ? (
-        <IonLabel color="danger" position="stacked">
-          <h6>{errorMessage}</h6>
-        </IonLabel>
-      ) : (
-        <IonLabel color="default " position="floating">
-          <h6>{label}</h6>
+    <div className={styles['input-container']}>
+      {label && (
+        <IonLabel
+          style={{ visibility: value ? 'visible' : 'hidden' }}
+          className={styles['input-floating-label']}
+        >
+          {label}
         </IonLabel>
       )}
-
       {!multiline ? (
         <IonInput
+          className="ion-no-padding"
           value={value}
           placeholder={placeholder}
           debounce={debounce ? debounce : 0}
@@ -59,6 +58,11 @@ export default function TextInputField({
           autoGrow={true}
         />
       )}
-    </IonItem>
+      {errorMessage && (
+        <IonLabel className={styles['input-floating-label']} color="danger">
+          {errorMessage}
+        </IonLabel>
+      )}
+    </div>
   );
 }
