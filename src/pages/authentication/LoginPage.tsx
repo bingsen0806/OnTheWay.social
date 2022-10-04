@@ -68,12 +68,7 @@ export default function LoginPage() {
   }
 
   return (
-    <AuthenticationPageContainer>
-      <IonRow className="ion-justify-content-center ion-padding-bottom">
-        <IonCol>
-          <h1 className={styles['page-header-text']}>Login</h1>
-        </IonCol>
-      </IonRow>
+    <AuthenticationPageContainer pageTitle="Login">
       <IonRow className="ion-padding-bottom ion-justify-content-center">
         <IonCol size="10" className={styles['input-field-col']}>
           <TextInputField

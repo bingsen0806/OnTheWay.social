@@ -38,7 +38,7 @@ export default function RegisterPage() {
     const newErrorMessages = {
       email: '',
       password: '',
-      confirmationPassword,
+      confirmationPassword: '',
     };
     if (!loginDetails.email) {
       newErrorMessages.email = 'Please enter you NUS email.';
@@ -81,12 +81,7 @@ export default function RegisterPage() {
   }
 
   return (
-    <AuthenticationPageContainer>
-      <IonRow className="ion-justify-content-center ion-padding-bottom">
-        <IonCol>
-          <h1 className={styles['page-header-text']}>Sign Up</h1>
-        </IonCol>
-      </IonRow>
+    <AuthenticationPageContainer pageTitle="Register">
       <IonRow className="ion-padding-bottom ion-justify-content-center">
         <IonCol size="10" className={styles['input-field-col']}>
           <TextInputField

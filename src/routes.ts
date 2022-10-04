@@ -5,6 +5,8 @@
 export const LOGIN = '/login';
 export const REGISTER = '/register';
 export const PROFILE_CREATION = '/create_profile';
+export const EMAIL_VERIFICATION = '/verify_email';
+export const EMAIL_VERIFIED = '/verified_email';
 
 export const HOME = '/home';
 export const POSTS = '/posts';

@@ -1,6 +1,6 @@
 import { Redirect, Route } from 'react-router-dom';
 import { useAuthState } from '.';
-import { LOGIN } from '../../routes';
+import { EMAIL_VERIFICATION, LOGIN } from '../../routes';
 
 interface AuthenticatedRouteProps {
   exact?: boolean;
@@ -13,14 +13,24 @@ export default function AuthenticatedRoute({
   path,
   component,
 }: AuthenticatedRouteProps) {
-  const { isAuthenticated } = useAuthState();
+  const { isAuthenticated, isEmailVerified } = useAuthState();
   return (
     <Route
       exact={exact}
       path={path}
       render={(props) => {
         if (isAuthenticated) {
-          return <Route {...props} component={component} />;
+          if (isEmailVerified || path === EMAIL_VERIFICATION) {
+            return <Route {...props} component={component} />;
+          }
+          return (
+            <Redirect
+              to={{
+                pathname: EMAIL_VERIFICATION,
+                state: { from: props.location },
+              }}
+            />
+          );
         } else {
           return (
             <Redirect

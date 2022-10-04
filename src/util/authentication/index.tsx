@@ -9,6 +9,7 @@ import {
 
 export interface AuthenticationState {
   isAuthenticated: boolean;
+  isEmailVerified: boolean;
   // firabase user object of the current authenticated user
   user?: User | null;
   error?: Error | null;
@@ -29,7 +30,12 @@ export const AuthProvider = ({ children, ...rest }: PropsWithChildren) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, isAuthenticated: user ? true : false, error }}
+      value={{
+        user,
+        isAuthenticated: user ? true : false,
+        error,
+        isEmailVerified: user?.emailVerified ? true : false,
+      }}
       {...rest}
     >
       {children}

@@ -1,6 +1,7 @@
 import {
   createUserWithEmailAndPassword,
   getAuth,
+  sendEmailVerification,
   signInWithEmailAndPassword,
   signOut,
 } from 'firebase/auth';
@@ -11,6 +12,10 @@ export interface LoginDetails {
   email: string;
   password: string;
 }
+
+const actionCodeSettings = {
+  url: 'https://cs3216-final-group-9.firebaseapp.com/verified_email',
+};
 
 export async function login({ email, password }: LoginDetails) {
   const auth = getAuth();
@@ -24,5 +29,14 @@ export async function logout() {
 
 export async function signUp({ email, password }: LoginDetails) {
   const auth = getAuth();
-  createUserWithEmailAndPassword(auth, email, password);
+  await createUserWithEmailAndPassword(auth, email, password);
+  sendEmailVerification(auth.currentUser!, actionCodeSettings);
+}
+
+export async function resendEmailVerification() {
+  const auth = getAuth();
+  if (!auth.currentUser) {
+    throw new Error('User not yet authenticated.');
+  }
+  sendEmailVerification(auth.currentUser, actionCodeSettings);
 }

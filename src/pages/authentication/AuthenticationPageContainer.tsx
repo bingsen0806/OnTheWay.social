@@ -4,6 +4,7 @@ import styles from './styles.module.scss';
 
 interface AuthenticationPageContainerProps {
   children: ReactNode;
+  pageTitle: string;
 }
 
 /**
@@ -11,6 +12,7 @@ interface AuthenticationPageContainerProps {
  */
 export default function AuthenticationPageContainer({
   children,
+  pageTitle,
 }: AuthenticationPageContainerProps) {
   return (
     <IonPage>
@@ -27,6 +29,11 @@ export default function AuthenticationPageContainer({
           </IonRow>
           <IonRow className="ion-justify-content-center ion-no-padding">
             <IonCol size-lg="8" className="ion-no-padding">
+              <IonRow className="ion-justify-content-center ion-padding-bottom">
+                <IonCol>
+                  <h1 className={styles['page-header-text']}>{pageTitle}</h1>
+                </IonCol>
+              </IonRow>
               {children}
             </IonCol>
           </IonRow>

@@ -9,7 +9,6 @@ import useAuth from '../../util/hooks/useAuth';
 import styles from './styles.module.scss';
 
 export default function PostsPage() {
-  useAuth();
   return (
     <IonPage>
       <IonHeader>

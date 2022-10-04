@@ -35,12 +35,20 @@ import '@ionic/react/css/display.css';
 import './theme/variables.scss';
 import styles from './styles.module.scss';
 
-import { HOME, LOGIN, POSTS, PROFILE, REGISTER } from './routes';
+import {
+  EMAIL_VERIFICATION,
+  HOME,
+  LOGIN,
+  POSTS,
+  PROFILE,
+  REGISTER,
+} from './routes';
 import { AuthProvider } from './util/authentication';
 import AuthenticatedRoute from './util/authentication/AuthenticatedRoute';
 import UnauthenticatedRoute from './util/authentication/UnauthenticatedRoute';
 import LoginPage from './pages/authentication/LoginPage';
 import RegisterPage from './pages/authentication/RegisterPage';
+import EmailVerificationPage from './pages/authentication/EmailVerificationPage';
 
 setupIonicReact();
 
@@ -56,6 +64,11 @@ export default function App() {
                 exact
                 path={REGISTER}
                 component={RegisterPage}
+              />
+              <AuthenticatedRoute
+                exact
+                path={EMAIL_VERIFICATION}
+                component={EmailVerificationPage}
               />
               <AuthenticatedRoute exact path={HOME} component={Home} />
               <AuthenticatedRoute exact path={POSTS} component={Posts} />
