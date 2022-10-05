@@ -1,19 +1,64 @@
-import { IonButton, IonCol, IonLoading, IonRow } from '@ionic/react';
+import {
+  IonButton,
+  IonCol,
+  IonRow,
+} from '@ionic/react';
 import { getAuth } from 'firebase/auth';
-import { useState } from 'react';
-import { login, LoginDetails } from '../../api/authentication';
-import TextInputField from '../../components/TextInputField/TextInputField';
-import { HOME, REGISTER } from '../../routes';
+import { useEffect } from 'react';
+import { useHistory } from 'react-router';
+import {
+  deleteCurrentUser,
+  resendEmailVerification,
+} from '../../api/authentication';
+import { PROFILE } from '../../routes';
+import { useAuthState } from '../../util/authentication';
 import AuthenticationPageContainer from './AuthenticationPageContainer';
-import { isValidNUSEmail } from './constants';
 import styles from './styles.module.scss';
 
 /**
- * Login page component.
- * TODO: forgot password functionality after MVP.
+ * Email verification page.
  */
 export default function EmailVerificationPage() {
   const auth = getAuth();
+  const authState = useAuthState();
+  const history = useHistory();
+
+  useEffect(() => {
+    // try reloading the user every second to see if email was verified
+    const timer = setInterval(() => {
+      authState
+        .reloadUser()
+        .then(() => {
+          const auth = getAuth();
+          if (auth.currentUser?.emailVerified) {
+            history.replace(PROFILE);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }, 3000);
+    return () => {
+      clearInterval(timer);
+    };
+  });
+
+  async function submitResendEmailRequest() {
+    try {
+      await resendEmailVerification();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function cancelSignUp() {
+    try {
+      await deleteCurrentUser();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <AuthenticationPageContainer pageTitle="Email Verification">
       <IonRow className="ion-padding-bottom ion-justify-content-center">
@@ -22,6 +67,19 @@ export default function EmailVerificationPage() {
             Please click on the verification link sent to your email at{' '}
             {auth.currentUser?.email}
           </h2>
+          <p>The email might be in your spam or junk folder.</p>
+        </IonCol>
+      </IonRow>
+      <IonRow className="ion-padding-bottom ion-justify-content-center">
+        <IonCol size="5">
+          <IonButton expand="block" color="medium" onClick={void cancelSignUp}>
+            Cancel
+          </IonButton>
+        </IonCol>
+        <IonCol size="5">
+          <IonButton expand="block" onClick={void submitResendEmailRequest}>
+            Resend
+          </IonButton>
         </IonCol>
       </IonRow>
     </AuthenticationPageContainer>

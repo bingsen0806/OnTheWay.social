@@ -41,6 +41,7 @@ import {
   LOGIN,
   POSTS,
   PROFILE,
+  PROFILE_CREATION,
   REGISTER,
 } from './routes';
 import { AuthProvider } from './util/authentication';
@@ -49,6 +50,7 @@ import UnauthenticatedRoute from './util/authentication/UnauthenticatedRoute';
 import LoginPage from './pages/authentication/LoginPage';
 import RegisterPage from './pages/authentication/RegisterPage';
 import EmailVerificationPage from './pages/authentication/EmailVerificationPage';
+import ProfileCreationPage from './pages/authentication/ProfileCreationPage';
 
 setupIonicReact();
 
@@ -70,8 +72,13 @@ export default function App() {
                 path={EMAIL_VERIFICATION}
                 component={EmailVerificationPage}
               />
-              <AuthenticatedRoute exact path={HOME} component={Home} />
-              <AuthenticatedRoute exact path={POSTS} component={Posts} />
+              <Route
+                exact
+                path={PROFILE_CREATION}
+                component={ProfileCreationPage}
+              />
+              <Route exact path={HOME} component={Home} />
+              <Route exact path={POSTS} component={Posts} />
               <AuthenticatedRoute path={PROFILE} component={Profile} />
               <Route exact path="/">
                 <Redirect to={HOME} />

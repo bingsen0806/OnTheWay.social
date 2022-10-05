@@ -1,10 +1,8 @@
 import { IonButton, IonCol, IonLoading, IonRow } from '@ionic/react';
 import { useState } from 'react';
-import { useHistory } from 'react-router';
-import { REGISTER } from 'redux-persist';
-import { login, LoginDetails, signUp } from '../../api/authentication';
+import { LoginDetails, signUp } from '../../api/authentication';
 import TextInputField from '../../components/TextInputField/TextInputField';
-import { HOME, LOGIN } from '../../routes';
+import { LOGIN } from '../../routes';
 import AuthenticationPageContainer from './AuthenticationPageContainer';
 import { isValidNUSEmail } from './constants';
 import styles from './styles.module.scss';
@@ -20,7 +18,6 @@ interface RegisterErrorMessages {
  * TODO: forgot password functionality after MVP.
  */
 export default function RegisterPage() {
-  const history = useHistory();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [loginDetails, setLoginDetails] = useState<LoginDetails>({
     email: '',
@@ -125,7 +122,7 @@ export default function RegisterPage() {
       </IonRow>
       <IonRow className="ion-padding-bottom ion-justify-content-center">
         <IonCol size="10">
-          <IonButton onClick={submitSignUp} expand="block">
+          <IonButton onClick={void submitSignUp} expand="block">
             Sign Up
           </IonButton>
         </IonCol>

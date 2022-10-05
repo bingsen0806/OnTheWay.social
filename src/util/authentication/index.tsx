@@ -13,6 +13,7 @@ export interface AuthenticationState {
   // firabase user object of the current authenticated user
   user?: User | null;
   error?: Error | null;
+  reloadUser: () => Promise<void>;
 }
 
 export const AuthContext = createContext<AuthenticationState>(
@@ -28,6 +29,20 @@ export const AuthProvider = ({ children, ...rest }: PropsWithChildren) => {
     return () => unsubscribe();
   }, []);
 
+  const reloadUser = async () => {
+    try {
+      let auth = getAuth();
+      if (!auth.currentUser) {
+        throw new Error('User not signed in.');
+      }
+      await auth.currentUser.reload();
+      auth = getAuth();
+      setUser(Object.assign({}, auth.currentUser));
+    } catch (error) {
+      setError(error as Error);
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -35,6 +50,7 @@ export const AuthProvider = ({ children, ...rest }: PropsWithChildren) => {
         isAuthenticated: user ? true : false,
         error,
         isEmailVerified: user?.emailVerified ? true : false,
+        reloadUser,
       }}
       {...rest}
     >

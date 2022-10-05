@@ -2,13 +2,25 @@
  * Type definition for main classes in the application.
  */
 
-enum Gender {
+export enum Gender {
   MALE,
   FEMALE,
   PREFER_NOT_TO_SAY,
 }
 
-enum Location {
+export enum Faculty {
+  ARTS_AND_SOCIAL_SCIENCES,
+  BUSINESS,
+  COMPUTING,
+  DENTISTRY,
+  DESIGN_AND_ENGINEERING,
+  LAW,
+  MEDICINE,
+  MUSIC,
+  SCIENCE,
+}
+
+export enum Location {
   CLB,
   UTOWN,
   SCIENCE,
@@ -23,7 +35,7 @@ enum Location {
 /**
  * Status values for a request.
  */
-enum AppliedRequestStatus {
+export enum AppliedRequestStatus {
   ACCEPTED,
   PENDING,
   REJECTED,
@@ -36,7 +48,7 @@ export interface User {
   id: string;
   name: string;
   gender: Gender;
-  faculty: string;
+  faculty: Faculty;
   telegramHandle: string;
   year: number;
   profilePhoto: string;
