@@ -61,7 +61,7 @@ export default function RegisterPage() {
     return haveError;
   }
 
-  async function submitSignUp() {
+  async function submitSignUp(): Promise<void> {
     if (checkForErrorsInInputFields()) {
       // have error, give up the login
       return;
@@ -122,7 +122,12 @@ export default function RegisterPage() {
       </IonRow>
       <IonRow className="ion-padding-bottom ion-justify-content-center">
         <IonCol size="10">
-          <IonButton onClick={void submitSignUp} expand="block">
+          <IonButton
+            onClick={() => {
+              void submitSignUp();
+            }}
+            expand="block"
+          >
             Sign Up
           </IonButton>
         </IonCol>

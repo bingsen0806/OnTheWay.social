@@ -1,8 +1,4 @@
-import {
-  IonButton,
-  IonCol,
-  IonRow,
-} from '@ionic/react';
+import { IonButton, IonCol, IonRow } from '@ionic/react';
 import { getAuth } from 'firebase/auth';
 import { useEffect } from 'react';
 import { useHistory } from 'react-router';
@@ -10,7 +6,7 @@ import {
   deleteCurrentUser,
   resendEmailVerification,
 } from '../../api/authentication';
-import { PROFILE } from '../../routes';
+import { PROFILE_CREATION } from '../../routes';
 import { useAuthState } from '../../util/authentication';
 import AuthenticationPageContainer from './AuthenticationPageContainer';
 import styles from './styles.module.scss';
@@ -31,7 +27,7 @@ export default function EmailVerificationPage() {
         .then(() => {
           const auth = getAuth();
           if (auth.currentUser?.emailVerified) {
-            history.replace(PROFILE);
+            history.replace(PROFILE_CREATION);
           }
         })
         .catch((error) => {
@@ -72,12 +68,23 @@ export default function EmailVerificationPage() {
       </IonRow>
       <IonRow className="ion-padding-bottom ion-justify-content-center">
         <IonCol size="5">
-          <IonButton expand="block" color="medium" onClick={void cancelSignUp}>
+          <IonButton
+            expand="block"
+            color="medium"
+            onClick={() => {
+              void cancelSignUp();
+            }}
+          >
             Cancel
           </IonButton>
         </IonCol>
         <IonCol size="5">
-          <IonButton expand="block" onClick={void submitResendEmailRequest}>
+          <IonButton
+            expand="block"
+            onClick={() => {
+              void submitResendEmailRequest();
+            }}
+          >
             Resend
           </IonButton>
         </IonCol>

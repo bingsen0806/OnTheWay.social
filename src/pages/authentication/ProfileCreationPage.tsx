@@ -222,7 +222,12 @@ export default function ProfileCreationPage() {
       </IonRow>
       <IonRow className="ion-padding-bottom ion-justify-content-center">
         <IonCol size="10">
-          <IonButton onClick={void submit} expand="block">
+          <IonButton
+            onClick={() => {
+              void submit();
+            }}
+            expand="block"
+          >
             Submit
           </IonButton>
         </IonCol>

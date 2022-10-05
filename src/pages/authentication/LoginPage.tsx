@@ -2,7 +2,7 @@ import { IonButton, IonCol, IonLoading, IonRow } from '@ionic/react';
 import { useState } from 'react';
 import { login, LoginDetails } from '../../api/authentication';
 import TextInputField from '../../components/TextInputField/TextInputField';
-import { HOME, REGISTER } from '../../routes';
+import { REGISTER } from '../../routes';
 import AuthenticationPageContainer from './AuthenticationPageContainer';
 import { isValidNUSEmail } from './constants';
 import styles from './styles.module.scss';
@@ -98,7 +98,12 @@ export default function LoginPage() {
       </IonRow>
       <IonRow className="ion-padding-bottom ion-justify-content-center">
         <IonCol size="10">
-          <IonButton onClick={submitLogin} expand="block">
+          <IonButton
+            onClick={() => {
+              void submitLogin();
+            }}
+            expand="block"
+          >
             Login
           </IonButton>
         </IonCol>
