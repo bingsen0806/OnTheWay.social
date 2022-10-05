@@ -5,7 +5,6 @@ import {
   IonTitle,
   IonToolbar,
 } from '@ionic/react';
-import styles from './styles.module.scss';
 
 export default function Homepage() {
   return (
