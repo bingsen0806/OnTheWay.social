@@ -138,7 +138,6 @@ export default function ProfileCreationPage() {
     if (!areAllFieldsSelected()) {
       setShouldShowDropdownErrors(true);
       haveError = true;
-      console.log(userDetails);
     }
 
     if (haveError) {

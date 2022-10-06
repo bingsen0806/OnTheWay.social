@@ -7,7 +7,7 @@ interface PostListItemProps {
   post: Post;
 }
 
-function convertDateToDateStr(date: Date) {
+function convertDateToDateStr(date: string) {
   const momentDate = moment(date);
   if (momentDate.isSame(moment(), 'day')) {
     return 'Today';
@@ -19,7 +19,7 @@ function convertDateToDateStr(date: Date) {
  * Assuming dates are the same day, return the range in terms of hh:mm am/pm.
  * TODO: make sure can only allow sessions within same day.
  */
-function convertDateRangeToTimeRangeStr(date1: Date, date2: Date) {
+function convertDateRangeToTimeRangeStr(date1: string, date2: string) {
   return (
     moment(date1).format('hh:mm A') + ' - ' + moment(date2).format('hh:mm A')
   );
@@ -40,7 +40,7 @@ export default function PostListItem({ post }: PostListItemProps) {
         <p className={styles['post-text']}>
           {post.participants.length + 1} / {post.personCapacity} pax
         </p>
-        <p className={styles['post-text']}>Description: {post.description};</p>
+        <p className={styles['post-text']}>Description: {post.description}</p>
         <br></br>
         <p className={styles['post-text']}>
           {post.poster.name}, Y{post.poster.year}{' '}

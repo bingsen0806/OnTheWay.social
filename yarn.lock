@@ -2107,6 +2107,13 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
+"@karmaniverous/serify-deserify@^1.2.9":
+  version "1.2.9"
+  resolved "https://registry.yarnpkg.com/@karmaniverous/serify-deserify/-/serify-deserify-1.2.9.tgz#741b1baac8b5a8cb0b8f6ed587da4b7a17c6f3bc"
+  integrity sha512-THVvdW1uoneRfa8b/b6ELnlu7cNQzSAE8jSMYHMAkdjOxS48hPIS0jbukJLJpkwIEG70wrHQ4KNHCxYVqScuag==
+  dependencies:
+    is-what "^4.1.7"
+
 "@leichtgewicht/ip-codec@^2.0.1":
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/@leichtgewicht/ip-codec/-/ip-codec-2.0.4.tgz#b2ac626d6cb9c8718ab459166d4bb405b8ffa78b"
@@ -6148,6 +6155,11 @@ is-weakref@^1.0.2:
   integrity sha512-qctsuLZmIQ0+vSSMfoVvyFe2+GSEvnmZ2ezTup1SBse9+twCCeial6EEi3Nc2KFcf6+qz2FBPnjXsk8xhKSaPQ==
   dependencies:
     call-bind "^1.0.2"
+
+is-what@^4.1.7:
+  version "4.1.7"
+  resolved "https://registry.yarnpkg.com/is-what/-/is-what-4.1.7.tgz#c41dc1d2d2d6a9285c624c2505f61849c8b1f9cc"
+  integrity sha512-DBVOQNiPKnGMxRMLIYSwERAS5MVY1B7xYiGnpgctsOFvVDz9f9PFXXxMcTOHuoqYp4NK9qFYQaIC1NRRxLMpBQ==
 
 is-wsl@^2.2.0:
   version "2.2.0"

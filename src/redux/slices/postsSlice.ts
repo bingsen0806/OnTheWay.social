@@ -50,7 +50,7 @@ export const getNewPageOfPostsWithFilter = createAsyncThunk<
   Post[],
   PostsFilter,
   { state: RootState }
->('posts/getNewPageOfPostsWithFilter', async (filter, thunkApi) => {
+>('posts/getNewPageOfPostsWithFilter', async (filter, _) => {
   const responseData = await getPosts(filter, 1);
   return responseData;
 });

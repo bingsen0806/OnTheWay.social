@@ -6,34 +6,27 @@ import {
   IonList,
   IonPage,
   IonToolbar,
+  useIonViewDidEnter,
 } from '@ionic/react';
 import { funnelOutline } from 'ionicons/icons';
-import { Faculty, Gender, Post, Location } from '../../api/types';
+import { useState } from 'react';
+import { PostsFilter } from '../../api/posts';
 import PostListItem from '../../components/PostListItem';
-
-const sampleData: Post[] = [
-  {
-    id: '0',
-    poster: {
-      id: '0',
-      name: 'Ben',
-      gender: Gender.MALE,
-      faculty: Faculty.COMPUTING,
-      telegramHandle: 'murph99',
-      year: 3,
-      profilePhoto: '',
-      thumbnailPhoto: '',
-    },
-    startDateTime: new Date(),
-    endDateTime: new Date(),
-    personCapacity: 5,
-    participants: [],
-    location: Location.SOC,
-    description: 'HEllo, feel free to meet',
-  },
-];
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { getNewPageOfPostsWithFilter } from '../../redux/slices/postsSlice';
 
 export default function PostsPage() {
+  const listOfPosts = useAppSelector((state) => state.posts.posts);
+  const dispatch = useAppDispatch();
+  const [tempFilter, setTempFilter] = useState<PostsFilter>({
+    locations: [],
+  });
+  // fetch the data right before this scren is opened
+  useIonViewDidEnter(() => {
+    void dispatch(getNewPageOfPostsWithFilter(tempFilter));
+    //TODO: add error
+  });
+
   return (
     <IonPage>
       <IonHeader>
@@ -41,7 +34,7 @@ export default function PostsPage() {
           <div className="ion-padding-start" slot="start">
             <h1>Study Sessions</h1>
             <p>
-              Posts don't suit your schedule?{' '}
+              Can't find a post that suits your schedule?{' '}
               <span>
                 <u>Make a post</u>
               </span>
@@ -55,8 +48,8 @@ export default function PostsPage() {
       </IonHeader>
       <IonContent fullscreen>
         <IonList>
-          {sampleData.map((data) => (
-            <PostListItem post={data}></PostListItem>
+          {listOfPosts.map((data) => (
+            <PostListItem post={data} key={data.id}></PostListItem>
           ))}
         </IonList>
       </IonContent>

@@ -10,6 +10,7 @@
     "@capacitor/status-bar": "4.0.1",
     "@ionic/react": "^6.0.0",
     "@ionic/react-router": "^6.0.0",
+    "@karmaniverous/serify-deserify": "^1.2.9",
     "@reduxjs/toolkit": "^1.8.5",
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^13.3.0",

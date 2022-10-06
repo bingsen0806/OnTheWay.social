@@ -107,8 +107,8 @@ export interface User {
 export interface Post {
   id: string;
   poster: User;
-  startDateTime: Date;
-  endDateTime: Date;
+  startDateTime: string;
+  endDateTime: string;
   personCapacity: number;
   /** List of users who have been confirmed to be going for the post event */
   participants: User[];
