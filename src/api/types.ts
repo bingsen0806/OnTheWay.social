@@ -20,6 +20,29 @@ export enum Faculty {
   SCIENCE,
 }
 
+export function facultyEnumToStr(faculty: Faculty) {
+  switch (faculty) {
+    case Faculty.ARTS_AND_SOCIAL_SCIENCES:
+      return 'Arts & Social Sciences';
+    case Faculty.BUSINESS:
+      return 'Business';
+    case Faculty.COMPUTING:
+      return 'Computing';
+    case Faculty.DENTISTRY:
+      return 'Dentistry';
+    case Faculty.DESIGN_AND_ENGINEERING:
+      return 'Design & Engineering';
+    case Faculty.LAW:
+      return 'Law';
+    case Faculty.MEDICINE:
+      return 'Medicine';
+    case Faculty.MUSIC:
+      return 'Music';
+    case Faculty.SCIENCE:
+      return 'Science';
+  }
+}
+
 export enum Location {
   CLB,
   UTOWN,
@@ -30,6 +53,29 @@ export enum Location {
   SDE,
   SOC,
   LAW,
+}
+
+export function locationEnumToStr(location: Location) {
+  switch (location) {
+    case Location.CLB:
+      return 'Central Library';
+    case Location.UTOWN:
+      return 'UTown';
+    case Location.SCIENCE:
+      return 'Science';
+    case Location.FASS:
+      return 'FASS';
+    case Location.ENGINEERING:
+      return 'Engineering';
+    case Location.BIZ:
+      return 'Biz';
+    case Location.SDE:
+      return 'SDE';
+    case Location.SOC:
+      return 'SOC';
+    case Location.LAW:
+      return 'Law';
+  }
 }
 
 /**
@@ -60,12 +106,14 @@ export interface User {
  */
 export interface Post {
   id: string;
+  poster: User;
   startDateTime: Date;
   endDateTime: Date;
   personCapacity: number;
   /** List of users who have been confirmed to be going for the post event */
-  currPersons: User[];
+  participants: User[];
   location: Location;
+  description: string;
 }
 
 /**
