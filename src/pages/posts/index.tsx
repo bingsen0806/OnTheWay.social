@@ -3,10 +3,35 @@ import {
   IonContent,
   IonHeader,
   IonIcon,
+  IonList,
   IonPage,
   IonToolbar,
 } from '@ionic/react';
 import { funnelOutline } from 'ionicons/icons';
+import { Faculty, Gender, Post, Location } from '../../api/types';
+import PostListItem from '../../components/PostListItem';
+
+const sampleData: Post[] = [
+  {
+    id: '0',
+    poster: {
+      id: '0',
+      name: 'Ben',
+      gender: Gender.MALE,
+      faculty: Faculty.COMPUTING,
+      telegramHandle: 'murph99',
+      year: 3,
+      profilePhoto: '',
+      thumbnailPhoto: '',
+    },
+    startDateTime: new Date(),
+    endDateTime: new Date(),
+    personCapacity: 5,
+    participants: [],
+    location: Location.SOC,
+    description: 'HEllo, feel free to meet',
+  },
+];
 
 export default function PostsPage() {
   return (
@@ -16,9 +41,9 @@ export default function PostsPage() {
           <div className="ion-padding-start" slot="start">
             <h1>Study Sessions</h1>
             <p>
-              Requests don't suit your schedule?{' '}
+              Posts don't suit your schedule?{' '}
               <span>
-                <u>Post a request</u>
+                <u>Make a post</u>
               </span>
             </p>
           </div>
@@ -28,7 +53,13 @@ export default function PostsPage() {
           </IonButton>
         </IonToolbar>
       </IonHeader>
-      <IonContent fullscreen></IonContent>
+      <IonContent fullscreen>
+        <IonList>
+          {sampleData.map((data) => (
+            <PostListItem post={data}></PostListItem>
+          ))}
+        </IonList>
+      </IonContent>
     </IonPage>
   );
 }
