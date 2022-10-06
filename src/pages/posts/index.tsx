@@ -1,58 +1,131 @@
 import {
   IonButton,
+  IonChip,
+  IonCol,
   IonContent,
+  IonFooter,
+  IonGrid,
   IonHeader,
   IonIcon,
   IonList,
+  IonMenu,
+  IonMenuToggle,
   IonPage,
+  IonRow,
+  IonTitle,
   IonToolbar,
   useIonViewDidEnter,
 } from '@ionic/react';
 import { funnelOutline } from 'ionicons/icons';
 import { useState } from 'react';
-import { PostsFilter } from '../../api/posts';
+import { Location, locationEnumToStr } from '../../api/types';
 import PostListItem from '../../components/PostListItem';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { getNewPageOfPostsWithFilter } from '../../redux/slices/postsSlice';
+import styles from './styles.module.scss';
 
 export default function PostsPage() {
   const listOfPosts = useAppSelector((state) => state.posts.posts);
   const dispatch = useAppDispatch();
-  const [tempFilter, setTempFilter] = useState<PostsFilter>({
-    locations: [],
+  const [filterLocations, setFilterLocations] = useState<{
+    [key in Location]: boolean;
+  }>({
+    [Location.CLB]: false,
+    [Location.UTOWN]: false,
+    [Location.SCIENCE]: false,
+    [Location.FASS]: false,
+    [Location.ENGINEERING]: false,
+    [Location.BIZ]: false,
+    [Location.SDE]: false,
+    [Location.SOC]: false,
+    [Location.LAW]: false,
   });
+
+  function getColorOfLocationFilterBasedOnClickStatus(location: Location) {
+    return filterLocations[location] ? 'primary' : 'dark';
+  }
+
+  function setFilterLocationValue(location: Location) {
+    const prvState = filterLocations[location];
+    setFilterLocations({ ...filterLocations, [location]: !prvState });
+  }
   // fetch the data right before this scren is opened
   useIonViewDidEnter(() => {
-    void dispatch(getNewPageOfPostsWithFilter(tempFilter));
+    void dispatch(getNewPageOfPostsWithFilter({ locations: [] }));
     //TODO: add error
   });
 
   return (
-    <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <div className="ion-padding-start" slot="start">
-            <h1>Study Sessions</h1>
-            <p>
-              Can't find a post that suits your schedule?{' '}
-              <span>
-                <u>Make a post</u>
-              </span>
-            </p>
-          </div>
-          <IonButton slot="end" fill="clear" color="dark">
-            <IonIcon icon={funnelOutline} slot="start"></IonIcon>
-            <p>Filter</p>
-          </IonButton>
-        </IonToolbar>
-      </IonHeader>
-      <IonContent fullscreen>
-        <IonList>
-          {listOfPosts.map((data) => (
-            <PostListItem post={data} key={data.id}></PostListItem>
-          ))}
-        </IonList>
-      </IonContent>
-    </IonPage>
+    <>
+      <IonMenu contentId="main-content" side="end">
+        <IonHeader>
+          <IonToolbar>
+            <IonTitle>Filter Posts</IonTitle>
+          </IonToolbar>
+        </IonHeader>
+        <IonContent className="ion-padding">
+          <h4 className={styles['filter-category-header']}>Locations</h4>
+          {Object.values(Location)
+            .filter((v) => !isNaN(Number(v)))
+            .map((locationEnum) => (
+              <IonChip
+                key={locationEnum}
+                color={getColorOfLocationFilterBasedOnClickStatus(
+                  locationEnum as Location
+                )}
+                onClick={() => setFilterLocationValue(locationEnum as Location)}
+              >
+                {locationEnumToStr(locationEnum as Location)}
+              </IonChip>
+            ))}
+        </IonContent>
+        <IonFooter>
+          <IonToolbar>
+            <IonGrid>
+              <IonRow>
+                <IonCol>
+                  <IonButton color="medium" expand="block">
+                    Reset
+                  </IonButton>
+                </IonCol>
+                <IonCol>
+                  <IonButton color="primary" expand="block">
+                    Apply
+                  </IonButton>
+                </IonCol>
+              </IonRow>
+            </IonGrid>
+          </IonToolbar>
+        </IonFooter>
+      </IonMenu>
+      <IonPage id="main-content">
+        <IonHeader>
+          <IonToolbar>
+            <div className="ion-padding-start" slot="start">
+              <h1>Study Sessions</h1>
+              <p>
+                Can't find a post that suits your schedule?{' '}
+                <span className={styles['create-post-link-text']}>
+                  <u>Make a post</u>
+                </span>
+              </p>
+            </div>
+            <IonMenuToggle slot="end">
+              <IonButton fill="clear" color="dark">
+                <IonIcon icon={funnelOutline} slot="start"></IonIcon>
+                <p>Filter</p>
+              </IonButton>
+            </IonMenuToggle>
+          </IonToolbar>
+        </IonHeader>
+        <IonContent fullscreen>
+          <IonList>
+            {listOfPosts.map((data) => (
+              <PostListItem post={data} key={data.id}></PostListItem>
+            ))}
+          </IonList>
+        </IonContent>
+      </IonPage>
+    </>
   );
 }
