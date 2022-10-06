@@ -11,32 +11,38 @@ import {
   IonRow,
   IonCol,
   IonAvatar,
+  useIonViewDidEnter,
 } from "@ionic/react";
 import styles from "./styles.module.scss";
 import { useHistory } from "react-router";
 import { FAQ } from "../../routes";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { getUserObject } from "../../redux/slices/userSlice";
+import { getAuth } from "firebase/auth";
+import { logout } from "../../api/authentication";
 
 export default function ProfilePage() {
   const history = useHistory();
+  const dispatch = useAppDispatch();
+  const user = useAppSelector((state) => state.user.user);
 
-  // const dispatch = useAppDispatch();
+  useIonViewDidEnter(() => {
+    const auth = getAuth();
+    if (auth.currentUser?.uid) {
+      void dispatch(getUserObject(auth.currentUser.uid));
+    }
+  });
+
   function submitLogout() {
-    // try {
-    //   await logout();
-    // } catch (error) {
-    // } finally {
-    //   persistor.purge();
-    //   dispatch({ type: 'USER_LOGOUT' });
-    // }
+    void logout();
   }
 
   const routeToFAQ = () => {
     history.push(FAQ);
   };
 
-  const imageURL =
-    "https://images.unsplash.com/photo-1594751543129-6701ad444259?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8ZGFyayUyMHByb2ZpbGV8ZW58MHx8MHx8&w=1000&q=80";
-  const username = "USERNAME";
+  const imageURL = user.thumbnailPhoto;
+  const username = user.name;
 
   return (
     <IonPage>
