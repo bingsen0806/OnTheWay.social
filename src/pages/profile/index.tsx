@@ -1,28 +1,43 @@
 import {
-  IonButton,
   IonContent,
+  IonGrid,
   IonHeader,
   IonPage,
   IonTitle,
   IonToolbar,
-} from '@ionic/react';
-import { home } from 'ionicons/icons';
-import { logout } from '../../api/authentication';
-import { useAppDispatch } from '../../redux/hooks';
-import { persistor } from '../../redux/store';
-import styles from './styles.module.scss';
+  IonItem,
+  IonLabel,
+  IonList,
+  IonRow,
+  IonCol,
+  IonAvatar,
+} from "@ionic/react";
+import styles from "./styles.module.scss";
+import { useHistory } from "react-router";
+import { FAQ } from "../../routes";
 
 export default function ProfilePage() {
-  const dispatch = useAppDispatch();
-  async function submitLogout() {
-    try {
-      await logout();
-    } catch (error) {
-    } finally {
-      persistor.purge();
-      dispatch({ type: 'USER_LOGOUT' });
-    }
+  const history = useHistory();
+
+  // const dispatch = useAppDispatch();
+  function submitLogout() {
+    // try {
+    //   await logout();
+    // } catch (error) {
+    // } finally {
+    //   persistor.purge();
+    //   dispatch({ type: 'USER_LOGOUT' });
+    // }
   }
+
+  const routeToFAQ = () => {
+    history.push(FAQ);
+  };
+
+  const imageURL =
+    "https://images.unsplash.com/photo-1594751543129-6701ad444259?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8ZGFyayUyMHByb2ZpbGV8ZW58MHx8MHx8&w=1000&q=80";
+  const username = "USERNAME";
+
   return (
     <IonPage>
       <IonHeader>
@@ -31,14 +46,43 @@ export default function ProfilePage() {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large">User Profile</IonTitle>
-          </IonToolbar>
-        </IonHeader>
-        <IonButton expand="block" onClick={submitLogout}>
-          Logout
-        </IonButton>
+        <IonGrid>
+          <IonRow className="ion-justify-content-center">
+            <IonCol
+              size="11"
+              sizeMd="8"
+              sizeLg="6"
+              sizeXl="4"
+              className="ion-no-padding"
+            >
+              <IonGrid>
+                <IonRow className="ion-align-items-center">
+                  <IonAvatar>
+                    <img alt="profile" src={imageURL} />
+                  </IonAvatar>
+
+                  <p className="ion-padding">{username}</p>
+                </IonRow>
+              </IonGrid>
+
+              <IonList lines="none">
+                <IonItem>
+                  <IonLabel onClick={routeToFAQ} className={styles["pointer"]}>
+                    <h1>FAQ</h1>
+                  </IonLabel>
+                </IonItem>
+                <IonItem>
+                  <IonLabel
+                    className={styles["pointer"]}
+                    onClick={submitLogout}
+                  >
+                    <h1>Log out</h1>
+                  </IonLabel>
+                </IonItem>
+              </IonList>
+            </IonCol>
+          </IonRow>
+        </IonGrid>
       </IonContent>
     </IonPage>
   );
