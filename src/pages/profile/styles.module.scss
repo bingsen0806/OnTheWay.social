@@ -2,6 +2,20 @@
   cursor: pointer;
 }
 
+.avatar {
+  width: 20vw;
+  height: 20vw;
+  cursor: pointer;
+  @media screen and (min-width: 768px) {
+    width: 10vw;
+    height: 10vw;
+  }
+  @media screen and (min-width: 1600px) {
+    width: 5vw;
+    height: 5vw;
+  }
+}
+
 .row {
   display: flex;
   align-items: center;

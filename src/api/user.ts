@@ -18,3 +18,7 @@ export async function getUser(userId: string) {
   };
   return Promise.resolve(sampleUser);
 }
+
+export async function uploadImage() {
+  //TODO: Upload image
+}
