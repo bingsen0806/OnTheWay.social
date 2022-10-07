@@ -9,6 +9,7 @@ interface PostsState {
   posts: Post[];
   filter: PostsFilter;
   page: number;
+  isLoading: boolean;
 }
 
 const initialState: PostsState = {
@@ -17,6 +18,7 @@ const initialState: PostsState = {
     locations: [],
   },
   page: 0,
+  isLoading: false,
 };
 
 const PostsSlice = createSlice({
@@ -29,16 +31,30 @@ const PostsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(getNewPageOfPostsWithFilter.fulfilled, (state, action) => {
+      state.isLoading = false;
       state.page = 1;
       state.posts = action.payload;
       state.filter = action.meta.arg;
     });
     builder.addCase(getNextPageOfPosts.fulfilled, (state, action) => {
+      state.isLoading = false;
       if (action.payload.length > 0) {
         // only if a non empty page received then increment page
         state.page += 1;
         state.posts = state.posts.concat(action.payload);
       }
+    });
+    builder.addCase(getNextPageOfPosts.pending, (state, _) => {
+      state.isLoading = true;
+    });
+    builder.addCase(getNewPageOfPostsWithFilter.pending, (state, _) => {
+      state.isLoading = true;
+    });
+    builder.addCase(getNextPageOfPosts.rejected, (state, _) => {
+      state.isLoading = false;
+    });
+    builder.addCase(getNewPageOfPostsWithFilter.rejected, (state, _) => {
+      state.isLoading = false;
     });
   },
 });

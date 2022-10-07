@@ -8,6 +8,7 @@ import {
   IonHeader,
   IonIcon,
   IonList,
+  IonLoading,
   IonMenu,
   IonMenuToggle,
   IonPage,
@@ -26,6 +27,7 @@ import styles from './styles.module.scss';
 
 export default function PostsPage() {
   const listOfPosts = useAppSelector((state) => state.posts.posts);
+  const isLoading = useAppSelector((state) => state.posts.isLoading);
   const dispatch = useAppDispatch();
   const [filterLocations, setFilterLocations] = useState<{
     [key in Location]: boolean;
@@ -41,18 +43,44 @@ export default function PostsPage() {
     [Location.LAW]: false,
   });
 
+  function resetFilter() {
+    const newFilterLocations = {} as { [key in Location]: boolean };
+    for (const location in filterLocations) {
+      newFilterLocations[location as unknown as Location] = false;
+    }
+    setFilterLocations(newFilterLocations);
+    resetPostsList();
+  }
+
   function getColorOfLocationFilterBasedOnClickStatus(location: Location) {
     return filterLocations[location] ? 'primary' : 'dark';
+  }
+
+  function resetPostsList() {
+    void dispatch(getNewPageOfPostsWithFilter({ locations: [] }));
+    // add error
   }
 
   function setFilterLocationValue(location: Location) {
     const prvState = filterLocations[location];
     setFilterLocations({ ...filterLocations, [location]: !prvState });
   }
+
+  function applyNewFilter() {
+    const newLocationFilter: Location[] = [];
+    for (const location in filterLocations) {
+      if (filterLocations[location as unknown as Location]) {
+        newLocationFilter.push(location as unknown as Location);
+      }
+    }
+    void dispatch(
+      getNewPageOfPostsWithFilter({ locations: newLocationFilter })
+    );
+  }
+
   // fetch the data right before this scren is opened
   useIonViewDidEnter(() => {
-    void dispatch(getNewPageOfPostsWithFilter({ locations: [] }));
-    //TODO: add error
+    resetPostsList();
   });
 
   return (
@@ -84,14 +112,26 @@ export default function PostsPage() {
             <IonGrid>
               <IonRow>
                 <IonCol>
-                  <IonButton color="medium" expand="block">
-                    Reset
-                  </IonButton>
+                  <IonMenuToggle>
+                    <IonButton
+                      color="medium"
+                      expand="block"
+                      onClick={resetFilter}
+                    >
+                      Reset
+                    </IonButton>
+                  </IonMenuToggle>
                 </IonCol>
                 <IonCol>
-                  <IonButton color="primary" expand="block">
-                    Apply
-                  </IonButton>
+                  <IonMenuToggle>
+                    <IonButton
+                      color="primary"
+                      expand="block"
+                      onClick={applyNewFilter}
+                    >
+                      Apply
+                    </IonButton>
+                  </IonMenuToggle>
                 </IonCol>
               </IonRow>
             </IonGrid>
@@ -125,6 +165,7 @@ export default function PostsPage() {
             ))}
           </IonList>
         </IonContent>
+        <IonLoading isOpen={isLoading}></IonLoading>
       </IonPage>
     </>
   );
