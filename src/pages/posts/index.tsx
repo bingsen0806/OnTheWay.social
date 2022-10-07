@@ -7,6 +7,8 @@ import {
   IonGrid,
   IonHeader,
   IonIcon,
+  IonInfiniteScroll,
+  IonInfiniteScrollContent,
   IonList,
   IonLoading,
   IonMenu,
@@ -19,10 +21,15 @@ import {
 } from '@ionic/react';
 import { funnelOutline } from 'ionicons/icons';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Location, locationEnumToStr } from '../../api/types';
 import PostListItem from '../../components/PostListItem';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { getNewPageOfPostsWithFilter } from '../../redux/slices/postsSlice';
+import {
+  getNewPageOfPostsWithFilter,
+  getNextPageOfPosts,
+} from '../../redux/slices/postsSlice';
+import { CREATE_POST } from '../../routes';
 import styles from './styles.module.scss';
 
 export default function PostsPage() {
@@ -76,6 +83,10 @@ export default function PostsPage() {
     void dispatch(
       getNewPageOfPostsWithFilter({ locations: newLocationFilter })
     );
+  }
+
+  function requestNextPageOfPosts() {
+    void dispatch(getNextPageOfPosts());
   }
 
   // fetch the data right before this scren is opened
@@ -146,7 +157,7 @@ export default function PostsPage() {
               <p>
                 Can't find a post that suits your schedule?{' '}
                 <span className={styles['create-post-link-text']}>
-                  <u>Make a post</u>
+                  <Link to={CREATE_POST}>Make a post</Link>
                 </span>
               </p>
             </div>
@@ -164,6 +175,13 @@ export default function PostsPage() {
               <PostListItem post={data} key={data.id}></PostListItem>
             ))}
           </IonList>
+          <IonInfiniteScroll
+            onIonInfinite={getNextPageOfPosts}
+            threshold="50px"
+            disabled={listOfPosts.length < 20}
+          >
+            <IonInfiniteScrollContent loadingSpinner="circles"></IonInfiniteScrollContent>
+          </IonInfiniteScroll>
         </IonContent>
         <IonLoading isOpen={isLoading}></IonLoading>
       </IonPage>

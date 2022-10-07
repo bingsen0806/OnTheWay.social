@@ -1,4 +1,4 @@
-import { IonInput, IonItem, IonLabel, IonTextarea } from '@ionic/react';
+import { IonInput, IonLabel, IonTextarea } from '@ionic/react';
 import styles from './styles.module.scss';
 
 interface TextInputFieldProps {
@@ -50,7 +50,7 @@ export default function TextInputField({
         <IonTextarea
           placeholder={placeholder}
           debounce={debounce ? debounce : 0}
-          className={styles.customTextArea}
+          className="ion-no-padding"
           value={value}
           onIonChange={onChange ? (e) => onChange(e.detail.value!) : undefined}
           rows={rows}

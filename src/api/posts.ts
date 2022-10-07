@@ -1,7 +1,11 @@
-import { Faculty, Gender, Location } from './types';
+import { Faculty, Gender, Location, Post } from './types';
 
 export interface PostsFilter {
   locations: Location[];
+}
+
+export async function createPost(post: Post) {
+  return Promise.resolve();
 }
 
 /**
@@ -10,7 +14,7 @@ export interface PostsFilter {
  *
  */
 export async function getPosts(filter: PostsFilter, page: number) {
-  return new Promise((resolve, reject) =>
+  return new Promise<Post[]>((resolve, reject) =>
     setTimeout(
       () =>
         resolve([
