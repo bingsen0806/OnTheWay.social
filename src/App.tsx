@@ -82,7 +82,7 @@ export default function App() {
                 path={PROFILE_CREATION}
                 component={ProfileCreationPage}
               />
-              <Route exact path={HOME} component={Home} />
+              <AuthenticatedRoute exact path={HOME} component={Home} />
               <Route exact path={POSTS} component={Posts} />
               <Route exact path={CREATE_POST} component={CreatePostPage} />
               <AuthenticatedRoute path={PROFILE} component={Profile} />

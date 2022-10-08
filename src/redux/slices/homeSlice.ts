@@ -10,6 +10,7 @@ interface HomeState {
   createdRequests: CreatedRequest[];
   appliedRequestsPage: number;
   createdRequestsPage: number;
+  isLoading: boolean;
 }
 
 const initialState: HomeState = {
@@ -17,6 +18,7 @@ const initialState: HomeState = {
   createdRequests: [],
   appliedRequestsPage: 0,
   createdRequestsPage: 0,
+  isLoading: false,
 };
 
 const HomeSlice = createSlice({
@@ -38,6 +40,13 @@ const HomeSlice = createSlice({
         state.appliedRequestsPage += 1;
         state.appliedRequests = state.appliedRequests.concat(action.payload);
       }
+      state.isLoading = false;
+    });
+    builder.addCase(getNextPageOfAppliedRequests.pending, (state, _) => {
+      state.isLoading = true;
+    });
+    builder.addCase(getNextPageOfAppliedRequests.rejected, (state, _) => {
+      state.isLoading = false;
     });
     builder.addCase(getNextPageOfCreatedRequests.fulfilled, (state, action) => {
       if (action.payload.length > 0) {
@@ -45,6 +54,13 @@ const HomeSlice = createSlice({
         state.createdRequestsPage += 1;
         state.createdRequests = state.createdRequests.concat(action.payload);
       }
+      state.isLoading = false;
+    });
+    builder.addCase(getNextPageOfCreatedRequests.pending, (state, _) => {
+      state.isLoading = true;
+    });
+    builder.addCase(getNextPageOfCreatedRequests.rejected, (state, _) => {
+      state.isLoading = false;
     });
   },
 });
@@ -57,7 +73,7 @@ export const getNewPageOfAppliedRequests = createAsyncThunk<
   AppliedRequest[],
   undefined,
   { state: RootState }
->('home/getNewPageOfAppliedRequests', async (_, thunkApi) => {
+>('home/getNewPageOfAppliedRequests', async () => {
   const responseData = await getAppliedRequests(1);
   return responseData;
 });
@@ -70,7 +86,7 @@ export const getNewPageOfCreatedRequests = createAsyncThunk<
   CreatedRequest[],
   undefined,
   { state: RootState }
->('home/getNewPageOfCreatedRequests', async (_, thunkApi) => {
+>('home/getNewPageOfCreatedRequests', async () => {
   const responseData = await getCreatedRequests(1);
   return responseData;
 });

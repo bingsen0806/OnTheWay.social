@@ -1,28 +1,13 @@
 import { IonItem } from '@ionic/react';
-import moment from 'moment';
 import { facultyEnumToStr, locationEnumToStr, Post } from '../../api/types';
+import {
+  convertDateRangeToTimeRangeStr,
+  convertDateToDateStr,
+} from '../../util/dateUtils';
 import styles from './styles.module.scss';
 
 interface PostListItemProps {
   post: Post;
-}
-
-function convertDateToDateStr(date: string) {
-  const momentDate = moment(date);
-  if (momentDate.isSame(moment(), 'day')) {
-    return 'Today';
-  }
-  return momentDate.format('DD MMM');
-}
-
-/**
- * Assuming dates are the same day, return the range in terms of hh:mm am/pm.
- * TODO: make sure can only allow sessions within same day.
- */
-function convertDateRangeToTimeRangeStr(date1: string, date2: string) {
-  return (
-    moment(date1).format('hh:mm A') + ' - ' + moment(date2).format('hh:mm A')
-  );
 }
 
 export default function PostListItem({ post }: PostListItemProps) {
