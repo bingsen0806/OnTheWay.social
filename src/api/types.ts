@@ -132,3 +132,13 @@ export interface CreatedRequest {
   /** List of users who have applied for this post */
   applicants: User[];
 }
+
+export interface ApiResponseBody<T> {
+  success: boolean;
+  message: T | string;
+}
+
+export interface ApiRequestBody {
+  /* eslint-disable */
+  [key: string]: any;
+}

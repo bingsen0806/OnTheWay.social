@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import { getPosts, PostsFilter } from '../../api/posts';
-import { Post } from '../../api/types';
+import { ApiResponseBody, Post } from '../../api/types';
 import { RootState } from '../store';
 
 interface PostsState {
@@ -32,16 +32,20 @@ const PostsSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(getNewPageOfPostsWithFilter.fulfilled, (state, action) => {
       state.isLoading = false;
-      state.page = 1;
-      state.posts = action.payload;
-      state.filter = action.meta.arg;
+      if (action.payload.success) {
+        state.page = 1;
+        state.posts = action.payload.message as Post[];
+        state.filter = action.meta.arg;
+      }
     });
     builder.addCase(getNextPageOfPosts.fulfilled, (state, action) => {
       state.isLoading = false;
-      if (action.payload.length > 0) {
-        // only if a non empty page received then increment page
-        state.page += 1;
-        state.posts = state.posts.concat(action.payload);
+      if (action.payload.success) {
+        if (action.payload.message.length > 0) {
+          // only if a non empty page received then increment page
+          state.page += 1;
+          state.posts = state.posts.concat(action.payload.message as Post[]);
+        }
       }
     });
     builder.addCase(getNextPageOfPosts.pending, (state, _) => {
@@ -63,7 +67,7 @@ const PostsSlice = createSlice({
  * Get new page of posts, with a new filter, resetting page back to 1.
  */
 export const getNewPageOfPostsWithFilter = createAsyncThunk<
-  Post[],
+  ApiResponseBody<Post[]>,
   PostsFilter,
   { state: RootState }
 >('posts/getNewPageOfPostsWithFilter', async (filter, _) => {
@@ -75,7 +79,7 @@ export const getNewPageOfPostsWithFilter = createAsyncThunk<
  * Get another page of posts with the current filter settings.
  */
 export const getNextPageOfPosts = createAsyncThunk<
-  Post[],
+  ApiResponseBody<Post[]>,
   undefined,
   { state: RootState }
 >('posts/getNextPageOfPosts', async (_, thunkApi) => {

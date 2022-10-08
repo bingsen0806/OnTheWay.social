@@ -8,6 +8,8 @@ import DropdownSelection, {
 } from '../../components/DropdownSelection';
 import TextInputField from '../../components/TextInputField/TextInputField';
 import { HOME } from '../../routes';
+import useCheckedErrorHandler from '../../util/hooks/useCheckedErrorHandler';
+import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
 import AuthenticationPageContainer from './AuthenticationPageContainer';
 import styles from './styles.module.scss';
 
@@ -97,8 +99,19 @@ const yearOfStudyDropdownItems: DropdownItem<number>[] = [
  */
 export default function ProfileCreationPage() {
   const history = useHistory();
+  const handleCheckedError = useCheckedErrorHandler();
+  const handleUnknownError = useUnknownErrorHandler();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [userDetails, setUserDetails] = useState<User>({} as User);
+  const [userDetails, setUserDetails] = useState<User>({
+    id: '',
+    name: '',
+    gender: Gender.PREFER_NOT_TO_SAY,
+    faculty: Faculty.ARTS_AND_SOCIAL_SCIENCES,
+    telegramHandle: '',
+    year: 2022,
+    profilePhoto: '',
+    thumbnailPhoto: '',
+  });
   const [errorMessages, setErrorMessages] =
     useState<ProfileCreationErrorMessages>({
       username: '',
@@ -146,10 +159,15 @@ export default function ProfileCreationPage() {
 
     try {
       setIsLoading(true);
-      await createUserProfile(userDetails);
-      history.replace(HOME);
+      const resp = await createUserProfile(userDetails);
+      console.log(resp);
+      if (resp.success) {
+        history.replace(HOME);
+      } else {
+        handleCheckedError(resp.message);
+      }
     } catch (error) {
-      console.log(error);
+      handleUnknownError(error);
     } finally {
       setIsLoading(false);
     }

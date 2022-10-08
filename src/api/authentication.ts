@@ -6,7 +6,9 @@ import {
   signInWithEmailAndPassword,
   signOut,
 } from 'firebase/auth';
-import { User } from './types';
+import { httpsCallable } from 'firebase/functions';
+import { firestoreFunctions } from '../firebase';
+import { ApiRequestBody, ApiResponseBody, User } from './types';
 
 export interface LoginDetails {
   email: string;
@@ -46,7 +48,10 @@ export async function deleteCurrentUser() {
 }
 
 export async function createUserProfile(userDetails: User) {
-  await Promise.resolve();
-  //TODO: implement
-  return;
+  const callApi = httpsCallable<ApiRequestBody, ApiResponseBody<string>>(
+    firestoreFunctions,
+    'createUser'
+  );
+  const result = await callApi({ user: userDetails });
+  return result.data;
 }

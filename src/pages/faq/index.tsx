@@ -1,4 +1,4 @@
-import styles from "./styles.module.scss";
+import styles from './styles.module.scss';
 import {
   IonContent,
   IonHeader,
@@ -14,12 +14,12 @@ import {
   IonGrid,
   IonRow,
   IonCol,
-} from "@ionic/react";
-import { useAppSelector } from "../../redux/hooks";
+} from '@ionic/react';
+import { useAppSelector } from '../../redux/hooks';
 export default function Faq() {
   const FAQs = useAppSelector((state) => state.faq.faqs);
   const items = FAQs.map((faq, i) => (
-    <IonAccordion value={i.toString()} color="light">
+    <IonAccordion value={i.toString()} color="light" key={faq.question}>
       <IonItem slot="header" color="light">
         <IonLabel>{faq.question}</IonLabel>
       </IonItem>
@@ -42,9 +42,9 @@ export default function Faq() {
       <IonContent fullscreen>
         <IonGrid>
           <h1 className="ion-text-center">Frequently asked questions</h1>
-          <IonRow className={styles["row"]}>
+          <IonRow className={styles['row']}>
             <IonCol size="11" sizeMd="8" sizeLg="6">
-              <IonAccordionGroup className={styles["bg"]}>
+              <IonAccordionGroup className={styles['bg']}>
                 {items}
               </IonAccordionGroup>
             </IonCol>

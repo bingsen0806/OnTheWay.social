@@ -1,6 +1,6 @@
 /* eslint-disable */
 // @ts-nocheck
-import { Redirect, Route, useHistory, useLocation } from 'react-router-dom';
+import { Redirect, Route } from 'react-router-dom';
 import { useAuthState } from '.';
 import { EMAIL_VERIFICATION, HOME } from '../../routes';
 
@@ -16,7 +16,6 @@ export default function UnauthenticatedRoute({
   component,
 }: UnauthenticatedRouteProps) {
   const { isAuthenticated, isEmailVerified } = useAuthState();
-  const location = useLocation();
   return (
     <Route
       exact={exact}

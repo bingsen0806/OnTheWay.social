@@ -17,7 +17,6 @@ import {
   IonRow,
   IonTitle,
   IonToolbar,
-  useIonViewDidEnter,
 } from '@ionic/react';
 import { funnelOutline } from 'ionicons/icons';
 import { useState } from 'react';
@@ -30,12 +29,17 @@ import {
   getNextPageOfPosts,
 } from '../../redux/slices/postsSlice';
 import { CREATE_POST } from '../../routes';
+import useCheckedErrorHandler from '../../util/hooks/useCheckedErrorHandler';
+import usePageInitialLoad from '../../util/hooks/usePageInitialLoad';
+import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
 import styles from './styles.module.scss';
 
 export default function PostsPage() {
   const listOfPosts = useAppSelector((state) => state.posts.posts);
   const isLoading = useAppSelector((state) => state.posts.isLoading);
   const dispatch = useAppDispatch();
+  const handleCheckedError = useCheckedErrorHandler();
+  const handleUnknownError = useUnknownErrorHandler();
   const [filterLocations, setFilterLocations] = useState<{
     [key in Location]: boolean;
   }>({
@@ -64,8 +68,16 @@ export default function PostsPage() {
   }
 
   function resetPostsList() {
-    void dispatch(getNewPageOfPostsWithFilter({ locations: [] }));
-    // add error
+    dispatch(getNewPageOfPostsWithFilter({ locations: [] }))
+      .unwrap()
+      .then((resp) => {
+        if (!resp.success) {
+          handleCheckedError(resp.message as string);
+        }
+      })
+      .catch((error) => {
+        handleUnknownError(error);
+      });
   }
 
   function setFilterLocationValue(location: Location) {
@@ -80,17 +92,33 @@ export default function PostsPage() {
         newLocationFilter.push(location as unknown as Location);
       }
     }
-    void dispatch(
-      getNewPageOfPostsWithFilter({ locations: newLocationFilter })
-    );
+    dispatch(getNewPageOfPostsWithFilter({ locations: newLocationFilter }))
+      .unwrap()
+      .then((resp) => {
+        if (!resp.success) {
+          handleCheckedError(resp.message as string);
+        }
+      })
+      .catch((error) => {
+        handleUnknownError(error);
+      });
   }
 
   function requestNextPageOfPosts() {
-    void dispatch(getNextPageOfPosts());
+    dispatch(getNextPageOfPosts())
+      .unwrap()
+      .then((resp) => {
+        if (!resp.success) {
+          handleCheckedError(resp.message as string);
+        }
+      })
+      .catch((error) => {
+        handleUnknownError(error);
+      });
   }
 
   // fetch the data right before this scren is opened
-  useIonViewDidEnter(() => {
+  usePageInitialLoad(() => {
     resetPostsList();
   });
 
@@ -176,7 +204,7 @@ export default function PostsPage() {
             ))}
           </IonList>
           <IonInfiniteScroll
-            onIonInfinite={getNextPageOfPosts}
+            onIonInfinite={requestNextPageOfPosts}
             threshold="50px"
             disabled={listOfPosts.length < 20}
           >

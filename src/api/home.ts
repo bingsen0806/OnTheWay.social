@@ -2,69 +2,38 @@
  * TODO: add firebase functions here for api calls
  */
 
+import { httpsCallable } from 'firebase/functions';
+import { firestoreFunctions } from '../firebase';
 import {
+  ApiRequestBody,
+  ApiResponseBody,
   AppliedRequest,
-  AppliedRequestStatus,
   CreatedRequest,
-  Faculty,
-  Gender,
-  Location,
 } from './types';
 
 export async function getAppliedRequests(page: number) {
-  return Promise.resolve<AppliedRequest[]>([
-    {
-      post: {
-        id: '0',
-        poster: {
-          id: '0',
-          name: 'Ben',
-          gender: Gender.MALE,
-          faculty: Faculty.COMPUTING,
-          telegramHandle: 'murph99',
-          year: 3,
-          profilePhoto: '',
-          thumbnailPhoto: '',
-        },
-        startDateTime: new Date().toISOString(),
-        endDateTime: new Date().toISOString(),
-        personCapacity: 5,
-        participants: [],
-        location: Location.SOC,
-        description: 'Hello, feel free to meet',
-      },
-      status: AppliedRequestStatus.ACCEPTED,
-    },
-  ]);
+  const callApi = httpsCallable<
+    ApiRequestBody,
+    ApiResponseBody<AppliedRequest[]>
+  >(firestoreFunctions, 'getAppliedPosts');
+  const result = await callApi({ page });
+  return result.data;
 }
 
 export async function getCreatedRequests(page: number) {
-  return Promise.resolve<CreatedRequest[]>([
-    {
-      post: {
-        id: '0',
-        poster: {
-          id: '0',
-          name: 'Ben',
-          gender: Gender.MALE,
-          faculty: Faculty.COMPUTING,
-          telegramHandle: 'murph99',
-          year: 3,
-          profilePhoto: '',
-          thumbnailPhoto: '',
-        },
-        startDateTime: new Date().toISOString(),
-        endDateTime: new Date().toISOString(),
-        personCapacity: 5,
-        participants: [],
-        location: Location.SOC,
-        description: 'Hello, feel free to meet',
-      },
-      applicants: [],
-    },
-  ]);
+  const callApi = httpsCallable<
+    ApiRequestBody,
+    ApiResponseBody<CreatedRequest[]>
+  >(firestoreFunctions, 'getCreatedPosts');
+  const result = await callApi({ page });
+  return result.data;
 }
 
 export async function cancelRequest(postId: string) {
-  return Promise.resolve();
+  const callApi = httpsCallable<ApiRequestBody, ApiResponseBody<string>>(
+    firestoreFunctions,
+    'deletePost'
+  );
+  const result = await callApi({ postId });
+  return result.data;
 }

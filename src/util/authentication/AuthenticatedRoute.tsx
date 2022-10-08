@@ -14,6 +14,7 @@ export default function AuthenticatedRoute({
   component,
 }: AuthenticatedRouteProps) {
   const { isAuthenticated, isEmailVerified } = useAuthState();
+  console.log('auth');
   return (
     <Route
       exact={exact}

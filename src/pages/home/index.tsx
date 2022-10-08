@@ -10,7 +10,6 @@ import {
   IonSegment,
   IonSegmentButton,
   IonToolbar,
-  useIonViewWillEnter,
 } from '@ionic/react';
 import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -19,6 +18,9 @@ import {
   getNewPageOfCreatedRequests,
 } from '../../redux/slices/homeSlice';
 import { getSelf } from '../../redux/slices/userSlice';
+import useCheckedErrorHandler from '../../util/hooks/useCheckedErrorHandler';
+import usePageInitialLoad from '../../util/hooks/usePageInitialLoad';
+import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
 import AppliedRequestListItem from './components/RequesListItems/AppliedRequestListItem';
 import CreatedRequestListItem from './components/RequesListItems/CreatedRequestListItem';
 
@@ -28,28 +30,74 @@ enum HomeTab {
 }
 
 export default function Homepage() {
-  const username = useAppSelector((state) => state.user.user.name);
   const dispatch = useAppDispatch();
+  const username = useAppSelector((state) => state.user.user.name);
   const appliedPosts = useAppSelector((state) => state.home.appliedRequests);
   const createdPosts = useAppSelector((state) => state.home.createdRequests);
   const isLoading = useAppSelector((state) => state.home.isLoading);
+  const handleCheckedError = useCheckedErrorHandler();
+  const handleUnknownError = useUnknownErrorHandler();
   const [tabToShow, setTabToShow] = useState<HomeTab>(HomeTab.APPLIED_POST);
 
-  useIonViewWillEnter(() => {
-    void dispatch(getNewPageOfAppliedRequests());
-    void dispatch(getNewPageOfCreatedRequests());
-    void dispatch(getSelf());
-    // TODO: add error hadnling
+  usePageInitialLoad(() => {
+    dispatch(getSelf())
+      .unwrap()
+      .then((selfResp) => {
+        if (!selfResp.success) {
+          handleCheckedError(selfResp.message as string);
+          return;
+        }
+        dispatch(getNewPageOfAppliedRequests())
+          .unwrap()
+          .then((appliedReqResp) => {
+            if (!appliedReqResp.success) {
+              handleCheckedError(appliedReqResp.message as string);
+              return;
+            }
+            dispatch(getNewPageOfCreatedRequests())
+              .unwrap()
+              .then((createdReqResp) => {
+                if (!createdReqResp.success) {
+                  handleCheckedError(createdReqResp.message as string);
+                }
+              })
+              .catch((error) => {
+                handleUnknownError(error);
+              });
+          })
+          .catch((error) => {
+            handleUnknownError(error);
+          });
+      })
+      .catch((error) => {
+        handleUnknownError(error);
+      });
   });
 
   function getNextPageOfAppliedRequests() {
-    void dispatch(getNewPageOfAppliedRequests());
-    // TODO: add error handling
+    dispatch(getNewPageOfAppliedRequests())
+      .unwrap()
+      .then((resp) => {
+        if (!resp.success) {
+          handleCheckedError(resp.message as string);
+        }
+      })
+      .catch((error) => {
+        handleUnknownError(error);
+      });
   }
 
   function getNextPageOfCreatedRequests() {
-    void dispatch(getNewPageOfCreatedRequests());
-    // TODO: add error handling
+    dispatch(getNewPageOfCreatedRequests())
+      .unwrap()
+      .then((resp) => {
+        if (!resp.success) {
+          handleCheckedError(resp.message as string);
+        }
+      })
+      .catch((error) => {
+        handleUnknownError(error);
+      });
   }
 
   function renderListBasedOnTab() {
