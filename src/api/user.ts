@@ -1,4 +1,5 @@
 import { User, Gender, Faculty } from "./types";
+import { uploadImage } from "./uploader";
 
 /**
  * Get user object
@@ -19,6 +20,25 @@ export async function getUser(userId: string) {
   return Promise.resolve(sampleUser);
 }
 
-export async function uploadImage() {
-  //TODO: Upload image
+export function uploadImageAndStoreToDb(user: User, image: File) {
+  const callback = (urls: string[]) => {
+    if (urls.length !== 2) {
+      return;
+    }
+    const profilePhoto = urls[0];
+    const thumbnailPhoto = urls[1];
+    const updatedUser: User = {
+      id: user.id,
+      name: user.name,
+      gender: user.gender,
+      faculty: user.faculty,
+      telegramHandle: user.telegramHandle,
+      year: user.year,
+      profilePhoto: profilePhoto,
+      thumbnailPhoto: thumbnailPhoto,
+    };
+    console.log(updatedUser);
+    //TODO: Make api call with updated user object
+  };
+  return uploadImage(image, user.id, callback);
 }
