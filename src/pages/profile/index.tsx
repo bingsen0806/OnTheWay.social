@@ -17,8 +17,7 @@ import styles from './styles.module.scss';
 import { useHistory } from 'react-router';
 import { FAQ } from '../../routes';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { getUserObject } from '../../redux/slices/userSlice';
-import { getAuth } from 'firebase/auth';
+import { getSelf } from '../../redux/slices/userSlice';
 import { logout } from '../../api/authentication';
 import React, { useRef, useState } from 'react';
 import { uploadImage } from '../../api/user';
@@ -57,10 +56,7 @@ export default function ProfilePage() {
   };
 
   const getUser = () => {
-    const auth = getAuth();
-    if (auth.currentUser?.uid) {
-      void dispatch(getUserObject(auth.currentUser.uid));
-    }
+    dispatch(getSelf);
   };
 
   useIonViewDidEnter(() => {

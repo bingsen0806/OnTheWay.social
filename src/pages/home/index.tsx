@@ -18,6 +18,7 @@ import {
   getNewPageOfAppliedRequests,
   getNewPageOfCreatedRequests,
 } from '../../redux/slices/homeSlice';
+import { getSelf } from '../../redux/slices/userSlice';
 import AppliedRequestListItem from './components/RequesListItems/AppliedRequestListItem';
 import CreatedRequestListItem from './components/RequesListItems/CreatedRequestListItem';
 
@@ -27,6 +28,7 @@ enum HomeTab {
 }
 
 export default function Homepage() {
+  const username = useAppSelector((state) => state.user.user.name);
   const dispatch = useAppDispatch();
   const appliedPosts = useAppSelector((state) => state.home.appliedRequests);
   const createdPosts = useAppSelector((state) => state.home.createdRequests);
@@ -36,6 +38,7 @@ export default function Homepage() {
   useIonViewWillEnter(() => {
     void dispatch(getNewPageOfAppliedRequests());
     void dispatch(getNewPageOfCreatedRequests());
+    void dispatch(getSelf());
     // TODO: add error hadnling
   });
 
@@ -90,7 +93,7 @@ export default function Homepage() {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <h1 className="ion-padding-start">Hi {}</h1>
+          <h1 className="ion-padding-start">Hi {username}!</h1>
           <p className="ion-padding-start">
             Here are all the posts you've applied to or created
           </p>

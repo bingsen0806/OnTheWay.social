@@ -1,6 +1,8 @@
-import { Redirect, Route } from 'react-router-dom';
+/* eslint-disable */
+// @ts-nocheck
+import { Redirect, Route, useHistory, useLocation } from 'react-router-dom';
 import { useAuthState } from '.';
-import { EMAIL_VERIFICATION, PROFILE } from '../../routes';
+import { EMAIL_VERIFICATION, HOME } from '../../routes';
 
 interface UnauthenticatedRouteProps {
   exact?: boolean;
@@ -14,6 +16,7 @@ export default function UnauthenticatedRoute({
   component,
 }: UnauthenticatedRouteProps) {
   const { isAuthenticated, isEmailVerified } = useAuthState();
+  const location = useLocation();
   return (
     <Route
       exact={exact}
@@ -26,7 +29,9 @@ export default function UnauthenticatedRoute({
             return (
               <Redirect
                 to={{
-                  pathname: PROFILE,
+                  pathname: props.location.state?.from
+                    ? props.location.state.from.pathname
+                    : HOME,
                   state: { from: props.location },
                 }}
               />
