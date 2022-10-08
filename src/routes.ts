@@ -13,4 +13,4 @@ export const POSTS = '/posts';
 export const CREATE_POST = '/posts/create';
 
 export const PROFILE = '/profile';
-export const FAQ = '/faq';
+export const FAQ = '/profile/faq';

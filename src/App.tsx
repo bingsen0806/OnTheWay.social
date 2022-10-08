@@ -64,7 +64,6 @@ export default function App() {
         <IonReactRouter>
           <IonTabs>
             <IonRouterOutlet>
-              <Route exact path={FAQ} component={Faq} />
               <UnauthenticatedRoute exact path={LOGIN} component={LoginPage} />
               <UnauthenticatedRoute
                 exact
@@ -85,7 +84,8 @@ export default function App() {
               <AuthenticatedRoute exact path={HOME} component={Home} />
               <Route exact path={POSTS} component={Posts} />
               <Route exact path={CREATE_POST} component={CreatePostPage} />
-              <AuthenticatedRoute path={PROFILE} component={Profile} />
+              <AuthenticatedRoute exact path={PROFILE} component={Profile} />
+              <Route exact path={FAQ} component={Faq} />
               <Route exact path="/">
                 <Redirect to={HOME} />
               </Route>
