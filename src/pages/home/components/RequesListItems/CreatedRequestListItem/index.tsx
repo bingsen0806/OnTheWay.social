@@ -1,15 +1,7 @@
-import {
-  IonItem,
-  IonButton,
-  IonCol,
-  IonGrid,
-  IonRow,
-} from '@ionic/react';
+import { IonItem, IonButton, IonCol, IonGrid, IonRow } from '@ionic/react';
+import { useState } from 'react';
 import { cancelRequest } from '../../../../../api/home';
-import {
-  locationEnumToStr,
-  CreatedRequest,
-} from '../../../../../api/types';
+import { locationEnumToStr, CreatedRequest } from '../../../../../api/types';
 import {
   convertDateToDateStr,
   convertDateRangeToTimeRangeStr,
@@ -23,13 +15,19 @@ interface CreatedRequestListItemProps {
 export default function CreatedRequestListItem({
   createdRequest,
 }: CreatedRequestListItemProps) {
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+  function closeModal() {
+    setIsModalOpen(false);
+  }
+
   function sendCancellationRequest() {
     void cancelRequest(createdRequest.post.id);
     // TODO: error handling
   }
 
   return (
-    <IonItem>
+    <IonItem button onClick={() => setIsModalOpen(true)}>
       <IonGrid>
         <IonRow className="ion-justify-content-between">
           <IonCol>
