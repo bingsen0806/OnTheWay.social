@@ -19,7 +19,7 @@ import { useAppSelector } from "../../redux/hooks";
 export default function Faq() {
   const FAQs = useAppSelector((state) => state.faq.faqs);
   const items = FAQs.map((faq, i) => (
-    <IonAccordion value={i.toString()} color="light">
+    <IonAccordion value={i.toString()} color="light" key={faq.question}>
       <IonItem slot="header" color="light">
         <IonLabel>{faq.question}</IonLabel>
       </IonItem>

@@ -1,15 +1,17 @@
-import { IonButton, IonCol, IonLoading, IonRow } from '@ionic/react';
-import { useState } from 'react';
-import { useHistory } from 'react-router';
-import { createUserProfile } from '../../api/authentication';
-import { Faculty, Gender, User } from '../../api/types';
+import { IonButton, IonCol, IonLoading, IonRow } from "@ionic/react";
+import { useState } from "react";
+import { useHistory } from "react-router";
+import { createUserProfile } from "../../api/authentication";
+import { Faculty, Gender, User } from "../../api/types";
 import DropdownSelection, {
   DropdownItem,
-} from '../../components/DropdownSelection';
-import TextInputField from '../../components/TextInputField/TextInputField';
-import { HOME } from '../../routes';
-import AuthenticationPageContainer from './AuthenticationPageContainer';
-import styles from './styles.module.scss';
+} from "../../components/DropdownSelection";
+import TextInputField from "../../components/TextInputField/TextInputField";
+import { HOME } from "../../routes";
+import useCheckedErrorHandler from "../../util/hooks/useCheckedErrorHandler";
+import useUnknownErrorHandler from "../../util/hooks/useUnknownErrorHandler";
+import AuthenticationPageContainer from "./AuthenticationPageContainer";
+import styles from "./styles.module.scss";
 
 interface ProfileCreationErrorMessages {
   username: string;
@@ -18,73 +20,73 @@ interface ProfileCreationErrorMessages {
 
 const genderDropdownItems: DropdownItem<Gender>[] = [
   {
-    label: 'Male',
+    label: "Male",
     value: Gender.MALE,
   },
   {
-    label: 'Female',
+    label: "Female",
     value: Gender.FEMALE,
   },
   {
-    label: 'Prefer not to say',
+    label: "Prefer not to say",
     value: Gender.PREFER_NOT_TO_SAY,
   },
 ];
 
 const facultyDropdownItems: DropdownItem<Faculty>[] = [
   {
-    label: 'Arts & Social Sciences',
+    label: "Arts & Social Sciences",
     value: Faculty.ARTS_AND_SOCIAL_SCIENCES,
   },
   {
-    label: 'Business',
+    label: "Business",
     value: Faculty.BUSINESS,
   },
   {
-    label: 'Computing',
+    label: "Computing",
     value: Faculty.COMPUTING,
   },
   {
-    label: 'Dentistry',
+    label: "Dentistry",
     value: Faculty.DENTISTRY,
   },
   {
-    label: 'Design & Engineering',
+    label: "Design & Engineering",
     value: Faculty.DESIGN_AND_ENGINEERING,
   },
   {
-    label: 'Law',
+    label: "Law",
     value: Faculty.LAW,
   },
   {
-    label: 'Medicine',
+    label: "Medicine",
     value: Faculty.MEDICINE,
   },
   {
-    label: 'Music',
+    label: "Music",
     value: Faculty.MUSIC,
   },
   {
-    label: 'Science',
+    label: "Science",
     value: Faculty.SCIENCE,
   },
 ];
 
 const yearOfStudyDropdownItems: DropdownItem<number>[] = [
   {
-    label: 'Year 1',
+    label: "Year 1",
     value: 1,
   },
   {
-    label: 'Year 2',
+    label: "Year 2",
     value: 2,
   },
   {
-    label: 'Year 3',
+    label: "Year 3",
     value: 3,
   },
   {
-    label: 'Year 4',
+    label: "Year 4",
     value: 4,
   },
 ];
@@ -97,12 +99,23 @@ const yearOfStudyDropdownItems: DropdownItem<number>[] = [
  */
 export default function ProfileCreationPage() {
   const history = useHistory();
+  const handleCheckedError = useCheckedErrorHandler();
+  const handleUnknownError = useUnknownErrorHandler();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [userDetails, setUserDetails] = useState<User>({} as User);
+  const [userDetails, setUserDetails] = useState<User>({
+    id: "",
+    name: "",
+    gender: Gender.PREFER_NOT_TO_SAY,
+    faculty: Faculty.ARTS_AND_SOCIAL_SCIENCES,
+    telegramHandle: "",
+    year: 2022,
+    profilePhoto: "",
+    thumbnailPhoto: "",
+  });
   const [errorMessages, setErrorMessages] =
     useState<ProfileCreationErrorMessages>({
-      username: '',
-      telegramHandle: '',
+      username: "",
+      telegramHandle: "",
     });
   const [shouldShowDropdownErrors, setShouldShowDropdownErrors] =
     useState<boolean>(false);
@@ -121,15 +134,15 @@ export default function ProfileCreationPage() {
     let haveError = false;
 
     const newErrorMessages: ProfileCreationErrorMessages = {
-      username: '',
-      telegramHandle: '',
+      username: "",
+      telegramHandle: "",
     };
     if (!userDetails.name) {
-      newErrorMessages.username = 'Please provide your username';
+      newErrorMessages.username = "Please provide your username";
       haveError = true;
     }
     if (!userDetails.telegramHandle) {
-      newErrorMessages.telegramHandle = 'Please provide your telegram handle';
+      newErrorMessages.telegramHandle = "Please provide your telegram handle";
       haveError = true;
     }
 
@@ -146,10 +159,15 @@ export default function ProfileCreationPage() {
 
     try {
       setIsLoading(true);
-      await createUserProfile(userDetails);
-      history.replace(HOME);
+      const resp = await createUserProfile(userDetails);
+      console.log(resp);
+      if (resp.success) {
+        history.replace(HOME);
+      } else {
+        handleCheckedError(resp.message);
+      }
     } catch (error) {
-      console.log(error);
+      handleUnknownError(error);
     } finally {
       setIsLoading(false);
     }
@@ -171,7 +189,7 @@ export default function ProfileCreationPage() {
         </IonCol>
       </IonRow>
       <IonRow className="ion-padding-bottom ion-justify-content-center">
-        <IonCol size="10" className={styles['input-field-col']}>
+        <IonCol size="10" className={styles["input-field-col"]}>
           <TextInputField
             label="Telegram Handle"
             placeholder="Telegram Handle"

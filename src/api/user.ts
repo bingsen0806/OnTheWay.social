@@ -1,4 +1,6 @@
-import { User, Gender, Faculty } from "./types";
+import { httpsCallable } from "firebase/functions";
+import { firestoreFunctions } from "../firebase";
+import { User, ApiRequestBody, ApiResponseBody } from "./types";
 import { uploadImage } from "./uploader";
 
 /**
@@ -6,22 +8,30 @@ import { uploadImage } from "./uploader";
  * TODO: add firebase func call.
  */
 export async function getUser(userId: string) {
-  const sampleUser: User = {
-    id: userId,
-    name: "Chun",
-    gender: Gender.PREFER_NOT_TO_SAY,
-    faculty: Faculty.COMPUTING,
-    telegramHandle: "",
-    year: 0,
-    profilePhoto: "",
-    thumbnailPhoto:
-      "https://images.unsplash.com/photo-1529665253569-6d01c0eaf7b6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8cHJvZmlsZXxlbnwwfHwwfHw%3D&w=1000&q=80",
-  };
-  return Promise.resolve(sampleUser);
+  const callApi = httpsCallable<ApiRequestBody, ApiResponseBody<User>>(
+    firestoreFunctions,
+    "getUser"
+  );
+  const result = await callApi({ userId });
+  return result.data;
 }
 
-export function uploadImageAndStoreToDb(user: User, image: File) {
-  const callback = (urls: string[]) => {
+export async function getSelfUser() {
+  const callApi = httpsCallable<ApiRequestBody, ApiResponseBody<User>>(
+    firestoreFunctions,
+    "getCurrentUser"
+  );
+  const result = await callApi({});
+  return result.data;
+}
+
+export function uploadImageAndStoreToDb(
+  user: User,
+  image: File,
+  success: () => void,
+  failed: (e: string) => void
+) {
+  const callback = async (urls: string[]) => {
     if (urls.length !== 2) {
       return;
     }
@@ -37,8 +47,16 @@ export function uploadImageAndStoreToDb(user: User, image: File) {
       profilePhoto: profilePhoto,
       thumbnailPhoto: thumbnailPhoto,
     };
-    console.log(updatedUser);
-    //TODO: Make api call with updated user object
+    const callApi = httpsCallable<ApiRequestBody, ApiResponseBody<string>>(
+      firestoreFunctions,
+      "updateUser"
+    );
+    const res = await callApi({ user: updatedUser });
+    if (res.data.success) {
+      success();
+    } else {
+      failed(res.data.message);
+    }
   };
   return uploadImage(image, user.id, callback);
 }

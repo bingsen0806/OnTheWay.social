@@ -1,6 +1,6 @@
-import { Redirect, Route } from 'react-router-dom';
-import { useAuthState } from '.';
-import { EMAIL_VERIFICATION, LOGIN } from '../../routes';
+import { Redirect, Route } from "react-router-dom";
+import { useAuthState } from ".";
+import { EMAIL_VERIFICATION, LOGIN } from "../../routes";
 
 interface AuthenticatedRouteProps {
   exact?: boolean;
@@ -14,6 +14,7 @@ export default function AuthenticatedRoute({
   component,
 }: AuthenticatedRouteProps) {
   const { isAuthenticated, isEmailVerified } = useAuthState();
+  console.log("auth");
   return (
     <Route
       exact={exact}

@@ -1,6 +1,5 @@
 import {
   IonContent,
-  IonGrid,
   IonHeader,
   IonPage,
   IonTitle,
@@ -8,20 +7,24 @@ import {
   IonItem,
   IonLabel,
   IonList,
+  IonAvatar,
+  IonCardContent,
+  IonCard,
+  IonCardHeader,
+  IonGrid,
   IonRow,
   IonCol,
-  IonAvatar,
-  useIonViewDidEnter,
 } from "@ionic/react";
 import styles from "./styles.module.scss";
 import { useHistory } from "react-router";
 import { FAQ } from "../../routes";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { getUserObject } from "../../redux/slices/userSlice";
-import { getAuth } from "firebase/auth";
+import { getSelf } from "../../redux/slices/userSlice";
 import { logout } from "../../api/authentication";
 import React, { useRef, useState } from "react";
-import { uploadImage } from "../../api/user";
+import { uploadImageAndStoreToDb } from "../../api/user";
+import usePageInitialLoad from "../../util/hooks/usePageInitialLoad";
+import useCheckedErrorHandler from "../../util/hooks/useCheckedErrorHandler";
 
 interface Image {
   preview: string;
@@ -38,6 +41,7 @@ export default function ProfilePage() {
     raw: [],
   };
   const [image, setImage] = useState(dummyImage);
+  const handleCheckedError = useCheckedErrorHandler();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -46,7 +50,9 @@ export default function ProfilePage() {
         preview: URL.createObjectURL(e.target.files[0]),
         raw: [file],
       });
-      void uploadImage().then(getUser);
+      const successCallback = getUser;
+      const failedCallback = (error: string) => handleCheckedError(error);
+      void uploadImageAndStoreToDb(user, file, successCallback, failedCallback);
     }
   };
 
@@ -57,13 +63,10 @@ export default function ProfilePage() {
   };
 
   const getUser = () => {
-    const auth = getAuth();
-    if (auth.currentUser?.uid) {
-      void dispatch(getUserObject(auth.currentUser.uid));
-    }
+    void dispatch(getSelf());
   };
 
-  useIonViewDidEnter(() => {
+  usePageInitialLoad(() => {
     getUser();
   });
 
@@ -88,16 +91,11 @@ export default function ProfilePage() {
       <IonContent fullscreen>
         <IonGrid>
           <IonRow className="ion-justify-content-center">
-            <IonCol
-              size="11"
-              sizeMd="8"
-              sizeLg="6"
-              sizeXl="4"
-              className="ion-no-padding"
-            >
-              <IonGrid>
-                <IonRow className="ion-align-items-center">
+            <IonCol size="12" sizeMd="6" sizeLg="4" sizeXl="3">
+              <IonCard>
+                <IonCardContent>
                   <input
+                    accept="image/*"
                     ref={inputFile}
                     type="file"
                     id="upload-button"
@@ -120,25 +118,29 @@ export default function ProfilePage() {
                     </IonAvatar>
                   )}
 
-                  <p className="ion-padding">{username}</p>
-                </IonRow>
-              </IonGrid>
-
-              <IonList lines="none">
-                <IonItem>
-                  <IonLabel onClick={routeToFAQ} className={styles["pointer"]}>
-                    <h1>FAQ</h1>
-                  </IonLabel>
-                </IonItem>
-                <IonItem>
-                  <IonLabel
-                    className={styles["pointer"]}
-                    onClick={submitLogout}
-                  >
-                    <h1>Log out</h1>
-                  </IonLabel>
-                </IonItem>
-              </IonList>
+                  <IonCardHeader>
+                    <h1 className={styles["username-text"]}>{username}</h1>
+                  </IonCardHeader>
+                  <IonList lines="none">
+                    <IonItem>
+                      <IonLabel
+                        onClick={routeToFAQ}
+                        className={styles["pointer"]}
+                      >
+                        <h1>FAQ</h1>
+                      </IonLabel>
+                    </IonItem>
+                    <IonItem>
+                      <IonLabel
+                        className={styles["pointer"]}
+                        onClick={submitLogout}
+                      >
+                        <h1>Log out</h1>
+                      </IonLabel>
+                    </IonItem>
+                  </IonList>
+                </IonCardContent>
+              </IonCard>
             </IonCol>
           </IonRow>
         </IonGrid>

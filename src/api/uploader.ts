@@ -23,8 +23,7 @@ function compressImage(
   failedCallback: () => Promise<any>
 ) {
   const maxWidth = 200;
-  const imageSize = byteToMegabyte(image.size);
-  const quality = imageSize < 1 ? 0.6 : imageSize < 2 ? 0.2 : 0;
+  const quality = 0.8;
   const options = {
     maxWidth,
     quality,
@@ -62,14 +61,14 @@ async function uploadFilesAndGetUrl(
 export function uploadImage(
   image: File,
   userId: string,
-  callback: (urls: string[]) => void
+  callback: (urls: string[]) => Promise<void>
 ) {
   const fileExt = image.name.split(".").pop();
   if (!fileExt) {
     return;
   }
-  const profilePath = `profilePhotos/${userId}.${fileExt}`;
-  const thumbnailPath = `profilePhotos/${userId}-compressed.${fileExt}`;
+  const profilePath = `profilePhoto/${userId}.${fileExt}`;
+  const thumbnailPath = `profilePhoto/${userId}-compressed.${fileExt}`;
   const profileStorageRef = ref(storage, profilePath);
   const thumbnailStorageRef = ref(storage, thumbnailPath);
 

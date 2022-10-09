@@ -2,8 +2,8 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import { RootState } from "../store";
-import { User, Gender, Faculty } from "../../api/types";
-import { getUser } from "../../api/user";
+import { User, Gender, Faculty, ApiResponseBody } from "../../api/types";
+import { getSelfUser, getUser } from "../../api/user";
 
 interface UserState {
   user: User;
@@ -28,7 +28,14 @@ const UserSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getUserObject.fulfilled, (state, action) => {
-      state.user = action.payload;
+      if (action.payload.success) {
+        state.user = action.payload.message as User;
+      }
+    });
+    builder.addCase(getSelf.fulfilled, (state, action) => {
+      if (action.payload.success) {
+        state.user = action.payload.message as User;
+      }
     });
   },
 });
@@ -37,11 +44,20 @@ const UserSlice = createSlice({
  * Get user
  */
 export const getUserObject = createAsyncThunk<
-  User,
+  ApiResponseBody<User>,
   string,
   { state: RootState }
->("user/getUser", async (userId, thunkApi) => {
+>("user/getUser", async (userId, _) => {
   const responseData = await getUser(userId);
+  return responseData;
+});
+
+export const getSelf = createAsyncThunk<
+  ApiResponseBody<User>,
+  undefined,
+  { state: RootState }
+>("user/getSelf", async () => {
+  const responseData = await getSelfUser();
   return responseData;
 });
 
