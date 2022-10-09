@@ -8,19 +8,23 @@ import {
   IonLabel,
   IonList,
   IonAvatar,
-  useIonViewDidEnter,
   IonCardContent,
   IonCard,
   IonCardHeader,
-} from '@ionic/react';
-import styles from './styles.module.scss';
-import { useHistory } from 'react-router';
-import { FAQ } from '../../routes';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { getSelf } from '../../redux/slices/userSlice';
-import { logout } from '../../api/authentication';
-import React, { useRef, useState } from 'react';
-import { uploadImage } from '../../api/user';
+  IonGrid,
+  IonRow,
+  IonCol,
+} from "@ionic/react";
+import styles from "./styles.module.scss";
+import { useHistory } from "react-router";
+import { FAQ } from "../../routes";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { getSelf } from "../../redux/slices/userSlice";
+import { logout } from "../../api/authentication";
+import React, { useRef, useState } from "react";
+import { uploadImageAndStoreToDb } from "../../api/user";
+import usePageInitialLoad from "../../util/hooks/usePageInitialLoad";
+import useCheckedErrorHandler from "../../util/hooks/useCheckedErrorHandler";
 
 interface Image {
   preview: string;
@@ -33,10 +37,11 @@ export default function ProfilePage() {
   const user = useAppSelector((state) => state.user.user);
   const inputFile = useRef<HTMLInputElement>(null);
   const dummyImage: Image = {
-    preview: '',
+    preview: "",
     raw: [],
   };
   const [image, setImage] = useState(dummyImage);
+  const handleCheckedError = useCheckedErrorHandler();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -45,7 +50,9 @@ export default function ProfilePage() {
         preview: URL.createObjectURL(e.target.files[0]),
         raw: [file],
       });
-      void uploadImage().then(getUser);
+      const successCallback = getUser;
+      const failedCallback = (error: string) => handleCheckedError(error);
+      void uploadImageAndStoreToDb(user, file, successCallback, failedCallback);
     }
   };
 
@@ -56,10 +63,10 @@ export default function ProfilePage() {
   };
 
   const getUser = () => {
-    dispatch(getSelf);
+    void dispatch(getSelf());
   };
 
-  useIonViewDidEnter(() => {
+  usePageInitialLoad(() => {
     getUser();
   });
 
@@ -82,42 +89,61 @@ export default function ProfilePage() {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        <IonCard>
-          <IonCardContent>
-            <input
-              ref={inputFile}
-              type="file"
-              id="upload-button"
-              style={{ display: 'none' }}
-              onChange={handleChange}
-            />
-            {image.preview ? (
-              <IonAvatar onClick={openUpload} className={styles['avatar']}>
-                <img alt="profile" src={image.preview} />
-              </IonAvatar>
-            ) : (
-              <IonAvatar onClick={openUpload} className={styles['avatar']}>
-                <img alt="profile" src={imageURL} />
-              </IonAvatar>
-            )}
+        <IonGrid>
+          <IonRow className="ion-justify-content-center">
+            <IonCol size="12" sizeMd="6" sizeLg="4" sizeXl="3">
+              <IonCard>
+                <IonCardContent>
+                  <input
+                    accept="image/*"
+                    ref={inputFile}
+                    type="file"
+                    id="upload-button"
+                    style={{ display: "none" }}
+                    onChange={handleChange}
+                  />
+                  {image.preview ? (
+                    <IonAvatar
+                      onClick={openUpload}
+                      className={styles["avatar"]}
+                    >
+                      <img alt="profile" src={image.preview} />
+                    </IonAvatar>
+                  ) : (
+                    <IonAvatar
+                      onClick={openUpload}
+                      className={styles["avatar"]}
+                    >
+                      <img alt="profile" src={imageURL} />
+                    </IonAvatar>
+                  )}
 
-            <IonCardHeader>
-              <h1 className={styles['username-text']}>{username}</h1>
-            </IonCardHeader>
-            <IonList lines="none">
-              <IonItem>
-                <IonLabel onClick={routeToFAQ} className={styles['pointer']}>
-                  <h1>FAQ</h1>
-                </IonLabel>
-              </IonItem>
-              <IonItem>
-                <IonLabel className={styles['pointer']} onClick={submitLogout}>
-                  <h1>Log out</h1>
-                </IonLabel>
-              </IonItem>
-            </IonList>
-          </IonCardContent>
-        </IonCard>
+                  <IonCardHeader>
+                    <h1 className={styles["username-text"]}>{username}</h1>
+                  </IonCardHeader>
+                  <IonList lines="none">
+                    <IonItem>
+                      <IonLabel
+                        onClick={routeToFAQ}
+                        className={styles["pointer"]}
+                      >
+                        <h1>FAQ</h1>
+                      </IonLabel>
+                    </IonItem>
+                    <IonItem>
+                      <IonLabel
+                        className={styles["pointer"]}
+                        onClick={submitLogout}
+                      >
+                        <h1>Log out</h1>
+                      </IonLabel>
+                    </IonItem>
+                  </IonList>
+                </IonCardContent>
+              </IonCard>
+            </IonCol>
+          </IonRow>
+        </IonGrid>
       </IonContent>
     </IonPage>
   );

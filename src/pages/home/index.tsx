@@ -10,23 +10,23 @@ import {
   IonSegment,
   IonSegmentButton,
   IonToolbar,
-} from '@ionic/react';
-import { useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+} from "@ionic/react";
+import { useState } from "react";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import {
   getNewPageOfAppliedRequests,
   getNewPageOfCreatedRequests,
-} from '../../redux/slices/homeSlice';
-import { getSelf } from '../../redux/slices/userSlice';
-import useCheckedErrorHandler from '../../util/hooks/useCheckedErrorHandler';
-import usePageInitialLoad from '../../util/hooks/usePageInitialLoad';
-import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
-import AppliedRequestListItem from './components/RequesListItems/AppliedRequestListItem';
-import CreatedRequestListItem from './components/RequesListItems/CreatedRequestListItem';
+} from "../../redux/slices/homeSlice";
+import { getSelf } from "../../redux/slices/userSlice";
+import useCheckedErrorHandler from "../../util/hooks/useCheckedErrorHandler";
+import usePageInitialLoad from "../../util/hooks/usePageInitialLoad";
+import useUnknownErrorHandler from "../../util/hooks/useUnknownErrorHandler";
+import AppliedRequestListItem from "./components/RequesListItems/AppliedRequestListItem";
+import CreatedRequestListItem from "./components/RequesListItems/CreatedRequestListItem";
 
 enum HomeTab {
-  APPLIED_POST = 'Applied Posts',
-  CREATED_POST = 'Created Posts',
+  APPLIED_POST = "Applied Posts",
+  CREATED_POST = "Created Posts",
 }
 
 export default function Homepage() {

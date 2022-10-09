@@ -1,9 +1,9 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { persistReducer } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
-import { getPosts, PostsFilter } from '../../api/posts';
-import { ApiResponseBody, Post } from '../../api/types';
-import { RootState } from '../store';
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { persistReducer } from "redux-persist";
+import storage from "redux-persist/lib/storage";
+import { getPosts, PostsFilter } from "../../api/posts";
+import { ApiResponseBody, Post } from "../../api/types";
+import { RootState } from "../store";
 
 interface PostsState {
   posts: Post[];
@@ -22,7 +22,7 @@ const initialState: PostsState = {
 };
 
 const PostsSlice = createSlice({
-  name: 'posts',
+  name: "posts",
   initialState,
   reducers: {
     setFilter: (state, action: PayloadAction<PostsFilter>) => {
@@ -70,7 +70,7 @@ export const getNewPageOfPostsWithFilter = createAsyncThunk<
   ApiResponseBody<Post[]>,
   PostsFilter,
   { state: RootState }
->('posts/getNewPageOfPostsWithFilter', async (filter, _) => {
+>("posts/getNewPageOfPostsWithFilter", async (filter, _) => {
   const responseData = await getPosts(filter, 1);
   return responseData;
 });
@@ -82,7 +82,7 @@ export const getNextPageOfPosts = createAsyncThunk<
   ApiResponseBody<Post[]>,
   undefined,
   { state: RootState }
->('posts/getNextPageOfPosts', async (_, thunkApi) => {
+>("posts/getNextPageOfPosts", async (_, thunkApi) => {
   const responseData = await getPosts(
     thunkApi.getState().posts.filter,
     thunkApi.getState().home.appliedRequestsPage + 1
@@ -92,7 +92,7 @@ export const getNextPageOfPosts = createAsyncThunk<
 
 // set up persistence, uses local storage to persist this reducer
 const postsPersistConfig = {
-  key: 'posts',
+  key: "posts",
   storage,
 };
 

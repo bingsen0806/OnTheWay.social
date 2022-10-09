@@ -6,11 +6,13 @@ import styles from "./styles.module.scss";
 interface ApplicantListProps {
   applicants: User[];
   participants: string[];
+  postId: string;
 }
 
 export default function ApplicantList({
   applicants,
   participants,
+  postId,
 }: ApplicantListProps) {
   return (
     <IonGrid>
@@ -24,6 +26,7 @@ export default function ApplicantList({
       <IonList>
         {applicants.map((applicant) => (
           <SingleApplicant
+            postId={postId}
             applicant={applicant}
             key={applicant.id}
             isAccepted={participants.includes(applicant.id)}

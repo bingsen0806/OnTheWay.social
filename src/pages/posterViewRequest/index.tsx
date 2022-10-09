@@ -45,7 +45,7 @@ export default function PosterViewRequest({
     cancelRequest(postId)
       .then((resp) => {
         if (!resp.success) {
-          handleCheckedError(resp.message );
+          handleCheckedError(resp.message);
         } else {
           console.log("successfully deleted");
           setIsLoading(false);
@@ -80,6 +80,7 @@ export default function PosterViewRequest({
       <IonContent fullscreen>
         <PostDetails post={createdRequest.post} />
         <ApplicantList
+          postId={createdRequest.post.id}
           applicants={createdRequest.applicants}
           participants={getParticipantsFromCreatedRequest(createdRequest)}
         />
