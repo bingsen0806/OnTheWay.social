@@ -1,18 +1,18 @@
 import { httpsCallable } from 'firebase/functions';
 import { firestoreFunctions } from '../firebase';
-import {
-  ApiRequestBody,
-  ApiResponseBody,
-  Location,
-  Post,
-} from './types';
+import { ApiRequestBody, ApiResponseBody, Location, Post } from './types';
 
 export interface PostsFilter {
   locations: Location[];
 }
 
 export async function createPost(post: Post) {
-  return Promise.resolve();
+  const callApi = httpsCallable<ApiRequestBody, ApiResponseBody<Post[]>>(
+    firestoreFunctions,
+    'createPost'
+  );
+  const result = await callApi({ post });
+  return result.data;
 }
 
 /**
