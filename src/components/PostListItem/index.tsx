@@ -1,4 +1,5 @@
 import { IonItem } from '@ionic/react';
+import { useState } from 'react';
 import { facultyEnumToStr, locationEnumToStr, Post } from '../../api/types';
 import {
   convertDateRangeToTimeRangeStr,
@@ -11,8 +12,16 @@ interface PostListItemProps {
 }
 
 export default function PostListItem({ post }: PostListItemProps) {
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  function closeModal() {
+    setIsModalOpen(false);
+  }
   return (
-    <IonItem>
+    <IonItem
+      onClick={() => {
+        setIsModalOpen(true);
+      }}
+    >
       <div className={styles['post-container']}>
         <p className={styles['post-text']}>
           Location: {locationEnumToStr(post.location)}

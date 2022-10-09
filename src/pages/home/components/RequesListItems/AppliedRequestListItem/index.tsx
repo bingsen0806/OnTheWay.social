@@ -1,4 +1,5 @@
 import { IonItem, IonLabel, IonButton } from '@ionic/react';
+import { useState } from 'react';
 import { cancelRequest } from '../../../../../api/home';
 import {
   AppliedRequest,
@@ -19,13 +20,23 @@ interface AppliedRequestListItemProps {
 export default function AppliedRequestListItem({
   appliedRequest,
 }: AppliedRequestListItemProps) {
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+  function closeModal() {
+    setIsModalOpen(false);
+  }
+
   function sendCancellationRequest() {
     void cancelRequest(appliedRequest.post.id);
     // TODO: error handling
   }
 
   return (
-    <IonItem>
+    <IonItem
+      onClick={() => {
+        setIsModalOpen(true);
+      }}
+    >
       <div className={styles['post-container']}>
         <p className={styles['post-text']}>
           Location: {locationEnumToStr(appliedRequest.post.location)}

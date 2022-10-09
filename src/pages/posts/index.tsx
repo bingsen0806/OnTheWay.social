@@ -89,7 +89,7 @@ export default function PostsPage() {
     const newLocationFilter: Location[] = [];
     for (const location in filterLocations) {
       if (filterLocations[location as unknown as Location]) {
-        newLocationFilter.push(location as unknown as Location);
+        newLocationFilter.push(Number(location) as unknown as Location);
       }
     }
     dispatch(getNewPageOfPostsWithFilter({ locations: newLocationFilter }))
