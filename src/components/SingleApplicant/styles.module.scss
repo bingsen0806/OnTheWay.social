@@ -1,0 +1,38 @@
+.header {
+  font-weight: bold;
+  font-size: 1.3rem;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.user-info {
+  padding-top: 15px;
+  justify-content: space-between;
+}
+
+.avatar {
+  width: 18vw;
+  height: 18vw;
+  cursor: pointer;
+  @media screen and (min-width: 768px) {
+    width: 10vw;
+    height: 10vw;
+  }
+  @media screen and (min-width: 1600px) {
+    width: 5vw;
+    height: 5vw;
+  }
+}
+
+.accept-col {
+  padding-top: 15px;
+  justify-content: space-between;
+  padding-right: 30px;
+}
+
+.delete-button {
+  font-weight: bold;
+  font-size: 1.3rem;
+}
