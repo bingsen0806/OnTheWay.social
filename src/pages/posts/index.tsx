@@ -17,22 +17,22 @@ import {
   IonRow,
   IonTitle,
   IonToolbar,
-} from '@ionic/react';
-import { funnelOutline } from 'ionicons/icons';
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Location, locationEnumToStr } from '../../api/types';
-import PostListItem from '../../components/PostListItem';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+} from "@ionic/react";
+import { funnelOutline } from "ionicons/icons";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { Location, locationEnumToStr } from "../../api/types";
+import PostListItem from "../../components/PostListItem";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import {
   getNewPageOfPostsWithFilter,
   getNextPageOfPosts,
-} from '../../redux/slices/postsSlice';
-import { CREATE_POST } from '../../routes';
-import useCheckedErrorHandler from '../../util/hooks/useCheckedErrorHandler';
-import usePageInitialLoad from '../../util/hooks/usePageInitialLoad';
-import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
-import styles from './styles.module.scss';
+} from "../../redux/slices/postsSlice";
+import { CREATE_POST } from "../../routes";
+import useCheckedErrorHandler from "../../util/hooks/useCheckedErrorHandler";
+import usePageInitialLoad from "../../util/hooks/usePageInitialLoad";
+import useUnknownErrorHandler from "../../util/hooks/useUnknownErrorHandler";
+import styles from "./styles.module.scss";
 
 export default function PostsPage() {
   const listOfPosts = useAppSelector((state) => state.posts.posts);
@@ -64,7 +64,7 @@ export default function PostsPage() {
   }
 
   function getColorOfLocationFilterBasedOnClickStatus(location: Location) {
-    return filterLocations[location] ? 'primary' : 'dark';
+    return filterLocations[location] ? "primary" : "dark";
   }
 
   function resetPostsList() {
@@ -131,7 +131,7 @@ export default function PostsPage() {
           </IonToolbar>
         </IonHeader>
         <IonContent className="ion-padding">
-          <h4 className={styles['filter-category-header']}>Locations</h4>
+          <h4 className={styles["filter-category-header"]}>Locations</h4>
           {Object.values(Location)
             .filter((v) => !isNaN(Number(v)))
             .map((locationEnum) => (
@@ -183,8 +183,8 @@ export default function PostsPage() {
             <div className="ion-padding-start" slot="start">
               <h1>Study Sessions</h1>
               <p>
-                Can't find a post that suits your schedule?{' '}
-                <span className={styles['create-post-link-text']}>
+                Can't find a post that suits your schedule?{" "}
+                <span className={styles["create-post-link-text"]}>
                   <Link to={CREATE_POST}>Make a post</Link>
                 </span>
               </p>

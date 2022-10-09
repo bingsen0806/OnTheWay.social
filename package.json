@@ -21,6 +21,7 @@
     "@types/react-dom": "^18.0.6",
     "@types/react-router": "^5.1.11",
     "@types/react-router-dom": "^5.1.7",
+    "compressorjs": "^1.1.1",
     "ionicons": "^6.0.3",
     "moment": "^2.29.4",
     "react": "^18.2.0",

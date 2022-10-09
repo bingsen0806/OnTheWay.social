@@ -1,5 +1,5 @@
-import { useIonViewDidLeave, useIonViewWillEnter } from '@ionic/react';
-import { useRef } from 'react';
+import { useIonViewDidLeave, useIonViewWillEnter } from "@ionic/react";
+import { useRef } from "react";
 
 /**
  * Custom hook that handles initial loading of data for a page.

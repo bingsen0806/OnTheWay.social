@@ -1,13 +1,13 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { persistReducer } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
-import { getAppliedRequests, getCreatedRequests } from '../../api/home';
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { persistReducer } from "redux-persist";
+import storage from "redux-persist/lib/storage";
+import { getAppliedRequests, getCreatedRequests } from "../../api/home";
 import {
   ApiResponseBody,
   AppliedRequest,
   CreatedRequest,
-} from '../../api/types';
-import { RootState } from '../store';
+} from "../../api/types";
+import { RootState } from "../store";
 
 interface HomeState {
   appliedRequests: AppliedRequest[];
@@ -26,7 +26,7 @@ const initialState: HomeState = {
 };
 
 const HomeSlice = createSlice({
-  name: 'home',
+  name: "home",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -91,7 +91,7 @@ export const getNewPageOfAppliedRequests = createAsyncThunk<
   ApiResponseBody<AppliedRequest[]>,
   undefined,
   { state: RootState }
->('home/getNewPageOfAppliedRequests', async () => {
+>("home/getNewPageOfAppliedRequests", async () => {
   const responseData = await getAppliedRequests(1);
   return responseData;
 });
@@ -104,7 +104,7 @@ export const getNewPageOfCreatedRequests = createAsyncThunk<
   ApiResponseBody<CreatedRequest[]>,
   undefined,
   { state: RootState }
->('home/getNewPageOfCreatedRequests', async () => {
+>("home/getNewPageOfCreatedRequests", async () => {
   const responseData = await getCreatedRequests(1);
   return responseData;
 });
@@ -116,7 +116,7 @@ export const getNextPageOfAppliedRequests = createAsyncThunk<
   ApiResponseBody<AppliedRequest[]>,
   undefined,
   { state: RootState }
->('home/getNextPageOfAppliedRequests', async (_, thunkApi) => {
+>("home/getNextPageOfAppliedRequests", async (_, thunkApi) => {
   const responseData = await getAppliedRequests(
     thunkApi.getState().home.appliedRequestsPage + 1
   );
@@ -130,7 +130,7 @@ export const getNextPageOfCreatedRequests = createAsyncThunk<
   ApiResponseBody<CreatedRequest[]>,
   undefined,
   { state: RootState }
->('home/getNextPageOfCreatedRequests', async (_, thunkApi) => {
+>("home/getNextPageOfCreatedRequests", async (_, thunkApi) => {
   const responseData = await getCreatedRequests(
     thunkApi.getState().home.appliedRequestsPage + 1
   );
@@ -139,7 +139,7 @@ export const getNextPageOfCreatedRequests = createAsyncThunk<
 
 // set up persistence, uses local storage to persist this reducer
 const homePersistConfig = {
-  key: 'home',
+  key: "home",
   storage,
 };
 

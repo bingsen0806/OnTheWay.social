@@ -5,10 +5,10 @@ import {
   sendEmailVerification,
   signInWithEmailAndPassword,
   signOut,
-} from 'firebase/auth';
-import { httpsCallable } from 'firebase/functions';
-import { firestoreFunctions } from '../firebase';
-import { ApiRequestBody, ApiResponseBody, User } from './types';
+} from "firebase/auth";
+import { httpsCallable } from "firebase/functions";
+import { firestoreFunctions } from "../firebase";
+import { ApiRequestBody, ApiResponseBody, User } from "./types";
 
 export interface LoginDetails {
   email: string;
@@ -34,7 +34,7 @@ export async function signUp({ email, password }: LoginDetails) {
 export async function resendEmailVerification() {
   const auth = getAuth();
   if (!auth.currentUser) {
-    throw new Error('User not yet authenticated.');
+    throw new Error("User not yet authenticated.");
   }
   await sendEmailVerification(auth.currentUser);
 }
@@ -42,7 +42,7 @@ export async function resendEmailVerification() {
 export async function deleteCurrentUser() {
   const auth = getAuth();
   if (!auth.currentUser) {
-    throw new Error('No user currently authenticated');
+    throw new Error("No user currently authenticated");
   }
   await deleteUser(auth.currentUser);
 }
@@ -50,7 +50,7 @@ export async function deleteCurrentUser() {
 export async function createUserProfile(userDetails: User) {
   const callApi = httpsCallable<ApiRequestBody, ApiResponseBody<string>>(
     firestoreFunctions,
-    'createUser'
+    "createUser"
   );
   const result = await callApi({ user: userDetails });
   return result.data;
