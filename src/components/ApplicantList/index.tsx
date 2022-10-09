@@ -5,29 +5,31 @@ import styles from "./styles.module.scss";
 
 interface ApplicantListProps {
   applicants: User[];
+  participants: string[];
 }
 
-export default function ApplicantList({ applicants }: ApplicantListProps) {
+export default function ApplicantList({
+  applicants,
+  participants,
+}: ApplicantListProps) {
   return (
-    <div onClick={() => console.log("hi poster")}>
-      <IonGrid>
-        <IonRow
-          className={
-            styles["header"] + " ion-justify-content-start ion-padding-start"
-          }
-        >
-          <IonCol>Applicants</IonCol>
-        </IonRow>
-        <IonList>
-          {applicants.map((applicant) => (
-            <SingleApplicant
-              applicant={applicant}
-              key={applicant.id}
-              isAccepted={false}
-            ></SingleApplicant> /*TODO: IMPORTANT, How to know whether applicant is accepted or not */
-          ))}
-        </IonList>
-      </IonGrid>
-    </div>
+    <IonGrid>
+      <IonRow
+        className={
+          styles["header"] + " ion-justify-content-start ion-padding-start"
+        }
+      >
+        <IonCol>Applicants</IonCol>
+      </IonRow>
+      <IonList>
+        {applicants.map((applicant) => (
+          <SingleApplicant
+            applicant={applicant}
+            key={applicant.id}
+            isAccepted={participants.includes(applicant.id)}
+          ></SingleApplicant> /*TODO: IMPORTANT, How to know whether applicant is accepted or not */
+        ))}
+      </IonList>
+    </IonGrid>
   );
 }

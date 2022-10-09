@@ -54,9 +54,6 @@ import RegisterPage from "./pages/authentication/RegisterPage";
 import EmailVerificationPage from "./pages/authentication/EmailVerificationPage";
 import ProfileCreationPage from "./pages/authentication/ProfileCreationPage";
 import CreatePostPage from "./pages/posts/CreatePostPage";
-import ApplyModal from "./pages/apply";
-import PosterViewRequest from "./pages/posterViewRequest";
-import AppliedPostStatus from "./pages/appliedPostStatus";
 
 setupIonicReact();
 
@@ -87,9 +84,6 @@ export default function App() {
               <AuthenticatedRoute exact path={HOME} component={Home} />
               <Route exact path={POSTS} component={Posts} />
               <Route exact path={CREATE_POST} component={CreatePostPage} />
-              <Route exact path="/apply" component={ApplyModal} />
-              <Route exact path="/posterView" component={PosterViewRequest} />
-              <Route exact path="/appliedPost" component={AppliedPostStatus} />
               <AuthenticatedRoute exact path={PROFILE} component={Profile} />
               <Route exact path={FAQ} component={Faq} />
               <Route exact path="/">

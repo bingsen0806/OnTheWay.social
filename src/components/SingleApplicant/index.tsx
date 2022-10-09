@@ -1,54 +1,118 @@
-import { IonAvatar, IonButton, IonCol, IonRow } from "@ionic/react";
-import { Faculty, Gender, User } from "../../api/types";
+import { IonAvatar, IonButton, IonCol, IonLoading, IonRow } from "@ionic/react";
+import { useState } from "react";
+import { responseAppliedRequest } from "../../api/appliedRequests";
+import {
+  AppliedRequestStatus,
+  facultyEnumToStr,
+  genderEnumToStr,
+  User,
+} from "../../api/types";
+import useCheckedErrorHandler from "../../util/hooks/useCheckedErrorHandler";
+import useUnknownErrorHandler from "../../util/hooks/useUnknownErrorHandler";
 import styles from "./styles.module.scss";
 
 interface SingleApplicantProps {
+  postId: string;
   applicant: User;
   isAccepted: boolean;
 }
 
-async function handleCancel() {
-  //TODO
-  await Promise.resolve();
-  console.log("cancelled");
-}
+// export const mockPoster: User = {
+//   id: "testid1",
+//   name: "Chun Yong",
+//   gender: Gender.MALE,
+//   faculty: Faculty.COMPUTING,
+//   telegramHandle: "chunyonggg",
+//   year: 4,
+//   profilePhoto:
+//     "https://images.unsplash.com/photo-1529665253569-6d01c0eaf7b6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8cHJvZmlsZXxlbnwwfHwwfHw%3D&w=1000&q=80",
+//   thumbnailPhoto:
+//     "https://images.unsplash.com/photo-1529665253569-6d01c0eaf7b6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8cHJvZmlsZXxlbnwwfHwwfHw%3D&w=1000&q=80",
+// };
 
-async function handleAccept() {
-  //TODO
-  await Promise.resolve();
-  console.log("acccepted");
-}
+// export const mockUser2: User = {
+//   id: "testid2",
+//   name: "Bing Sen",
+//   gender: Gender.MALE,
+//   faculty: Faculty.BUSINESS,
+//   telegramHandle: "bingsennn",
+//   year: 3,
+//   profilePhoto:
+//     "https://images.unsplash.com/photo-1529665253569-6d01c0eaf7b6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8cHJvZmlsZXxlbnwwfHwwfHw%3D&w=1000&q=80",
+//   thumbnailPhoto:
+//     "https://images.unsplash.com/photo-1529665253569-6d01c0eaf7b6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8cHJvZmlsZXxlbnwwfHwwfHw%3D&w=1000&q=80",
+// };
 
-export const mockPoster: User = {
-  id: "testid1",
-  name: "Chun Yong",
-  gender: Gender.MALE,
-  faculty: Faculty.COMPUTING,
-  telegramHandle: "chunyonggg",
-  year: 4,
-  profilePhoto:
-    "https://images.unsplash.com/photo-1529665253569-6d01c0eaf7b6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8cHJvZmlsZXxlbnwwfHwwfHw%3D&w=1000&q=80",
-  thumbnailPhoto:
-    "https://images.unsplash.com/photo-1529665253569-6d01c0eaf7b6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8cHJvZmlsZXxlbnwwfHwwfHw%3D&w=1000&q=80",
-};
-
-export const mockUser2: User = {
-  id: "testid2",
-  name: "Bing Sen",
-  gender: Gender.MALE,
-  faculty: Faculty.BUSINESS,
-  telegramHandle: "bingsennn",
-  year: 3,
-  profilePhoto:
-    "https://images.unsplash.com/photo-1529665253569-6d01c0eaf7b6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8cHJvZmlsZXxlbnwwfHwwfHw%3D&w=1000&q=80",
-  thumbnailPhoto:
-    "https://images.unsplash.com/photo-1529665253569-6d01c0eaf7b6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8cHJvZmlsZXxlbnwwfHwwfHw%3D&w=1000&q=80",
-};
+// export const mockUser3: User = {
+//   id: "testid3",
+//   name: "Ben",
+//   gender: Gender.MALE,
+//   faculty: Faculty.SCIENCE,
+//   telegramHandle: "benmurphy",
+//   year: 3,
+//   profilePhoto:
+//     "https://images.unsplash.com/photo-1529665253569-6d01c0eaf7b6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8cHJvZmlsZXxlbnwwfHwwfHw%3D&w=1000&q=80",
+//   thumbnailPhoto:
+//     "https://images.unsplash.com/photo-1529665253569-6d01c0eaf7b6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8cHJvZmlsZXxlbnwwfHwwfHw%3D&w=1000&q=80",
+// };
 
 export default function SingleApplicant({
+  postId,
   applicant,
   isAccepted,
 }: SingleApplicantProps) {
+  const handleCheckedError = useCheckedErrorHandler();
+  const handleUnknownError = useUnknownErrorHandler();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  function handleCancel(postId: string, applicantUserId: string) {
+    setIsLoading(true);
+    responseAppliedRequest(
+      postId,
+      applicantUserId,
+      AppliedRequestStatus.REJECTED
+    )
+      .then((resp) => {
+        if (!resp.success) {
+          handleCheckedError(resp.message);
+        } else {
+          console.log("successfully rejected");
+          setIsLoading(false);
+        }
+      })
+      .catch((error) => {
+        handleUnknownError(error);
+      })
+      .finally(() => {
+        console.log("reject application api called!");
+        setIsLoading(false);
+      });
+  }
+
+  function handleAccept(postId: string, applicantUserId: string) {
+    setIsLoading(true);
+    responseAppliedRequest(
+      postId,
+      applicantUserId,
+      AppliedRequestStatus.REJECTED
+    )
+      .then((resp) => {
+        if (!resp.success) {
+          handleCheckedError(resp.message);
+        } else {
+          console.log("successfully rejected");
+          setIsLoading(false);
+        }
+      })
+      .catch((error) => {
+        handleUnknownError(error);
+      })
+      .finally(() => {
+        console.log("reject application api called!");
+        setIsLoading(false);
+      });
+  }
+
   return (
     <IonRow className="ion-padding-start ion-justify-content-center">
       <IonCol size="3">
@@ -63,9 +127,9 @@ export default function SingleApplicant({
         </IonRow>
         <IonRow>
           Y{applicant.year ?? 0}/
-          {Faculty[applicant.faculty] ?? "unknown faculty"}
+          {facultyEnumToStr(applicant.faculty) ?? "unknown faculty"}
         </IonRow>
-        <IonRow>{Gender[applicant.gender] ?? "unknown gender"}</IonRow>
+        <IonRow>{genderEnumToStr(applicant.gender) ?? "unknown gender"}</IonRow>
         {isAccepted ? (
           <IonRow className={styles["bold"]}>
             Telegram: {applicant.telegramHandle ?? "No Telegram"}
@@ -95,7 +159,7 @@ export default function SingleApplicant({
                 color="dark"
                 size="small"
                 onClick={() => {
-                  void handleCancel();
+                  handleCancel(postId, applicant.id);
                 }}
               >
                 Cancel
@@ -109,7 +173,7 @@ export default function SingleApplicant({
               fill="solid"
               size="small"
               onClick={() => {
-                void handleAccept();
+                void handleAccept(postId, applicant.id);
               }}
             >
               Accept
@@ -117,6 +181,7 @@ export default function SingleApplicant({
           </IonRow>
         )}
       </IonCol>
+      <IonLoading isOpen={isLoading}></IonLoading>
     </IonRow>
   );
 }

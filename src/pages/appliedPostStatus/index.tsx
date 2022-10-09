@@ -4,44 +4,69 @@ import {
   IonContent,
   IonHeader,
   IonIcon,
-  IonPage,
+  IonLoading,
+  IonModal,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { AppliedRequest, AppliedRequestStatus, User } from "../../api/types";
+import { AppliedRequest, locationEnumToStr } from "../../api/types";
 import { arrowBackOutline } from "ionicons/icons";
-import PostDetails, { mockPost } from "../../components/PostDetails";
+import PostDetails from "../../components/PostDetails";
 import AboutPoster from "../../components/AboutPoster";
 import RequestStatus from "../../components/RequestStatus";
+import useCheckedErrorHandler from "../../util/hooks/useCheckedErrorHandler";
+import useUnknownErrorHandler from "../../util/hooks/useUnknownErrorHandler";
+import { useState } from "react";
+import { deleteAppliedRequest } from "../../api/appliedRequests";
 
 interface AppliedPostStatusProps {
   isOpen: boolean;
   onClose: () => void;
-  currentUser: User;
   appliedRequest: AppliedRequest;
 }
 
-async function handleCancel() {
-  await Promise.resolve();
-  console.log("cancelled!");
-}
-
-export const mockAppliedRequest: AppliedRequest = {
-  post: mockPost,
-  status: AppliedRequestStatus.ACCEPTED,
-};
+// export const mockAppliedRequest: AppliedRequest = {
+//   post: mockPost,
+//   status: AppliedRequestStatus.ACCEPTED,
+// };
 
 export default function AppliedPostStatus({
   isOpen,
   onClose,
-  currentUser,
-  appliedRequest = mockAppliedRequest,
+  appliedRequest,
 }: AppliedPostStatusProps) {
+  const handleCheckedError = useCheckedErrorHandler();
+  const handleUnknownError = useUnknownErrorHandler();
+  const [isCancelled, setIsCancelled] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  function handleCancel(postId: string) {
+    setIsLoading(true);
+    deleteAppliedRequest(postId)
+      .then((resp) => {
+        if (!resp.success) {
+          handleCheckedError(resp.message );
+        } else {
+          setIsCancelled(true);
+        }
+      })
+      .catch((error) => {
+        handleUnknownError(error);
+      })
+      .finally(() => {
+        console.log("delete applied request api called!");
+        setIsLoading(false);
+      });
+  }
+
   return (
-    <IonPage>
+    <IonModal isOpen={isOpen}>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Study Session @ CLB</IonTitle>
+          <IonTitle>
+            Study Session @{" "}
+            {locationEnumToStr(appliedRequest?.post?.location) ?? "UNKNOWN"}
+          </IonTitle>
           <IonButtons>
             <IonButton slot="start" fill="clear" color="dark" onClick={onClose}>
               <IonIcon icon={arrowBackOutline} slot="start" />
@@ -57,19 +82,33 @@ export default function AppliedPostStatus({
         />
         <PostDetails post={appliedRequest.post} />
         <AboutPoster poster={appliedRequest.post?.poster} />
-        <IonButton
-          className="ion-padding-horizontal"
-          expand="block"
-          size="large"
-          fill="outline"
-          color="medium"
-          onClick={() => {
-            void handleCancel();
-          }}
-        >
-          Cancel
-        </IonButton>
+        {isCancelled ? (
+          <IonButton
+            className="ion-padding-horizontal"
+            expand="block"
+            size="large"
+            fill="clear"
+            color="danger"
+            disabled={true}
+          >
+            Cancelled
+          </IonButton>
+        ) : (
+          <IonButton
+            className="ion-padding-horizontal"
+            expand="block"
+            size="large"
+            fill="outline"
+            color="medium"
+            onClick={() => {
+              handleCancel(appliedRequest.post?.id);
+            }}
+          >
+            Cancel
+          </IonButton>
+        )}
+        <IonLoading isOpen={isLoading}></IonLoading>
       </IonContent>
-    </IonPage>
+    </IonModal>
   );
 }

@@ -9,6 +9,9 @@ export async function createAppliedRequest(postId: string) {
   );
   const result = await callApi({ postId });
   return result.data;
+  // await new Promise((resolve) => setTimeout(resolve, 1000));
+  // console.log("done after 1 second");
+  // return { success: true, message: ErrorType.POST_NOT_FOUND.toString() };
 }
 
 export async function deleteAppliedRequest(postId: string) {
@@ -18,6 +21,9 @@ export async function deleteAppliedRequest(postId: string) {
   );
   const result = await callApi({ postId });
   return result.data;
+  // await new Promise((resolve) => setTimeout(resolve, 1000));
+  // console.log("done after 1 second");
+  // return { success: true, message: ErrorType.POST_NOT_FOUND.toString() };
 }
 
 export async function responseAppliedRequest(
@@ -35,4 +41,7 @@ export async function responseAppliedRequest(
     responseStatus,
   });
   return result.data;
+  // await new Promise((resolve) => setTimeout(resolve, 1000));
+  // console.log("done after 1 second");
+  // return { success: true, message: ErrorType.POST_NOT_FOUND.toString() };
 }

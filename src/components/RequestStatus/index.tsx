@@ -8,16 +8,18 @@ interface RequestStatusProps {
   telegramHandle: string;
 }
 
-const getCssClass = (status: AppliedRequestStatus) => {
+const getStatusLabel = (status: AppliedRequestStatus) => {
   switch (status) {
     case AppliedRequestStatus.ACCEPTED:
-      return "status-accepted";
+      return <IonCol className={styles["status-accepted"]}>Accepted!</IonCol>;
     case AppliedRequestStatus.PENDING:
-      return "status-pending";
+      return <IonCol className={styles["status-pending"]}>Pending</IonCol>;
     case AppliedRequestStatus.REJECTED:
-      return "status-rejected";
+      return <IonCol className={styles["status-rejected"]}>Rejected</IonCol>;
     default:
-      return "status-unknown";
+      return (
+        <IonCol className={styles["status-unknown"]}>Unknown Status</IonCol>
+      );
   }
 };
 
@@ -26,43 +28,39 @@ export default function RequestStatus({
   telegramHandle,
 }: RequestStatusProps) {
   return (
-    <div onClick={() => console.log("hi")}>
-      <IonGrid className="ion-margin-vertical">
-        <IonRow
-          className={
-            styles["non-bold-header"] +
-            " ion-padding-start ion-justify-content-start"
-          }
-        >
-          <IonCol>Status:</IonCol>
-          <IonCol className={styles[getCssClass(status)]}>
-            {AppliedRequestStatus[status] ?? "unknown status"}
-          </IonCol>
-        </IonRow>
-        <IonRow
-          className={
-            styles["non-bold-header"] +
-            " ion-padding-start ion-justify-content-start"
-          }
-        >
-          <IonCol>Telegram:</IonCol>
-          <IonCol className="ion-no-padding">
-            {telegramHandle ?? "No telegram"}
-            <IonIcon
-              className={styles["copy-icon"]}
-              icon={copyOutline}
-              onClick={() => {
-                void navigator.clipboard.writeText(telegramHandle);
-              }}
-            />
-          </IonCol>
-        </IonRow>
-        <IonRow className="ion-padding-start ion-justify-content-cente">
-          <IonCol>
-            Contact the poster via telegram to coordinate your meetup!
-          </IonCol>
-        </IonRow>
-      </IonGrid>
-    </div>
+    <IonGrid className="ion-margin-vertical">
+      <IonRow
+        className={
+          styles["non-bold-header"] +
+          " ion-padding-start ion-justify-content-start"
+        }
+      >
+        <IonCol>Status:</IonCol>
+        {getStatusLabel(status)}
+      </IonRow>
+      <IonRow
+        className={
+          styles["non-bold-header"] +
+          " ion-padding-start ion-justify-content-start"
+        }
+      >
+        <IonCol>Telegram:</IonCol>
+        <IonCol className="ion-no-padding">
+          {telegramHandle ?? "No telegram"}
+          <IonIcon
+            className={styles["copy-icon"]}
+            icon={copyOutline}
+            onClick={() => {
+              void navigator.clipboard.writeText(telegramHandle);
+            }}
+          />
+        </IonCol>
+      </IonRow>
+      <IonRow className="ion-padding-start ion-justify-content-cente">
+        <IonCol>
+          Contact the poster via telegram to coordinate your meetup!
+        </IonCol>
+      </IonRow>
+    </IonGrid>
   );
 }

@@ -22,7 +22,6 @@ import { funnelOutline } from "ionicons/icons";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Location, locationEnumToStr } from "../../api/types";
-import { mockPost } from "../../components/PostDetails";
 import PostListItem from "../../components/PostListItem";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import {
@@ -200,7 +199,6 @@ export default function PostsPage() {
         </IonHeader>
         <IonContent fullscreen>
           <IonList>
-            <PostListItem post={mockPost} />
             {listOfPosts.map((data) => (
               <PostListItem post={data} key={data.id}></PostListItem>
             ))}
@@ -213,7 +211,7 @@ export default function PostsPage() {
             <IonInfiniteScrollContent loadingSpinner="circles"></IonInfiniteScrollContent>
           </IonInfiniteScroll>
         </IonContent>
-        <IonLoading isOpen={false}></IonLoading> {/*change back to isLoading */}
+        <IonLoading isOpen={isLoading}></IonLoading>
       </IonPage>
     </>
   );

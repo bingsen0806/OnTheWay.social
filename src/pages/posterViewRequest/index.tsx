@@ -4,15 +4,19 @@ import {
   IonContent,
   IonHeader,
   IonIcon,
-  IonPage,
+  IonLoading,
+  IonModal,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { CreatedRequest } from "../../api/types";
+import { CreatedRequest, locationEnumToStr } from "../../api/types";
 import { arrowBackOutline } from "ionicons/icons";
 import PostDetails from "../../components/PostDetails";
 import ApplicantList from "../../components/ApplicantList";
-import { mockCreatedRequest } from "../apply";
+import useCheckedErrorHandler from "../../util/hooks/useCheckedErrorHandler";
+import useUnknownErrorHandler from "../../util/hooks/useUnknownErrorHandler";
+import { useState } from "react";
+import { cancelRequest } from "../../api/home";
 
 interface PosterViewRequestProps {
   isOpen: boolean;
@@ -20,24 +24,53 @@ interface PosterViewRequestProps {
   createdRequest: CreatedRequest;
 }
 
-async function handleDelete() {
-  //TODO
-  await Promise.resolve();
-  console.log("applied!");
+function getParticipantsFromCreatedRequest(createdRequest: CreatedRequest) {
+  if (!createdRequest.post || !createdRequest.post.participants) {
+    return [];
+  }
+  return createdRequest.post.participants.map((user) => user.id);
 }
 
 export default function PosterViewRequest({
   isOpen,
   onClose,
-  createdRequest = mockCreatedRequest,
+  createdRequest,
 }: PosterViewRequestProps) {
+  const handleCheckedError = useCheckedErrorHandler();
+  const handleUnknownError = useUnknownErrorHandler();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  function handleDelete(postId: string) {
+    setIsLoading(true);
+    cancelRequest(postId)
+      .then((resp) => {
+        if (!resp.success) {
+          handleCheckedError(resp.message );
+        } else {
+          console.log("successfully deleted");
+          setIsLoading(false);
+          //TODO: Close modal or redirect back to pprevious page
+        }
+      })
+      .catch((error) => {
+        handleUnknownError(error);
+      })
+      .finally(() => {
+        console.log("delete applied request api called!");
+        setIsLoading(false);
+      });
+  }
+
   return (
-    <IonPage>
+    <IonModal isOpen={isOpen}>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Study Session @ CLB</IonTitle>
+          <IonTitle>
+            Study Session @{" "}
+            {locationEnumToStr(createdRequest?.post?.location) ?? "UNKNOWN"}
+          </IonTitle>
           <IonButtons>
-            <IonButton slot="start" fill="clear" color="dark">
+            <IonButton slot="start" fill="clear" color="dark" onClick={onClose}>
               <IonIcon icon={arrowBackOutline} slot="start" />
               <p>Back</p>
             </IonButton>
@@ -46,7 +79,10 @@ export default function PosterViewRequest({
       </IonHeader>
       <IonContent fullscreen>
         <PostDetails post={createdRequest.post} />
-        <ApplicantList applicants={createdRequest.applicants} />
+        <ApplicantList
+          applicants={createdRequest.applicants}
+          participants={getParticipantsFromCreatedRequest(createdRequest)}
+        />
         <IonButton
           className="ion-padding-horizontal ion-margin-top"
           expand="block"
@@ -54,12 +90,13 @@ export default function PosterViewRequest({
           color="medium"
           size="large"
           onClick={() => {
-            void handleDelete();
+            void handleDelete(createdRequest.post?.id);
           }}
         >
           Delete Request
         </IonButton>
+        <IonLoading isOpen={isLoading}></IonLoading>
       </IonContent>
-    </IonPage>
+    </IonModal>
   );
 }

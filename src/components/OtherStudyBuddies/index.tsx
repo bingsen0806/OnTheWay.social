@@ -11,24 +11,22 @@ export default function OtherStudyBuddies({
   studyBuddies,
 }: OtherStudyBuddiesProp) {
   return studyBuddies && studyBuddies.length > 0 ? (
-    <div onClick={() => console.log("hi other study buddies")}>
-      <IonGrid className="ion-margin-vertical">
-        <IonRow
-          className={
-            styles["header"] +
-            " ion-justify-content-start ion-padding-start ion-padding-bottom"
-          }
-        >
-          <IonCol>Other Confirmed Attendees ?</IonCol>
-          {/*TODO: implement popup */}
-        </IonRow>
-        <IonList>
-          {studyBuddies.map((buddy) => (
-            <StudyBuddy buddy={buddy} key={buddy.id}></StudyBuddy>
-          ))}
-        </IonList>
-      </IonGrid>
-    </div>
+    <IonGrid className="ion-margin-vertical">
+      <IonRow
+        className={
+          styles["header"] +
+          " ion-justify-content-start ion-padding-start ion-padding-bottom"
+        }
+      >
+        <IonCol>Other Confirmed Attendees ?</IonCol>
+        {/*TODO: implement popup */}
+      </IonRow>
+      <IonList>
+        {studyBuddies.map((buddy) => (
+          <StudyBuddy buddy={buddy} key={buddy.id}></StudyBuddy>
+        ))}
+      </IonList>
+    </IonGrid>
   ) : (
     <></>
   );
