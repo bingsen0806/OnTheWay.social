@@ -1,0 +1,27 @@
+.header {
+  font-weight: bold;
+  font-size: 1.3rem;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.user-info {
+  padding-top: 10px;
+  justify-content: space-between;
+}
+
+.avatar {
+  width: 20vw;
+  height: 20vw;
+  cursor: pointer;
+  @media screen and (min-width: 768px) {
+    width: 10vw;
+    height: 10vw;
+  }
+  @media screen and (min-width: 1600px) {
+    width: 5vw;
+    height: 5vw;
+  }
+}

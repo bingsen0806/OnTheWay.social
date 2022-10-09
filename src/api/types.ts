@@ -8,6 +8,17 @@ export enum Gender {
   PREFER_NOT_TO_SAY,
 }
 
+export function genderEnumToStr(gender: Gender) {
+  switch (gender) {
+    case Gender.MALE:
+      return "Male";
+    case Gender.FEMALE:
+      return "female";
+    case Gender.PREFER_NOT_TO_SAY:
+      return "Prefer not to say";
+  }
+}
+
 export enum Faculty {
   ARTS_AND_SOCIAL_SCIENCES,
   BUSINESS,

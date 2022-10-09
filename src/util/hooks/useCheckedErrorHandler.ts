@@ -31,6 +31,9 @@ export default function useCheckedErrorHandler() {
         displayErrorToast("You have not created your profile yet!");
         history.replace(PROFILE_CREATION);
         return;
+      case ErrorType.POST_NOT_FOUND:
+        displayErrorToast("Post not found. It may have already been deleted");
+        return;
       default:
         displayErrorToast("An unknown error occured.");
         console.log(errorMessage);
