@@ -6,11 +6,13 @@ import {
   IonContent,
   IonGrid,
   IonHeader,
+  IonLoading,
   IonPage,
   IonRow,
   IonToolbar,
 } from '@ionic/react';
 import { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { createPost } from '../../api/posts';
 import { locationEnumToStr, Post } from '../../api/types';
 import { Location } from '../../api/types';
@@ -20,6 +22,9 @@ import DropdownSelection, {
 } from '../../components/DropdownSelection';
 import TextInputField from '../../components/TextInputField/TextInputField';
 import { POSTS } from '../../routes';
+import useCheckedErrorHandler from '../../util/hooks/useCheckedErrorHandler';
+import useInfoToast from '../../util/hooks/useInfoToast';
+import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
 
 const locationDropdownItems: DropdownItem<Location>[] = [
   {
@@ -76,9 +81,14 @@ interface InputErrorMessages {
 }
 
 export default function CreatePostPage() {
+  const handleCheckedError = useCheckedErrorHandler();
+  const handleUnknownError = useUnknownErrorHandler();
+  const presentInfoToast = useInfoToast();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [shouldShowDropdownErrors, setShouldShowDropdownErrors] =
     useState<boolean>(false);
   const [post, setPost] = useState<Post>({} as Post);
+  const history = useHistory();
 
   const [dateTimes, setDateTimes] = useState({
     date: new Date().toISOString(),
@@ -104,8 +114,7 @@ export default function CreatePostPage() {
       dateTimes.date === undefined ||
       dateTimes.startTime === undefined ||
       dateTimes.endTime === undefined ||
-      post.personCapacity === undefined ||
-      post.description
+      post.personCapacity === undefined
     ) {
       return false;
     }
@@ -157,7 +166,22 @@ export default function CreatePostPage() {
     console.log(newPost);
 
     setPost(newPost);
-    void createPost(newPost);
+    setIsLoading(true);
+    createPost(newPost)
+      .then((resp) => {
+        if (!resp.success) {
+          handleCheckedError(resp.message as string);
+        } else {
+          presentInfoToast('Successfully created new post!');
+          history.goBack();
+        }
+      })
+      .catch((error) => {
+        handleUnknownError(error);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   }
 
   return (
@@ -216,7 +240,6 @@ export default function CreatePostPage() {
                 type="time"
                 label="Start Time"
                 onChange={(startTime) => {
-                  console.log(startTime);
                   setDateTimes({ ...dateTimes, startTime });
                 }}
                 errorMessage={errorMessages.startTime}
@@ -276,6 +299,7 @@ export default function CreatePostPage() {
             </IonCol>
           </IonRow>
         </IonGrid>
+        <IonLoading isOpen={isLoading}></IonLoading>
       </IonContent>
     </IonPage>
   );
