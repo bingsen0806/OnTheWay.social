@@ -1,15 +1,17 @@
-import { IonAvatar, IonButton, IonCol, IonLoading, IonRow } from "@ionic/react";
-import { useState } from "react";
-import { responseAppliedRequest } from "../../api/appliedRequests";
+import { IonAvatar, IonButton, IonCol, IonLoading, IonRow } from '@ionic/react';
+import { useState } from 'react';
+import { responseAppliedRequest } from '../../api/appliedRequests';
 import {
   AppliedRequestStatus,
   facultyEnumToStr,
   genderEnumToStr,
   User,
-} from "../../api/types";
-import useCheckedErrorHandler from "../../util/hooks/useCheckedErrorHandler";
-import useUnknownErrorHandler from "../../util/hooks/useUnknownErrorHandler";
-import styles from "./styles.module.scss";
+} from '../../api/types';
+import { useAppDispatch } from '../../redux/hooks';
+import { setApplicantStatusOfCreatedRequest } from '../../redux/slices/homeSlice';
+import useCheckedErrorHandler from '../../util/hooks/useCheckedErrorHandler';
+import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
+import styles from './styles.module.scss';
 
 interface SingleApplicantProps {
   postId: string;
@@ -61,6 +63,7 @@ export default function SingleApplicant({
   applicant,
   isAccepted,
 }: SingleApplicantProps) {
+  const dispatch = useAppDispatch();
   const handleCheckedError = useCheckedErrorHandler();
   const handleUnknownError = useUnknownErrorHandler();
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -75,16 +78,16 @@ export default function SingleApplicant({
       .then((resp) => {
         if (!resp.success) {
           handleCheckedError(resp.message);
-        } else {
-          console.log("successfully rejected");
-          setIsLoading(false);
+          return;
         }
+        dispatch(
+          setApplicantStatusOfCreatedRequest({ applicantUserId, postId })
+        );
       })
       .catch((error) => {
         handleUnknownError(error);
       })
       .finally(() => {
-        console.log("reject application api called!");
         setIsLoading(false);
       });
   }
@@ -100,7 +103,6 @@ export default function SingleApplicant({
         if (!resp.success) {
           handleCheckedError(resp.message);
         } else {
-          console.log("successfully rejected");
           setIsLoading(false);
         }
       })
@@ -108,7 +110,6 @@ export default function SingleApplicant({
         handleUnknownError(error);
       })
       .finally(() => {
-        console.log("reject application api called!");
         setIsLoading(false);
       });
   }
@@ -116,29 +117,29 @@ export default function SingleApplicant({
   return (
     <IonRow className="ion-padding-start ion-justify-content-center">
       <IonCol size="3">
-        <IonAvatar className={styles["avatar"]}>
-          <img alt="profilePic" src={applicant.profilePhoto} />{" "}
+        <IonAvatar className={styles['avatar']}>
+          <img alt="profilePic" src={applicant.profilePhoto} />{' '}
           {/*TODO: Use default photo url if user does not have profile photo */}
         </IonAvatar>
       </IonCol>
-      <IonCol className={styles["user-info"]}>
-        <IonRow className={styles["bold"]}>
-          {applicant.name ?? "No Name"}
+      <IonCol className={styles['user-info']}>
+        <IonRow className={styles['bold']}>
+          {applicant.name ?? 'No Name'}
         </IonRow>
         <IonRow>
           Y{applicant.year ?? 0}/
-          {facultyEnumToStr(applicant.faculty) ?? "unknown faculty"}
+          {facultyEnumToStr(applicant.faculty) ?? 'unknown faculty'}
         </IonRow>
-        <IonRow>{genderEnumToStr(applicant.gender) ?? "unknown gender"}</IonRow>
+        <IonRow>{genderEnumToStr(applicant.gender) ?? 'unknown gender'}</IonRow>
         {isAccepted ? (
-          <IonRow className={styles["bold"]}>
-            Telegram: {applicant.telegramHandle ?? "No Telegram"}
+          <IonRow className={styles['bold']}>
+            Telegram: {applicant.telegramHandle ?? 'No Telegram'}
           </IonRow>
         ) : (
           <></>
         )}
       </IonCol>
-      <IonCol size="4" className={styles["accept-col"]}>
+      <IonCol size="4" className={styles['accept-col']}>
         {isAccepted ? (
           <>
             <IonRow className="ion-align-items-center">

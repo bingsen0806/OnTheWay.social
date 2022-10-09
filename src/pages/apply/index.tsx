@@ -8,16 +8,16 @@ import {
   IonModal,
   IonTitle,
   IonToolbar,
-} from "@ionic/react";
-import { locationEnumToStr, Post } from "../../api/types";
-import { arrowBackOutline } from "ionicons/icons";
-import PostDetails from "../../components/PostDetails";
-import AboutPoster from "../../components/AboutPoster";
-import OtherStudyBuddies from "../../components/OtherStudyBuddies";
-import { createAppliedRequest } from "../../api/appliedRequests";
-import useCheckedErrorHandler from "../../util/hooks/useCheckedErrorHandler";
-import useUnknownErrorHandler from "../../util/hooks/useUnknownErrorHandler";
-import { useState } from "react";
+} from '@ionic/react';
+import { locationEnumToStr, Post } from '../../api/types';
+import { arrowBackOutline } from 'ionicons/icons';
+import PostDetails from '../../components/PostDetails';
+import AboutPoster from '../../components/AboutPoster';
+import OtherStudyBuddies from '../../components/OtherStudyBuddies';
+import { createAppliedRequest } from '../../api/appliedRequests';
+import useCheckedErrorHandler from '../../util/hooks/useCheckedErrorHandler';
+import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
+import { useState } from 'react';
 
 interface ApplyModalProps {
   isOpen: boolean;
@@ -45,7 +45,7 @@ export default function ApplyModal({
     createAppliedRequest(postId)
       .then((resp) => {
         if (!resp.success) {
-          handleCheckedError(resp.message );
+          handleCheckedError(resp.message);
         } else {
           setIsApplied(true);
         }
@@ -54,24 +54,32 @@ export default function ApplyModal({
         handleUnknownError(error);
       })
       .finally(() => {
-        console.log("applied api called!");
+        console.log('applied api called!');
         setIsLoading(false);
       });
   }
 
   return (
-    <IonModal isOpen={isOpen}>
+    <IonModal isOpen={isOpen} onWillDismiss={onClose}>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>
-            Study Session @ {locationEnumToStr(applyPost.location) ?? "UNKNOWN"}
-          </IonTitle>
           <IonButtons>
-            <IonButton slot="start" fill="clear" color="dark" onClick={onClose}>
+            <IonButton
+              slot="start"
+              fill="clear"
+              color="dark"
+              onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
+                event.stopPropagation();
+                onClose();
+              }}
+            >
               <IonIcon icon={arrowBackOutline} slot="start" />
               <p>Back</p>
             </IonButton>
           </IonButtons>
+          <IonTitle>
+            Study Session @ {locationEnumToStr(applyPost.location) ?? 'UNKNOWN'}
+          </IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
@@ -94,7 +102,8 @@ export default function ApplyModal({
             className="ion-padding-horizontal"
             expand="block"
             size="large"
-            onClick={() => {
+            onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
+              event.stopPropagation();
               handleApply(applyPost.id);
             }}
           >

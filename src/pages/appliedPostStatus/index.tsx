@@ -8,16 +8,16 @@ import {
   IonModal,
   IonTitle,
   IonToolbar,
-} from "@ionic/react";
-import { AppliedRequest, locationEnumToStr } from "../../api/types";
-import { arrowBackOutline } from "ionicons/icons";
-import PostDetails from "../../components/PostDetails";
-import AboutPoster from "../../components/AboutPoster";
-import RequestStatus from "../../components/RequestStatus";
-import useCheckedErrorHandler from "../../util/hooks/useCheckedErrorHandler";
-import useUnknownErrorHandler from "../../util/hooks/useUnknownErrorHandler";
-import { useState } from "react";
-import { deleteAppliedRequest } from "../../api/appliedRequests";
+} from '@ionic/react';
+import { AppliedRequest, locationEnumToStr } from '../../api/types';
+import { arrowBackOutline } from 'ionicons/icons';
+import PostDetails from '../../components/PostDetails';
+import AboutPoster from '../../components/AboutPoster';
+import RequestStatus from '../../components/RequestStatus';
+import useCheckedErrorHandler from '../../util/hooks/useCheckedErrorHandler';
+import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
+import { useState } from 'react';
+import { deleteAppliedRequest } from '../../api/appliedRequests';
 
 interface AppliedPostStatusProps {
   isOpen: boolean;
@@ -45,7 +45,7 @@ export default function AppliedPostStatus({
     deleteAppliedRequest(postId)
       .then((resp) => {
         if (!resp.success) {
-          handleCheckedError(resp.message );
+          handleCheckedError(resp.message);
         } else {
           setIsCancelled(true);
         }
@@ -54,7 +54,7 @@ export default function AppliedPostStatus({
         handleUnknownError(error);
       })
       .finally(() => {
-        console.log("delete applied request api called!");
+        console.log('delete applied request api called!');
         setIsLoading(false);
       });
   }
@@ -64,11 +64,19 @@ export default function AppliedPostStatus({
       <IonHeader>
         <IonToolbar>
           <IonTitle>
-            Study Session @{" "}
-            {locationEnumToStr(appliedRequest?.post?.location) ?? "UNKNOWN"}
+            Study Session @{' '}
+            {locationEnumToStr(appliedRequest?.post?.location) ?? 'UNKNOWN'}
           </IonTitle>
           <IonButtons>
-            <IonButton slot="start" fill="clear" color="dark" onClick={onClose}>
+            <IonButton
+              slot="start"
+              fill="clear"
+              color="dark"
+              onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
+                event.stopPropagation();
+                onClose();
+              }}
+            >
               <IonIcon icon={arrowBackOutline} slot="start" />
               <p>Back</p>
             </IonButton>
@@ -100,7 +108,8 @@ export default function AppliedPostStatus({
             size="large"
             fill="outline"
             color="medium"
-            onClick={() => {
+            onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
+              event.stopPropagation();
               handleCancel(appliedRequest.post?.id);
             }}
           >

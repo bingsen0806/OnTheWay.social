@@ -17,7 +17,6 @@ export async function createPost(post: Post) {
 
 /**
  * Get a page of posts with given filter and page number.
- * TODO: add firebase func call.
  *
  */
 export async function getPosts(filter: PostsFilter, page: number) {

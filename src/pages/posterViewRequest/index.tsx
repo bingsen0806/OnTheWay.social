@@ -8,15 +8,17 @@ import {
   IonModal,
   IonTitle,
   IonToolbar,
-} from "@ionic/react";
-import { CreatedRequest, locationEnumToStr } from "../../api/types";
-import { arrowBackOutline } from "ionicons/icons";
-import PostDetails from "../../components/PostDetails";
-import ApplicantList from "../../components/ApplicantList";
-import useCheckedErrorHandler from "../../util/hooks/useCheckedErrorHandler";
-import useUnknownErrorHandler from "../../util/hooks/useUnknownErrorHandler";
-import { useState } from "react";
-import { cancelRequest } from "../../api/home";
+} from '@ionic/react';
+import { CreatedRequest, locationEnumToStr } from '../../api/types';
+import { arrowBackOutline } from 'ionicons/icons';
+import PostDetails from '../../components/PostDetails';
+import ApplicantList from '../../components/ApplicantList';
+import useCheckedErrorHandler from '../../util/hooks/useCheckedErrorHandler';
+import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
+import { useState } from 'react';
+import { cancelRequest } from '../../api/home';
+import { useAppDispatch } from '../../redux/hooks';
+import { getNewPageOfCreatedRequests } from '../../redux/slices/homeSlice';
 
 interface PosterViewRequestProps {
   isOpen: boolean;
@@ -36,6 +38,7 @@ export default function PosterViewRequest({
   onClose,
   createdRequest,
 }: PosterViewRequestProps) {
+  const dispatch = useAppDispatch();
   const handleCheckedError = useCheckedErrorHandler();
   const handleUnknownError = useUnknownErrorHandler();
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -47,16 +50,23 @@ export default function PosterViewRequest({
         if (!resp.success) {
           handleCheckedError(resp.message);
         } else {
-          console.log("successfully deleted");
           setIsLoading(false);
-          //TODO: Close modal or redirect back to pprevious page
+          dispatch(getNewPageOfCreatedRequests())
+            .unwrap()
+            .then((resp) => {
+              if (!resp.success) {
+                handleCheckedError(resp.message as string);
+              }
+            })
+            .catch((error) => {
+              handleUnknownError(error);
+            });
         }
       })
       .catch((error) => {
         handleUnknownError(error);
       })
       .finally(() => {
-        console.log("delete applied request api called!");
         setIsLoading(false);
       });
   }
@@ -66,11 +76,19 @@ export default function PosterViewRequest({
       <IonHeader>
         <IonToolbar>
           <IonTitle>
-            Study Session @{" "}
-            {locationEnumToStr(createdRequest?.post?.location) ?? "UNKNOWN"}
+            Study Session @{' '}
+            {locationEnumToStr(createdRequest?.post?.location) ?? 'UNKNOWN'}
           </IonTitle>
           <IonButtons>
-            <IonButton slot="start" fill="clear" color="dark" onClick={onClose}>
+            <IonButton
+              slot="start"
+              fill="clear"
+              color="dark"
+              onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
+                event.stopPropagation();
+                onClose();
+              }}
+            >
               <IonIcon icon={arrowBackOutline} slot="start" />
               <p>Back</p>
             </IonButton>
@@ -90,7 +108,8 @@ export default function PosterViewRequest({
           fill="outline"
           color="medium"
           size="large"
-          onClick={() => {
+          onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
+            event.stopPropagation();
             void handleDelete(createdRequest.post?.id);
           }}
         >
