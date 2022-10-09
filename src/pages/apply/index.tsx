@@ -4,11 +4,11 @@ import {
   IonContent,
   IonHeader,
   IonIcon,
-  IonPage,
+  IonModal,
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { CreatedRequest, User } from "../../api/types";
+import { CreatedRequest, Post } from "../../api/types";
 import { arrowBackOutline } from "ionicons/icons";
 import PostDetails, { mockPost } from "../../components/PostDetails";
 import AboutPoster from "../../components/AboutPoster";
@@ -18,8 +18,7 @@ import { mockUser2 } from "../../components/SingleApplicant";
 interface ApplyModalProps {
   isOpen: boolean;
   onClose: () => void;
-  currentUser: User;
-  createdRequest: CreatedRequest;
+  applyPost: Post;
 }
 
 async function handleApply() {
@@ -35,11 +34,10 @@ export const mockCreatedRequest: CreatedRequest = {
 export default function ApplyModal({
   isOpen,
   onClose,
-  currentUser,
-  createdRequest = mockCreatedRequest,
+  applyPost,
 }: ApplyModalProps) {
   return (
-    <IonPage>
+    <IonModal isOpen={isOpen}>
       <IonHeader>
         <IonToolbar>
           <IonTitle>Study Session @ CLB</IonTitle>
@@ -52,9 +50,9 @@ export default function ApplyModal({
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        <PostDetails post={createdRequest.post} />
-        <AboutPoster poster={createdRequest.post?.poster} />
-        <OtherStudyBuddies studyBuddies={createdRequest.post.participants} />
+        <PostDetails post={applyPost} />
+        <AboutPoster poster={applyPost?.poster} />
+        <OtherStudyBuddies studyBuddies={applyPost.participants} />
         <IonButton
           className="ion-padding-horizontal"
           expand="block"
@@ -65,6 +63,6 @@ export default function ApplyModal({
           Apply
         </IonButton>
       </IonContent>
-    </IonPage>
+    </IonModal>
   );
 }
