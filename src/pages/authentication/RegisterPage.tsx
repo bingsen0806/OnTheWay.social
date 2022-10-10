@@ -1,10 +1,12 @@
 import { IonButton, IonCol, IonLoading, IonRow } from '@ionic/react';
 import { logEvent } from 'firebase/analytics';
+import { FirebaseError } from 'firebase/app';
 import { useState } from 'react';
 import { LoginDetails, signUp } from '../../api/authentication';
 import TextInputField from '../../components/TextInputField/TextInputField';
 import { analytics } from '../../firebase';
 import { LOGIN } from '../../routes';
+import useErrorToast from '../../util/hooks/useErrorToast';
 import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
 import AuthenticationPageContainer from './AuthenticationPageContainer';
 import { isValidNUSEmail } from './constants';
@@ -21,6 +23,7 @@ interface RegisterErrorMessages {
  * TODO: forgot password functionality after MVP.
  */
 export default function RegisterPage() {
+  const presentErrorToast = useErrorToast();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const handleUnknownError = useUnknownErrorHandler();
   const [loginDetails, setLoginDetails] = useState<LoginDetails>({
@@ -52,6 +55,10 @@ export default function RegisterPage() {
     if (!loginDetails.password) {
       newErrorMessages.password = 'Please enter your password.';
       haveError = true;
+    } else if (loginDetails.password.length < 6) {
+      newErrorMessages.password =
+        'Password must be at least 6 characters long.';
+      haveError = true;
     }
 
     if (!confirmationPassword) {
@@ -70,13 +77,19 @@ export default function RegisterPage() {
       // have error, give up the login
       return;
     }
-
     setIsLoading(true);
     try {
       await signUp(loginDetails);
       logEvent(analytics, 'sign_up');
     } catch (error) {
-      handleUnknownError(error);
+      if (
+        error instanceof FirebaseError &&
+        error.code === 'auth/email-already-in-use'
+      ) {
+        presentErrorToast('Email already registered.');
+      } else {
+        handleUnknownError(error);
+      }
       console.log(error);
     } finally {
       setIsLoading(false);

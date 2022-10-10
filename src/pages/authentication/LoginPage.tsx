@@ -1,10 +1,12 @@
 import { IonButton, IonCol, IonLoading, IonRow } from '@ionic/react';
 import { logEvent } from 'firebase/analytics';
+import { FirebaseError } from 'firebase/app';
 import { useState } from 'react';
 import { login, LoginDetails } from '../../api/authentication';
 import TextInputField from '../../components/TextInputField/TextInputField';
 import { analytics } from '../../firebase';
 import { REGISTER } from '../../routes';
+import useErrorToast from '../../util/hooks/useErrorToast';
 import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
 import AuthenticationPageContainer from './AuthenticationPageContainer';
 import { isValidNUSEmail } from './constants';
@@ -21,6 +23,7 @@ interface LoginErrorMessages {
  */
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const presentErrorToast = useErrorToast();
   const handleUnknownError = useUnknownErrorHandler();
   const [loginDetails, setLoginDetails] = useState<LoginDetails>({
     email: '',
@@ -67,7 +70,15 @@ export default function LoginPage() {
       logEvent(analytics, 'login');
     } catch (error) {
       //TODO: add more specific error handling for authentication
-      handleUnknownError(error);
+      if (
+        error instanceof FirebaseError &&
+        (error.code === 'auth/wrong-password' ||
+          error.code === 'auth/user-not-found')
+      ) {
+        presentErrorToast('Email and/or password is incorrect.');
+      } else {
+        handleUnknownError(error);
+      }
       console.log(error);
     } finally {
       setIsLoading(false);
