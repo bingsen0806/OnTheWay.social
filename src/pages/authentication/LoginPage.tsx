@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { login, LoginDetails } from '../../api/authentication';
 import TextInputField from '../../components/TextInputField/TextInputField';
 import { REGISTER } from '../../routes';
+import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
 import AuthenticationPageContainer from './AuthenticationPageContainer';
 import { isValidNUSEmail } from './constants';
 import styles from './styles.module.scss';
@@ -18,6 +19,7 @@ interface LoginErrorMessages {
  */
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const handleUnknownError = useUnknownErrorHandler();
   const [loginDetails, setLoginDetails] = useState<LoginDetails>({
     email: '',
     password: '',
@@ -61,6 +63,8 @@ export default function LoginPage() {
     try {
       await login(loginDetails);
     } catch (error) {
+      //TODO: add more specific error handling for authentication
+      handleUnknownError(error);
       console.log(error);
     } finally {
       setIsLoading(false);

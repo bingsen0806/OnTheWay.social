@@ -7,9 +7,12 @@ import {
   IonList,
   IonLoading,
   IonPage,
+  IonRefresher,
+  IonRefresherContent,
   IonSegment,
   IonSegmentButton,
   IonToolbar,
+  RefresherEventDetail,
 } from '@ionic/react';
 import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -17,6 +20,8 @@ import {
   getInitialData,
   getNewPageOfAppliedRequests,
   getNewPageOfCreatedRequests,
+  getNextPageOfAppliedRequests,
+  getNextPageOfCreatedRequests,
 } from '../../redux/slices/homeSlice';
 import { getInitialSelf } from '../../redux/slices/userSlice';
 import useCheckedErrorHandler from '../../util/hooks/useCheckedErrorHandler';
@@ -65,8 +70,8 @@ export default function Homepage() {
       });
   });
 
-  function getNextPageOfAppliedRequests() {
-    dispatch(getNewPageOfAppliedRequests())
+  function requestNextPageOfAppliedRequests() {
+    dispatch(getNextPageOfAppliedRequests())
       .unwrap()
       .then((resp) => {
         if (!resp.success) {
@@ -78,8 +83,40 @@ export default function Homepage() {
       });
   }
 
-  function getNextPageOfCreatedRequests() {
+  function refreshAppliedRequests(event: CustomEvent<RefresherEventDetail>) {
+    dispatch(getNewPageOfAppliedRequests())
+      .unwrap()
+      .then((resp) => {
+        if (!resp.success) {
+          handleCheckedError(resp.message as string);
+        }
+      })
+      .catch((error) => {
+        handleUnknownError(error);
+      })
+      .finally(() => {
+        event.detail.complete();
+      });
+  }
+
+  function refreshCreatedRequests(event: CustomEvent<RefresherEventDetail>) {
     dispatch(getNewPageOfCreatedRequests())
+      .unwrap()
+      .then((resp) => {
+        if (!resp.success) {
+          handleCheckedError(resp.message as string);
+        }
+      })
+      .catch((error) => {
+        handleUnknownError(error);
+      })
+      .finally(() => {
+        event.detail.complete();
+      });
+  }
+
+  function requestNextPageOfCreatedRequests() {
+    dispatch(getNextPageOfCreatedRequests())
       .unwrap()
       .then((resp) => {
         if (!resp.success) {
@@ -94,36 +131,50 @@ export default function Homepage() {
   function renderListBasedOnTab() {
     if (tabToShow === HomeTab.CREATED_POST) {
       return (
-        <IonList>
-          {createdPosts.map((post) => (
-            <CreatedRequestListItem
-              key={post.post.id}
-              createdRequest={post}
-            ></CreatedRequestListItem>
-          ))}
-          <IonInfiniteScroll
-            onIonInfinite={getNextPageOfCreatedRequests}
-            threshold="50px"
-            disabled={createdPosts.length < 20}
-          >
-            <IonInfiniteScrollContent loadingSpinner="circles"></IonInfiniteScrollContent>
-          </IonInfiniteScroll>
-        </IonList>
+        <>
+          {' '}
+          <IonRefresher slot="fixed" onIonRefresh={refreshCreatedRequests}>
+            <IonRefresherContent></IonRefresherContent>
+          </IonRefresher>
+          <IonList>
+            {createdPosts.map((post) => (
+              <CreatedRequestListItem
+                key={post.post.id}
+                createdRequest={post}
+              ></CreatedRequestListItem>
+            ))}
+            <IonInfiniteScroll
+              onIonInfinite={requestNextPageOfCreatedRequests}
+              threshold="50px"
+              disabled={createdPosts.length < 20}
+            >
+              <IonInfiniteScrollContent loadingSpinner="circles"></IonInfiniteScrollContent>
+            </IonInfiniteScroll>
+          </IonList>
+        </>
       );
     } else {
       return (
-        <IonList>
-          {appliedPosts.map((post) => (
-            <AppliedRequestListItem key={post.post.id} appliedRequest={post} />
-          ))}
-          <IonInfiniteScroll
-            onIonInfinite={getNextPageOfAppliedRequests}
-            threshold="50px"
-            disabled={appliedPosts.length < 20}
-          >
-            <IonInfiniteScrollContent loadingSpinner="circles"></IonInfiniteScrollContent>
-          </IonInfiniteScroll>
-        </IonList>
+        <>
+          <IonRefresher slot="fixed" onIonRefresh={refreshAppliedRequests}>
+            <IonRefresherContent></IonRefresherContent>
+          </IonRefresher>
+          <IonList>
+            {appliedPosts.map((post) => (
+              <AppliedRequestListItem
+                key={post.post.id}
+                appliedRequest={post}
+              />
+            ))}
+            <IonInfiniteScroll
+              onIonInfinite={requestNextPageOfAppliedRequests}
+              threshold="50px"
+              disabled={appliedPosts.length < 20}
+            >
+              <IonInfiniteScrollContent loadingSpinner="circles"></IonInfiniteScrollContent>
+            </IonInfiniteScroll>
+          </IonList>
+        </>
       );
     }
   }

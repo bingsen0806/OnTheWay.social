@@ -8,6 +8,7 @@ import {
 } from '../../api/authentication';
 import { PROFILE_CREATION } from '../../routes';
 import { useAuthState } from '../../util/authentication';
+import useInfoToast from '../../util/hooks/useInfoToast';
 import AuthenticationPageContainer from './AuthenticationPageContainer';
 import styles from './styles.module.scss';
 
@@ -17,6 +18,7 @@ import styles from './styles.module.scss';
 export default function EmailVerificationPage() {
   const auth = getAuth();
   const authState = useAuthState();
+  const presentInfoToast = useInfoToast();
   const history = useHistory();
 
   useEffect(() => {
@@ -28,6 +30,9 @@ export default function EmailVerificationPage() {
           const auth = getAuth();
           if (auth.currentUser?.emailVerified) {
             history.replace(PROFILE_CREATION);
+            presentInfoToast(
+              'Email verified. Please fill in your account details.'
+            );
           }
         })
         .catch((error) => {

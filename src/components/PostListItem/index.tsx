@@ -1,7 +1,7 @@
 import { IonItem } from '@ionic/react';
 import { useState } from 'react';
 import { facultyEnumToStr, locationEnumToStr, Post } from '../../api/types';
-import ApplyModal from '../../pages/apply';
+import PostModal from '../../pages/PostModal';
 import {
   convertDateRangeToTimeRangeStr,
   convertDateToDateStr,
@@ -43,7 +43,7 @@ export default function PostListItem({ post }: PostListItemProps) {
           {facultyEnumToStr(post.poster.faculty)}
         </p>
       </div>
-      <ApplyModal isOpen={isModalOpen} onClose={closeModal} applyPost={post} />
+      <PostModal isOpen={isModalOpen} onClose={closeModal} applyPost={post} />
     </IonItem>
   );
 }

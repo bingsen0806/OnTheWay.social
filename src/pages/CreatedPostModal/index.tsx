@@ -33,7 +33,7 @@ function getParticipantsFromCreatedRequest(createdRequest: CreatedRequest) {
   return createdRequest.post.participants.map((user) => user.id);
 }
 
-export default function PosterViewRequest({
+export default function CreatedPostModal({
   isOpen,
   onClose,
   createdRequest,
@@ -75,13 +75,8 @@ export default function PosterViewRequest({
     <IonModal isOpen={isOpen}>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>
-            Study Session @{' '}
-            {locationEnumToStr(createdRequest?.post?.location) ?? 'UNKNOWN'}
-          </IonTitle>
-          <IonButtons>
+          <IonButtons slot="start">
             <IonButton
-              slot="start"
               fill="clear"
               color="dark"
               onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
@@ -93,6 +88,10 @@ export default function PosterViewRequest({
               <p>Back</p>
             </IonButton>
           </IonButtons>
+          <IonTitle>
+            Study Session @{' '}
+            {locationEnumToStr(createdRequest?.post?.location) ?? 'UNKNOWN'}
+          </IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>

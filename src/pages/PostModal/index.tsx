@@ -9,50 +9,50 @@ import {
   IonTitle,
   IonToolbar,
 } from '@ionic/react';
-import { AppliedRequest, locationEnumToStr } from '../../api/types';
+import { locationEnumToStr, Post } from '../../api/types';
 import { arrowBackOutline } from 'ionicons/icons';
 import PostDetails from '../../components/PostDetails';
 import AboutPoster from '../../components/AboutPoster';
-import RequestStatus from '../../components/RequestStatus';
+import OtherStudyBuddies from '../../components/OtherStudyBuddies';
+import { createAppliedRequest } from '../../api/appliedRequests';
 import useCheckedErrorHandler from '../../util/hooks/useCheckedErrorHandler';
 import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
 import { useState } from 'react';
-import { deleteAppliedRequest } from '../../api/appliedRequests';
 import { useAppDispatch } from '../../redux/hooks';
-import { removeAppliedRequest } from '../../redux/slices/homeSlice';
+import { removePost } from '../../redux/slices/postsSlice';
 
-interface AppliedPostStatusProps {
+interface ApplyModalProps {
   isOpen: boolean;
   onClose: () => void;
-  appliedRequest: AppliedRequest;
+  applyPost: Post;
 }
 
-// export const mockAppliedRequest: AppliedRequest = {
+// export const mockCreatedRequest: CreatedRequest = {
 //   post: mockPost,
-//   status: AppliedRequestStatus.ACCEPTED,
+//   applicants: [mockUser2, mockUser3],
 // };
 
-export default function AppliedPostStatus({
+export default function PostModal({
   isOpen,
   onClose,
-  appliedRequest,
-}: AppliedPostStatusProps) {
+  applyPost,
+}: ApplyModalProps) {
   const handleCheckedError = useCheckedErrorHandler();
   const handleUnknownError = useUnknownErrorHandler();
   const dispatch = useAppDispatch();
-  const [isCancelled, setIsCancelled] = useState<boolean>(false);
+  const [isApplied, setIsApplied] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  function handleCancel(postId: string) {
+  function handleApply(postId: string) {
     setIsLoading(true);
-    deleteAppliedRequest(postId)
+    createAppliedRequest(postId)
       .then((resp) => {
         if (!resp.success) {
           handleCheckedError(resp.message);
         } else {
-          setIsCancelled(true);
-          dispatch(removeAppliedRequest(appliedRequest));
-          onClose();
+          setIsApplied(true);
+          // remove the post from the outside list of posts, since applied for it already
+          dispatch(removePost(applyPost));
         }
       })
       .catch((error) => {
@@ -64,16 +64,11 @@ export default function AppliedPostStatus({
   }
 
   return (
-    <IonModal isOpen={isOpen}>
+    <IonModal isOpen={isOpen} onWillDismiss={onClose}>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>
-            Study Session @{' '}
-            {locationEnumToStr(appliedRequest?.post?.location) ?? 'UNKNOWN'}
-          </IonTitle>
-          <IonButtons>
+          <IonButtons slot="start">
             <IonButton
-              slot="start"
               fill="clear"
               color="dark"
               onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
@@ -85,42 +80,44 @@ export default function AppliedPostStatus({
               <p>Back</p>
             </IonButton>
           </IonButtons>
+          <IonTitle>
+            Study Session @ {locationEnumToStr(applyPost.location) ?? 'UNKNOWN'}
+          </IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        <RequestStatus
-          status={appliedRequest.status}
-          telegramHandle={appliedRequest.post?.poster?.telegramHandle}
-        />
-        <PostDetails post={appliedRequest.post} />
-        <AboutPoster poster={appliedRequest.post?.poster} />
-        {isCancelled ? (
+        <PostDetails post={applyPost} />
+        <AboutPoster poster={applyPost?.poster} />
+        <OtherStudyBuddies studyBuddies={applyPost.participants} />
+        {isApplied ? (
           <IonButton
             className="ion-padding-horizontal"
-            expand="block"
-            size="large"
             fill="clear"
-            color="danger"
+            color="success"
+            expand="block"
             disabled={true}
+            size="large"
+            onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
+              event.stopPropagation();
+              handleApply(applyPost.id);
+            }}
           >
-            Cancelled
+            Cancel
           </IonButton>
         ) : (
           <IonButton
             className="ion-padding-horizontal"
             expand="block"
-            fill="outline"
-            color="medium"
             onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
               event.stopPropagation();
-              handleCancel(appliedRequest.post?.id);
+              handleApply(applyPost.id);
             }}
           >
-            Cancel
+            Apply
           </IonButton>
         )}
-        <IonLoading isOpen={isLoading}></IonLoading>
       </IonContent>
+      <IonLoading isOpen={isLoading}></IonLoading>
     </IonModal>
   );
 }

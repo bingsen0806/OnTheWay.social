@@ -1,7 +1,7 @@
-import { IonCol, IonGrid, IonList, IonRow } from "@ionic/react";
-import { User } from "../../api/types";
-import SingleApplicant from "../SingleApplicant";
-import styles from "./styles.module.scss";
+import { IonCol, IonGrid, IonList, IonRow } from '@ionic/react';
+import { User } from '../../api/types';
+import SingleApplicant from '../SingleApplicant';
+import styles from './styles.module.scss';
 
 interface ApplicantListProps {
   applicants: User[];
@@ -18,7 +18,7 @@ export default function ApplicantList({
     <IonGrid>
       <IonRow
         className={
-          styles["header"] + " ion-justify-content-start ion-padding-start"
+          styles['header'] + ' ion-justify-content-start ion-padding-start'
         }
       >
         <IonCol>Applicants</IonCol>
@@ -30,7 +30,7 @@ export default function ApplicantList({
             applicant={applicant}
             key={applicant.id}
             isAccepted={participants.includes(applicant.id)}
-          ></SingleApplicant> /*TODO: IMPORTANT, How to know whether applicant is accepted or not */
+          ></SingleApplicant>
         ))}
       </IonList>
     </IonGrid>

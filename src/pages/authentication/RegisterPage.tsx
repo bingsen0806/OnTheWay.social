@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { LoginDetails, signUp } from '../../api/authentication';
 import TextInputField from '../../components/TextInputField/TextInputField';
 import { LOGIN } from '../../routes';
+import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
 import AuthenticationPageContainer from './AuthenticationPageContainer';
 import { isValidNUSEmail } from './constants';
 import styles from './styles.module.scss';
@@ -19,6 +20,7 @@ interface RegisterErrorMessages {
  */
 export default function RegisterPage() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const handleUnknownError = useUnknownErrorHandler();
   const [loginDetails, setLoginDetails] = useState<LoginDetails>({
     email: '',
     password: '',
@@ -71,6 +73,7 @@ export default function RegisterPage() {
     try {
       await signUp(loginDetails);
     } catch (error) {
+      handleUnknownError(error);
       console.log(error);
     } finally {
       setIsLoading(false);

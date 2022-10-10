@@ -15,7 +15,7 @@ import {
 } from '../../../../../util/dateUtils';
 import useCheckedErrorHandler from '../../../../../util/hooks/useCheckedErrorHandler';
 import useUnknownErrorHandler from '../../../../../util/hooks/useUnknownErrorHandler';
-import AppliedPostStatus from '../../../../appliedPostStatus';
+import AppliedPostStatusModal from '../../../../AppliedPostStatusModal';
 import styles from '../styles.module.scss';
 
 interface AppliedRequestListItemProps {
@@ -107,7 +107,7 @@ export default function AppliedRequestListItem({
           Cancel
         </IonButton>
       </div>
-      <AppliedPostStatus
+      <AppliedPostStatusModal
         isOpen={isModalOpen}
         onClose={closeModal}
         appliedRequest={appliedRequest}

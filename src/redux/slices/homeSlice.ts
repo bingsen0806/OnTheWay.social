@@ -66,25 +66,29 @@ const HomeSlice = createSlice({
       }
       state.isLoading = false;
     });
+    /*
     builder.addCase(getNewPageOfAppliedRequests.pending, (state, _) => {
       state.isLoading = true;
     });
     builder.addCase(getNewPageOfAppliedRequests.rejected, (state, _) => {
       state.isLoading = false;
     });
+    */
     builder.addCase(getNewPageOfCreatedRequests.fulfilled, (state, action) => {
       if (action.payload.success) {
         state.createdRequestsPage = 1;
         state.createdRequests = action.payload.message as CreatedRequest[];
       }
-      state.isLoading = false;
+      //state.isLoading = false;
     });
+    /*
     builder.addCase(getNewPageOfCreatedRequests.pending, (state, _) => {
       state.isLoading = true;
     });
     builder.addCase(getNewPageOfCreatedRequests.rejected, (state, _) => {
       state.isLoading = false;
     });
+    */
     builder.addCase(getNextPageOfAppliedRequests.fulfilled, (state, action) => {
       if (action.payload.success) {
         if (action.payload.message.length > 0) {
@@ -95,7 +99,7 @@ const HomeSlice = createSlice({
           );
         }
       }
-      state.isLoading = false;
+      //state.isLoading = false;
     });
     builder.addCase(getNextPageOfAppliedRequests.pending, (state, _) => {
       state.isLoading = true;

@@ -1,4 +1,11 @@
-import { IonItem, IonButton, IonCol, IonGrid, IonRow } from '@ionic/react';
+import {
+  IonItem,
+  IonButton,
+  IonCol,
+  IonGrid,
+  IonRow,
+  IonLoading,
+} from '@ionic/react';
 import { useState } from 'react';
 import { cancelRequest } from '../../../../../api/home';
 import { locationEnumToStr, CreatedRequest } from '../../../../../api/types';
@@ -10,7 +17,7 @@ import {
 } from '../../../../../util/dateUtils';
 import useCheckedErrorHandler from '../../../../../util/hooks/useCheckedErrorHandler';
 import useUnknownErrorHandler from '../../../../../util/hooks/useUnknownErrorHandler';
-import PosterViewRequest from '../../../../posterViewRequest';
+import CreatedPostModal from '../../../../CreatedPostModal';
 import styles from '../styles.module.scss';
 
 interface CreatedRequestListItemProps {
@@ -21,6 +28,7 @@ export default function CreatedRequestListItem({
   createdRequest,
 }: CreatedRequestListItemProps) {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const handleCheckedError = useCheckedErrorHandler();
   const handleUnknownError = useUnknownErrorHandler();
@@ -30,6 +38,7 @@ export default function CreatedRequestListItem({
   }
 
   function sendCancellationRequest() {
+    setIsLoading(true);
     cancelRequest(createdRequest.post.id)
       .then((resp) => {
         if (!resp.success) {
@@ -49,6 +58,9 @@ export default function CreatedRequestListItem({
       })
       .catch((error) => {
         handleUnknownError(error);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }
 
@@ -97,11 +109,12 @@ export default function CreatedRequestListItem({
           </IonCol>
         </IonRow>
       </IonGrid>
-      <PosterViewRequest
+      <CreatedPostModal
         isOpen={isModalOpen}
         onClose={closeModal}
         createdRequest={createdRequest}
       />
+      <IonLoading isOpen={isLoading}></IonLoading>
     </IonItem>
   );
 }
