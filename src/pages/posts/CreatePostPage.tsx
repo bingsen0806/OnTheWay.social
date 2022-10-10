@@ -76,7 +76,6 @@ interface InputErrorMessages {
   date: string;
   startTime: string;
   endTime: string;
-  personCapacity: string;
   description: string;
 }
 
@@ -100,7 +99,6 @@ export default function CreatePostPage() {
     date: '',
     startTime: '',
     endTime: '',
-    personCapacity: '',
     description: '',
   });
 
@@ -143,11 +141,6 @@ export default function CreatePostPage() {
       haveError = true;
     } else if (!checkStartTimeBeforeEndTime()) {
       newErrorMessages.endTime = 'End time must be later than start time';
-      haveError = true;
-    }
-    if (!post.personCapacity) {
-      newErrorMessages.personCapacity =
-        'Please specify how many people you would like to have at this study session';
       haveError = true;
     }
 
@@ -258,23 +251,6 @@ export default function CreatePostPage() {
                 }}
                 errorMessage={errorMessages.endTime}
               ></DateTimePicker>
-            </IonCol>
-          </IonRow>
-          <IonRow className="ion-justify-content-center">
-            <IonCol>
-              <TextInputField
-                label="Number of people"
-                placeholder="Number of people"
-                value={
-                  post.personCapacity
-                    ? post.personCapacity.toString()
-                    : undefined
-                }
-                errorMessage={errorMessages.personCapacity}
-                onChange={(personCapacity) => {
-                  setPost({ ...post, personCapacity: Number(personCapacity) });
-                }}
-              />
             </IonCol>
           </IonRow>
           <IonRow className="ion-justify-content-center">

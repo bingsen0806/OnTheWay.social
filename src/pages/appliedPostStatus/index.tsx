@@ -18,6 +18,8 @@ import useCheckedErrorHandler from '../../util/hooks/useCheckedErrorHandler';
 import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
 import { useState } from 'react';
 import { deleteAppliedRequest } from '../../api/appliedRequests';
+import { useAppDispatch } from '../../redux/hooks';
+import { removeAppliedRequest } from '../../redux/slices/homeSlice';
 
 interface AppliedPostStatusProps {
   isOpen: boolean;
@@ -37,6 +39,7 @@ export default function AppliedPostStatus({
 }: AppliedPostStatusProps) {
   const handleCheckedError = useCheckedErrorHandler();
   const handleUnknownError = useUnknownErrorHandler();
+  const dispatch = useAppDispatch();
   const [isCancelled, setIsCancelled] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -48,13 +51,14 @@ export default function AppliedPostStatus({
           handleCheckedError(resp.message);
         } else {
           setIsCancelled(true);
+          dispatch(removeAppliedRequest(appliedRequest));
+          onClose();
         }
       })
       .catch((error) => {
         handleUnknownError(error);
       })
       .finally(() => {
-        console.log('delete applied request api called!');
         setIsLoading(false);
       });
   }
@@ -105,7 +109,6 @@ export default function AppliedPostStatus({
           <IonButton
             className="ion-padding-horizontal"
             expand="block"
-            size="large"
             fill="outline"
             color="medium"
             onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {

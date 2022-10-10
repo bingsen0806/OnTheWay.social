@@ -18,6 +18,8 @@ import { createAppliedRequest } from '../../api/appliedRequests';
 import useCheckedErrorHandler from '../../util/hooks/useCheckedErrorHandler';
 import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
 import { useState } from 'react';
+import { useAppDispatch } from '../../redux/hooks';
+import { removePost } from '../../redux/slices/postsSlice';
 
 interface ApplyModalProps {
   isOpen: boolean;
@@ -37,6 +39,7 @@ export default function ApplyModal({
 }: ApplyModalProps) {
   const handleCheckedError = useCheckedErrorHandler();
   const handleUnknownError = useUnknownErrorHandler();
+  const dispatch = useAppDispatch();
   const [isApplied, setIsApplied] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -48,13 +51,14 @@ export default function ApplyModal({
           handleCheckedError(resp.message);
         } else {
           setIsApplied(true);
+          // remove the post from the outside list of posts, since applied for it already
+          dispatch(removePost(applyPost));
         }
       })
       .catch((error) => {
         handleUnknownError(error);
       })
       .finally(() => {
-        console.log('applied api called!');
         setIsLoading(false);
       });
   }
@@ -94,14 +98,17 @@ export default function ApplyModal({
             expand="block"
             disabled={true}
             size="large"
+            onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
+              event.stopPropagation();
+              handleApply(applyPost.id);
+            }}
           >
-            Applied
+            Cancel
           </IonButton>
         ) : (
           <IonButton
             className="ion-padding-horizontal"
             expand="block"
-            size="large"
             onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
               event.stopPropagation();
               handleApply(applyPost.id);

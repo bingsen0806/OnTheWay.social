@@ -107,7 +107,6 @@ export default function PosterViewRequest({
           expand="block"
           fill="outline"
           color="medium"
-          size="large"
           onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
             event.stopPropagation();
             void handleDelete(createdRequest.post?.id);

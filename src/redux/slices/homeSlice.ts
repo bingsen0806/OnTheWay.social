@@ -52,6 +52,11 @@ const HomeSlice = createSlice({
         state.createdRequests = newCreatedRequests;
       }
     },
+    removeAppliedRequest: (state, action: PayloadAction<AppliedRequest>) => {
+      state.appliedRequests = state.appliedRequests.filter(
+        (appliedRequest) => appliedRequest.post.id !== action.payload.post.id
+      );
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getNewPageOfAppliedRequests.fulfilled, (state, action) => {
@@ -116,6 +121,25 @@ const HomeSlice = createSlice({
     builder.addCase(getNextPageOfCreatedRequests.rejected, (state, _) => {
       state.isLoading = false;
     });
+    builder.addCase(getInitialData.pending, (state, _) => {
+      state.isLoading = true;
+    });
+    builder.addCase(getInitialData.rejected, (state, _) => {
+      state.isLoading = false;
+    });
+    builder.addCase(getInitialData.fulfilled, (state, action) => {
+      state.isLoading = false;
+      if (action.payload.success) {
+        const respData = action.payload.message as {
+          appliedRequests: AppliedRequest[];
+          createdRequests: CreatedRequest[];
+        };
+        state.appliedRequestsPage = 1;
+        state.appliedRequests = respData.appliedRequests;
+        state.createdRequestsPage = 1;
+        state.createdRequests = respData.createdRequests;
+      }
+    });
   },
 });
 
@@ -173,7 +197,51 @@ export const getNextPageOfCreatedRequests = createAsyncThunk<
   return responseData;
 });
 
-export const { setApplicantStatusOfCreatedRequest } = HomeSlice.actions;
+/**
+ * Gets the initial homepage data if no data currently in store.
+ */
+export const getInitialData = createAsyncThunk<
+  ApiResponseBody<{
+    appliedRequests: AppliedRequest[];
+    createdRequests: CreatedRequest[];
+  }>,
+  undefined,
+  { state: RootState }
+>('home/getInitialData', async (_, thunkApi) => {
+  if (
+    thunkApi.getState().home.appliedRequests.length <= 0 ||
+    thunkApi.getState().home.createdRequests.length <= 0
+  ) {
+    const appliedRequestsResp = await getAppliedRequests(1);
+    const createdRequestsResp = await getCreatedRequests(1);
+
+    if (!appliedRequestsResp.success) {
+      return { success: false, message: appliedRequestsResp.message as string };
+    }
+
+    if (!createdRequestsResp.success) {
+      return { success: false, message: createdRequestsResp.message as string };
+    }
+
+    return {
+      success: true,
+      message: {
+        appliedRequests: appliedRequestsResp.message as AppliedRequest[],
+        createdRequests: createdRequestsResp.message as CreatedRequest[],
+      },
+    };
+  }
+  return {
+    success: true,
+    message: {
+      appliedRequests: thunkApi.getState().home.appliedRequests,
+      createdRequests: thunkApi.getState().home.createdRequests,
+    },
+  };
+});
+
+export const { setApplicantStatusOfCreatedRequest, removeAppliedRequest } =
+  HomeSlice.actions;
 
 // set up persistence, uses local storage to persist this reducer
 const homePersistConfig = {

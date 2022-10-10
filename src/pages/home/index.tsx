@@ -10,23 +10,24 @@ import {
   IonSegment,
   IonSegmentButton,
   IonToolbar,
-} from "@ionic/react";
-import { useState } from "react";
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+} from '@ionic/react';
+import { useState } from 'react';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import {
+  getInitialData,
   getNewPageOfAppliedRequests,
   getNewPageOfCreatedRequests,
-} from "../../redux/slices/homeSlice";
-import { getSelf } from "../../redux/slices/userSlice";
-import useCheckedErrorHandler from "../../util/hooks/useCheckedErrorHandler";
-import usePageInitialLoad from "../../util/hooks/usePageInitialLoad";
-import useUnknownErrorHandler from "../../util/hooks/useUnknownErrorHandler";
-import AppliedRequestListItem from "./components/RequesListItems/AppliedRequestListItem";
-import CreatedRequestListItem from "./components/RequesListItems/CreatedRequestListItem";
+} from '../../redux/slices/homeSlice';
+import { getInitialSelf } from '../../redux/slices/userSlice';
+import useCheckedErrorHandler from '../../util/hooks/useCheckedErrorHandler';
+import usePageInitialLoad from '../../util/hooks/usePageInitialLoad';
+import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
+import AppliedRequestListItem from './components/RequesListItems/AppliedRequestListItem';
+import CreatedRequestListItem from './components/RequesListItems/CreatedRequestListItem';
 
 enum HomeTab {
-  APPLIED_POST = "Applied Posts",
-  CREATED_POST = "Created Posts",
+  APPLIED_POST = 'Applied Posts',
+  CREATED_POST = 'Created Posts',
 }
 
 export default function Homepage() {
@@ -40,30 +41,20 @@ export default function Homepage() {
   const [tabToShow, setTabToShow] = useState<HomeTab>(HomeTab.APPLIED_POST);
 
   usePageInitialLoad(() => {
-    dispatch(getSelf())
+    dispatch(getInitialSelf())
       .unwrap()
       .then((selfResp) => {
         if (!selfResp.success) {
           handleCheckedError(selfResp.message as string);
           return;
         }
-        dispatch(getNewPageOfAppliedRequests())
+        dispatch(getInitialData())
           .unwrap()
-          .then((appliedReqResp) => {
-            if (!appliedReqResp.success) {
-              handleCheckedError(appliedReqResp.message as string);
+          .then((resp) => {
+            if (!resp.success) {
+              handleCheckedError(selfResp.message as string);
               return;
             }
-            dispatch(getNewPageOfCreatedRequests())
-              .unwrap()
-              .then((createdReqResp) => {
-                if (!createdReqResp.success) {
-                  handleCheckedError(createdReqResp.message as string);
-                }
-              })
-              .catch((error) => {
-                handleUnknownError(error);
-              });
           })
           .catch((error) => {
             handleUnknownError(error);
