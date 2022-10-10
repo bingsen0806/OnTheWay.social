@@ -51,7 +51,7 @@ export default function AppliedPostStatusModal({
           handleCheckedError(resp.message);
         } else {
           setIsCancelled(true);
-          dispatch(removeAppliedRequest(appliedRequest));
+          dispatch(removeAppliedRequest(appliedRequest.post.id));
           onClose();
         }
       })
