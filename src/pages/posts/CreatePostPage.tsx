@@ -111,8 +111,7 @@ export default function CreatePostPage() {
       post.location === undefined ||
       dateTimes.date === undefined ||
       dateTimes.startTime === undefined ||
-      dateTimes.endTime === undefined ||
-      post.personCapacity === undefined
+      dateTimes.endTime === undefined
     ) {
       return false;
     }
