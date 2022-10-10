@@ -1,4 +1,5 @@
 import { IonButton, IonCol, IonRow } from '@ionic/react';
+import { logEvent } from 'firebase/analytics';
 import { getAuth } from 'firebase/auth';
 import { useEffect } from 'react';
 import { useHistory } from 'react-router';
@@ -6,6 +7,7 @@ import {
   deleteCurrentUser,
   resendEmailVerification,
 } from '../../api/authentication';
+import { analytics } from '../../firebase';
 import { PROFILE_CREATION } from '../../routes';
 import { useAuthState } from '../../util/authentication';
 import useInfoToast from '../../util/hooks/useInfoToast';
@@ -33,6 +35,7 @@ export default function EmailVerificationPage() {
             presentInfoToast(
               'Email verified. Please fill in your account details.'
             );
+            logEvent(analytics, 'email_verified');
           }
         })
         .catch((error) => {

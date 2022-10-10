@@ -1,7 +1,9 @@
 import { IonButton, IonCol, IonLoading, IonRow } from '@ionic/react';
+import { logEvent } from 'firebase/analytics';
 import { useState } from 'react';
 import { LoginDetails, signUp } from '../../api/authentication';
 import TextInputField from '../../components/TextInputField/TextInputField';
+import { analytics } from '../../firebase';
 import { LOGIN } from '../../routes';
 import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
 import AuthenticationPageContainer from './AuthenticationPageContainer';
@@ -72,6 +74,7 @@ export default function RegisterPage() {
     setIsLoading(true);
     try {
       await signUp(loginDetails);
+      logEvent(analytics, 'sign_up');
     } catch (error) {
       handleUnknownError(error);
       console.log(error);

@@ -1,4 +1,5 @@
 import { IonItem, IonLabel, IonButton, IonLoading } from '@ionic/react';
+import { logEvent } from 'firebase/analytics';
 import { useState } from 'react';
 import { deleteAppliedRequest } from '../../../../../api/appliedRequests';
 import {
@@ -7,6 +8,7 @@ import {
   facultyEnumToStr,
   AppliedRequestStatus,
 } from '../../../../../api/types';
+import { analytics } from '../../../../../firebase';
 import { useAppDispatch } from '../../../../../redux/hooks';
 import { removeAppliedRequest } from '../../../../../redux/slices/homeSlice';
 import {
@@ -43,7 +45,8 @@ export default function AppliedRequestListItem({
         if (!resp.success) {
           handleCheckedError(resp.message);
         } else {
-          dispatch(removeAppliedRequest(appliedRequest));
+          dispatch(removeAppliedRequest(appliedRequest.post.id));
+          logEvent(analytics, 'cancel_post_application');
         }
       })
       .catch((error) => {

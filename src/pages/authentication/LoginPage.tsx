@@ -1,7 +1,9 @@
 import { IonButton, IonCol, IonLoading, IonRow } from '@ionic/react';
+import { logEvent } from 'firebase/analytics';
 import { useState } from 'react';
 import { login, LoginDetails } from '../../api/authentication';
 import TextInputField from '../../components/TextInputField/TextInputField';
+import { analytics } from '../../firebase';
 import { REGISTER } from '../../routes';
 import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
 import AuthenticationPageContainer from './AuthenticationPageContainer';
@@ -62,6 +64,7 @@ export default function LoginPage() {
 
     try {
       await login(loginDetails);
+      logEvent(analytics, 'login');
     } catch (error) {
       //TODO: add more specific error handling for authentication
       handleUnknownError(error);

@@ -11,6 +11,7 @@ import {
   IonRow,
   IonToolbar,
 } from '@ionic/react';
+import { logEvent } from 'firebase/analytics';
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { createPost } from '../../api/posts';
@@ -21,6 +22,7 @@ import DropdownSelection, {
   DropdownItem,
 } from '../../components/DropdownSelection';
 import TextInputField from '../../components/TextInputField/TextInputField';
+import { analytics } from '../../firebase';
 import { POSTS } from '../../routes';
 import useCheckedErrorHandler from '../../util/hooks/useCheckedErrorHandler';
 import useInfoToast from '../../util/hooks/useInfoToast';
@@ -165,6 +167,7 @@ export default function CreatePostPage() {
           handleCheckedError(resp.message as string);
         } else {
           presentInfoToast('Successfully created new post!');
+          logEvent(analytics, 'create_post');
           history.goBack();
         }
       })

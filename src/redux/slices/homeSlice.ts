@@ -52,9 +52,9 @@ const HomeSlice = createSlice({
         state.createdRequests = newCreatedRequests;
       }
     },
-    removeAppliedRequest: (state, action: PayloadAction<AppliedRequest>) => {
+    removeAppliedRequest: (state, action: PayloadAction<string>) => {
       state.appliedRequests = state.appliedRequests.filter(
-        (appliedRequest) => appliedRequest.post.id !== action.payload.post.id
+        (appliedRequest) => appliedRequest.post.id !== action.payload
       );
     },
   },

@@ -14,12 +14,18 @@ import { arrowBackOutline } from 'ionicons/icons';
 import PostDetails from '../../components/PostDetails';
 import AboutPoster from '../../components/AboutPoster';
 import OtherStudyBuddies from '../../components/OtherStudyBuddies';
-import { createAppliedRequest } from '../../api/appliedRequests';
+import {
+  createAppliedRequest,
+  deleteAppliedRequest,
+} from '../../api/appliedRequests';
 import useCheckedErrorHandler from '../../util/hooks/useCheckedErrorHandler';
 import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
 import { useState } from 'react';
 import { useAppDispatch } from '../../redux/hooks';
 import { removePost } from '../../redux/slices/postsSlice';
+import { logEvent } from 'firebase/analytics';
+import { analytics } from '../../firebase';
+import { removeAppliedRequest } from '../../redux/slices/homeSlice';
 
 interface ApplyModalProps {
   isOpen: boolean;
@@ -53,6 +59,26 @@ export default function PostModal({
           setIsApplied(true);
           // remove the post from the outside list of posts, since applied for it already
           dispatch(removePost(applyPost));
+          logEvent(analytics, 'apply_post');
+        }
+      })
+      .catch((error) => {
+        handleUnknownError(error);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }
+
+  function sendCancellationRequest(postId: string) {
+    setIsLoading(true);
+    deleteAppliedRequest(postId)
+      .then((resp) => {
+        if (!resp.success) {
+          handleCheckedError(resp.message);
+        } else {
+          dispatch(removeAppliedRequest(postId));
+          logEvent(analytics, 'cancel_post_application');
         }
       })
       .catch((error) => {
@@ -99,7 +125,7 @@ export default function PostModal({
             size="large"
             onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
               event.stopPropagation();
-              handleApply(applyPost.id);
+              sendCancellationRequest(applyPost.id);
             }}
           >
             Cancel

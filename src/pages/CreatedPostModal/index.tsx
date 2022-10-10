@@ -19,6 +19,8 @@ import { useState } from 'react';
 import { cancelRequest } from '../../api/home';
 import { useAppDispatch } from '../../redux/hooks';
 import { getNewPageOfCreatedRequests } from '../../redux/slices/homeSlice';
+import { analytics } from '../../firebase';
+import { logEvent } from 'firebase/analytics';
 
 interface PosterViewRequestProps {
   isOpen: boolean;
@@ -51,6 +53,8 @@ export default function CreatedPostModal({
           handleCheckedError(resp.message);
         } else {
           setIsLoading(false);
+          logEvent(analytics, 'delete_post');
+          // TODO: change to own side remove if needed
           dispatch(getNewPageOfCreatedRequests())
             .unwrap()
             .then((resp) => {
@@ -111,7 +115,7 @@ export default function CreatedPostModal({
             void handleDelete(createdRequest.post?.id);
           }}
         >
-          Delete Request
+          Delete Post
         </IonButton>
         <IonLoading isOpen={isLoading}></IonLoading>
       </IonContent>

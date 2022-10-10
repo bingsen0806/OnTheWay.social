@@ -1,4 +1,5 @@
 import { IonButton, IonCol, IonLoading, IonRow } from '@ionic/react';
+import { logEvent } from 'firebase/analytics';
 import { useState } from 'react';
 import { useHistory } from 'react-router';
 import { createUserProfile } from '../../api/authentication';
@@ -7,6 +8,7 @@ import DropdownSelection, {
   DropdownItem,
 } from '../../components/DropdownSelection';
 import TextInputField from '../../components/TextInputField/TextInputField';
+import { analytics } from '../../firebase';
 import { HOME } from '../../routes';
 import useCheckedErrorHandler from '../../util/hooks/useCheckedErrorHandler';
 import useInfoToast from '../../util/hooks/useInfoToast';
@@ -168,6 +170,7 @@ export default function ProfileCreationPage() {
         presentInfoToast(
           'User profile creation successful. Enjoy using BuddyNUS!'
         );
+        logEvent(analytics, 'profile_create');
       } else {
         handleCheckedError(resp.message);
       }

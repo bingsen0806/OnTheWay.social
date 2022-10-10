@@ -1,4 +1,5 @@
 import { IonAvatar, IonButton, IonCol, IonLoading, IonRow } from '@ionic/react';
+import { logEvent } from 'firebase/analytics';
 import { useState } from 'react';
 import { responseAppliedRequest } from '../../api/appliedRequests';
 import {
@@ -7,6 +8,7 @@ import {
   genderEnumToStr,
   User,
 } from '../../api/types';
+import { analytics } from '../../firebase';
 import { useAppDispatch } from '../../redux/hooks';
 import { setApplicantStatusOfCreatedRequest } from '../../redux/slices/homeSlice';
 import useCheckedErrorHandler from '../../util/hooks/useCheckedErrorHandler';
@@ -83,6 +85,7 @@ export default function SingleApplicant({
         dispatch(
           setApplicantStatusOfCreatedRequest({ applicantUserId, postId })
         );
+        logEvent(analytics, 'cancel_accepted_applicant');
       })
       .catch((error) => {
         handleUnknownError(error);
@@ -97,13 +100,14 @@ export default function SingleApplicant({
     responseAppliedRequest(
       postId,
       applicantUserId,
-      AppliedRequestStatus.REJECTED
+      AppliedRequestStatus.ACCEPTED
     )
       .then((resp) => {
         if (!resp.success) {
           handleCheckedError(resp.message);
         } else {
           setIsLoading(false);
+          logEvent(analytics, 'accept_post_application');
         }
       })
       .catch((error) => {
