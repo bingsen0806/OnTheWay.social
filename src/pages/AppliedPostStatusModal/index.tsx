@@ -17,13 +17,16 @@ import RequestStatus from '../../components/RequestStatus';
 import useCheckedErrorHandler from '../../util/hooks/useCheckedErrorHandler';
 import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
 import { useState } from 'react';
-import { deleteAppliedRequest } from '../../api/appliedRequests';
+import {
+  createAppliedRequest,
+  deleteAppliedRequest,
+} from '../../api/appliedRequests';
 import { useAppDispatch } from '../../redux/hooks';
 import { removeAppliedRequest } from '../../redux/slices/homeSlice';
 
 interface AppliedPostStatusProps {
   isOpen: boolean;
-  onClose: () => void;
+  onClose: (callback: () => void) => void;
   appliedRequest: AppliedRequest;
 }
 
@@ -43,16 +46,14 @@ export default function AppliedPostStatusModal({
   const [isCancelled, setIsCancelled] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  function handleCancel(postId: string) {
+  function handleCancel() {
     setIsLoading(true);
-    deleteAppliedRequest(postId)
+    deleteAppliedRequest(appliedRequest.post.id)
       .then((resp) => {
         if (!resp.success) {
           handleCheckedError(resp.message);
         } else {
           setIsCancelled(true);
-          dispatch(removeAppliedRequest(appliedRequest.post.id));
-          onClose();
         }
       })
       .catch((error) => {
@@ -63,22 +64,47 @@ export default function AppliedPostStatusModal({
       });
   }
 
+  function handleUndoCancel() {
+    setIsLoading(true);
+    createAppliedRequest(appliedRequest.post.id)
+      .then((resp) => {
+        if (!resp.success) {
+          handleCheckedError(resp.message);
+        } else {
+          setIsCancelled(false);
+        }
+      })
+      .catch((error) => {
+        handleUnknownError(error);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }
+
+  function closeModal() {
+    onClose(() => {
+      if (isCancelled) {
+        dispatch(removeAppliedRequest(appliedRequest.post.id));
+      }
+    });
+  }
+
   return (
-    <IonModal isOpen={isOpen}>
+    <IonModal isOpen={isOpen} onWillDismiss={closeModal}>
       <IonHeader>
         <IonToolbar>
           <IonTitle>
             Study Session @{' '}
             {locationEnumToStr(appliedRequest?.post?.location) ?? 'UNKNOWN'}
           </IonTitle>
-          <IonButtons>
+          <IonButtons slot="start">
             <IonButton
-              slot="start"
               fill="clear"
               color="dark"
               onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
                 event.stopPropagation();
-                onClose();
+                closeModal();
               }}
             >
               <IonIcon icon={arrowBackOutline} slot="start" />
@@ -98,22 +124,21 @@ export default function AppliedPostStatusModal({
           <IonButton
             className="ion-padding-horizontal"
             expand="block"
-            size="large"
-            fill="clear"
-            color="danger"
-            disabled={true}
+            onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
+              event.stopPropagation();
+              handleUndoCancel();
+            }}
           >
-            Cancelled
+            Undo Cancel
           </IonButton>
         ) : (
           <IonButton
             className="ion-padding-horizontal"
             expand="block"
-            fill="outline"
             color="medium"
             onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
               event.stopPropagation();
-              handleCancel(appliedRequest.post?.id);
+              handleCancel();
             }}
           >
             Cancel

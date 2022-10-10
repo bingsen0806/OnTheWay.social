@@ -1,5 +1,5 @@
 import { IonItem } from '@ionic/react';
-import { useState } from 'react';
+import { useStateWithCallbackLazy } from 'use-state-with-callback';
 import { facultyEnumToStr, locationEnumToStr, Post } from '../../api/types';
 import PostModal from '../../pages/PostModal';
 import {
@@ -13,15 +13,18 @@ interface PostListItemProps {
 }
 
 export default function PostListItem({ post }: PostListItemProps) {
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const closeModal = () => {
-    setIsModalOpen(false);
+  const [isModalOpen, setIsModalOpen] =
+    useStateWithCallbackLazy<boolean>(false);
+  const closeModal = (callback: () => void) => {
+    setIsModalOpen(false, callback);
   };
   return (
     <IonItem
       button
       onClick={() => {
-        setIsModalOpen(true);
+        setIsModalOpen(true, () => {
+          return;
+        });
       }}
     >
       <div className={styles['post-container']}>

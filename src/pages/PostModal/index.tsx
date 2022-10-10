@@ -25,11 +25,13 @@ import { useAppDispatch } from '../../redux/hooks';
 import { removePost } from '../../redux/slices/postsSlice';
 import { logEvent } from 'firebase/analytics';
 import { analytics } from '../../firebase';
-import { removeAppliedRequest } from '../../redux/slices/homeSlice';
+import {
+  requestReloadOfHomeData,
+} from '../../redux/slices/homeSlice';
 
 interface ApplyModalProps {
   isOpen: boolean;
-  onClose: () => void;
+  onClose: ((callback: () => void) => void) | (() => void);
   applyPost: Post;
 }
 
@@ -58,8 +60,8 @@ export default function PostModal({
         } else {
           setIsApplied(true);
           // remove the post from the outside list of posts, since applied for it already
-          dispatch(removePost(applyPost));
           logEvent(analytics, 'apply_post');
+          dispatch(requestReloadOfHomeData());
         }
       })
       .catch((error) => {
@@ -77,8 +79,9 @@ export default function PostModal({
         if (!resp.success) {
           handleCheckedError(resp.message);
         } else {
-          dispatch(removeAppliedRequest(postId));
+          setIsApplied(false);
           logEvent(analytics, 'cancel_post_application');
+          dispatch(requestReloadOfHomeData());
         }
       })
       .catch((error) => {
@@ -89,8 +92,16 @@ export default function PostModal({
       });
   }
 
+  function onCloseAction() {
+    onClose(() => {
+      if (isApplied) {
+        dispatch(removePost(applyPost));
+      }
+    });
+  }
+
   return (
-    <IonModal isOpen={isOpen} onWillDismiss={onClose}>
+    <IonModal isOpen={isOpen} onWillDismiss={onCloseAction}>
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">
@@ -99,7 +110,7 @@ export default function PostModal({
               color="dark"
               onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
                 event.stopPropagation();
-                onClose();
+                onCloseAction();
               }}
             >
               <IonIcon icon={arrowBackOutline} slot="start" />
@@ -118,11 +129,8 @@ export default function PostModal({
         {isApplied ? (
           <IonButton
             className="ion-padding-horizontal"
-            fill="clear"
-            color="success"
+            color="medium"
             expand="block"
-            disabled={true}
-            size="large"
             onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
               event.stopPropagation();
               sendCancellationRequest(applyPost.id);

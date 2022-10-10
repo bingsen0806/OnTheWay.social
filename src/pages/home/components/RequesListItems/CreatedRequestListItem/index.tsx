@@ -6,11 +6,17 @@ import {
   IonRow,
   IonLoading,
 } from '@ionic/react';
+import { logEvent } from 'firebase/analytics';
 import { useState } from 'react';
+import { useStateWithCallbackLazy } from 'use-state-with-callback';
 import { cancelRequest } from '../../../../../api/home';
 import { locationEnumToStr, CreatedRequest } from '../../../../../api/types';
+import { analytics } from '../../../../../firebase';
 import { useAppDispatch } from '../../../../../redux/hooks';
-import { getNewPageOfCreatedRequests } from '../../../../../redux/slices/homeSlice';
+import {
+  removeCreatedRequest,
+} from '../../../../../redux/slices/homeSlice';
+import { requestReloadOfPosts } from '../../../../../redux/slices/postsSlice';
 import {
   convertDateToDateStr,
   convertDateRangeToTimeRangeStr,
@@ -27,14 +33,15 @@ interface CreatedRequestListItemProps {
 export default function CreatedRequestListItem({
   createdRequest,
 }: CreatedRequestListItemProps) {
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isModalOpen, setIsModalOpen] =
+    useStateWithCallbackLazy<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const handleCheckedError = useCheckedErrorHandler();
   const handleUnknownError = useUnknownErrorHandler();
 
-  function closeModal() {
-    setIsModalOpen(false);
+  function closeModal(callback: () => void) {
+    setIsModalOpen(false, callback);
   }
 
   function sendCancellationRequest() {
@@ -44,16 +51,10 @@ export default function CreatedRequestListItem({
         if (!resp.success) {
           handleCheckedError(resp.message);
         } else {
-          dispatch(getNewPageOfCreatedRequests())
-            .unwrap()
-            .then((resp) => {
-              if (!resp.success) {
-                handleCheckedError(resp.message as string);
-              }
-            })
-            .catch((error) => {
-              handleUnknownError(error);
-            });
+          dispatch(removeCreatedRequest(createdRequest.post.id));
+          // TODO: remove this line when backend dosnet send my own posts back in posts page
+          dispatch(requestReloadOfPosts());
+          logEvent(analytics, 'delete_post');
         }
       })
       .catch((error) => {
@@ -65,7 +66,14 @@ export default function CreatedRequestListItem({
   }
 
   return (
-    <IonItem button onClick={() => setIsModalOpen(true)}>
+    <IonItem
+      button
+      onClick={() =>
+        setIsModalOpen(true, () => {
+          return;
+        })
+      }
+    >
       <IonGrid>
         <IonRow className="ion-justify-content-between">
           <IonCol>

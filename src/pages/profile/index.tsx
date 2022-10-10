@@ -27,6 +27,7 @@ import { uploadImageAndStoreToDb } from '../../api/user';
 import usePageInitialLoad from '../../util/hooks/usePageInitialLoad';
 import useCheckedErrorHandler from '../../util/hooks/useCheckedErrorHandler';
 import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
+import { persistor } from '../../redux/store';
 
 interface Image {
   preview: string;
@@ -84,7 +85,13 @@ export default function ProfilePage() {
   });
 
   function submitLogout() {
-    void logout();
+    logout()
+      .then(() => {
+        void persistor.purge();
+      })
+      .catch((error) => {
+        handleUnknownError(error);
+      });
   }
 
   const routeToFAQ = () => {

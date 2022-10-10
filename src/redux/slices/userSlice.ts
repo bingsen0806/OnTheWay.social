@@ -29,7 +29,14 @@ const initialState: UserState = {
 const UserSlice = createSlice({
   name: 'user',
   initialState,
-  reducers: {},
+  reducers: {
+    /**
+     * TODO: To be used in future if add edit the user profile functionality is added.
+     */
+    requestReloadOfUserData: (state) => {
+      state.selfLoadedOnce = false;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(getUserObject.fulfilled, (state, action) => {
       if (action.payload.success) {

@@ -18,13 +18,14 @@ import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
 import { useState } from 'react';
 import { cancelRequest } from '../../api/home';
 import { useAppDispatch } from '../../redux/hooks';
-import { getNewPageOfCreatedRequests } from '../../redux/slices/homeSlice';
+import { removeCreatedRequest } from '../../redux/slices/homeSlice';
 import { analytics } from '../../firebase';
 import { logEvent } from 'firebase/analytics';
+import { requestReloadOfPosts } from '../../redux/slices/postsSlice';
 
 interface PosterViewRequestProps {
   isOpen: boolean;
-  onClose: () => void;
+  onClose: (callback: () => void) => void;
   createdRequest: CreatedRequest;
 }
 
@@ -54,17 +55,11 @@ export default function CreatedPostModal({
         } else {
           setIsLoading(false);
           logEvent(analytics, 'delete_post');
-          // TODO: change to own side remove if needed
-          dispatch(getNewPageOfCreatedRequests())
-            .unwrap()
-            .then((resp) => {
-              if (!resp.success) {
-                handleCheckedError(resp.message as string);
-              }
-            })
-            .catch((error) => {
-              handleUnknownError(error);
-            });
+          onClose(() => {
+            dispatch(removeCreatedRequest(createdRequest.post.id));
+            // TODO: remove this line when backend dosnet send my own posts back in posts page
+            dispatch(requestReloadOfPosts());
+          });
         }
       })
       .catch((error) => {
@@ -76,7 +71,14 @@ export default function CreatedPostModal({
   }
 
   return (
-    <IonModal isOpen={isOpen}>
+    <IonModal
+      isOpen={isOpen}
+      onWillDismiss={() =>
+        onClose(() => {
+          return;
+        })
+      }
+    >
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">
@@ -85,7 +87,9 @@ export default function CreatedPostModal({
               color="dark"
               onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
                 event.stopPropagation();
-                onClose();
+                onClose(() => {
+                  return;
+                });
               }}
             >
               <IonIcon icon={arrowBackOutline} slot="start" />
@@ -108,7 +112,6 @@ export default function CreatedPostModal({
         <IonButton
           className="ion-padding-horizontal ion-margin-top"
           expand="block"
-          fill="outline"
           color="medium"
           onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
             event.stopPropagation();

@@ -10,6 +10,7 @@ interface PostsState {
   filter: PostsFilter;
   page: number;
   isLoading: boolean;
+  hasDoneInitialLoad: boolean;
 }
 
 const initialState: PostsState = {
@@ -19,6 +20,7 @@ const initialState: PostsState = {
   },
   page: 0,
   isLoading: false,
+  hasDoneInitialLoad: false,
 };
 
 const PostsSlice = createSlice({
@@ -30,6 +32,9 @@ const PostsSlice = createSlice({
     },
     removePost: (state, action: PayloadAction<Post>) => {
       state.posts = state.posts.filter((post) => post.id !== action.payload.id);
+    },
+    requestReloadOfPosts: (state) => {
+      state.hasDoneInitialLoad = false;
     },
   },
   extraReducers: (builder) => {
@@ -63,18 +68,8 @@ const PostsSlice = createSlice({
     builder.addCase(getNewPageOfPostsWithFilter.rejected, (state, _) => {
       state.isLoading = false;
     });
-    builder.addCase(getInitialPostsData.pending, (state, _) => {
-      state.isLoading = true;
-    });
-    builder.addCase(getInitialPostsData.rejected, (state, _) => {
-      state.isLoading = false;
-    });
-    builder.addCase(getInitialPostsData.fulfilled, (state, action) => {
-      state.isLoading = false;
-      if (action.payload.success) {
-        state.page = 1;
-        state.posts = action.payload.message as Post[];
-      }
+    builder.addCase(getInitialPostsData.fulfilled, (state, _) => {
+      state.hasDoneInitialLoad = true;
     });
   },
 });
@@ -114,17 +109,20 @@ export const getInitialPostsData = createAsyncThunk<
   undefined,
   { state: RootState }
 >('posts/getInitialPostsData', async (_, thunkApi) => {
-  if (thunkApi.getState().posts.posts.length > 0) {
-    return { success: true, message: thunkApi.getState().posts.posts };
+  if (!thunkApi.getState().posts.hasDoneInitialLoad) {
+    const resp = await thunkApi
+      .dispatch(getNewPageOfPostsWithFilter({ locations: [] }))
+      .unwrap();
+    return resp;
   }
-  const responseData = await getPosts({ locations: [] }, 1);
-  return responseData;
+  return { success: true, message: '' };
 });
 
 // set up persistence, uses local storage to persist this reducer
 const postsPersistConfig = {
   key: 'posts',
   storage,
+  blacklist: ['hasDoneInitialLoad', 'isLoading'],
 };
 
 const persistedPostsReducer = persistReducer(
@@ -132,6 +130,6 @@ const persistedPostsReducer = persistReducer(
   PostsSlice.reducer
 );
 
-export const { removePost } = PostsSlice.actions;
+export const { removePost, requestReloadOfPosts } = PostsSlice.actions;
 
 export default persistedPostsReducer;

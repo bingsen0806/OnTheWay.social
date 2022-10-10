@@ -23,6 +23,8 @@ import DropdownSelection, {
 } from '../../components/DropdownSelection';
 import TextInputField from '../../components/TextInputField/TextInputField';
 import { analytics } from '../../firebase';
+import { useAppDispatch } from '../../redux/hooks';
+import { requestReloadOfHomeData } from '../../redux/slices/homeSlice';
 import { POSTS } from '../../routes';
 import useCheckedErrorHandler from '../../util/hooks/useCheckedErrorHandler';
 import useInfoToast from '../../util/hooks/useInfoToast';
@@ -82,6 +84,7 @@ interface InputErrorMessages {
 }
 
 export default function CreatePostPage() {
+  const dispatch = useAppDispatch();
   const handleCheckedError = useCheckedErrorHandler();
   const handleUnknownError = useUnknownErrorHandler();
   const presentInfoToast = useInfoToast();
@@ -157,8 +160,6 @@ export default function CreatePostPage() {
       description: post.description ? post.description : '',
     };
 
-    console.log(newPost);
-
     setPost(newPost);
     setIsLoading(true);
     createPost(newPost)
@@ -167,6 +168,7 @@ export default function CreatePostPage() {
           handleCheckedError(resp.message as string);
         } else {
           presentInfoToast('Successfully created new post!');
+          dispatch(requestReloadOfHomeData());
           logEvent(analytics, 'create_post');
           history.goBack();
         }

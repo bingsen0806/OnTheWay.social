@@ -23,16 +23,24 @@ export default function ApplicantList({
       >
         <IonCol>Applicants</IonCol>
       </IonRow>
-      <IonList>
-        {applicants.map((applicant) => (
-          <SingleApplicant
-            postId={postId}
-            applicant={applicant}
-            key={applicant.id}
-            isAccepted={participants.includes(applicant.id)}
-          ></SingleApplicant>
-        ))}
-      </IonList>
+      {applicants.length <= 0 ? (
+        <IonRow className="ion-justify-content-start ion-padding-start">
+          <IonCol>
+            <p>No one has applied to your post yet. Check again later!</p>
+          </IonCol>
+        </IonRow>
+      ) : (
+        <IonList>
+          {applicants.map((applicant) => (
+            <SingleApplicant
+              postId={postId}
+              applicant={applicant}
+              key={applicant.id}
+              isAccepted={participants.includes(applicant.id)}
+            ></SingleApplicant>
+          ))}
+        </IonList>
+      )}
     </IonGrid>
   );
 }

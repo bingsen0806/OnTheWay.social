@@ -143,9 +143,6 @@ export default function PostsPage() {
           </IonToolbar>
         </IonHeader>
         <IonContent className="ion-padding">
-          <IonRefresher slot="fixed" onIonRefresh={applyNewFilter}>
-            <IonRefresherContent></IonRefresherContent>
-          </IonRefresher>
           <h4 className={styles['filter-category-header']}>Locations</h4>
           {Object.values(Location)
             .filter((v) => !isNaN(Number(v)))
@@ -213,6 +210,9 @@ export default function PostsPage() {
           </IonToolbar>
         </IonHeader>
         <IonContent fullscreen>
+          <IonRefresher slot="fixed" onIonRefresh={applyNewFilter}>
+            <IonRefresherContent></IonRefresherContent>
+          </IonRefresher>
           <IonList>
             {listOfPosts.map((data) => (
               <PostListItem post={data} key={data.id}></PostListItem>

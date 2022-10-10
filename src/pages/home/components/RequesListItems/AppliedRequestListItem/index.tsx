@@ -1,6 +1,9 @@
 import { IonItem, IonLabel, IonButton, IonLoading } from '@ionic/react';
 import { logEvent } from 'firebase/analytics';
 import { useState } from 'react';
+import {
+  useStateWithCallbackLazy,
+} from 'use-state-with-callback';
 import { deleteAppliedRequest } from '../../../../../api/appliedRequests';
 import {
   AppliedRequest,
@@ -11,6 +14,7 @@ import {
 import { analytics } from '../../../../../firebase';
 import { useAppDispatch } from '../../../../../redux/hooks';
 import { removeAppliedRequest } from '../../../../../redux/slices/homeSlice';
+import { requestReloadOfPosts } from '../../../../../redux/slices/postsSlice';
 import {
   convertDateToDateStr,
   convertDateRangeToTimeRangeStr,
@@ -27,15 +31,15 @@ interface AppliedRequestListItemProps {
 export default function AppliedRequestListItem({
   appliedRequest,
 }: AppliedRequestListItemProps) {
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isModalOpen, setIsModalOpen] =
+    useStateWithCallbackLazy<boolean>(false);
   const dispatch = useAppDispatch();
   const handleCheckedError = useCheckedErrorHandler();
   const handleUnknownError = useUnknownErrorHandler();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  function closeModal() {
-    setIsModalOpen(false);
-    console.log('close applied request modal');
+  function closeModal(callback: () => void) {
+    setIsModalOpen(false, callback);
   }
 
   function sendCancellationRequest() {
@@ -46,6 +50,7 @@ export default function AppliedRequestListItem({
           handleCheckedError(resp.message);
         } else {
           dispatch(removeAppliedRequest(appliedRequest.post.id));
+          dispatch(requestReloadOfPosts());
           logEvent(analytics, 'cancel_post_application');
         }
       })
@@ -61,7 +66,9 @@ export default function AppliedRequestListItem({
     <IonItem
       button
       onClick={() => {
-        setIsModalOpen(true);
+        setIsModalOpen(true, () => {
+          return;
+        });
       }}
     >
       <div className={styles['post-container']}>
