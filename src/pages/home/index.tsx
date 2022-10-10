@@ -27,6 +27,7 @@ import { getInitialSelf } from '../../redux/slices/userSlice';
 import useCheckedErrorHandler from '../../util/hooks/useCheckedErrorHandler';
 import usePageInitialLoad from '../../util/hooks/usePageInitialLoad';
 import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
+import NoData from '../NoData';
 import AppliedRequestListItem from './components/RequesListItems/AppliedRequestListItem';
 import CreatedRequestListItem from './components/RequesListItems/CreatedRequestListItem';
 
@@ -130,6 +131,18 @@ export default function Homepage() {
 
   function renderListBasedOnTab() {
     if (tabToShow === HomeTab.CREATED_POST) {
+      if (createdPosts.length === 0) {
+        return (
+          <>
+            <IonRefresher slot="fixed" onIonRefresh={refreshCreatedRequests}>
+              <IonRefresherContent></IonRefresherContent>
+            </IonRefresher>
+            <NoData>
+              <>No created requests!</>
+            </NoData>
+          </>
+        );
+      }
       return (
         <>
           {' '}
@@ -154,6 +167,18 @@ export default function Homepage() {
         </>
       );
     } else {
+      if (appliedPosts.length === 0) {
+        return (
+          <>
+            <IonRefresher slot="fixed" onIonRefresh={refreshCreatedRequests}>
+              <IonRefresherContent></IonRefresherContent>
+            </IonRefresher>
+            <NoData>
+              <>You have not applied for any study requests.</>
+            </NoData>
+          </>
+        );
+      }
       return (
         <>
           <IonRefresher slot="fixed" onIonRefresh={refreshAppliedRequests}>
