@@ -13,9 +13,7 @@ import { cancelRequest } from '../../../../../api/home';
 import { locationEnumToStr, CreatedRequest } from '../../../../../api/types';
 import { analytics } from '../../../../../firebase';
 import { useAppDispatch } from '../../../../../redux/hooks';
-import {
-  removeCreatedRequest,
-} from '../../../../../redux/slices/homeSlice';
+import { removeCreatedRequest } from '../../../../../redux/slices/homeSlice';
 import { requestReloadOfPosts } from '../../../../../redux/slices/postsSlice';
 import {
   convertDateToDateStr,
@@ -89,8 +87,11 @@ export default function CreatedRequestListItem({
               )}
             </p>
             <p className={styles['post-text']}>
-              {createdRequest.post.participants.length + 1} /{' '}
-              {createdRequest.post.personCapacity} pax
+              {`${(createdRequest.post.participants.length + 1).toString()} ${
+                createdRequest.post.participants.length <= 0
+                  ? 'attendee'
+                  : 'attendees'
+              }`}
             </p>
             <p className={styles['post-text']}>
               Description: {createdRequest.post.description}

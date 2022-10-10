@@ -37,7 +37,9 @@ export default function PostListItem({ post }: PostListItemProps) {
           {convertDateRangeToTimeRangeStr(post.startDateTime, post.endDateTime)}
         </p>
         <p className={styles['post-text']}>
-          {post.participants.length + 1} / {post.personCapacity} pax
+          {`${(post.participants.length + 1).toString()} ${
+            post.participants.length <= 0 ? 'attendee' : 'attendees'
+          }`}
         </p>
         <p className={styles['post-text']}>Description: {post.description}</p>
         <br></br>

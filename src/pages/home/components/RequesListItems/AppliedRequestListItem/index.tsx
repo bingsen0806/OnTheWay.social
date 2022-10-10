@@ -1,9 +1,7 @@
 import { IonItem, IonLabel, IonButton, IonLoading } from '@ionic/react';
 import { logEvent } from 'firebase/analytics';
 import { useState } from 'react';
-import {
-  useStateWithCallbackLazy,
-} from 'use-state-with-callback';
+import { useStateWithCallbackLazy } from 'use-state-with-callback';
 import { deleteAppliedRequest } from '../../../../../api/appliedRequests';
 import {
   AppliedRequest,
@@ -84,8 +82,11 @@ export default function AppliedRequestListItem({
           )}
         </p>
         <p className={styles['post-text']}>
-          {appliedRequest.post.participants.length + 1} /{' '}
-          {appliedRequest.post.personCapacity} pax
+          {`${(appliedRequest.post.participants.length + 1).toString()} ${
+            appliedRequest.post.participants.length <= 0
+              ? 'attendee'
+              : 'attendees'
+          }`}
         </p>
         <p className={styles['post-text']}>
           Description: {appliedRequest.post.description}
