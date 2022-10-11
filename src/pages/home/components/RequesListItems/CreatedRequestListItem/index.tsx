@@ -87,7 +87,7 @@ export default function CreatedRequestListItem({
               )}
             </p>
             <p className={styles['post-text']}>
-              {`${(createdRequest.post.participants.length + 1).toString()} ${
+              {`${createdRequest.post.participants.length.toString()} ${
                 createdRequest.post.participants.length <= 0
                   ? 'attendee'
                   : 'attendees'

@@ -156,7 +156,7 @@ export default function CreatePostPage() {
     const newPost = {
       ...post,
       startDateTime: combineDateAndTime(dateTimes.date, dateTimes.startTime),
-      endDateTime: combineDateAndTime(dateTimes.date, dateTimes.startTime),
+      endDateTime: combineDateAndTime(dateTimes.date, dateTimes.endTime),
       description: post.description ? post.description : '',
     };
 
@@ -250,7 +250,6 @@ export default function CreatePostPage() {
                 type="time"
                 label="End Time"
                 onChange={(endTime) => {
-                  console.log(endTime);
                   setDateTimes({ ...dateTimes, endTime });
                 }}
                 errorMessage={errorMessages.endTime}

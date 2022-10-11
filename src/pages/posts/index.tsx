@@ -19,6 +19,7 @@ import {
   IonRow,
   IonTitle,
   IonToolbar,
+  RefresherEventDetail,
 } from '@ionic/react';
 import { funnelOutline } from 'ionicons/icons';
 import { useState } from 'react';
@@ -134,6 +135,28 @@ export default function PostsPage() {
       });
   });
 
+  function refreshContents(event: CustomEvent<RefresherEventDetail>) {
+    const newLocationFilter: Location[] = [];
+    for (const location in filterLocations) {
+      if (filterLocations[location as unknown as Location]) {
+        newLocationFilter.push(Number(location) as unknown as Location);
+      }
+    }
+    dispatch(getNewPageOfPostsWithFilter({ locations: newLocationFilter }))
+      .unwrap()
+      .then((resp) => {
+        if (!resp.success) {
+          handleCheckedError(resp.message as string);
+        }
+      })
+      .catch((error) => {
+        handleUnknownError(error);
+      })
+      .finally(() => {
+        event.detail.complete();
+      });
+  }
+
   return (
     <>
       <IonMenu contentId="main-content" side="end">
@@ -210,7 +233,7 @@ export default function PostsPage() {
           </IonToolbar>
         </IonHeader>
         <IonContent fullscreen>
-          <IonRefresher slot="fixed" onIonRefresh={applyNewFilter}>
+          <IonRefresher slot="fixed" onIonRefresh={refreshContents}>
             <IonRefresherContent></IonRefresherContent>
           </IonRefresher>
           <IonList>

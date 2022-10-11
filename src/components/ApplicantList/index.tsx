@@ -5,14 +5,14 @@ import styles from './styles.module.scss';
 
 interface ApplicantListProps {
   applicants: User[];
-  participants: string[];
+  addParticipantToCreatedRequest: (participant: User) => void;
   postId: string;
 }
 
 export default function ApplicantList({
   applicants,
-  participants,
   postId,
+  addParticipantToCreatedRequest,
 }: ApplicantListProps) {
   return (
     <IonGrid>
@@ -36,7 +36,7 @@ export default function ApplicantList({
               postId={postId}
               applicant={applicant}
               key={applicant.id}
-              isAccepted={participants.includes(applicant.id)}
+              addParticipantToCreatedRequest={addParticipantToCreatedRequest}
             ></SingleApplicant>
           ))}
         </IonList>

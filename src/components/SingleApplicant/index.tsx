@@ -9,8 +9,6 @@ import {
   User,
 } from '../../api/types';
 import { analytics } from '../../firebase';
-import { useAppDispatch } from '../../redux/hooks';
-import { setApplicantStatusOfCreatedRequest } from '../../redux/slices/homeSlice';
 import useCheckedErrorHandler from '../../util/hooks/useCheckedErrorHandler';
 import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
 import styles from './styles.module.scss';
@@ -18,7 +16,7 @@ import styles from './styles.module.scss';
 interface SingleApplicantProps {
   postId: string;
   applicant: User;
-  isAccepted: boolean;
+  addParticipantToCreatedRequest: (participant: User) => void;
 }
 
 // export const mockPoster: User = {
@@ -63,37 +61,11 @@ interface SingleApplicantProps {
 export default function SingleApplicant({
   postId,
   applicant,
-  isAccepted,
+  addParticipantToCreatedRequest,
 }: SingleApplicantProps) {
-  const dispatch = useAppDispatch();
   const handleCheckedError = useCheckedErrorHandler();
   const handleUnknownError = useUnknownErrorHandler();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  function handleCancel(postId: string, applicantUserId: string) {
-    setIsLoading(true);
-    responseAppliedRequest(
-      postId,
-      applicantUserId,
-      AppliedRequestStatus.REJECTED
-    )
-      .then((resp) => {
-        if (!resp.success) {
-          handleCheckedError(resp.message);
-          return;
-        }
-        dispatch(
-          setApplicantStatusOfCreatedRequest({ applicantUserId, postId })
-        );
-        logEvent(analytics, 'cancel_accepted_applicant');
-      })
-      .catch((error) => {
-        handleUnknownError(error);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }
 
   function handleAccept(postId: string, applicantUserId: string) {
     setIsLoading(true);
@@ -106,7 +78,7 @@ export default function SingleApplicant({
         if (!resp.success) {
           handleCheckedError(resp.message);
         } else {
-          setIsLoading(false);
+          addParticipantToCreatedRequest(applicant);
           logEvent(analytics, 'accept_post_application');
         }
       })
@@ -135,56 +107,19 @@ export default function SingleApplicant({
           {facultyEnumToStr(applicant.faculty) ?? 'unknown faculty'}
         </IonRow>
         <IonRow>{genderEnumToStr(applicant.gender) ?? 'unknown gender'}</IonRow>
-        {isAccepted ? (
-          <IonRow className={styles['bold']}>
-            Telegram: {applicant.telegramHandle ?? 'No Telegram'}
-          </IonRow>
-        ) : (
-          <></>
-        )}
       </IonCol>
       <IonCol size="4" className={styles['accept-col']}>
-        {isAccepted ? (
-          <>
-            <IonRow className="ion-align-items-center">
-              <IonButton
-                disabled={true}
-                shape="round"
-                fill="outline"
-                color="dark"
-                size="small"
-              >
-                Accepted
-              </IonButton>
-            </IonRow>
-            <IonRow className="ion-align-items-center">
-              <IonButton
-                shape="round"
-                fill="clear"
-                color="dark"
-                size="small"
-                onClick={() => {
-                  handleCancel(postId, applicant.id);
-                }}
-              >
-                Cancel
-              </IonButton>
-            </IonRow>
-          </>
-        ) : (
-          <IonRow>
-            <IonButton
-              shape="round"
-              fill="solid"
-              size="small"
-              onClick={() => {
-                void handleAccept(postId, applicant.id);
-              }}
-            >
-              Accept
-            </IonButton>
-          </IonRow>
-        )}
+        <IonButton
+          shape="round"
+          fill="solid"
+          size="small"
+          onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
+            event.stopPropagation();
+            handleAccept(postId, applicant.id);
+          }}
+        >
+          Accept
+        </IonButton>
       </IonCol>
       <IonLoading isOpen={isLoading}></IonLoading>
     </IonRow>

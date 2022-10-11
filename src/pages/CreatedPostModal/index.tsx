@@ -9,7 +9,7 @@ import {
   IonTitle,
   IonToolbar,
 } from '@ionic/react';
-import { CreatedRequest, locationEnumToStr } from '../../api/types';
+import { CreatedRequest, locationEnumToStr, User } from '../../api/types';
 import { arrowBackOutline } from 'ionicons/icons';
 import PostDetails from '../../components/PostDetails';
 import ApplicantList from '../../components/ApplicantList';
@@ -18,10 +18,14 @@ import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
 import { useState } from 'react';
 import { cancelRequest } from '../../api/home';
 import { useAppDispatch } from '../../redux/hooks';
-import { removeCreatedRequest } from '../../redux/slices/homeSlice';
+import {
+  removeCreatedRequest,
+  replaceCreatedRequest,
+} from '../../redux/slices/homeSlice';
 import { analytics } from '../../firebase';
 import { logEvent } from 'firebase/analytics';
 import { requestReloadOfPosts } from '../../redux/slices/postsSlice';
+import OtherStudyBuddies from '../../components/OtherStudyBuddies';
 
 interface PosterViewRequestProps {
   isOpen: boolean;
@@ -44,6 +48,14 @@ export default function CreatedPostModal({
   const dispatch = useAppDispatch();
   const handleCheckedError = useCheckedErrorHandler();
   const handleUnknownError = useUnknownErrorHandler();
+  // temp state of created request, any changes will be synced up with redux when the modal is closed
+  const [createdRequestState, setCreatedRequestState] =
+    useState<CreatedRequest>(
+      JSON.parse(JSON.stringify(createdRequest)) as CreatedRequest
+    );
+  // simple flag to determine if we should request reload of post data if cretaed request is changed
+  const [createdRequestWasEdited, setCreatedRequestWasEdited] =
+    useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   function handleDelete(postId: string) {
@@ -57,7 +69,7 @@ export default function CreatedPostModal({
           logEvent(analytics, 'delete_post');
           onClose(() => {
             dispatch(removeCreatedRequest(createdRequest.post.id));
-            // TODO: remove this line when backend dosnet send my own posts back in posts page
+            // TODO: remove this line when backend doesnt send my own posts back in posts page
             dispatch(requestReloadOfPosts());
           });
         }
@@ -70,15 +82,29 @@ export default function CreatedPostModal({
       });
   }
 
-  return (
-    <IonModal
-      isOpen={isOpen}
-      onWillDismiss={() =>
-        onClose(() => {
-          return;
-        })
+  function addParticipantToCreatedRequest(participant: User) {
+    const newCreatedRequest = JSON.parse(
+      JSON.stringify(createdRequestState)
+    ) as CreatedRequest;
+    newCreatedRequest.applicants = newCreatedRequest.applicants.filter(
+      (applicant) => applicant.id !== participant.id
+    );
+    newCreatedRequest.post.participants.push(participant);
+    setCreatedRequestState(newCreatedRequest);
+    setCreatedRequestWasEdited(true);
+  }
+
+  function closeModal() {
+    onClose(() => {
+      if (createdRequestWasEdited) {
+        dispatch(replaceCreatedRequest(createdRequestState));
+        dispatch(requestReloadOfPosts());
       }
-    >
+    });
+  }
+
+  return (
+    <IonModal isOpen={isOpen} onWillDismiss={closeModal}>
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">
@@ -87,9 +113,7 @@ export default function CreatedPostModal({
               color="dark"
               onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
                 event.stopPropagation();
-                onClose(() => {
-                  return;
-                });
+                closeModal();
               }}
             >
               <IonIcon icon={arrowBackOutline} slot="start" />
@@ -98,16 +122,21 @@ export default function CreatedPostModal({
           </IonButtons>
           <IonTitle>
             Study Session @{' '}
-            {locationEnumToStr(createdRequest?.post?.location) ?? 'UNKNOWN'}
+            {locationEnumToStr(createdRequestState?.post?.location) ??
+              'UNKNOWN'}
           </IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        <PostDetails post={createdRequest.post} />
+        <PostDetails post={createdRequestState.post} />
+        <OtherStudyBuddies
+          inCreatedRequest
+          studyBuddies={createdRequestState.post.participants}
+        ></OtherStudyBuddies>
         <ApplicantList
-          postId={createdRequest.post.id}
-          applicants={createdRequest.applicants}
-          participants={getParticipantsFromCreatedRequest(createdRequest)}
+          postId={createdRequestState.post.id}
+          applicants={createdRequestState.applicants}
+          addParticipantToCreatedRequest={addParticipantToCreatedRequest}
         />
         <IonButton
           className="ion-padding-horizontal ion-margin-top"
@@ -115,7 +144,7 @@ export default function CreatedPostModal({
           color="medium"
           onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
             event.stopPropagation();
-            void handleDelete(createdRequest.post?.id);
+            void handleDelete(createdRequestState.post?.id);
           }}
         >
           Delete Post

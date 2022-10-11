@@ -5,10 +5,12 @@ import styles from './styles.module.scss';
 
 interface OtherStudyBuddiesProp {
   studyBuddies: User[];
+  inCreatedRequest?: boolean;
 }
 
 export default function OtherStudyBuddies({
   studyBuddies,
+  inCreatedRequest,
 }: OtherStudyBuddiesProp) {
   return studyBuddies && studyBuddies.length > 0 ? (
     <IonGrid className="ion-margin-vertical">
@@ -22,13 +24,15 @@ export default function OtherStudyBuddies({
         {/*TODO: implement popup */}
       </IonRow>
       {studyBuddies.length <= 0 ? (
-        <IonRow className="ion-justify-content-start ion-padding-start">
-          <IonCol>
-            <p>
-              No one is participating in this study session yet. Be the first!
-            </p>
-          </IonCol>
-        </IonRow>
+        inCreatedRequest && (
+          <IonRow className="ion-justify-content-start ion-padding-start">
+            <IonCol>
+              <p>
+                No one is participating in this study session yet. Be the first!
+              </p>
+            </IonCol>
+          </IonRow>
+        )
       ) : (
         <IonList>
           {studyBuddies.map((buddy) => (

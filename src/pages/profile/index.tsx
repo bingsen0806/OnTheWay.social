@@ -88,6 +88,7 @@ export default function ProfilePage() {
     logout()
       .then(() => {
         void persistor.purge();
+        dispatch({ type: 'USER_LOGOUT' });
       })
       .catch((error) => {
         handleUnknownError(error);

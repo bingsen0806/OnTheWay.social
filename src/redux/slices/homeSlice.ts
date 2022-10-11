@@ -31,28 +31,76 @@ const HomeSlice = createSlice({
   name: 'home',
   initialState,
   reducers: {
-    setApplicantStatusOfCreatedRequest: (
+    /**
+    cancelApplicantOfCreatedRequest: (
       state,
       action: PayloadAction<{ applicantUserId: string; postId: string }>
     ) => {
       const newCreatedRequests = [];
       for (let i = 0; i < state.createdRequests.length; i++) {
+        let changedParticipant;
         const createdRequest = state.createdRequests[i];
         if (createdRequest.post.id === action.payload.postId) {
-          // remove the user from list of applicants
-          const newApplicants = [];
-          for (const applicant of createdRequest.applicants) {
-            if (applicant.id !== action.payload.applicantUserId) {
-              newApplicants.push(applicant);
+          const newParticipants = [];
+          for (const participant of createdRequest.post.participants) {
+            if (participant.id !== action.payload.applicantUserId) {
+              newParticipants.push(participant);
+            } else {
+              changedParticipant = participant;
             }
           }
+          const newApplicants = [...createdRequest.applicants] as User[];
+          newApplicants.push(changedParticipant as User);
+          createdRequest.post.participants = newParticipants;
           createdRequest.applicants = newApplicants;
-          newApplicants.push(createdRequest);
+          //TODO: check if this mutable change is fine
+          newCreatedRequests.push(createdRequest);
         } else {
           newCreatedRequests.push(createdRequest);
         }
         state.createdRequests = newCreatedRequests;
       }
+    },
+    acceptApplicantOfCreatedRequest: (
+      state,
+      action: PayloadAction<{ applicantUserId: string; postId: string }>
+    ) => {
+      const newCreatedRequests = [];
+      for (let i = 0; i < state.createdRequests.length; i++) {
+        let changedParticipant;
+        const createdRequest = state.createdRequests[i];
+        if (createdRequest.post.id === action.payload.postId) {
+          const newApplicants = [];
+          for (const applicant of createdRequest.applicants) {
+            if (applicant.id !== action.payload.applicantUserId) {
+              newApplicants.push(applicant);
+            } else {
+              changedParticipant = applicant;
+            }
+          }
+          const newParticipants = [...createdRequest.post.participants] as User[];
+          newParticipants.push(changedParticipant as User);
+          createdRequest.post.participants = newParticipants;
+          createdRequest.applicants = newApplicants;
+          //TODO: check if this mutable change is fine
+          newCreatedRequests.push(createdRequest);
+        } else {
+          newCreatedRequests.push(createdRequest);
+        }
+        state.createdRequests = newCreatedRequests;
+      }
+    },
+    */
+    replaceCreatedRequest: (state, action: PayloadAction<CreatedRequest>) => {
+      const newCreatedRequests: CreatedRequest[] = [];
+      for (const createdRequest of state.createdRequests) {
+        if (createdRequest.post.id !== action.payload.post.id) {
+          newCreatedRequests.push(createdRequest);
+        } else {
+          newCreatedRequests.push(action.payload);
+        }
+      }
+      state.createdRequests = newCreatedRequests;
     },
     removeCreatedRequest: (state, action: PayloadAction<string>) => {
       state.createdRequests = state.createdRequests.filter(
@@ -220,7 +268,7 @@ export const getInitialData = createAsyncThunk<
 });
 
 export const {
-  setApplicantStatusOfCreatedRequest,
+  replaceCreatedRequest,
   removeAppliedRequest,
   removeCreatedRequest,
   requestReloadOfHomeData,
