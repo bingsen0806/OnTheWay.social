@@ -28,6 +28,8 @@ import usePageInitialLoad from '../../util/hooks/usePageInitialLoad';
 import useCheckedErrorHandler from '../../util/hooks/useCheckedErrorHandler';
 import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
 import { persistor } from '../../redux/store';
+import { requestReloadOfHomeData } from '../../redux/slices/homeSlice';
+import { requestReloadOfPosts } from '../../redux/slices/postsSlice';
 
 interface Image {
   preview: string;
@@ -89,6 +91,8 @@ export default function ProfilePage() {
       .then(() => {
         void persistor.purge();
         dispatch({ type: 'USER_LOGOUT' });
+        dispatch(requestReloadOfHomeData());
+        dispatch(requestReloadOfPosts());
       })
       .catch((error) => {
         handleUnknownError(error);

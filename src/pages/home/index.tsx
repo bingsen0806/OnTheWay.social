@@ -1,10 +1,9 @@
 import {
   IonContent,
   IonHeader,
-  IonInfiniteScroll,
-  IonInfiniteScrollContent,
   IonLabel,
   IonList,
+  IonButton,
   IonLoading,
   IonPage,
   IonRefresher,
@@ -13,6 +12,9 @@ import {
   IonSegmentButton,
   IonToolbar,
   RefresherEventDetail,
+  IonFabButton,
+  IonFab,
+  IonIcon,
 } from '@ionic/react';
 import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -20,8 +22,6 @@ import {
   getInitialData,
   getNewPageOfAppliedRequests,
   getNewPageOfCreatedRequests,
-  getNextPageOfAppliedRequests,
-  getNextPageOfCreatedRequests,
 } from '../../redux/slices/homeSlice';
 import { getInitialSelf } from '../../redux/slices/userSlice';
 import useCheckedErrorHandler from '../../util/hooks/useCheckedErrorHandler';
@@ -30,13 +30,18 @@ import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
 import NoData from '../NoData';
 import AppliedRequestListItem from './components/RequesListItems/AppliedRequestListItem';
 import CreatedRequestListItem from './components/RequesListItems/CreatedRequestListItem';
+import { CREATE_POST, POSTS } from '../../routes';
+import { useHistory } from 'react-router';
+import styles from './styles.module.scss';
+import { add } from 'ionicons/icons';
 
 enum HomeTab {
-  APPLIED_POST = 'Applied Posts',
-  CREATED_POST = 'Created Posts',
+  APPLIED_POST = 'Applied',
+  CREATED_POST = 'Created',
 }
 
 export default function Homepage() {
+  const history = useHistory();
   const dispatch = useAppDispatch();
   const username = useAppSelector((state) => state.user.user.name);
   const appliedPosts = useAppSelector((state) => state.home.appliedRequests);
@@ -45,7 +50,6 @@ export default function Homepage() {
   const handleCheckedError = useCheckedErrorHandler();
   const handleUnknownError = useUnknownErrorHandler();
   const [tabToShow, setTabToShow] = useState<HomeTab>(HomeTab.APPLIED_POST);
-
   usePageInitialLoad(() => {
     dispatch(getInitialSelf())
       .unwrap()
@@ -70,19 +74,6 @@ export default function Homepage() {
         handleUnknownError(error);
       });
   });
-
-  function requestNextPageOfAppliedRequests() {
-    dispatch(getNextPageOfAppliedRequests())
-      .unwrap()
-      .then((resp) => {
-        if (!resp.success) {
-          handleCheckedError(resp.message as string);
-        }
-      })
-      .catch((error) => {
-        handleUnknownError(error);
-      });
-  }
 
   function refreshAppliedRequests(event: CustomEvent<RefresherEventDetail>) {
     dispatch(getNewPageOfAppliedRequests())
@@ -116,20 +107,19 @@ export default function Homepage() {
       });
   }
 
-  function requestNextPageOfCreatedRequests() {
-    dispatch(getNextPageOfCreatedRequests())
-      .unwrap()
-      .then((resp) => {
-        if (!resp.success) {
-          handleCheckedError(resp.message as string);
-        }
-      })
-      .catch((error) => {
-        handleUnknownError(error);
-      });
-  }
-
   function renderListBasedOnTab() {
+    const fab = (
+      <IonFab vertical="bottom" horizontal="end" className={styles['fab']}>
+        <IonFabButton
+          color="primary"
+          onClick={() => {
+            history.replace(CREATE_POST);
+          }}
+        >
+          <IonIcon icon={add} />
+        </IonFabButton>
+      </IonFab>
+    );
     if (tabToShow === HomeTab.CREATED_POST) {
       if (createdPosts.length === 0) {
         return (
@@ -138,8 +128,19 @@ export default function Homepage() {
               <IonRefresherContent></IonRefresherContent>
             </IonRefresher>
             <NoData>
-              <>No created requests!</>
+              <div>
+                <p>You have not created any posts</p>
+                <IonButton
+                  onClick={() => {
+                    history.replace(CREATE_POST);
+                  }}
+                  expand="block"
+                >
+                  Post a Request
+                </IonButton>
+              </div>
             </NoData>
+            {fab}
           </>
         );
       }
@@ -156,14 +157,8 @@ export default function Homepage() {
                 createdRequest={post}
               ></CreatedRequestListItem>
             ))}
-            <IonInfiniteScroll
-              onIonInfinite={requestNextPageOfCreatedRequests}
-              threshold="50px"
-              disabled={createdPosts.length < 20}
-            >
-              <IonInfiniteScrollContent loadingSpinner="circles"></IonInfiniteScrollContent>
-            </IonInfiniteScroll>
           </IonList>
+          {fab}
         </>
       );
     } else {
@@ -174,8 +169,19 @@ export default function Homepage() {
               <IonRefresherContent></IonRefresherContent>
             </IonRefresher>
             <NoData>
-              <>You have not applied for any study requests.</>
+              <div>
+                <p>You have not applied for any study posts</p>
+                <IonButton
+                  onClick={() => {
+                    history.replace(POSTS);
+                  }}
+                  expand="block"
+                >
+                  Find a study buddy
+                </IonButton>
+              </div>
             </NoData>
+            {fab}
           </>
         );
       }
@@ -191,14 +197,8 @@ export default function Homepage() {
                 appliedRequest={post}
               />
             ))}
-            <IonInfiniteScroll
-              onIonInfinite={requestNextPageOfAppliedRequests}
-              threshold="50px"
-              disabled={appliedPosts.length < 20}
-            >
-              <IonInfiniteScrollContent loadingSpinner="circles"></IonInfiniteScrollContent>
-            </IonInfiniteScroll>
           </IonList>
+          {fab}
         </>
       );
     }

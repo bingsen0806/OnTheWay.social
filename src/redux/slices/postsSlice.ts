@@ -30,11 +30,19 @@ const PostsSlice = createSlice({
     setFilter: (state, action: PayloadAction<PostsFilter>) => {
       state.filter = action.payload;
     },
+    setLoading: (state, action: PayloadAction<boolean>) => {
+      console.log(34, action.payload);
+      state.isLoading = action.payload;
+    },
     removePost: (state, action: PayloadAction<Post>) => {
       state.posts = state.posts.filter((post) => post.id !== action.payload.id);
     },
     requestReloadOfPosts: (state) => {
       state.hasDoneInitialLoad = false;
+    },
+    setPostHasDoneInitialLoad: (state, action: PayloadAction<boolean>) => {
+      console.log('44 CALLED', action.payload);
+      state.hasDoneInitialLoad = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -57,19 +65,26 @@ const PostsSlice = createSlice({
       }
     });
     builder.addCase(getNextPageOfPosts.pending, (state, _) => {
-      state.isLoading = true;
-    });
-    builder.addCase(getNewPageOfPostsWithFilter.pending, (state, _) => {
+      console.log(62);
       state.isLoading = true;
     });
     builder.addCase(getNextPageOfPosts.rejected, (state, _) => {
+      console.log(70);
       state.isLoading = false;
     });
     builder.addCase(getNewPageOfPostsWithFilter.rejected, (state, _) => {
+      console.log(74);
+      state.isLoading = false;
+    });
+    builder.addCase(reloadInitialPostsData.fulfilled, (state, _) => {
+      state.hasDoneInitialLoad = true;
+      state.isLoading = false;
+    });
+    builder.addCase(getInitialPostsData.pending, (state, _) => {
       state.isLoading = false;
     });
     builder.addCase(getInitialPostsData.fulfilled, (state, _) => {
-      state.hasDoneInitialLoad = true;
+      state.isLoading = false;
     });
   },
 });
@@ -82,6 +97,7 @@ export const getNewPageOfPostsWithFilter = createAsyncThunk<
   PostsFilter,
   { state: RootState }
 >('posts/getNewPageOfPostsWithFilter', async (filter, _) => {
+  console.log('FETCHING POSTS');
   const responseData = await getPosts(filter, 1);
   return responseData;
 });
@@ -109,12 +125,29 @@ export const getInitialPostsData = createAsyncThunk<
   undefined,
   { state: RootState }
 >('posts/getInitialPostsData', async (_, thunkApi) => {
+  console.log('ATTEMPTING RELOAD');
   if (!thunkApi.getState().posts.hasDoneInitialLoad) {
+    console.log('RELOADING ATTEMPT BEGINS');
+    console.log(115);
+    thunkApi.dispatch(setPostHasDoneInitialLoad(true));
+    thunkApi.dispatch(setLoading(true));
     const resp = await thunkApi
       .dispatch(getNewPageOfPostsWithFilter({ locations: [] }))
       .unwrap();
     return resp;
   }
+  return { success: true, message: '' };
+});
+
+export const reloadInitialPostsData = createAsyncThunk<
+  ApiResponseBody<Post[]>,
+  undefined,
+  { state: RootState }
+>('posts/reloadInitialPostsData', async (_, thunkApi) => {
+  console.log('RELOADING');
+  await thunkApi
+    .dispatch(getNewPageOfPostsWithFilter({ locations: [] }))
+    .unwrap();
   return { success: true, message: '' };
 });
 
@@ -130,6 +163,11 @@ const persistedPostsReducer = persistReducer(
   PostsSlice.reducer
 );
 
-export const { removePost, requestReloadOfPosts } = PostsSlice.actions;
+export const {
+  removePost,
+  requestReloadOfPosts,
+  setLoading,
+  setPostHasDoneInitialLoad,
+} = PostsSlice.actions;
 
 export default persistedPostsReducer;

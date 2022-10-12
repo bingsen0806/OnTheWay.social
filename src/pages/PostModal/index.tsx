@@ -8,6 +8,7 @@ import {
   IonModal,
   IonTitle,
   IonToolbar,
+  useIonAlert,
 } from '@ionic/react';
 import { locationEnumToStr, Post } from '../../api/types';
 import { arrowBackOutline } from 'ionicons/icons';
@@ -26,8 +27,9 @@ import { removePost } from '../../redux/slices/postsSlice';
 import { logEvent } from 'firebase/analytics';
 import { analytics } from '../../firebase';
 import {
-  requestReloadOfHomeData,
+  reloadInitialData,
 } from '../../redux/slices/homeSlice';
+import useInfoToast from '../../util/hooks/useInfoToast';
 
 interface ApplyModalProps {
   isOpen: boolean;
@@ -48,8 +50,10 @@ export default function PostModal({
   const handleCheckedError = useCheckedErrorHandler();
   const handleUnknownError = useUnknownErrorHandler();
   const dispatch = useAppDispatch();
+  const [presentAlert] = useIonAlert();
   const [isApplied, setIsApplied] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const presentInfoToast = useInfoToast();
 
   function handleApply(postId: string) {
     setIsLoading(true);
@@ -58,10 +62,10 @@ export default function PostModal({
         if (!resp.success) {
           handleCheckedError(resp.message);
         } else {
-          setIsApplied(true);
-          // remove the post from the outside list of posts, since applied for it already
           logEvent(analytics, 'apply_post');
-          dispatch(requestReloadOfHomeData());
+          setIsApplied(true);
+          presentInfoToast('Successfully applied!');
+          void dispatch(reloadInitialData());
         }
       })
       .catch((error) => {
@@ -80,8 +84,9 @@ export default function PostModal({
           handleCheckedError(resp.message);
         } else {
           setIsApplied(false);
+          presentInfoToast('Study application cancelled');
           logEvent(analytics, 'cancel_post_application');
-          dispatch(requestReloadOfHomeData());
+          void dispatch(reloadInitialData());
         }
       })
       .catch((error) => {
@@ -124,16 +129,32 @@ export default function PostModal({
       </IonHeader>
       <IonContent fullscreen>
         <PostDetails post={applyPost} />
-        <AboutPoster poster={applyPost?.poster} />
         <OtherStudyBuddies studyBuddies={applyPost.participants} />
+        <AboutPoster poster={applyPost?.poster} />
         {isApplied ? (
           <IonButton
             className="ion-padding-horizontal"
-            color="medium"
+            fill="outline"
+            color="danger"
             expand="block"
             onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
               event.stopPropagation();
-              sendCancellationRequest(applyPost.id);
+              void presentAlert({
+                header: 'Confirm cancelling study application?',
+                buttons: [
+                  {
+                    text: 'Cancel',
+                    role: 'cancel',
+                  },
+                  {
+                    text: 'Confirm',
+                    role: 'confirm',
+                    handler: () => {
+                      sendCancellationRequest(applyPost.id);
+                    },
+                  },
+                ],
+              });
             }}
           >
             Cancel
@@ -142,9 +163,25 @@ export default function PostModal({
           <IonButton
             className="ion-padding-horizontal"
             expand="block"
+            color="primary"
             onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
               event.stopPropagation();
-              handleApply(applyPost.id);
+              void presentAlert({
+                header: 'Confirm Applying?',
+                buttons: [
+                  {
+                    text: 'Cancel',
+                    role: 'cancel',
+                  },
+                  {
+                    text: 'Apply',
+                    role: 'confirm',
+                    handler: () => {
+                      handleApply(applyPost.id);
+                    },
+                  },
+                ],
+              });
             }}
           >
             Apply

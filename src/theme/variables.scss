@@ -12,7 +12,7 @@ http://ionicframework.com/docs/theming/ */
 
   --ion-color-success: #4bb543;
   --ion-color-success-rgb: 75, 181, 67;
-  --ion-color-success-contrast: #000000;
+  --ion-color-success-contrast: #fff;
   --ion-color-success-contrast-rgb: 0, 0, 0;
   --ion-color-success-shade: #429f3b;
   --ion-color-success-tint: #5dbc56;
@@ -25,6 +25,13 @@ http://ionicframework.com/docs/theming/ */
   --ion-color-warning-tint: #fbbe47;
 
   --ion-color-danger: #de4a4a;
+  --ion-color-danger-rgb: 222, 74, 74;
+  --ion-color-danger-contrast: #ffffff;
+  --ion-color-danger-contrast-rgb: 255, 255, 255;
+  --ion-color-danger-shade: #c34141;
+  --ion-color-danger-tint: #e15c5c;
+
+  --ion-color-danger-outline: #de4a4a;
   --ion-color-danger-rgb: 222, 74, 74;
   --ion-color-danger-contrast: #ffffff;
   --ion-color-danger-contrast-rgb: 255, 255, 255;

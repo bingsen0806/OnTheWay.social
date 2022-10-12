@@ -24,7 +24,8 @@ import DropdownSelection, {
 import TextInputField from '../../components/TextInputField/TextInputField';
 import { analytics } from '../../firebase';
 import { useAppDispatch } from '../../redux/hooks';
-import { requestReloadOfHomeData } from '../../redux/slices/homeSlice';
+import { reloadInitialData } from '../../redux/slices/homeSlice';
+import { reloadInitialPostsData } from '../../redux/slices/postsSlice';
 import { POSTS } from '../../routes';
 import useCheckedErrorHandler from '../../util/hooks/useCheckedErrorHandler';
 import useInfoToast from '../../util/hooks/useInfoToast';
@@ -167,17 +168,16 @@ export default function CreatePostPage() {
         if (!resp.success) {
           handleCheckedError(resp.message as string);
         } else {
+          setIsLoading(false);
           presentInfoToast('Successfully created new post!');
-          dispatch(requestReloadOfHomeData());
+          void dispatch(reloadInitialData());
+          void dispatch(reloadInitialPostsData());
           logEvent(analytics, 'create_post');
-          history.goBack();
         }
       })
       .catch((error) => {
-        handleUnknownError(error);
-      })
-      .finally(() => {
         setIsLoading(false);
+        handleUnknownError(error);
       });
   }
 

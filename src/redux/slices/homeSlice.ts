@@ -112,43 +112,36 @@ const HomeSlice = createSlice({
         (appliedRequest) => appliedRequest.post.id !== action.payload
       );
     },
+
     /** Resets the has done initial load back to false, so home data will reload */
     requestReloadOfHomeData: (state) => {
+      console.log('118 CALLED');
       state.hasDoneInitialLoad = false;
     },
+    setHomeHasDoneInitialLoad: (state, action: PayloadAction<boolean>) => {
+      console.log('121 CALLED', action.payload);
+      state.hasDoneInitialLoad = action.payload;
+    },
     setHomeIsLoading: (state, action: PayloadAction<boolean>) => {
+      console.log('120 SETTING SPINNER', action.payload);
       state.isLoading = action.payload;
     },
   },
   extraReducers: (builder) => {
     builder.addCase(getNewPageOfAppliedRequests.fulfilled, (state, action) => {
       if (action.payload.success) {
+        console.log('128 DONE APPLIED');
         state.appliedRequestsPage = 1;
         state.appliedRequests = action.payload.message as AppliedRequest[];
       }
     });
-    /*
-    builder.addCase(getNewPageOfAppliedRequests.pending, (state, _) => {
-      state.isLoading = true;
-    });
-    builder.addCase(getNewPageOfAppliedRequests.rejected, (state, _) => {
-      state.isLoading = false;
-    });
-    */
     builder.addCase(getNewPageOfCreatedRequests.fulfilled, (state, action) => {
       if (action.payload.success) {
+        console.log('135 DONE CREATED ');
         state.createdRequestsPage = 1;
         state.createdRequests = action.payload.message as CreatedRequest[];
       }
     });
-    /*
-    builder.addCase(getNewPageOfCreatedRequests.pending, (state, _) => {
-      state.isLoading = true;
-    });
-    builder.addCase(getNewPageOfCreatedRequests.rejected, (state, _) => {
-      state.isLoading = false;
-    });
-    */
     builder.addCase(getNextPageOfAppliedRequests.fulfilled, (state, action) => {
       if (action.payload.success) {
         if (action.payload.message.length > 0) {
@@ -159,10 +152,9 @@ const HomeSlice = createSlice({
           );
         }
       }
-      //state.isLoading = false;
     });
     builder.addCase(getNextPageOfAppliedRequests.pending, (state, _) => {
-      state.isLoading = true;
+      // state.isLoading = true;
     });
     builder.addCase(getNextPageOfAppliedRequests.rejected, (state, _) => {
       state.isLoading = false;
@@ -180,13 +172,18 @@ const HomeSlice = createSlice({
       state.isLoading = false;
     });
     builder.addCase(getNextPageOfCreatedRequests.pending, (state, _) => {
-      state.isLoading = true;
+      // state.isLoading = true;
     });
     builder.addCase(getNextPageOfCreatedRequests.rejected, (state, _) => {
       state.isLoading = false;
     });
     builder.addCase(getInitialData.fulfilled, (state, _) => {
+      console.log('SETTING SPINNER BACK TO FALSE');
+      state.isLoading = false;
+    });
+    builder.addCase(reloadInitialData.fulfilled, (state, _) => {
       state.hasDoneInitialLoad = true;
+      state.isLoading = false;
     });
   },
 });
@@ -248,20 +245,34 @@ export const getNextPageOfCreatedRequests = createAsyncThunk<
 /**
  * Gets the initial homepage data if no data currently in store.
  */
+export const reloadInitialData = createAsyncThunk<
+  ApiResponseBody<string>,
+  undefined,
+  { state: RootState }
+>('home/reloadData', async (_, thunkApi) => {
+  const promises = [
+    thunkApi.dispatch(getNewPageOfAppliedRequests()).unwrap(),
+    thunkApi.dispatch(getNewPageOfCreatedRequests()).unwrap(),
+  ];
+  await Promise.all(promises);
+  return { success: true, message: '' };
+});
+
+/**
+ * Gets the initial homepage data if no data currently in store.
+ */
 export const getInitialData = createAsyncThunk<
   ApiResponseBody<string>,
   undefined,
   { state: RootState }
 >('home/getInitialData', async (_, thunkApi) => {
+  console.log('263 CALLED');
   if (!thunkApi.getState().home.hasDoneInitialLoad) {
+    console.log('264 CALLED');
+    thunkApi.dispatch(setHomeHasDoneInitialLoad(true));
     thunkApi.dispatch(setHomeIsLoading(true));
-    try {
-      await thunkApi.dispatch(getNewPageOfAppliedRequests()).unwrap();
-      await thunkApi.dispatch(getNewPageOfCreatedRequests()).unwrap();
-    } finally {
-      thunkApi.dispatch(setHomeIsLoading(false));
-    }
-
+    await thunkApi.dispatch(getNewPageOfAppliedRequests()).unwrap();
+    await thunkApi.dispatch(getNewPageOfCreatedRequests()).unwrap();
     return { success: true, message: '' };
   }
   return { success: true, message: '' };
@@ -273,6 +284,7 @@ export const {
   removeCreatedRequest,
   requestReloadOfHomeData,
   setHomeIsLoading,
+  setHomeHasDoneInitialLoad,
 } = HomeSlice.actions;
 
 // set up persistence, uses local storage to persist this reducer

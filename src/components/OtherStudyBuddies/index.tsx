@@ -12,36 +12,32 @@ export default function OtherStudyBuddies({
   studyBuddies,
   inCreatedRequest,
 }: OtherStudyBuddiesProp) {
-  return studyBuddies && studyBuddies.length > 0 ? (
+  return (
     <IonGrid className="ion-margin-vertical">
-      <IonRow
-        className={
-          styles['header'] +
-          ' ion-justify-content-start ion-padding-start ion-padding-bottom'
-        }
-      >
-        <IonCol>Confirmed Attendees</IonCol>
-        {/*TODO: implement popup */}
+      <IonRow className="ion-justify-content-start ion-padding-start">
+        <IonCol className={styles['header']} size="12">
+          Confirmed Attendees
+        </IonCol>
+
+        {!inCreatedRequest && studyBuddies.length === 0 && (
+          <IonCol>
+            <p>
+              No one is participating in this study session yet. Be the first!
+            </p>
+          </IonCol>
+        )}
       </IonRow>
-      {studyBuddies.length <= 0 ? (
-        inCreatedRequest && (
-          <IonRow className="ion-justify-content-start ion-padding-start">
-            <IonCol>
-              <p>
-                No one is participating in this study session yet. Be the first!
-              </p>
-            </IonCol>
-          </IonRow>
-        )
-      ) : (
+      {studyBuddies.length > 0 && (
         <IonList>
           {studyBuddies.map((buddy) => (
-            <StudyBuddy buddy={buddy} key={buddy.id}></StudyBuddy>
+            <StudyBuddy
+              buddy={buddy}
+              key={buddy.id}
+              inCreatedRequest={inCreatedRequest}
+            ></StudyBuddy>
           ))}
         </IonList>
       )}
     </IonGrid>
-  ) : (
-    <></>
   );
 }

@@ -8,6 +8,7 @@ import {
   IonModal,
   IonTitle,
   IonToolbar,
+  useIonAlert,
 } from '@ionic/react';
 import { CreatedRequest, locationEnumToStr, User } from '../../api/types';
 import { arrowBackOutline } from 'ionicons/icons';
@@ -24,8 +25,12 @@ import {
 } from '../../redux/slices/homeSlice';
 import { analytics } from '../../firebase';
 import { logEvent } from 'firebase/analytics';
-import { requestReloadOfPosts } from '../../redux/slices/postsSlice';
+import {
+  reloadInitialPostsData,
+  requestReloadOfPosts,
+} from '../../redux/slices/postsSlice';
 import OtherStudyBuddies from '../../components/OtherStudyBuddies';
+import useInfoToast from '../../util/hooks/useInfoToast';
 
 interface PosterViewRequestProps {
   isOpen: boolean;
@@ -45,9 +50,11 @@ export default function CreatedPostModal({
   onClose,
   createdRequest,
 }: PosterViewRequestProps) {
+  const [presentAlert] = useIonAlert();
   const dispatch = useAppDispatch();
   const handleCheckedError = useCheckedErrorHandler();
   const handleUnknownError = useUnknownErrorHandler();
+  const presentInfoToast = useInfoToast();
   // temp state of created request, any changes will be synced up with redux when the modal is closed
   const [createdRequestState, setCreatedRequestState] =
     useState<CreatedRequest>(
@@ -62,15 +69,16 @@ export default function CreatedPostModal({
     setIsLoading(true);
     cancelRequest(postId)
       .then((resp) => {
+        console.log(resp);
         if (!resp.success) {
           handleCheckedError(resp.message);
         } else {
           setIsLoading(false);
           logEvent(analytics, 'delete_post');
+          presentInfoToast('Successfully deleted!');
           onClose(() => {
             dispatch(removeCreatedRequest(createdRequest.post.id));
-            // TODO: remove this line when backend doesnt send my own posts back in posts page
-            dispatch(requestReloadOfPosts());
+            void dispatch(reloadInitialPostsData());
           });
         }
       })
@@ -141,10 +149,27 @@ export default function CreatedPostModal({
         <IonButton
           className="ion-padding-horizontal ion-margin-top"
           expand="block"
+          fill="outline"
           color="danger"
           onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
             event.stopPropagation();
-            void handleDelete(createdRequestState.post?.id);
+            void presentAlert({
+              header: 'Warning!',
+              message: 'You are deleting a post. This is irreversible',
+              buttons: [
+                {
+                  text: 'Cancel',
+                  role: 'cancel',
+                },
+                {
+                  text: 'Delete Post',
+                  role: 'confirm',
+                  handler: () => {
+                    void handleDelete(createdRequestState.post?.id);
+                  },
+                },
+              ],
+            });
           }}
         >
           Delete Post

@@ -11,7 +11,13 @@ import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
 import AuthenticationPageContainer from './AuthenticationPageContainer';
 import { isValidNUSEmail } from './constants';
 import styles from './styles.module.scss';
-
+import { useAppDispatch } from '../../redux/hooks';
+import {
+  reloadInitialData,
+} from '../../redux/slices/homeSlice';
+import {
+  reloadInitialPostsData,
+} from '../../redux/slices/postsSlice';
 interface LoginErrorMessages {
   email: string;
   password: string;
@@ -22,6 +28,7 @@ interface LoginErrorMessages {
  * TODO: forgot password functionality after MVP.
  */
 export default function LoginPage() {
+  const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const presentErrorToast = useErrorToast();
   const handleUnknownError = useUnknownErrorHandler();
@@ -67,6 +74,11 @@ export default function LoginPage() {
 
     try {
       await login(loginDetails);
+      const promises = [
+        dispatch(reloadInitialData()),
+        dispatch(reloadInitialPostsData()),
+      ];
+      await Promise.all(promises);
       logEvent(analytics, 'login');
     } catch (error) {
       //TODO: add more specific error handling for authentication

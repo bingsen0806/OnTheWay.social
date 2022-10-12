@@ -29,10 +29,10 @@ export default function PostListItem({ post }: PostListItemProps) {
     >
       <div className={styles['post-container']}>
         <p className={styles['post-text']}>
-          Location: {locationEnumToStr(post.location)}
+          {locationEnumToStr(post.location)}
         </p>
         <p className={styles['post-text']}>
-          When: {convertDateToDateStr(post.startDateTime)}
+          {convertDateToDateStr(post.startDateTime)}
           {', '}
           {convertDateRangeToTimeRangeStr(post.startDateTime, post.endDateTime)}
         </p>
@@ -41,11 +41,12 @@ export default function PostListItem({ post }: PostListItemProps) {
             post.participants.length <= 0 ? 'attendee' : 'attendees'
           }`}
         </p>
-        <p className={styles['post-text']}>Description: {post.description}</p>
         <br></br>
+        <p className={styles['post-text']}>{post.description}</p>
+        <br></br>
+        <p className={styles['post-text']}>{post.poster.name}</p>
         <p className={styles['post-text']}>
-          {post.poster.name}, Y{post.poster.year}{' '}
-          {facultyEnumToStr(post.poster.faculty)}
+          Y{post.poster.year}/{` ${facultyEnumToStr(post.poster.faculty)}`}
         </p>
       </div>
       <PostModal isOpen={isModalOpen} onClose={closeModal} applyPost={post} />

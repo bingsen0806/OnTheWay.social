@@ -8,6 +8,7 @@ import {
   IonModal,
   IonTitle,
   IonToolbar,
+  useIonAlert,
 } from '@ionic/react';
 import { AppliedRequest, locationEnumToStr } from '../../api/types';
 import { arrowBackOutline } from 'ionicons/icons';
@@ -17,12 +18,12 @@ import RequestStatus from '../../components/RequestStatus';
 import useCheckedErrorHandler from '../../util/hooks/useCheckedErrorHandler';
 import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
 import { useState } from 'react';
-import {
-  createAppliedRequest,
-  deleteAppliedRequest,
-} from '../../api/appliedRequests';
+import { deleteAppliedRequest } from '../../api/appliedRequests';
 import { useAppDispatch } from '../../redux/hooks';
 import { removeAppliedRequest } from '../../redux/slices/homeSlice';
+import { useHistory } from 'react-router';
+import useInfoToast from '../../util/hooks/useInfoToast';
+import { reloadInitialPostsData } from '../../redux/slices/postsSlice';
 
 interface AppliedPostStatusProps {
   isOpen: boolean;
@@ -30,22 +31,19 @@ interface AppliedPostStatusProps {
   appliedRequest: AppliedRequest;
 }
 
-// export const mockAppliedRequest: AppliedRequest = {
-//   post: mockPost,
-//   status: AppliedRequestStatus.ACCEPTED,
-// };
-
 export default function AppliedPostStatusModal({
   isOpen,
   onClose,
   appliedRequest,
 }: AppliedPostStatusProps) {
+  const [presentAlert] = useIonAlert();
   const handleCheckedError = useCheckedErrorHandler();
   const handleUnknownError = useUnknownErrorHandler();
   const dispatch = useAppDispatch();
   const [isCancelled, setIsCancelled] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
+  const history = useHistory();
+  const presentInfoToast = useInfoToast();
   function handleCancel() {
     setIsLoading(true);
     deleteAppliedRequest(appliedRequest.post.id)
@@ -54,24 +52,8 @@ export default function AppliedPostStatusModal({
           handleCheckedError(resp.message);
         } else {
           setIsCancelled(true);
-        }
-      })
-      .catch((error) => {
-        handleUnknownError(error);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }
-
-  function handleUndoCancel() {
-    setIsLoading(true);
-    createAppliedRequest(appliedRequest.post.id)
-      .then((resp) => {
-        if (!resp.success) {
-          handleCheckedError(resp.message);
-        } else {
-          setIsCancelled(false);
+          presentInfoToast('Successfully cancelled!');
+          void dispatch(reloadInitialPostsData());
         }
       })
       .catch((error) => {
@@ -101,7 +83,6 @@ export default function AppliedPostStatusModal({
           <IonButtons slot="start">
             <IonButton
               fill="clear"
-              color="dark"
               onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
                 event.stopPropagation();
                 closeModal();
@@ -114,31 +95,37 @@ export default function AppliedPostStatusModal({
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        <RequestStatus
-          status={appliedRequest.status}
-          telegramHandle={appliedRequest.post?.poster?.telegramHandle}
-        />
+        {!isCancelled && (
+          <RequestStatus
+            status={appliedRequest.status}
+            telegramHandle={appliedRequest.post?.poster?.telegramHandle}
+          />
+        )}
         <PostDetails post={appliedRequest.post} />
         <AboutPoster poster={appliedRequest.post?.poster} />
-        {isCancelled ? (
+        {!isCancelled && (
           <IonButton
             className="ion-padding-horizontal"
             expand="block"
+            fill="outline"
+            color="danger"
             onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
               event.stopPropagation();
-              handleUndoCancel();
-            }}
-          >
-            Undo Cancel
-          </IonButton>
-        ) : (
-          <IonButton
-            className="ion-padding-horizontal"
-            expand="block"
-            color="medium"
-            onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
-              event.stopPropagation();
-              handleCancel();
+              void presentAlert({
+                header: 'Confirm Cancel Application?',
+                message: 'This action is irreversible',
+                buttons: [
+                  {
+                    text: 'Cancel',
+                    role: 'cancel',
+                  },
+                  {
+                    text: 'Confirm',
+                    role: 'confirm',
+                    handler: handleCancel,
+                  },
+                ],
+              });
             }}
           >
             Cancel

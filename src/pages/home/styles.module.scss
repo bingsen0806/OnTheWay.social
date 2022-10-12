@@ -1,0 +1,6 @@
+.fab {
+  margin-bottom: 10vh;
+  @media (min-width: 768px) {
+    display: none;
+  }
+}

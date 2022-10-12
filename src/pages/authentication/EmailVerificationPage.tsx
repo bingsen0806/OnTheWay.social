@@ -78,7 +78,8 @@ export default function EmailVerificationPage() {
         <IonCol size="5">
           <IonButton
             expand="block"
-            color="medium"
+            fill="outline"
+            color="danger"
             onClick={() => {
               void cancelSignUp();
             }}

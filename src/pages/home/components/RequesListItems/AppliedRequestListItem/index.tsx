@@ -1,18 +1,13 @@
-import { IonItem, IonLabel, IonButton, IonLoading } from '@ionic/react';
-import { logEvent } from 'firebase/analytics';
+import { IonItem, IonLoading } from '@ionic/react';
 import { useState } from 'react';
 import { useStateWithCallbackLazy } from 'use-state-with-callback';
-import { deleteAppliedRequest } from '../../../../../api/appliedRequests';
 import {
   AppliedRequest,
   locationEnumToStr,
   facultyEnumToStr,
   AppliedRequestStatus,
 } from '../../../../../api/types';
-import { analytics } from '../../../../../firebase';
 import { useAppDispatch } from '../../../../../redux/hooks';
-import { removeAppliedRequest } from '../../../../../redux/slices/homeSlice';
-import { requestReloadOfPosts } from '../../../../../redux/slices/postsSlice';
 import {
   convertDateToDateStr,
   convertDateRangeToTimeRangeStr,
@@ -40,26 +35,6 @@ export default function AppliedRequestListItem({
     setIsModalOpen(false, callback);
   }
 
-  function sendCancellationRequest() {
-    setIsLoading(true);
-    deleteAppliedRequest(appliedRequest.post.id)
-      .then((resp) => {
-        if (!resp.success) {
-          handleCheckedError(resp.message);
-        } else {
-          dispatch(removeAppliedRequest(appliedRequest.post.id));
-          dispatch(requestReloadOfPosts());
-          logEvent(analytics, 'cancel_post_application');
-        }
-      })
-      .catch((error) => {
-        handleUnknownError(error);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }
-
   return (
     <IonItem
       button
@@ -69,12 +44,17 @@ export default function AppliedRequestListItem({
         });
       }}
     >
+      {appliedRequest.status === AppliedRequestStatus.ACCEPTED ? (
+        <div className={styles['success-line']} />
+      ) : (
+        <div className={styles['alert-line']} />
+      )}
       <div className={styles['post-container']}>
         <p className={styles['post-text']}>
-          Location: {locationEnumToStr(appliedRequest.post.location)}
+          {locationEnumToStr(appliedRequest.post.location)}
         </p>
         <p className={styles['post-text']}>
-          When: {convertDateToDateStr(appliedRequest.post.startDateTime)}
+          {convertDateToDateStr(appliedRequest.post.startDateTime)}
           {', '}
           {convertDateRangeToTimeRangeStr(
             appliedRequest.post.startDateTime,
@@ -88,36 +68,16 @@ export default function AppliedRequestListItem({
               : 'attendees'
           }`}
         </p>
+        <br />
+        <p className={styles['post-text']}>{appliedRequest.post.description}</p>
+        <br />
+        <p className={styles['post-text']}>{appliedRequest.post.poster.name}</p>
         <p className={styles['post-text']}>
-          Description: {appliedRequest.post.description}
-        </p>
-        <br></br>
-        <p className={styles['post-text']}>
-          {appliedRequest.post.poster.name}, Y{appliedRequest.post.poster.year}{' '}
+          Y{appliedRequest.post.poster.year},
           {facultyEnumToStr(appliedRequest.post.poster.faculty)}
         </p>
       </div>
-      <div slot="end" className={styles['status-container']}>
-        {appliedRequest.status === AppliedRequestStatus.ACCEPTED ? (
-          <IonLabel color="success" className="ion-padding-bottom">
-            Accepted!
-          </IonLabel>
-        ) : (
-          <IonLabel color="warning" className="ion-padding-bottom">
-            Pending
-          </IonLabel>
-        )}
-        <IonButton
-          color="light"
-          className="ion-no-margin"
-          onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
-            event.stopPropagation();
-            sendCancellationRequest();
-          }}
-        >
-          Cancel
-        </IonButton>
-      </div>
+
       <AppliedPostStatusModal
         isOpen={isModalOpen}
         onClose={closeModal}

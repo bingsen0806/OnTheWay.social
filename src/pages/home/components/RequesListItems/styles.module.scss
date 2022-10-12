@@ -3,6 +3,16 @@
   flex-direction: column;
 }
 
+.success-line {
+  border-left: 6px solid #4bb543;
+  height: 100%;
+}
+
+.alert-line {
+  border-left: 6px solid #fab732;
+  height: 100%;
+}
+
 .post-container {
   padding: 8px;
 }

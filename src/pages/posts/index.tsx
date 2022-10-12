@@ -189,6 +189,7 @@ export default function PostsPage() {
                   <IonMenuToggle>
                     <IonButton
                       color="medium"
+                      fill="outline"
                       expand="block"
                       onClick={resetFilter}
                     >
@@ -232,7 +233,7 @@ export default function PostsPage() {
             </IonMenuToggle>
           </IonToolbar>
         </IonHeader>
-        <IonContent fullscreen>
+        <IonContent fullscreen className={styles['light-grey']}>
           <IonRefresher slot="fixed" onIonRefresh={refreshContents}>
             <IonRefresherContent></IonRefresherContent>
           </IonRefresher>

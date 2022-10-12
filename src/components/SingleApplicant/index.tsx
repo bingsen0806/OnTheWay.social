@@ -1,4 +1,11 @@
-import { IonAvatar, IonButton, IonCol, IonLoading, IonRow } from '@ionic/react';
+import {
+  IonAvatar,
+  IonButton,
+  IonCol,
+  IonLoading,
+  IonRow,
+  useIonAlert,
+} from '@ionic/react';
 import { logEvent } from 'firebase/analytics';
 import { useState } from 'react';
 import { responseAppliedRequest } from '../../api/appliedRequests';
@@ -12,61 +19,23 @@ import { analytics } from '../../firebase';
 import useCheckedErrorHandler from '../../util/hooks/useCheckedErrorHandler';
 import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
 import styles from './styles.module.scss';
+import useInfoToast from '../../util/hooks/useInfoToast';
 
 interface SingleApplicantProps {
   postId: string;
   applicant: User;
   addParticipantToCreatedRequest: (participant: User) => void;
 }
-
-// export const mockPoster: User = {
-//   id: "testid1",
-//   name: "Chun Yong",
-//   gender: Gender.MALE,
-//   faculty: Faculty.COMPUTING,
-//   telegramHandle: "chunyonggg",
-//   year: 4,
-//   profilePhoto:
-//     "https://images.unsplash.com/photo-1529665253569-6d01c0eaf7b6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8cHJvZmlsZXxlbnwwfHwwfHw%3D&w=1000&q=80",
-//   thumbnailPhoto:
-//     "https://images.unsplash.com/photo-1529665253569-6d01c0eaf7b6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8cHJvZmlsZXxlbnwwfHwwfHw%3D&w=1000&q=80",
-// };
-
-// export const mockUser2: User = {
-//   id: "testid2",
-//   name: "Bing Sen",
-//   gender: Gender.MALE,
-//   faculty: Faculty.BUSINESS,
-//   telegramHandle: "bingsennn",
-//   year: 3,
-//   profilePhoto:
-//     "https://images.unsplash.com/photo-1529665253569-6d01c0eaf7b6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8cHJvZmlsZXxlbnwwfHwwfHw%3D&w=1000&q=80",
-//   thumbnailPhoto:
-//     "https://images.unsplash.com/photo-1529665253569-6d01c0eaf7b6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8cHJvZmlsZXxlbnwwfHwwfHw%3D&w=1000&q=80",
-// };
-
-// export const mockUser3: User = {
-//   id: "testid3",
-//   name: "Ben",
-//   gender: Gender.MALE,
-//   faculty: Faculty.SCIENCE,
-//   telegramHandle: "benmurphy",
-//   year: 3,
-//   profilePhoto:
-//     "https://images.unsplash.com/photo-1529665253569-6d01c0eaf7b6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8cHJvZmlsZXxlbnwwfHwwfHw%3D&w=1000&q=80",
-//   thumbnailPhoto:
-//     "https://images.unsplash.com/photo-1529665253569-6d01c0eaf7b6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8cHJvZmlsZXxlbnwwfHwwfHw%3D&w=1000&q=80",
-// };
-
 export default function SingleApplicant({
   postId,
   applicant,
   addParticipantToCreatedRequest,
 }: SingleApplicantProps) {
+  const [presentAlert] = useIonAlert();
   const handleCheckedError = useCheckedErrorHandler();
   const handleUnknownError = useUnknownErrorHandler();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
+  const presentInfoToast = useInfoToast();
   function handleAccept(postId: string, applicantUserId: string) {
     setIsLoading(true);
     responseAppliedRequest(
@@ -78,6 +47,7 @@ export default function SingleApplicant({
         if (!resp.success) {
           handleCheckedError(resp.message);
         } else {
+          presentInfoToast('Successfully accepted!');
           addParticipantToCreatedRequest(applicant);
           logEvent(analytics, 'accept_post_application');
         }
@@ -95,7 +65,6 @@ export default function SingleApplicant({
       <IonCol size="3">
         <IonAvatar className={styles['avatar']}>
           <img alt="profilePic" src={applicant.profilePhoto} />{' '}
-          {/*TODO: Use default photo url if user does not have profile photo */}
         </IonAvatar>
       </IonCol>
       <IonCol className={styles['user-info']}>
@@ -115,7 +84,24 @@ export default function SingleApplicant({
           size="small"
           onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
             event.stopPropagation();
-            handleAccept(postId, applicant.id);
+            void presentAlert({
+              header: 'Confirm Accept Applicant?',
+              message:
+                'Once accepted, telegram details of the applicant will be shown, and they will be notified with your telegram details as well.',
+              buttons: [
+                {
+                  text: 'Cancel',
+                  role: 'cancel',
+                },
+                {
+                  text: 'Accept',
+                  role: 'confirm',
+                  handler: () => {
+                    handleAccept(postId, applicant.id);
+                  },
+                },
+              ],
+            });
           }}
         >
           Accept

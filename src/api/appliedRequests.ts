@@ -1,23 +1,20 @@
-import { httpsCallable } from "firebase/functions";
-import { firestoreFunctions } from "../firebase";
-import { ApiRequestBody, ApiResponseBody, AppliedRequestStatus } from "./types";
+import { httpsCallable } from 'firebase/functions';
+import { firestoreFunctions } from '../firebase';
+import { ApiRequestBody, ApiResponseBody, AppliedRequestStatus } from './types';
 
 export async function createAppliedRequest(postId: string) {
   const callApi = httpsCallable<ApiRequestBody, ApiResponseBody<string>>(
     firestoreFunctions,
-    "createPostApplication"
+    'createPostApplication'
   );
   const result = await callApi({ postId });
   return result.data;
-  // await new Promise((resolve) => setTimeout(resolve, 1000));
-  // console.log("done after 1 second");
-  // return { success: true, message: ErrorType.POST_NOT_FOUND.toString() };
 }
 
 export async function deleteAppliedRequest(postId: string) {
   const callApi = httpsCallable<ApiRequestBody, ApiResponseBody<string>>(
     firestoreFunctions,
-    "deletePostApplication"
+    'deletePostApplication'
   );
   const result = await callApi({ postId });
   return result.data;
@@ -33,7 +30,7 @@ export async function responseAppliedRequest(
 ) {
   const callApi = httpsCallable<ApiRequestBody, ApiResponseBody<string>>(
     firestoreFunctions,
-    "responsePostApplication"
+    'responsePostApplication'
   );
   const result = await callApi({
     postId,
