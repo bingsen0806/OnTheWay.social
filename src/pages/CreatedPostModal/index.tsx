@@ -141,7 +141,7 @@ export default function CreatedPostModal({
         <IonButton
           className="ion-padding-horizontal ion-margin-top"
           expand="block"
-          color="medium"
+          color="danger"
           onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
             event.stopPropagation();
             void handleDelete(createdRequestState.post?.id);

@@ -22,7 +22,7 @@ export async function createPost(post: Post) {
 export async function getPosts(filter: PostsFilter, page: number) {
   const callApi = httpsCallable<ApiRequestBody, ApiResponseBody<Post[]>>(
     firestoreFunctions,
-    'getPost'
+    'getExplorePost'
   );
   const result = await callApi({ page, location: filter.locations });
   return result.data;
