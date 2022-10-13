@@ -12,12 +12,8 @@ import AuthenticationPageContainer from './AuthenticationPageContainer';
 import { isValidNUSEmail } from './constants';
 import styles from './styles.module.scss';
 import { useAppDispatch } from '../../redux/hooks';
-import {
-  reloadInitialData,
-} from '../../redux/slices/homeSlice';
-import {
-  reloadInitialPostsData,
-} from '../../redux/slices/postsSlice';
+import { reloadInitialData } from '../../redux/slices/homeSlice';
+import { reloadInitialPostsData } from '../../redux/slices/postsSlice';
 interface LoginErrorMessages {
   email: string;
   password: string;
@@ -81,7 +77,6 @@ export default function LoginPage() {
       await Promise.all(promises);
       logEvent(analytics, 'login');
     } catch (error) {
-      //TODO: add more specific error handling for authentication
       if (
         error instanceof FirebaseError &&
         (error.code === 'auth/wrong-password' ||

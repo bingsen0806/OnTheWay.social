@@ -1,3 +1,3 @@
 export function isValidNUSEmail(email: string) {
-  return email.endsWith('@u.nus.edu');
+  return email.endsWith('@u.nus.edu') || email.endsWith('nus.edu.sg');
 }

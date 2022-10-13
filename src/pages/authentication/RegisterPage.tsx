@@ -1,4 +1,11 @@
-import { IonButton, IonCol, IonLoading, IonRow } from '@ionic/react';
+import {
+  IonButton,
+  IonCol,
+  IonContent,
+  IonLoading,
+  IonPopover,
+  IonRow,
+} from '@ionic/react';
 import { logEvent } from 'firebase/analytics';
 import { FirebaseError } from 'firebase/app';
 import { useState } from 'react';
@@ -109,6 +116,16 @@ export default function RegisterPage() {
               setLoginDetails({ ...loginDetails, email });
             }}
           />
+          <p className={styles['popover-text']} id="nus-email-popover">
+            Why NUS emails only?
+          </p>
+          <IonPopover trigger="nus-email-popover" triggerAction="click">
+            <IonContent class="ion-padding">
+              BuddyNUS is currently only deployed for NUS students. To guarantee
+              authentic users, we require verified NUS emails during
+              registration.
+            </IonContent>
+          </IonPopover>
         </IonCol>
       </IonRow>
       <IonRow className="ion-padding-bottom ion-justify-content-center">

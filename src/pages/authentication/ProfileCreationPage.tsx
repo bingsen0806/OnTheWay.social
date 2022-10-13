@@ -1,4 +1,11 @@
-import { IonButton, IonCol, IonLoading, IonRow } from '@ionic/react';
+import {
+  IonButton,
+  IonCol,
+  IonContent,
+  IonLoading,
+  IonPopover,
+  IonRow,
+} from '@ionic/react';
 import { logEvent } from 'firebase/analytics';
 import { useState } from 'react';
 import { useHistory } from 'react-router';
@@ -207,6 +214,15 @@ export default function ProfileCreationPage() {
               setUserDetails({ ...userDetails, telegramHandle });
             }}
           />
+          <p className={styles['popover-text']} id="telegram-popover">
+            Why do we need this?
+          </p>
+          <IonPopover trigger="telegram-popover" triggerAction="click">
+            <IonContent class="ion-padding">
+              Telegram handles are shared between users when both users have a
+              confirmed study session together, to allow for communication.
+            </IonContent>
+          </IonPopover>
         </IonCol>
       </IonRow>
       <IonRow className="ion-padding-bottom ion-justify-content-center">

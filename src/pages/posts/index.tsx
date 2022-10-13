@@ -233,11 +233,11 @@ export default function PostsPage() {
             </IonMenuToggle>
           </IonToolbar>
         </IonHeader>
-        <IonContent fullscreen className={styles['light-grey']}>
+        <IonContent fullscreen className={styles['posts-list-container']}>
           <IonRefresher slot="fixed" onIonRefresh={refreshContents}>
             <IonRefresherContent></IonRefresherContent>
           </IonRefresher>
-          <IonList>
+          <IonList className={styles['posts-list']}>
             {listOfPosts.map((data) => (
               <PostListItem post={data} key={data.id}></PostListItem>
             ))}
