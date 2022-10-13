@@ -13,7 +13,6 @@ import {
 } from '@ionic/react';
 import { logEvent } from 'firebase/analytics';
 import { useState } from 'react';
-import { useHistory } from 'react-router-dom';
 import { createPost } from '../../api/posts';
 import { locationEnumToStr, Post } from '../../api/types';
 import { Location } from '../../api/types';
@@ -74,7 +73,10 @@ const locationDropdownItems: DropdownItem<Location>[] = [
  * Combines a date string and time string to form a new string with both elements.
  */
 function combineDateAndTime(date: string, time: string) {
-  return date.split('T')[0] + 'T' + time.split('T')[1];
+  const combined = date.split('T')[0] + ' ' + time.split('T')[1];
+  const split = combined.split('Z');
+  const returnValue = split.length > 1 ? `${split[0]}+08:00` : split[0];
+  return returnValue;
 }
 
 interface InputErrorMessages {
@@ -93,7 +95,6 @@ export default function CreatePostPage() {
   const [shouldShowDropdownErrors, setShouldShowDropdownErrors] =
     useState<boolean>(false);
   const [post, setPost] = useState<Post>({} as Post);
-  const history = useHistory();
 
   const [dateTimes, setDateTimes] = useState({
     date: new Date().toISOString(),

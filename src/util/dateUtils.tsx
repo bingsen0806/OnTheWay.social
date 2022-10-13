@@ -10,7 +10,9 @@ export function convertDateRangeToTimeRangeStr(date1: string, date2: string) {
 }
 
 export function convertDateToDateStr(date: string) {
+  // console.log(date);
   const momentDate = moment(date);
+  // console.log(momentDate);
   if (momentDate.isSame(moment(), 'day')) {
     return 'Today';
   }
