@@ -178,6 +178,7 @@ export default function CreatePostPage() {
     setIsLoading(true);
     createPost(newPost)
       .then((resp) => {
+        setIsLoading(false);
         if (!resp.success) {
           handleCheckedError(resp.message as string);
         } else {
