@@ -16,26 +16,26 @@ export default function StudyBuddy({
   const presentInfoToast = useInfoToast();
   return (
     <div className={styles['study-buddy']}>
-      <IonRow>
+      <IonRow className="ion-padding-start">
         <IonCol size="3">
           <IonAvatar className={styles['avatar']}>
             <img alt="profile" src={buddy.profilePhoto} />
           </IonAvatar>
         </IonCol>
         <IonCol>
-          <IonRow className="ion-padding-start ion-justify-content-center">
+          <IonRow className="ion-justify-content-center">
             <IonCol className={styles['bold']}>{buddy.name ?? ''}</IonCol>
           </IonRow>
-          <IonRow className="ion-padding-start ion-justify-content-center">
+          <IonRow className="ion-justify-content-center">
             <IonCol>
               Y{buddy.year ?? 0}/{facultyEnumToStr(buddy.faculty) ?? ''}
             </IonCol>
           </IonRow>
-          <IonRow className="ion-padding-start ion-justify-content-center">
+          <IonRow className="ion-justify-content-center">
             <IonCol>{genderEnumToStr(buddy.gender) ?? ''}</IonCol>
           </IonRow>
           {inCreatedRequest && (
-            <IonRow className="ion-padding-start ion-justify-content-center">
+            <IonRow className="ion-justify-content-center">
               <IonCol className="ion-no-padding">
                 <span className={styles['bold-text']}>Telegram: </span>
                 {buddy.telegramHandle}
