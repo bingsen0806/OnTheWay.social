@@ -19,7 +19,7 @@ export default function AboutPoster({ poster }: AboutPosterProps) {
       <IonRow className="ion-padding-start ion-justify-content-center">
         <IonCol size="3">
           <IonAvatar className={styles['avatar']}>
-            <img alt="profilePic" src={poster.profilePhoto} />{' '}
+            <img alt="profilePic" src={poster.thumbnailPhoto} />{' '}
           </IonAvatar>
         </IonCol>
         <IonCol className={styles['user-info']}>

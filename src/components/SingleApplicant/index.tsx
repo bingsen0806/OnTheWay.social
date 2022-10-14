@@ -64,7 +64,7 @@ export default function SingleApplicant({
     <IonRow className="ion-padding-start ion-justify-content-center">
       <IonCol size="3">
         <IonAvatar className={styles['avatar']}>
-          <img alt="profilePic" src={applicant.profilePhoto} />{' '}
+          <img alt="profilePic" src={applicant.thumbnailPhoto} />{' '}
         </IonAvatar>
       </IonCol>
       <IonCol className={styles['user-info']}>

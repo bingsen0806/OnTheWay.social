@@ -19,7 +19,7 @@ export default function StudyBuddy({
       <IonRow className="ion-padding-start">
         <IonCol size="3">
           <IonAvatar className={styles['avatar']}>
-            <img alt="profile" src={buddy.profilePhoto} />
+            <img alt="profile" src={buddy.thumbnailPhoto} />
           </IonAvatar>
         </IonCol>
         <IonCol>
