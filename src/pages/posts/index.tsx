@@ -235,11 +235,16 @@ export default function PostsPage() {
             </IonMenuToggle>
           </IonToolbar>
         </IonHeader>
-        <IonContent fullscreen className={styles['light-grey']}>
+        <IonContent
+          fullscreen
+          className={
+            listOfPosts.length === 0 ? '' : styles['posts-list-container']
+          }
+        >
           <IonRefresher slot="fixed" onIonRefresh={refreshContents}>
             <IonRefresherContent></IonRefresherContent>
           </IonRefresher>
-          {listOfPosts.length === 0 && (
+          {listOfPosts.length === 0 ? (
             <NoData>
               <div>
                 <p>No study sessions!</p>
@@ -253,12 +258,14 @@ export default function PostsPage() {
                 </IonButton>
               </div>
             </NoData>
+          ) : (
+            <IonList className={styles['posts-list']}>
+              {listOfPosts.map((data) => (
+                <PostListItem post={data} key={data.id}></PostListItem>
+              ))}
+            </IonList>
           )}
-          <IonList>
-            {listOfPosts.map((data) => (
-              <PostListItem post={data} key={data.id}></PostListItem>
-            ))}
-          </IonList>
+
           <IonInfiniteScroll
             onIonInfinite={requestNextPageOfPosts}
             threshold="50px"
