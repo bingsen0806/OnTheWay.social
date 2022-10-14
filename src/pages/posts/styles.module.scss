@@ -2,6 +2,16 @@
   color: var(--ion-color-primary);
 }
 
+.error-text {
+  color: red;
+  line-height: 2;
+}
+
+.normal-text {
+  margin-top: 8px;
+  line-height: 2;
+}
+
 .filter-category-header {
   padding-left: 4px;
 }

@@ -10,18 +10,6 @@ interface PostDetailsProps {
   post: Post;
 }
 
-// export const mockPost: Post = {
-//   id: "postid",
-//   poster: mockPoster,
-//   startDateTime: "29 Sep",
-//   endDateTime: "29 Sep",
-//   personCapacity: 2,
-//   /** List of users who have been confirmed to be going for the post event */
-//   participants: [mockUser2, mockUser2],
-//   location: Location.CLB,
-//   description: "Hi, I will be at CLB lvl 4! Feel free to come!",
-// };
-
 export default function PostDetails({ post }: PostDetailsProps) {
   return (
     <IonGrid className="ion-margin-vertical">
@@ -51,9 +39,8 @@ export default function PostDetails({ post }: PostDetailsProps) {
       </IonRow>
       <IonRow className="ion-padding">
         <IonCol>
-          {post.description
-            ? `Description: ${post.description}`
-            : 'No description'}
+          <br />
+          {post.description}
         </IonCol>
       </IonRow>
     </IonGrid>

@@ -14,7 +14,6 @@ import {
 import { logEvent } from 'firebase/analytics';
 import moment from 'moment';
 import { useState } from 'react';
-import { useHistory } from 'react-router';
 import { createPost } from '../../api/posts';
 import { locationEnumToStr, Post } from '../../api/types';
 import { Location } from '../../api/types';
@@ -31,6 +30,7 @@ import { POSTS } from '../../routes';
 import useCheckedErrorHandler from '../../util/hooks/useCheckedErrorHandler';
 import useInfoToast from '../../util/hooks/useInfoToast';
 import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
+import styles from './styles.module.scss';
 
 const locationDropdownItems: DropdownItem<Location>[] = [
   {
@@ -96,8 +96,7 @@ export default function CreatePostPage() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [shouldShowDropdownErrors, setShouldShowDropdownErrors] =
     useState<boolean>(false);
-  const [post, setPost] = useState<Post>({} as Post);
-  const history = useHistory();
+  const [post, setPost] = useState<Post>({ description: '' } as Post);
   const [dateTimes, setDateTimes] = useState({
     date: new Date().toISOString(),
     startTime: new Date().toISOString(),
@@ -157,6 +156,10 @@ export default function CreatePostPage() {
       newErrorMessages.startTime = 'Start time cannot be in the past';
       haveError = true;
     }
+    if (post.description.length > 200) {
+      newErrorMessages.description = 'Description cannot exceed 200 characters';
+      haveError = true;
+    }
 
     if (haveError) {
       setErrorMessages(newErrorMessages);
@@ -178,7 +181,7 @@ export default function CreatePostPage() {
         if (!resp.success) {
           handleCheckedError(resp.message as string);
         } else {
-          setPost({} as Post);
+          setPost({ description: '' } as Post);
           setIsLoading(false);
           presentInfoToast('Successfully created new post!');
           void dispatch(reloadInitialData());
@@ -279,6 +282,16 @@ export default function CreatePostPage() {
                   setPost({ ...post, description });
                 }}
               />
+              <span
+                className={
+                  post.description !== undefined &&
+                  post.description.length > 200
+                    ? styles['error-text']
+                    : styles['normal-text']
+                }
+              >
+                {post.description.length} / 200
+              </span>
             </IonCol>
           </IonRow>
           <IonRow className="ion-justify-content-center">
