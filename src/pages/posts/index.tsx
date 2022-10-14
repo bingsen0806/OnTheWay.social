@@ -259,7 +259,7 @@ export default function PostsPage() {
               </div>
             </NoData>
           ) : (
-            <IonList className={styles['posts-list']}>
+            <IonList className={styles['posts-list']} lines="none">
               {listOfPosts.map((data) => (
                 <PostListItem post={data} key={data.id}></PostListItem>
               ))}

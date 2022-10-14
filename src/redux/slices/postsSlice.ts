@@ -47,6 +47,7 @@ const PostsSlice = createSlice({
     builder.addCase(getNewPageOfPostsWithFilter.fulfilled, (state, action) => {
       state.isLoading = false;
       if (action.payload.success) {
+        console.log(action.payload.message);
         state.page = 1;
         state.posts = action.payload.message as Post[];
         state.filter = action.meta.arg;

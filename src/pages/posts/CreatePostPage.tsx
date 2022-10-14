@@ -178,6 +178,7 @@ export default function CreatePostPage() {
         if (!resp.success) {
           handleCheckedError(resp.message as string);
         } else {
+          setPost({} as Post);
           setIsLoading(false);
           presentInfoToast('Successfully created new post!');
           void dispatch(reloadInitialData());

@@ -20,6 +20,7 @@ export default function PostListItem({ post }: PostListItemProps) {
   };
   return (
     <IonItem
+      className="ion-margin"
       button
       onClick={() => {
         setIsModalOpen(true, () => {
