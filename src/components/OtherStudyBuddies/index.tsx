@@ -18,7 +18,9 @@ export default function OtherStudyBuddies({
         <IonCol className={styles['header']} size="12">
           Confirmed Attendees
         </IonCol>
-
+        {inCreatedRequest && studyBuddies.length === 0 && (
+          <p>No one is participating in this study session yet.</p>
+        )}
         {!inCreatedRequest && studyBuddies.length === 0 && (
           <IonCol>
             <p>

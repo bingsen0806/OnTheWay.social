@@ -136,7 +136,7 @@ export default function Homepage() {
                   }}
                   expand="block"
                 >
-                  Post a Request
+                  Post a study session
                 </IonButton>
               </div>
             </NoData>

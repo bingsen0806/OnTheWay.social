@@ -31,7 +31,6 @@ const PostsSlice = createSlice({
       state.filter = action.payload;
     },
     setLoading: (state, action: PayloadAction<boolean>) => {
-      console.log(34, action.payload);
       state.isLoading = action.payload;
     },
     removePost: (state, action: PayloadAction<Post>) => {
@@ -41,7 +40,6 @@ const PostsSlice = createSlice({
       state.hasDoneInitialLoad = false;
     },
     setPostHasDoneInitialLoad: (state, action: PayloadAction<boolean>) => {
-      console.log('44 CALLED', action.payload);
       state.hasDoneInitialLoad = action.payload;
     },
   },
@@ -65,15 +63,12 @@ const PostsSlice = createSlice({
       }
     });
     builder.addCase(getNextPageOfPosts.pending, (state, _) => {
-      console.log(62);
       state.isLoading = true;
     });
     builder.addCase(getNextPageOfPosts.rejected, (state, _) => {
-      console.log(70);
       state.isLoading = false;
     });
     builder.addCase(getNewPageOfPostsWithFilter.rejected, (state, _) => {
-      console.log(74);
       state.isLoading = false;
     });
     builder.addCase(reloadInitialPostsData.fulfilled, (state, _) => {
@@ -97,7 +92,6 @@ export const getNewPageOfPostsWithFilter = createAsyncThunk<
   PostsFilter,
   { state: RootState }
 >('posts/getNewPageOfPostsWithFilter', async (filter, _) => {
-  console.log('FETCHING POSTS');
   const responseData = await getPosts(filter, 1);
   return responseData;
 });
@@ -125,10 +119,7 @@ export const getInitialPostsData = createAsyncThunk<
   undefined,
   { state: RootState }
 >('posts/getInitialPostsData', async (_, thunkApi) => {
-  console.log('ATTEMPTING RELOAD');
   if (!thunkApi.getState().posts.hasDoneInitialLoad) {
-    console.log('RELOADING ATTEMPT BEGINS');
-    console.log(115);
     thunkApi.dispatch(setPostHasDoneInitialLoad(true));
     thunkApi.dispatch(setLoading(true));
     const resp = await thunkApi
@@ -144,7 +135,6 @@ export const reloadInitialPostsData = createAsyncThunk<
   undefined,
   { state: RootState }
 >('posts/reloadInitialPostsData', async (_, thunkApi) => {
-  console.log('RELOADING');
   await thunkApi
     .dispatch(getNewPageOfPostsWithFilter({ locations: [] }))
     .unwrap();

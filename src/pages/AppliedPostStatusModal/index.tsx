@@ -21,7 +21,6 @@ import { useState } from 'react';
 import { deleteAppliedRequest } from '../../api/appliedRequests';
 import { useAppDispatch } from '../../redux/hooks';
 import { removeAppliedRequest } from '../../redux/slices/homeSlice';
-import { useHistory } from 'react-router';
 import useInfoToast from '../../util/hooks/useInfoToast';
 import { reloadInitialPostsData } from '../../redux/slices/postsSlice';
 
@@ -42,7 +41,6 @@ export default function AppliedPostStatusModal({
   const dispatch = useAppDispatch();
   const [isCancelled, setIsCancelled] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const history = useHistory();
   const presentInfoToast = useInfoToast();
   function handleCancel() {
     setIsLoading(true);

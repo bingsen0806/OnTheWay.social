@@ -115,29 +115,24 @@ const HomeSlice = createSlice({
 
     /** Resets the has done initial load back to false, so home data will reload */
     requestReloadOfHomeData: (state) => {
-      console.log('118 CALLED');
       state.hasDoneInitialLoad = false;
     },
     setHomeHasDoneInitialLoad: (state, action: PayloadAction<boolean>) => {
-      console.log('121 CALLED', action.payload);
       state.hasDoneInitialLoad = action.payload;
     },
     setHomeIsLoading: (state, action: PayloadAction<boolean>) => {
-      console.log('120 SETTING SPINNER', action.payload);
       state.isLoading = action.payload;
     },
   },
   extraReducers: (builder) => {
     builder.addCase(getNewPageOfAppliedRequests.fulfilled, (state, action) => {
       if (action.payload.success) {
-        console.log('128 DONE APPLIED');
         state.appliedRequestsPage = 1;
         state.appliedRequests = action.payload.message as AppliedRequest[];
       }
     });
     builder.addCase(getNewPageOfCreatedRequests.fulfilled, (state, action) => {
       if (action.payload.success) {
-        console.log('135 DONE CREATED ');
         state.createdRequestsPage = 1;
         state.createdRequests = action.payload.message as CreatedRequest[];
       }
@@ -178,7 +173,6 @@ const HomeSlice = createSlice({
       state.isLoading = false;
     });
     builder.addCase(getInitialData.fulfilled, (state, _) => {
-      console.log('SETTING SPINNER BACK TO FALSE');
       state.isLoading = false;
     });
     builder.addCase(reloadInitialData.fulfilled, (state, _) => {
@@ -266,9 +260,7 @@ export const getInitialData = createAsyncThunk<
   undefined,
   { state: RootState }
 >('home/getInitialData', async (_, thunkApi) => {
-  console.log('263 CALLED');
   if (!thunkApi.getState().home.hasDoneInitialLoad) {
-    console.log('264 CALLED');
     thunkApi.dispatch(setHomeHasDoneInitialLoad(true));
     thunkApi.dispatch(setHomeIsLoading(true));
     await thunkApi.dispatch(getNewPageOfAppliedRequests()).unwrap();

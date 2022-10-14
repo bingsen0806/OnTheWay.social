@@ -29,14 +29,7 @@ const initialState: UserState = {
 const UserSlice = createSlice({
   name: 'user',
   initialState,
-  reducers: {
-    /**
-     * TODO: To be used in future if add edit the user profile functionality is added.
-     */
-    requestReloadOfUserData: (state) => {
-      state.selfLoadedOnce = false;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getUserObject.fulfilled, (state, action) => {
       if (action.payload.success) {
@@ -48,6 +41,12 @@ const UserSlice = createSlice({
       state.isLoading = true;
     });
     builder.addCase(getUserObject.rejected, (state, _) => {
+      state.isLoading = false;
+    });
+    builder.addCase(reloadSelf.fulfilled, (state, action) => {
+      if (action.payload.success) {
+        state.user = action.payload.message as User;
+      }
       state.isLoading = false;
     });
     builder.addCase(getSelf.fulfilled, (state, action) => {
@@ -83,6 +82,15 @@ export const getSelf = createAsyncThunk<
   undefined,
   { state: RootState }
 >('user/getSelf', async () => {
+  const responseData = await getSelfUser();
+  return responseData;
+});
+
+export const reloadSelf = createAsyncThunk<
+  ApiResponseBody<User>,
+  undefined,
+  { state: RootState }
+>('user/reloadSelf', async () => {
   const responseData = await getSelfUser();
   return responseData;
 });

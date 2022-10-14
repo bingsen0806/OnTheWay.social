@@ -62,8 +62,8 @@ export default function AppliedRequestListItem({
           )}
         </p>
         <p className={styles['post-text']}>
-          {`${(appliedRequest.post.participants.length + 1).toString()} ${
-            appliedRequest.post.participants.length <= 0
+          {`${appliedRequest.post.participants.length.toString()} ${
+            appliedRequest.post.participants.length <= 1
               ? 'attendee'
               : 'attendees'
           }`}

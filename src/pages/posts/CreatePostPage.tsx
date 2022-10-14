@@ -12,7 +12,9 @@ import {
   IonToolbar,
 } from '@ionic/react';
 import { logEvent } from 'firebase/analytics';
+import moment from 'moment';
 import { useState } from 'react';
+import { useHistory } from 'react-router';
 import { createPost } from '../../api/posts';
 import { locationEnumToStr, Post } from '../../api/types';
 import { Location } from '../../api/types';
@@ -95,7 +97,7 @@ export default function CreatePostPage() {
   const [shouldShowDropdownErrors, setShouldShowDropdownErrors] =
     useState<boolean>(false);
   const [post, setPost] = useState<Post>({} as Post);
-
+  const history = useHistory();
   const [dateTimes, setDateTimes] = useState({
     date: new Date().toISOString(),
     startTime: new Date().toISOString(),
@@ -149,11 +151,18 @@ export default function CreatePostPage() {
       newErrorMessages.endTime = 'End time must be later than start time';
       haveError = true;
     }
+    const start = combineDateAndTime(dateTimes.date, dateTimes.startTime);
+    const startIsInPast = moment(start).isBefore(new Date(), 'minute');
+    if (startIsInPast) {
+      newErrorMessages.startTime = 'Start time cannot be in the past';
+      haveError = true;
+    }
 
     if (haveError) {
       setErrorMessages(newErrorMessages);
       return;
     }
+    setErrorMessages({ date: '', startTime: '', endTime: '', description: '' });
 
     const newPost = {
       ...post,

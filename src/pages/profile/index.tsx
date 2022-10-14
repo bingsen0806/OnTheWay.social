@@ -20,7 +20,7 @@ import styles from './styles.module.scss';
 import { useHistory } from 'react-router';
 import { FAQ } from '../../routes';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { getInitialSelf } from '../../redux/slices/userSlice';
+import { getInitialSelf, reloadSelf } from '../../redux/slices/userSlice';
 import { logout } from '../../api/authentication';
 import React, { useRef, useState } from 'react';
 import { uploadImageAndStoreToDb } from '../../api/user';
@@ -57,7 +57,10 @@ export default function ProfilePage() {
         preview: URL.createObjectURL(e.target.files[0]),
         raw: [file],
       });
-      const successCallback = getUser;
+      const successCallback = () => {
+        console.log('success 61 ');
+        getUser();
+      };
       const failedCallback = (error: string) => handleCheckedError(error);
       void uploadImageAndStoreToDb(user, file, successCallback, failedCallback);
     }
@@ -70,20 +73,11 @@ export default function ProfilePage() {
   };
 
   const getUser = () => {
-    dispatch(getInitialSelf())
-      .unwrap()
-      .then((resp) => {
-        if (!resp.success) {
-          handleCheckedError(resp.message as string);
-        }
-      })
-      .catch((error) => {
-        handleUnknownError(error);
-      });
+    void dispatch(reloadSelf());
   };
 
   usePageInitialLoad(() => {
-    getUser();
+    void dispatch(getInitialSelf());
   });
 
   function submitLogout() {

@@ -23,7 +23,7 @@ import {
 } from '@ionic/react';
 import { funnelOutline } from 'ionicons/icons';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { Location, locationEnumToStr } from '../../api/types';
 import PostListItem from '../../components/PostListItem';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -36,9 +36,11 @@ import { CREATE_POST } from '../../routes';
 import useCheckedErrorHandler from '../../util/hooks/useCheckedErrorHandler';
 import usePageInitialLoad from '../../util/hooks/usePageInitialLoad';
 import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
+import NoData from '../NoData';
 import styles from './styles.module.scss';
 
 export default function PostsPage() {
+  const history = useHistory();
   const listOfPosts = useAppSelector((state) => state.posts.posts);
   const isLoading = useAppSelector((state) => state.posts.isLoading);
   const dispatch = useAppDispatch();
@@ -237,6 +239,21 @@ export default function PostsPage() {
           <IonRefresher slot="fixed" onIonRefresh={refreshContents}>
             <IonRefresherContent></IonRefresherContent>
           </IonRefresher>
+          {listOfPosts.length === 0 && (
+            <NoData>
+              <div>
+                <p>No study sessions!</p>
+                <IonButton
+                  onClick={() => {
+                    history.replace(CREATE_POST);
+                  }}
+                  expand="block"
+                >
+                  Post a study session
+                </IonButton>
+              </div>
+            </NoData>
+          )}
           <IonList>
             {listOfPosts.map((data) => (
               <PostListItem post={data} key={data.id}></PostListItem>

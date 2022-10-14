@@ -1,5 +1,7 @@
-import { IonCol, IonRow, IonAvatar } from '@ionic/react';
+import { IonCol, IonRow, IonAvatar, IonIcon } from '@ionic/react';
+import { copyOutline } from 'ionicons/icons';
 import { facultyEnumToStr, genderEnumToStr, User } from '../../api/types';
+import useInfoToast from '../../util/hooks/useInfoToast';
 import styles from './styles.module.scss';
 
 interface StudyBuddyProps {
@@ -11,6 +13,7 @@ export default function StudyBuddy({
   buddy,
   inCreatedRequest,
 }: StudyBuddyProps) {
+  const presentInfoToast = useInfoToast();
   return (
     <div className={styles['study-buddy']}>
       <IonRow>
@@ -31,6 +34,22 @@ export default function StudyBuddy({
           <IonRow className="ion-padding-start ion-justify-content-center">
             <IonCol>{genderEnumToStr(buddy.gender) ?? ''}</IonCol>
           </IonRow>
+          {inCreatedRequest && (
+            <IonRow className="ion-padding-start ion-justify-content-center">
+              <IonCol className="ion-no-padding">
+                <span className={styles['bold-text']}>Telegram: </span>
+                {buddy.telegramHandle}
+                <IonIcon
+                  className={styles['copy-icon']}
+                  icon={copyOutline}
+                  onClick={() => {
+                    void navigator.clipboard.writeText(buddy.telegramHandle);
+                    presentInfoToast('Telegram handle copied!');
+                  }}
+                />
+              </IonCol>
+            </IonRow>
+          )}
         </IonCol>
       </IonRow>
     </div>

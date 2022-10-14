@@ -26,9 +26,7 @@ import { useAppDispatch } from '../../redux/hooks';
 import { removePost } from '../../redux/slices/postsSlice';
 import { logEvent } from 'firebase/analytics';
 import { analytics } from '../../firebase';
-import {
-  reloadInitialData,
-} from '../../redux/slices/homeSlice';
+import { reloadInitialData } from '../../redux/slices/homeSlice';
 import useInfoToast from '../../util/hooks/useInfoToast';
 
 interface ApplyModalProps {
@@ -54,7 +52,6 @@ export default function PostModal({
   const [isApplied, setIsApplied] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const presentInfoToast = useInfoToast();
-
   function handleApply(postId: string) {
     setIsLoading(true);
     createAppliedRequest(postId)

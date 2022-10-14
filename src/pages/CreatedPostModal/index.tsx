@@ -16,7 +16,7 @@ import PostDetails from '../../components/PostDetails';
 import ApplicantList from '../../components/ApplicantList';
 import useCheckedErrorHandler from '../../util/hooks/useCheckedErrorHandler';
 import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { cancelRequest } from '../../api/home';
 import { useAppDispatch } from '../../redux/hooks';
 import {
@@ -55,6 +55,10 @@ export default function CreatedPostModal({
   const handleCheckedError = useCheckedErrorHandler();
   const handleUnknownError = useUnknownErrorHandler();
   const presentInfoToast = useInfoToast();
+  useEffect(() => {
+    console.log('use effect triggered');
+    setCreatedRequestState(createdRequest);
+  }, [createdRequest]);
   // temp state of created request, any changes will be synced up with redux when the modal is closed
   const [createdRequestState, setCreatedRequestState] =
     useState<CreatedRequest>(

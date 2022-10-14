@@ -48,7 +48,8 @@ export default function RequestStatus({
       >
         {status === AppliedRequestStatus.ACCEPTED && (
           <IonCol className="ion-no-padding">
-            Telegram:{telegramHandle}
+            <span className={styles['bold-text']}>Telegram: </span>
+            {telegramHandle}
             <IonIcon
               className={styles['copy-icon']}
               icon={copyOutline}
