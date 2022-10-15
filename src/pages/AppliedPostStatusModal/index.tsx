@@ -4,7 +4,6 @@ import {
   IonContent,
   IonHeader,
   IonIcon,
-  IonLoading,
   IonModal,
   IonTitle,
   IonToolbar,
@@ -23,6 +22,7 @@ import { useAppDispatch } from '../../redux/hooks';
 import { removeAppliedRequest } from '../../redux/slices/homeSlice';
 import useInfoToast from '../../util/hooks/useInfoToast';
 import { reloadInitialPostsData } from '../../redux/slices/postsSlice';
+import ButtonSpinner from '../../components/ButtonSpinner';
 
 interface AppliedPostStatusProps {
   isOpen: boolean;
@@ -81,6 +81,7 @@ export default function AppliedPostStatusModal({
           <IonButtons slot="start">
             <IonButton
               fill="clear"
+              color="dark"
               onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
                 event.stopPropagation();
                 closeModal();
@@ -109,6 +110,9 @@ export default function AppliedPostStatusModal({
             color="danger"
             onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
               event.stopPropagation();
+              if (isLoading) {
+                return;
+              }
               void presentAlert({
                 header: 'Confirm Cancel Application?',
                 message: 'This action is irreversible',
@@ -126,10 +130,9 @@ export default function AppliedPostStatusModal({
               });
             }}
           >
-            Cancel
+            {isLoading ? <ButtonSpinner /> : 'Cancel'}
           </IonButton>
         )}
-        <IonLoading isOpen={isLoading}></IonLoading>
       </IonContent>
     </IonModal>
   );

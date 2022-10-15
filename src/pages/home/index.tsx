@@ -4,7 +4,6 @@ import {
   IonLabel,
   IonList,
   IonButton,
-  IonLoading,
   IonPage,
   IonRefresher,
   IonRefresherContent,
@@ -34,6 +33,7 @@ import { CREATE_POST, POSTS } from '../../routes';
 import { useHistory } from 'react-router';
 import styles from './styles.module.scss';
 import { add } from 'ionicons/icons';
+import LoadingSpinner from '../../components/LoadingSpinner';
 
 enum HomeTab {
   APPLIED_POST = 'Applied',
@@ -231,8 +231,7 @@ export default function Homepage() {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        {renderListBasedOnTab()}
-        <IonLoading isOpen={isLoading}></IonLoading>
+        {isLoading ? <LoadingSpinner /> : renderListBasedOnTab()}
       </IonContent>
     </IonPage>
   );

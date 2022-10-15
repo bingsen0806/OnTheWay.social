@@ -1,4 +1,4 @@
-import { IonButton, IonCol, IonLoading, IonRow } from '@ionic/react';
+import { IonButton, IonCol, IonRow } from '@ionic/react';
 import { logEvent } from 'firebase/analytics';
 import { FirebaseError } from 'firebase/app';
 import { useState } from 'react';
@@ -14,6 +14,7 @@ import styles from './styles.module.scss';
 import { useAppDispatch } from '../../redux/hooks';
 import { reloadInitialData } from '../../redux/slices/homeSlice';
 import { reloadInitialPostsData } from '../../redux/slices/postsSlice';
+import LoadingSpinner from '../../components/LoadingSpinner';
 interface LoginErrorMessages {
   email: string;
   password: string;
@@ -94,56 +95,61 @@ export default function LoginPage() {
 
   return (
     <AuthenticationPageContainer pageTitle="Login">
-      <IonRow className="ion-padding-bottom ion-justify-content-center">
-        <IonCol size="10" className={styles['input-field-col']}>
-          <TextInputField
-            label="Email"
-            placeholder="Email"
-            value={loginDetails?.email}
-            errorMessage={errorMessages?.email}
-            onChange={(email) => {
-              setLoginDetails({ ...loginDetails, email });
-            }}
-          />
-        </IonCol>
-      </IonRow>
-      <IonRow className="ion-padding-bottom ion-justify-content-center">
-        <IonCol size="10">
-          <TextInputField
-            label="Password"
-            placeholder="Password"
-            value={loginDetails?.password}
-            errorMessage={errorMessages?.password}
-            onChange={(password) => {
-              setLoginDetails({ ...loginDetails, password });
-            }}
-            type="password"
-          />
-        </IonCol>
-      </IonRow>
-      <IonRow className="ion-padding-bottom ion-justify-content-center">
-        <IonCol size="10">
-          <IonButton
-            onClick={() => {
-              void submitLogin();
-            }}
-            expand="block"
-          >
-            Login
-          </IonButton>
-        </IonCol>
-      </IonRow>
-      <IonRow className="ion-justify-content-center">
-        <IonCol size="10">
-          <p>
-            Don't have an account?{' '}
-            <a href={REGISTER}>
-              <u>Sign up</u>
-            </a>
-          </p>
-        </IonCol>
-      </IonRow>
-      <IonLoading isOpen={isLoading}></IonLoading>
+      {isLoading ? (
+        <LoadingSpinner />
+      ) : (
+        <>
+          <IonRow className="ion-padding-bottom ion-justify-content-center">
+            <IonCol size="10" className={styles['input-field-col']}>
+              <TextInputField
+                label="Email"
+                placeholder="Email"
+                value={loginDetails?.email}
+                errorMessage={errorMessages?.email}
+                onChange={(email) => {
+                  setLoginDetails({ ...loginDetails, email });
+                }}
+              />
+            </IonCol>
+          </IonRow>
+          <IonRow className="ion-padding-bottom ion-justify-content-center">
+            <IonCol size="10">
+              <TextInputField
+                label="Password"
+                placeholder="Password"
+                value={loginDetails?.password}
+                errorMessage={errorMessages?.password}
+                onChange={(password) => {
+                  setLoginDetails({ ...loginDetails, password });
+                }}
+                type="password"
+              />
+            </IonCol>
+          </IonRow>
+          <IonRow className="ion-padding-bottom ion-justify-content-center">
+            <IonCol size="10">
+              <IonButton
+                onClick={() => {
+                  void submitLogin();
+                }}
+                expand="block"
+              >
+                Login
+              </IonButton>
+            </IonCol>
+          </IonRow>
+          <IonRow className="ion-justify-content-center">
+            <IonCol size="10">
+              <p>
+                Don't have an account?{' '}
+                <a href={REGISTER}>
+                  <u>Sign up</u>
+                </a>
+              </p>
+            </IonCol>
+          </IonRow>
+        </>
+      )}
     </AuthenticationPageContainer>
   );
 }

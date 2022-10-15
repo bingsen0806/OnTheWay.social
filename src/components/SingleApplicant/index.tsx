@@ -2,7 +2,6 @@ import {
   IonAvatar,
   IonButton,
   IonCol,
-  IonLoading,
   IonRow,
   useIonAlert,
 } from '@ionic/react';
@@ -20,7 +19,7 @@ import useCheckedErrorHandler from '../../util/hooks/useCheckedErrorHandler';
 import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
 import styles from './styles.module.scss';
 import useInfoToast from '../../util/hooks/useInfoToast';
-
+import ButtonSpinner from '../ButtonSpinner';
 interface SingleApplicantProps {
   postId: string;
   applicant: User;
@@ -67,7 +66,7 @@ export default function SingleApplicant({
           <img alt="profilePic" src={applicant.thumbnailPhoto} />{' '}
         </IonAvatar>
       </IonCol>
-      <IonCol className={styles['user-info']}>
+      <IonCol size="5" className={styles['user-info']}>
         <IonRow className={styles['bold']}>
           {applicant.name ?? 'No Name'}
         </IonRow>
@@ -84,6 +83,9 @@ export default function SingleApplicant({
           size="small"
           onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
             event.stopPropagation();
+            if (isLoading) {
+              return;
+            }
             void presentAlert({
               header: 'Confirm Accept Applicant?',
               message:
@@ -104,10 +106,9 @@ export default function SingleApplicant({
             });
           }}
         >
-          Accept
+          {isLoading ? <ButtonSpinner /> : 'Accept'}
         </IonButton>
       </IonCol>
-      <IonLoading isOpen={isLoading}></IonLoading>
     </IonRow>
   );
 }

@@ -10,7 +10,6 @@ import {
   IonInfiniteScroll,
   IonInfiniteScrollContent,
   IonList,
-  IonLoading,
   IonMenu,
   IonMenuToggle,
   IonPage,
@@ -25,6 +24,7 @@ import { funnelOutline } from 'ionicons/icons';
 import { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { Location, locationEnumToStr } from '../../api/types';
+import LoadingSpinner from '../../components/LoadingSpinner';
 import PostListItem from '../../components/PostListItem';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import {
@@ -241,40 +241,44 @@ export default function PostsPage() {
             listOfPosts.length === 0 ? '' : styles['posts-list-container']
           }
         >
-          <IonRefresher slot="fixed" onIonRefresh={refreshContents}>
-            <IonRefresherContent></IonRefresherContent>
-          </IonRefresher>
-          {listOfPosts.length === 0 ? (
-            <NoData>
-              <div>
-                <p>No study sessions!</p>
-                <IonButton
-                  onClick={() => {
-                    history.replace(CREATE_POST);
-                  }}
-                  expand="block"
-                >
-                  Post a study session
-                </IonButton>
-              </div>
-            </NoData>
-          ) : (
-            <IonList className={styles['posts-list']} lines="none">
-              {listOfPosts.map((data) => (
-                <PostListItem post={data} key={data.id}></PostListItem>
-              ))}
-            </IonList>
-          )}
+          {isLoading && <LoadingSpinner />}
+          {!isLoading && (
+            <>
+              <IonRefresher slot="fixed" onIonRefresh={refreshContents}>
+                <IonRefresherContent></IonRefresherContent>
+              </IonRefresher>
+              {listOfPosts.length === 0 ? (
+                <NoData>
+                  <div>
+                    <p>No study sessions!</p>
+                    <IonButton
+                      onClick={() => {
+                        history.replace(CREATE_POST);
+                      }}
+                      expand="block"
+                    >
+                      Post a study session
+                    </IonButton>
+                  </div>
+                </NoData>
+              ) : (
+                <IonList className={styles['posts-list']} lines="none">
+                  {listOfPosts.map((data) => (
+                    <PostListItem post={data} key={data.id}></PostListItem>
+                  ))}
+                </IonList>
+              )}
 
-          <IonInfiniteScroll
-            onIonInfinite={requestNextPageOfPosts}
-            threshold="50px"
-            disabled={listOfPosts.length < 20}
-          >
-            <IonInfiniteScrollContent loadingSpinner="circles"></IonInfiniteScrollContent>
-          </IonInfiniteScroll>
+              <IonInfiniteScroll
+                onIonInfinite={requestNextPageOfPosts}
+                threshold="50px"
+                disabled={listOfPosts.length < 20}
+              >
+                <IonInfiniteScrollContent loadingSpinner="circles"></IonInfiniteScrollContent>
+              </IonInfiniteScroll>
+            </>
+          )}
         </IonContent>
-        <IonLoading isOpen={isLoading}></IonLoading>
       </IonPage>
     </>
   );

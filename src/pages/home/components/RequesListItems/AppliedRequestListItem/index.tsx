@@ -1,5 +1,4 @@
-import { IonItem, IonLoading } from '@ionic/react';
-import { useState } from 'react';
+import { IonItem } from '@ionic/react';
 import { useStateWithCallbackLazy } from 'use-state-with-callback';
 import {
   AppliedRequest,
@@ -7,13 +6,10 @@ import {
   facultyEnumToStr,
   AppliedRequestStatus,
 } from '../../../../../api/types';
-import { useAppDispatch } from '../../../../../redux/hooks';
 import {
   convertDateToDateStr,
   convertDateRangeToTimeRangeStr,
 } from '../../../../../util/dateUtils';
-import useCheckedErrorHandler from '../../../../../util/hooks/useCheckedErrorHandler';
-import useUnknownErrorHandler from '../../../../../util/hooks/useUnknownErrorHandler';
 import AppliedPostStatusModal from '../../../../AppliedPostStatusModal';
 import styles from '../styles.module.scss';
 
@@ -26,10 +22,6 @@ export default function AppliedRequestListItem({
 }: AppliedRequestListItemProps) {
   const [isModalOpen, setIsModalOpen] =
     useStateWithCallbackLazy<boolean>(false);
-  const dispatch = useAppDispatch();
-  const handleCheckedError = useCheckedErrorHandler();
-  const handleUnknownError = useUnknownErrorHandler();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   function closeModal(callback: () => void) {
     setIsModalOpen(false, callback);
@@ -83,7 +75,6 @@ export default function AppliedRequestListItem({
         onClose={closeModal}
         appliedRequest={appliedRequest}
       />
-      <IonLoading isOpen={isLoading}></IonLoading>
     </IonItem>
   );
 }

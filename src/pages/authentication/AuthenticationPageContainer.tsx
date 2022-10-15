@@ -27,15 +27,11 @@ export default function AuthenticationPageContainer({
               ></img>
             </IonCol>
           </IonRow>
-          <IonRow className="ion-justify-content-center ion-no-padding">
-            <IonCol size-lg="8" className="ion-no-padding">
-              <IonRow className="ion-justify-content-center ion-padding-bottom">
-                <IonCol>
-                  <h1 className={styles['page-header-text']}>{pageTitle}</h1>
-                </IonCol>
-              </IonRow>
-              {children}
+          <IonRow className="ion-justify-content-center">
+            <IonCol size-lg="8" className="ion-margin">
+              <h1 className={styles['page-header-text']}>{pageTitle}</h1>
             </IonCol>
+            <IonCol size="12">{children}</IonCol>
           </IonRow>
         </IonGrid>
       </IonContent>

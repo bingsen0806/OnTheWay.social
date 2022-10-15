@@ -6,7 +6,6 @@ import {
   IonContent,
   IonGrid,
   IonHeader,
-  IonLoading,
   IonPage,
   IonRow,
   IonToolbar,
@@ -17,6 +16,7 @@ import { useState } from 'react';
 import { createPost } from '../../api/posts';
 import { locationEnumToStr, Post } from '../../api/types';
 import { Location } from '../../api/types';
+import ButtonSpinner from '../../components/ButtonSpinner';
 import DateTimePicker from '../../components/DateTimePicker';
 import DropdownSelection, {
   DropdownItem,
@@ -298,12 +298,11 @@ export default function CreatePostPage() {
           <IonRow className="ion-justify-content-center">
             <IonCol>
               <IonButton expand="block" onClick={submitCreatePost}>
-                Post
+                {isLoading ? <ButtonSpinner /> : 'Post'}
               </IonButton>
             </IonCol>
           </IonRow>
         </IonGrid>
-        <IonLoading isOpen={isLoading}></IonLoading>
       </IonContent>
     </IonPage>
   );

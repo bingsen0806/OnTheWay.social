@@ -14,7 +14,6 @@ import {
   IonGrid,
   IonRow,
   IonCol,
-  IonLoading,
 } from '@ionic/react';
 import styles from './styles.module.scss';
 import { useHistory } from 'react-router';
@@ -30,6 +29,7 @@ import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
 import { persistor } from '../../redux/store';
 import { requestReloadOfHomeData } from '../../redux/slices/homeSlice';
 import { requestReloadOfPosts } from '../../redux/slices/postsSlice';
+import LoadingSpinner from '../../components/LoadingSpinner';
 
 interface Image {
   preview: string;
@@ -108,62 +108,65 @@ export default function ProfilePage() {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        <IonGrid>
-          <IonRow className="ion-justify-content-center">
-            <IonCol size="12" sizeMd="6" sizeLg="4" sizeXl="3">
-              <IonCard>
-                <IonCardContent>
-                  <input
-                    accept="image/*"
-                    ref={inputFile}
-                    type="file"
-                    id="upload-button"
-                    style={{ display: 'none' }}
-                    onChange={handleChange}
-                  />
-                  {image.preview ? (
-                    <IonAvatar
-                      onClick={openUpload}
-                      className={styles['avatar']}
-                    >
-                      <img alt="profile" src={image.preview} />
-                    </IonAvatar>
-                  ) : (
-                    <IonAvatar
-                      onClick={openUpload}
-                      className={styles['avatar']}
-                    >
-                      <img alt="profile" src={imageURL} />
-                    </IonAvatar>
-                  )}
+        {isLoading ? (
+          <LoadingSpinner />
+        ) : (
+          <IonGrid>
+            <IonRow className="ion-justify-content-center">
+              <IonCol size="12" sizeMd="6" sizeLg="4" sizeXl="3">
+                <IonCard>
+                  <IonCardContent>
+                    <input
+                      accept="image/*"
+                      ref={inputFile}
+                      type="file"
+                      id="upload-button"
+                      style={{ display: 'none' }}
+                      onChange={handleChange}
+                    />
+                    {image.preview ? (
+                      <IonAvatar
+                        onClick={openUpload}
+                        className={styles['avatar']}
+                      >
+                        <img alt="profile" src={image.preview} />
+                      </IonAvatar>
+                    ) : (
+                      <IonAvatar
+                        onClick={openUpload}
+                        className={styles['avatar']}
+                      >
+                        <img alt="profile" src={imageURL} />
+                      </IonAvatar>
+                    )}
 
-                  <IonCardHeader>
-                    <h1 className={styles['username-text']}>{username}</h1>
-                  </IonCardHeader>
-                  <IonList lines="none">
-                    <IonItem>
-                      <IonLabel
-                        onClick={routeToFAQ}
-                        className={styles['pointer']}
-                      >
-                        <h1>FAQ</h1>
-                      </IonLabel>
-                    </IonItem>
-                    <IonItem>
-                      <IonLabel
-                        className={styles['pointer']}
-                        onClick={submitLogout}
-                      >
-                        <h1>Log out</h1>
-                      </IonLabel>
-                    </IonItem>
-                  </IonList>
-                </IonCardContent>
-              </IonCard>
-            </IonCol>
-          </IonRow>
-        </IonGrid>
-        <IonLoading isOpen={isLoading}></IonLoading>
+                    <IonCardHeader>
+                      <h1 className={styles['username-text']}>{username}</h1>
+                    </IonCardHeader>
+                    <IonList lines="none">
+                      <IonItem>
+                        <IonLabel
+                          onClick={routeToFAQ}
+                          className={styles['pointer']}
+                        >
+                          <h1>FAQ</h1>
+                        </IonLabel>
+                      </IonItem>
+                      <IonItem>
+                        <IonLabel
+                          className={styles['pointer']}
+                          onClick={submitLogout}
+                        >
+                          <h1>Log out</h1>
+                        </IonLabel>
+                      </IonItem>
+                    </IonList>
+                  </IonCardContent>
+                </IonCard>
+              </IonCol>
+            </IonRow>
+          </IonGrid>
+        )}
       </IonContent>
     </IonPage>
   );

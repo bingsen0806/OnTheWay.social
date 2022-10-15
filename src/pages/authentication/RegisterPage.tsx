@@ -2,7 +2,6 @@ import {
   IonButton,
   IonCol,
   IonContent,
-  IonLoading,
   IonPopover,
   IonRow,
 } from '@ionic/react';
@@ -10,6 +9,7 @@ import { logEvent } from 'firebase/analytics';
 import { FirebaseError } from 'firebase/app';
 import { useState } from 'react';
 import { LoginDetails, signUp } from '../../api/authentication';
+import LoadingSpinner from '../../components/LoadingSpinner';
 import TextInputField from '../../components/TextInputField/TextInputField';
 import { analytics } from '../../firebase';
 import { LOGIN } from '../../routes';
@@ -105,78 +105,83 @@ export default function RegisterPage() {
 
   return (
     <AuthenticationPageContainer pageTitle="Register">
-      <IonRow className="ion-padding-bottom ion-justify-content-center">
-        <IonCol size="10" className={styles['input-field-col']}>
-          <TextInputField
-            label="NUS Email"
-            placeholder="NUS Email"
-            value={loginDetails?.email}
-            errorMessage={errorMessages?.email}
-            onChange={(email) => {
-              setLoginDetails({ ...loginDetails, email });
-            }}
-          />
-          <p className={styles['popover-text']} id="nus-email-popover">
-            Why NUS emails only?
-          </p>
-          <IonPopover trigger="nus-email-popover" triggerAction="click">
-            <IonContent class="ion-padding">
-              BuddyNUS is currently only deployed for NUS students. To guarantee
-              authentic users, we require verified NUS emails during
-              registration.
-            </IonContent>
-          </IonPopover>
-        </IonCol>
-      </IonRow>
-      <IonRow className="ion-padding-bottom ion-justify-content-center">
-        <IonCol size="10">
-          <TextInputField
-            label="Password"
-            placeholder="Password"
-            value={loginDetails?.password}
-            errorMessage={errorMessages?.password}
-            onChange={(password) => {
-              setLoginDetails({ ...loginDetails, password });
-            }}
-            type="password"
-          />
-        </IonCol>
-      </IonRow>
-      <IonRow className="ion-padding-bottom ion-justify-content-center">
-        <IonCol size="10">
-          <TextInputField
-            label="Confirm Password"
-            placeholder="Confirm Password"
-            value={confirmationPassword}
-            errorMessage={errorMessages.confirmationPassword}
-            onChange={(confirmationPassword) => {
-              setConfirmationPassword(confirmationPassword);
-            }}
-            type="password"
-          />
-        </IonCol>
-      </IonRow>
-      <IonRow className="ion-padding-bottom ion-justify-content-center">
-        <IonCol size="10">
-          <IonButton
-            onClick={() => {
-              void submitSignUp();
-            }}
-            expand="block"
-          >
-            Sign Up
-          </IonButton>
-        </IonCol>
-      </IonRow>
-      <IonRow className="ion-justify-content-center">
-        <IonCol size="10">
-          Already have an account?{' '}
-          <a href={LOGIN}>
-            <u>Login</u>
-          </a>
-        </IonCol>
-      </IonRow>
-      <IonLoading isOpen={isLoading}></IonLoading>
+      {isLoading ? (
+        <LoadingSpinner />
+      ) : (
+        <>
+          <IonRow className="ion-padding-bottom ion-justify-content-center">
+            <IonCol size="10" className={styles['input-field-col']}>
+              <TextInputField
+                label="NUS Email"
+                placeholder="NUS Email"
+                value={loginDetails?.email}
+                errorMessage={errorMessages?.email}
+                onChange={(email) => {
+                  setLoginDetails({ ...loginDetails, email });
+                }}
+              />
+              <p className={styles['popover-text']} id="nus-email-popover">
+                Why NUS emails only?
+              </p>
+              <IonPopover trigger="nus-email-popover" triggerAction="click">
+                <IonContent class="ion-padding">
+                  BuddyNUS is currently only deployed for NUS students. To
+                  guarantee authentic users, we require verified NUS emails
+                  during registration.
+                </IonContent>
+              </IonPopover>
+            </IonCol>
+          </IonRow>
+          <IonRow className="ion-padding-bottom ion-justify-content-center">
+            <IonCol size="10">
+              <TextInputField
+                label="Password"
+                placeholder="Password"
+                value={loginDetails?.password}
+                errorMessage={errorMessages?.password}
+                onChange={(password) => {
+                  setLoginDetails({ ...loginDetails, password });
+                }}
+                type="password"
+              />
+            </IonCol>
+          </IonRow>
+          <IonRow className="ion-padding-bottom ion-justify-content-center">
+            <IonCol size="10">
+              <TextInputField
+                label="Confirm Password"
+                placeholder="Confirm Password"
+                value={confirmationPassword}
+                errorMessage={errorMessages.confirmationPassword}
+                onChange={(confirmationPassword) => {
+                  setConfirmationPassword(confirmationPassword);
+                }}
+                type="password"
+              />
+            </IonCol>
+          </IonRow>
+          <IonRow className="ion-padding-bottom ion-justify-content-center">
+            <IonCol size="10">
+              <IonButton
+                onClick={() => {
+                  void submitSignUp();
+                }}
+                expand="block"
+              >
+                Sign Up
+              </IonButton>
+            </IonCol>
+          </IonRow>
+          <IonRow className="ion-justify-content-center">
+            <IonCol size="10">
+              Already have an account?{' '}
+              <a href={LOGIN}>
+                <u>Login</u>
+              </a>
+            </IonCol>
+          </IonRow>
+        </>
+      )}
     </AuthenticationPageContainer>
   );
 }

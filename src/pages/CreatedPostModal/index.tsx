@@ -4,7 +4,6 @@ import {
   IonContent,
   IonHeader,
   IonIcon,
-  IonLoading,
   IonModal,
   IonTitle,
   IonToolbar,
@@ -31,6 +30,7 @@ import {
 } from '../../redux/slices/postsSlice';
 import OtherStudyBuddies from '../../components/OtherStudyBuddies';
 import useInfoToast from '../../util/hooks/useInfoToast';
+import ButtonSpinner from '../../components/ButtonSpinner';
 
 interface PosterViewRequestProps {
   isOpen: boolean;
@@ -157,6 +157,9 @@ export default function CreatedPostModal({
           color="danger"
           onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
             event.stopPropagation();
+            if (isLoading) {
+              return;
+            }
             void presentAlert({
               header: 'Warning!',
               message: 'You are deleting a post. This is irreversible',
@@ -176,9 +179,8 @@ export default function CreatedPostModal({
             });
           }}
         >
-          Delete Post
+          {isLoading ? <ButtonSpinner /> : 'Delete'}
         </IonButton>
-        <IonLoading isOpen={isLoading}></IonLoading>
       </IonContent>
     </IonModal>
   );

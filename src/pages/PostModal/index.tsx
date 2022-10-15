@@ -4,7 +4,6 @@ import {
   IonContent,
   IonHeader,
   IonIcon,
-  IonLoading,
   IonModal,
   IonTitle,
   IonToolbar,
@@ -28,6 +27,7 @@ import { logEvent } from 'firebase/analytics';
 import { analytics } from '../../firebase';
 import { reloadInitialData } from '../../redux/slices/homeSlice';
 import useInfoToast from '../../util/hooks/useInfoToast';
+import ButtonSpinner from '../../components/ButtonSpinner';
 
 interface ApplyModalProps {
   isOpen: boolean;
@@ -136,6 +136,9 @@ export default function PostModal({
             expand="block"
             onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
               event.stopPropagation();
+              if (isLoading) {
+                return;
+              }
               void presentAlert({
                 header: 'Confirm cancelling study application?',
                 buttons: [
@@ -154,7 +157,7 @@ export default function PostModal({
               });
             }}
           >
-            Cancel
+            {isLoading ? <ButtonSpinner /> : 'Cancel'}
           </IonButton>
         ) : (
           <IonButton
@@ -163,6 +166,9 @@ export default function PostModal({
             color="primary"
             onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
               event.stopPropagation();
+              if (isLoading) {
+                return;
+              }
               void presentAlert({
                 header: 'Confirm Applying?',
                 buttons: [
@@ -181,11 +187,10 @@ export default function PostModal({
               });
             }}
           >
-            Apply
+            {isLoading ? <ButtonSpinner /> : 'Apply'}
           </IonButton>
         )}
       </IonContent>
-      <IonLoading isOpen={isLoading}></IonLoading>
     </IonModal>
   );
 }
