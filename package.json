@@ -66,12 +66,13 @@
     "stylelint-config-standard-scss": "^5.0.0"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "FIREBASE_ENV=dev && react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --transformIgnorePatterns 'node_modules/(?!(@ionic/react|@ionic/react-router|@ionic/core|@stencil/core|ionicons)/)'",
     "eject": "react-scripts eject",
     "prepare": "husky install",
-    "deploy": "ionic build --prod && firebase deploy"
+    "deploy": "FIREBASE_ENV=dev && ionic build --prod && firebase deploy",
+    "deploy-prod": "FIREBASE_ENV=prod && ionic build --prod && firebase deploy"
   },
   "eslintConfig": {
     "extends": [

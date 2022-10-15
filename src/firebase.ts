@@ -19,8 +19,23 @@ const firebaseConfig = {
   measurementId: 'G-JRFQTGTPR5',
 };
 
+const firebaseConfigProduction = {
+  apiKey: 'AIzaSyAAgHNOrwLHP8lkU3rhPjCNcXd2cb6cHYg',
+  authDomain: 'buddynus---production.firebaseapp.com',
+  projectId: 'buddynus---production',
+  storageBucket: 'buddynus---production.appspot.com',
+  messagingSenderId: '849296495400',
+  appId: '1:849296495400:web:7f2f93976ba0e60bf0761d',
+  measurementId: 'G-YFBLTC35E4',
+};
+
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+let app;
+if (process.env.FIREBASE_ENV === 'production') {
+  app = initializeApp(firebaseConfigProduction);
+} else {
+  app = initializeApp(firebaseConfig);
+}
 export const analytics = getAnalytics(app);
 
 export const firestoreFunctions = getFunctions(app);
