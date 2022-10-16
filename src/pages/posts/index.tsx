@@ -22,7 +22,7 @@ import {
 } from '@ionic/react';
 import { funnelOutline } from 'ionicons/icons';
 import { useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { Location, locationEnumToStr } from '../../api/types';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import PostListItem from '../../components/PostListItem';
@@ -218,15 +218,19 @@ export default function PostsPage() {
       <IonPage id="main-content">
         <IonHeader>
           <IonToolbar>
-            <div className="ion-padding-start" slot="start">
+            <div className="ion-padding-start ion-padding-bottom" slot="start">
               <h1>Study Sessions</h1>
-            </div>
-            <IonMenuToggle slot="end">
-              <IonButton>
-                <span>
-                  <Link to={CREATE_POST}>Make a post</Link>
-                </span>
+              <IonButton
+                href={CREATE_POST}
+                size="small"
+                expand="block"
+                slot="start"
+              >
+                Create post
               </IonButton>
+            </div>
+
+            <IonMenuToggle slot="end">
               <IonButton fill="clear" color="dark">
                 <IonIcon icon={funnelOutline} slot="start"></IonIcon>
                 <p>Filter</p>
