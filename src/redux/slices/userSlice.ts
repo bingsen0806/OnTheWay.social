@@ -52,8 +52,8 @@ const UserSlice = createSlice({
     builder.addCase(getSelf.fulfilled, (state, action) => {
       if (action.payload.success) {
         state.user = action.payload.message as User;
+        state.selfLoadedOnce = true;
       }
-      state.selfLoadedOnce = true;
       state.isLoading = false;
     });
     builder.addCase(getSelf.pending, (state, _) => {

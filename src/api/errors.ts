@@ -14,4 +14,5 @@ export enum ErrorType {
   POST_ALREADY_APPLIED = 'User already applied for this post',
   DATE_MORE_THAN_14_FROM_NOW = 'Date is more than 14 days away from now',
   APPLIED_REQUEST_NOT_FOUND = 'Could not find post application in DB',
+  APPLICATION_TO_POST_DELETED = 'User is not participanting in post',
 }

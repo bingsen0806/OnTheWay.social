@@ -71,8 +71,8 @@
     "test": "react-scripts test --transformIgnorePatterns 'node_modules/(?!(@ionic/react|@ionic/react-router|@ionic/core|@stencil/core|ionicons)/)'",
     "eject": "react-scripts eject",
     "prepare": "husky install",
-    "deploy": "firebase use default && FIREBASE_ENV=dev && ionic build --prod && firebase deploy",
-    "deploy-prod": "firebase use production && FIREBASE_ENV=prod && ionic build --prod && firebase deploy"
+    "deploy": "firebase use default && export FIREBASE_ENV=dev && ionic build --prod && firebase deploy",
+    "deploy-prod": "firebase use production && export FIREBASE_ENV=production && ionic build --prod && firebase deploy"
   },
   "eslintConfig": {
     "extends": [

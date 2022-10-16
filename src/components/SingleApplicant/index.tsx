@@ -53,6 +53,11 @@ export default function SingleApplicant({
               presentErrorToast('User does not exist anymore.');
               //TODO: add removal of the user item from the modal
               return;
+            case ErrorType.APPLICATION_TO_POST_DELETED:
+              presentErrorToast(
+                'This user is no longer applying to this post.'
+              );
+              return;
             default:
               handleCheckedError(resp.message);
           }

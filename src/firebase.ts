@@ -31,9 +31,11 @@ const firebaseConfigProduction = {
 
 // Initialize Firebase
 let app;
-if (process.env.FIREBASE_ENV === 'production') {
+if (process.env.NODE_ENV === 'production') {
+  console.log(process.env.FIREBASE_ENV);
   app = initializeApp(firebaseConfigProduction);
 } else {
+  console.log(process.env.FIREBASE_ENV);
   app = initializeApp(firebaseConfig);
 }
 export const analytics = getAnalytics(app);

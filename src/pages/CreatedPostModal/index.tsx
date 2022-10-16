@@ -58,7 +58,6 @@ export default function CreatedPostModal({
   const handleUnknownError = useUnknownErrorHandler();
   const presentInfoToast = useInfoToast();
   useEffect(() => {
-    console.log('use effect triggered');
     setCreatedRequestState(createdRequest);
   }, [createdRequest]);
   // temp state of created request, any changes will be synced up with redux when the modal is closed
