@@ -130,12 +130,8 @@ export default function LandingPage() {
         <p>Indicate your interest now and be notified when we go live!</p>
         <IonRow className="ion-justify-content-center">
           <IonCol size="auto">
-            <IonButton
-              className={styles['interest-button']}
-              href="https://forms.gle/MAKM8xttnAm5cj9bA"
-              target="_blank"
-            >
-              I'm Interested!
+            <IonButton className={styles['interest-button']} href="/register">
+              Sign up now!
             </IonButton>
           </IonCol>
         </IonRow>
@@ -172,7 +168,8 @@ export default function LandingPage() {
               <a
                 href="https://instagram.com/buddynus.official"
                 className={styles['contact-link']}
-                target="_blank" rel="noreferrer"
+                target="_blank"
+                rel="noreferrer"
               >
                 <div className={styles['contact-link-container']}>
                   <img
