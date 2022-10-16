@@ -34,6 +34,8 @@ import { useHistory } from 'react-router';
 import styles from './styles.module.scss';
 import { add } from 'ionicons/icons';
 import LoadingSpinner from '../../components/LoadingSpinner';
+import { useAuthState } from '../../util/authentication';
+import LandingPage from './LandingPage';
 
 enum HomeTab {
   APPLIED_POST = 'Applied',
@@ -50,29 +52,34 @@ export default function Homepage() {
   const handleCheckedError = useCheckedErrorHandler();
   const handleUnknownError = useUnknownErrorHandler();
   const [tabToShow, setTabToShow] = useState<HomeTab>(HomeTab.APPLIED_POST);
+
+  const { isAuthenticated } = useAuthState();
+
   usePageInitialLoad(() => {
-    dispatch(getInitialSelf())
-      .unwrap()
-      .then((selfResp) => {
-        if (!selfResp.success) {
-          handleCheckedError(selfResp.message as string);
-          return;
-        }
-        dispatch(getInitialData())
-          .unwrap()
-          .then((resp) => {
-            if (!resp.success) {
-              handleCheckedError(selfResp.message as string);
-              return;
-            }
-          })
-          .catch((error) => {
-            handleUnknownError(error);
-          });
-      })
-      .catch((error) => {
-        handleUnknownError(error);
-      });
+    if (isAuthenticated) {
+      dispatch(getInitialSelf())
+        .unwrap()
+        .then((selfResp) => {
+          if (!selfResp.success) {
+            handleCheckedError(selfResp.message as string);
+            return;
+          }
+          dispatch(getInitialData())
+            .unwrap()
+            .then((resp) => {
+              if (!resp.success) {
+                handleCheckedError(selfResp.message as string);
+                return;
+              }
+            })
+            .catch((error) => {
+              handleUnknownError(error);
+            });
+        })
+        .catch((error) => {
+          handleUnknownError(error);
+        });
+    }
   });
 
   function refreshAppliedRequests(event: CustomEvent<RefresherEventDetail>) {
@@ -206,33 +213,38 @@ export default function Homepage() {
 
   return (
     <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <h1 className="ion-padding-start">Hi {username}!</h1>
-          <p className="ion-padding-start">
-            Here are all the posts you've applied to or created
-          </p>
-        </IonToolbar>
-
-        <IonToolbar>
-          <IonSegment
-            value={tabToShow}
-            onIonChange={(e) => {
-              setTabToShow(e.detail.value! as HomeTab);
-            }}
-          >
-            <IonSegmentButton value={HomeTab.APPLIED_POST}>
-              <IonLabel>{HomeTab.APPLIED_POST}</IonLabel>
-            </IonSegmentButton>
-            <IonSegmentButton value={HomeTab.CREATED_POST}>
-              <IonLabel>{HomeTab.CREATED_POST}</IonLabel>
-            </IonSegmentButton>
-          </IonSegment>
-        </IonToolbar>
-      </IonHeader>
-      <IonContent fullscreen>
-        {isLoading ? <LoadingSpinner /> : renderListBasedOnTab()}
-      </IonContent>
+      {isAuthenticated ? (
+        <>
+          <IonHeader>
+            <IonToolbar>
+              <h1 className="ion-padding-start">Hi {username}!</h1>
+              <p className="ion-padding-start">
+                Here are all the posts you've applied to or created
+              </p>
+            </IonToolbar>
+            <IonToolbar>
+              <IonSegment
+                value={tabToShow}
+                onIonChange={(e) => {
+                  setTabToShow(e.detail.value! as HomeTab);
+                }}
+              >
+                <IonSegmentButton value={HomeTab.APPLIED_POST}>
+                  <IonLabel>{HomeTab.APPLIED_POST}</IonLabel>
+                </IonSegmentButton>
+                <IonSegmentButton value={HomeTab.CREATED_POST}>
+                  <IonLabel>{HomeTab.CREATED_POST}</IonLabel>
+                </IonSegmentButton>
+              </IonSegment>
+            </IonToolbar>
+          </IonHeader>
+          <IonContent fullscreen>
+            {isLoading ? <LoadingSpinner /> : renderListBasedOnTab()}
+          </IonContent>
+        </>
+      ) : (
+        <LandingPage></LandingPage>
+      )}
     </IonPage>
   );
 }
