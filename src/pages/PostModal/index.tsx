@@ -63,6 +63,9 @@ export default function PostModal({
       .then((resp) => {
         if (!resp.success) {
           switch (resp.message) {
+            case ErrorType.USER_PROFILE_NOT_CREATED:
+              onClose(() => handleCheckedError(resp.message));
+              return;
             case ErrorType.POST_ALREADY_APPLIED:
               presentInfoToast('You have applied for this post.');
               setIsApplied(true);

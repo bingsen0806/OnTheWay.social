@@ -226,7 +226,7 @@ export default function PostsPage() {
                 expand="block"
                 slot="start"
               >
-                Create post
+                Create Post
               </IonButton>
             </div>
 
