@@ -4,3 +4,138 @@
     display: none;
   }
 }
+
+.iframe-container {
+  -webkit-overflow-scrolling: scroll;
+  overflow-y: scroll;
+  width: 100%;
+  height: 100%;
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.landing-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.header-container {
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url('../../../public/assets/images/pang-yuhao-_kd5cxwZOK4-unsplash.jpg');
+  background-size: cover;
+  background-position: 50% 80%;
+  min-height: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.header-grid {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.header-text {
+  font-style: normal;
+  font-weight: 600;
+  color: white;
+  text-align: center;
+}
+
+.header-subtitle {
+  font-weight: 400;
+  color: white;
+  text-align: center;
+}
+
+.main-content-container {
+  background: #fff4e7;
+  min-height: 30%;
+}
+
+.content-icon {
+  width: 48px;
+  height: 48px;
+  padding-right: 8px;
+}
+
+.content-item-header {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.content-container-header-text {
+  font-weight: 700;
+}
+
+.content-item-text {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 15px;
+}
+
+.content-item-container {
+  display: flex;
+  align-items: center;
+}
+
+.interest-container {
+  width: fit-content;
+  margin: auto;
+}
+
+.interest-button {
+  //display: block;
+  margin: 0 auto;
+  color: white;
+}
+
+.footer-container {
+  background: #000000;
+}
+
+.footer-container-header-text {
+  font-weight: 700;
+  color: white;
+}
+
+.contact-icon {
+  width: 64px;
+  height: 64px;
+  padding: 8px;
+}
+
+.contact-text {
+  color: white;
+  text-decoration: none;
+}
+
+.contact-link {
+  text-decoration: none;
+}
+
+@media only screen and (max-width: 768px) {
+  .contact-text {
+    display: none;
+  }
+  .contact-icon {
+    width: 48px;
+    height: 48px;
+    padding: 8px;
+  }
+}
+
+.contact-link-column {
+  display: flex;
+  justify-content: center;
+}
+
+.contact-link-container {
+  display: flex;
+  align-items: center;
+}
