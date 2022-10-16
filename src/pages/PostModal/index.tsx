@@ -28,6 +28,7 @@ import { analytics } from '../../firebase';
 import { reloadInitialData } from '../../redux/slices/homeSlice';
 import useInfoToast from '../../util/hooks/useInfoToast';
 import ButtonSpinner from '../../components/ButtonSpinner';
+import styles from './styles.module.scss';
 
 interface ApplyModalProps {
   isOpen: boolean;
@@ -103,7 +104,11 @@ export default function PostModal({
   }
 
   return (
-    <IonModal isOpen={isOpen} onWillDismiss={onCloseAction}>
+    <IonModal
+      isOpen={isOpen}
+      onWillDismiss={onCloseAction}
+      className={styles['modal-container']}
+    >
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">

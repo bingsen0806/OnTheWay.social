@@ -31,6 +31,7 @@ import {
 import OtherStudyBuddies from '../../components/OtherStudyBuddies';
 import useInfoToast from '../../util/hooks/useInfoToast';
 import ButtonSpinner from '../../components/ButtonSpinner';
+import styles from './styles.module.scss';
 
 interface PosterViewRequestProps {
   isOpen: boolean;
@@ -116,7 +117,11 @@ export default function CreatedPostModal({
   }
 
   return (
-    <IonModal isOpen={isOpen} onWillDismiss={closeModal}>
+    <IonModal
+      isOpen={isOpen}
+      onWillDismiss={closeModal}
+      className={styles['modal-container']}
+    >
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">

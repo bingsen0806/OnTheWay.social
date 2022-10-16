@@ -23,6 +23,7 @@ import { removeAppliedRequest } from '../../redux/slices/homeSlice';
 import useInfoToast from '../../util/hooks/useInfoToast';
 import { reloadInitialPostsData } from '../../redux/slices/postsSlice';
 import ButtonSpinner from '../../components/ButtonSpinner';
+import styles from './styles.module.scss';
 
 interface AppliedPostStatusProps {
   isOpen: boolean;
@@ -71,7 +72,11 @@ export default function AppliedPostStatusModal({
   }
 
   return (
-    <IonModal isOpen={isOpen} onWillDismiss={closeModal}>
+    <IonModal
+      isOpen={isOpen}
+      onWillDismiss={closeModal}
+      className={styles['modal-container']}
+    >
       <IonHeader>
         <IonToolbar>
           <IonTitle>
