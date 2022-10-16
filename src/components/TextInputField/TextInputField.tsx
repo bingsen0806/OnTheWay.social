@@ -12,7 +12,6 @@ interface TextInputFieldProps {
   debounce?: number;
   maxlength?: number;
   type?: 'password' | 'text';
-  showLabel?: boolean;
 }
 
 export default function TextInputField({
@@ -26,7 +25,6 @@ export default function TextInputField({
   debounce,
   maxlength,
   type,
-  showLabel,
 }: TextInputFieldProps) {
   return (
     <>

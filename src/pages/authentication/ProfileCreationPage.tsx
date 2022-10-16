@@ -9,6 +9,7 @@ import { logEvent } from 'firebase/analytics';
 import { useState } from 'react';
 import { useHistory } from 'react-router';
 import { createUserProfile } from '../../api/authentication';
+import { ErrorType } from '../../api/errors';
 import { Faculty, Gender, User } from '../../api/types';
 import DropdownSelection, {
   DropdownItem,
@@ -18,6 +19,7 @@ import TextInputField from '../../components/TextInputField/TextInputField';
 import { analytics } from '../../firebase';
 import { HOME } from '../../routes';
 import useCheckedErrorHandler from '../../util/hooks/useCheckedErrorHandler';
+import useErrorToast from '../../util/hooks/useErrorToast';
 import useInfoToast from '../../util/hooks/useInfoToast';
 import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
 import AuthenticationPageContainer from './AuthenticationPageContainer';
@@ -110,6 +112,7 @@ const yearOfStudyDropdownItems: DropdownItem<number>[] = [
 export default function ProfileCreationPage() {
   const history = useHistory();
   const presentInfoToast = useInfoToast();
+  const presentErrorToast = useErrorToast();
   const handleCheckedError = useCheckedErrorHandler();
   const handleUnknownError = useUnknownErrorHandler();
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -179,7 +182,21 @@ export default function ProfileCreationPage() {
         );
         logEvent(analytics, 'profile_create');
       } else {
-        handleCheckedError(resp.message);
+        switch (resp.message) {
+          case ErrorType.TELEGRAM_HANDLE_IN_USE:
+            presentErrorToast(
+              'Telegram handle is already registered to an account.'
+            );
+            return;
+          case ErrorType.USERNAME_IN_USE:
+            presentErrorToast('Username already registered.');
+            return;
+          case ErrorType.TELE_AND_USERNAME_IN_USE:
+            presentErrorToast('Username and Telegram handle already in use.');
+            return;
+          default:
+            handleCheckedError(resp.message);
+        }
       }
     } catch (error) {
       handleUnknownError(error);

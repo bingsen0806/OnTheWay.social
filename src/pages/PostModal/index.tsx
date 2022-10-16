@@ -29,6 +29,8 @@ import { reloadInitialData } from '../../redux/slices/homeSlice';
 import useInfoToast from '../../util/hooks/useInfoToast';
 import ButtonSpinner from '../../components/ButtonSpinner';
 import styles from './styles.module.scss';
+import { ErrorType } from '../../api/errors';
+import useErrorToast from '../../util/hooks/useErrorToast';
 
 interface ApplyModalProps {
   isOpen: boolean;
@@ -53,12 +55,28 @@ export default function PostModal({
   const [isApplied, setIsApplied] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const presentInfoToast = useInfoToast();
+  const presentErrorToast = useErrorToast();
+
   function handleApply(postId: string) {
     setIsLoading(true);
     createAppliedRequest(postId)
       .then((resp) => {
         if (!resp.success) {
-          handleCheckedError(resp.message);
+          switch (resp.message) {
+            case ErrorType.POST_ALREADY_APPLIED:
+              presentInfoToast('You have applied for this post.');
+              setIsApplied(true);
+              void dispatch(reloadInitialData());
+              return;
+            case ErrorType.POST_NOT_FOUND:
+              presentErrorToast(
+                'Unable to apply to post. It may have been deleted.'
+              );
+              onCloseAction();
+              return;
+            default:
+              handleCheckedError(resp.message);
+          }
         } else {
           logEvent(analytics, 'apply_post');
           setIsApplied(true);

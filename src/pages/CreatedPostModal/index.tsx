@@ -32,6 +32,7 @@ import OtherStudyBuddies from '../../components/OtherStudyBuddies';
 import useInfoToast from '../../util/hooks/useInfoToast';
 import ButtonSpinner from '../../components/ButtonSpinner';
 import styles from './styles.module.scss';
+import { ErrorType } from '../../api/errors';
 
 interface PosterViewRequestProps {
   isOpen: boolean;
@@ -76,7 +77,17 @@ export default function CreatedPostModal({
       .then((resp) => {
         console.log(resp);
         if (!resp.success) {
-          handleCheckedError(resp.message);
+          switch (resp.message) {
+            case ErrorType.POST_NOT_FOUND:
+              presentInfoToast('Post has been deleted.');
+              onClose(() => {
+                dispatch(removeCreatedRequest(createdRequest.post.id));
+                void dispatch(reloadInitialPostsData());
+              });
+              return;
+            default:
+              handleCheckedError(resp.message);
+          }
         } else {
           setIsLoading(false);
           logEvent(analytics, 'delete_post');

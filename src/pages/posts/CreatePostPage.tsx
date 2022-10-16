@@ -276,7 +276,6 @@ export default function CreatePostPage() {
             <IonCol>
               <TextInputField
                 multiline
-                showLabel
                 label="Description"
                 placeholder={
                   'More details you would like others to know - like where you are or what you are studying!'

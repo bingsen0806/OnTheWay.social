@@ -77,7 +77,16 @@ export default function ProfilePage() {
   };
 
   usePageInitialLoad(() => {
-    void dispatch(getInitialSelf());
+    dispatch(getInitialSelf())
+      .unwrap()
+      .then((resp) => {
+        if (!resp.success) {
+          handleCheckedError(resp.message as string);
+        }
+      })
+      .catch((error) => {
+        handleUnknownError(error);
+      });
   });
 
   function submitLogout() {

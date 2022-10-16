@@ -24,6 +24,8 @@ import useInfoToast from '../../util/hooks/useInfoToast';
 import { reloadInitialPostsData } from '../../redux/slices/postsSlice';
 import ButtonSpinner from '../../components/ButtonSpinner';
 import styles from './styles.module.scss';
+import { ErrorType } from '../../api/errors';
+import useErrorToast from '../../util/hooks/useErrorToast';
 
 interface AppliedPostStatusProps {
   isOpen: boolean;
@@ -43,12 +45,29 @@ export default function AppliedPostStatusModal({
   const [isCancelled, setIsCancelled] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const presentInfoToast = useInfoToast();
+  const presentErrorToast = useErrorToast();
+
   function handleCancel() {
     setIsLoading(true);
     deleteAppliedRequest(appliedRequest.post.id)
       .then((resp) => {
         if (!resp.success) {
-          handleCheckedError(resp.message);
+          switch (resp.message) {
+            case ErrorType.POST_NOT_FOUND:
+              presentInfoToast('The post has already been deleted');
+              setIsCancelled(true);
+              void dispatch(reloadInitialPostsData());
+              closeModal();
+              return;
+            case ErrorType.APPLIED_REQUEST_NOT_FOUND:
+              presentInfoToast('You have already cancelled this application.');
+              setIsCancelled(true);
+              void dispatch(reloadInitialPostsData());
+              closeModal();
+              return;
+            default:
+              handleCheckedError(resp.message);
+          }
         } else {
           setIsCancelled(true);
           presentInfoToast('Successfully cancelled!');

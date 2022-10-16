@@ -20,6 +20,8 @@ import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
 import styles from './styles.module.scss';
 import useInfoToast from '../../util/hooks/useInfoToast';
 import ButtonSpinner from '../ButtonSpinner';
+import { ErrorType } from '../../api/errors';
+import useErrorToast from '../../util/hooks/useErrorToast';
 interface SingleApplicantProps {
   postId: string;
   applicant: User;
@@ -35,6 +37,8 @@ export default function SingleApplicant({
   const handleUnknownError = useUnknownErrorHandler();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const presentInfoToast = useInfoToast();
+  const presentErrorToast = useErrorToast();
+
   function handleAccept(postId: string, applicantUserId: string) {
     setIsLoading(true);
     responseAppliedRequest(
@@ -44,7 +48,14 @@ export default function SingleApplicant({
     )
       .then((resp) => {
         if (!resp.success) {
-          handleCheckedError(resp.message);
+          switch (resp.message) {
+            case ErrorType.USER_NOT_FOUND:
+              presentErrorToast('User does not exist anymore.');
+              //TODO: add removal of the user item from the modal
+              return;
+            default:
+              handleCheckedError(resp.message);
+          }
         } else {
           presentInfoToast('Successfully accepted!');
           addParticipantToCreatedRequest(applicant);
