@@ -20,13 +20,13 @@ const firebaseConfig = {
 };
 
 const firebaseConfigProduction = {
-  apiKey: 'AIzaSyAAgHNOrwLHP8lkU3rhPjCNcXd2cb6cHYg',
-  authDomain: 'buddynus---production.firebaseapp.com',
-  projectId: 'buddynus---production',
-  storageBucket: 'buddynus---production.appspot.com',
-  messagingSenderId: '849296495400',
-  appId: '1:849296495400:web:7f2f93976ba0e60bf0761d',
-  measurementId: 'G-YFBLTC35E4',
+  apiKey: 'AIzaSyDG5mnDMLiwKlP1c8aqJG-aSjRmxQ4j5LU',
+  authDomain: 'buddynus-production.firebaseapp.com',
+  projectId: 'buddynus-production',
+  storageBucket: 'buddynus-production.appspot.com',
+  messagingSenderId: '41559472129',
+  appId: '1:41559472129:web:1912a28e1eea15493ee800',
+  measurementId: 'G-KCCJ371DZ3',
 };
 
 // Initialize Firebase

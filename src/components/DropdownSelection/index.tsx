@@ -1,6 +1,11 @@
-import { IonLabel, IonSelect, IonSelectOption, isPlatform } from '@ionic/react';
+import {
+  IonItem,
+  IonLabel,
+  IonSelect,
+  IonSelectOption,
+  isPlatform,
+} from '@ionic/react';
 import { useState } from 'react';
-import styles from './styles.module.scss';
 
 export interface DropdownItem<T> {
   label: string;
@@ -28,7 +33,7 @@ function getSelectInterfaceType() {
 }
 
 const popoverDropdownOptions = {
-  alignment: 'end',
+  alignment: 'start',
 };
 
 export default function DropdownSelection<T>({
@@ -43,7 +48,7 @@ export default function DropdownSelection<T>({
 
   return (
     <>
-      <div className={styles['input-container']}>
+      <IonItem lines="full">
         <IonSelect
           interface={getSelectInterfaceType()}
           interfaceOptions={popoverDropdownOptions}
@@ -61,10 +66,10 @@ export default function DropdownSelection<T>({
             </IonSelectOption>
           ))}
         </IonSelect>
-      </div>
+      </IonItem>
       {shouldShowError && !isSelected && (
-        <IonLabel className={styles['error-text']} color="danger">
-          Please select an option.
+        <IonLabel color="danger" className="ion-padding-start">
+          Please select an option
         </IonLabel>
       )}
     </>

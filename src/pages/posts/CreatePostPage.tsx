@@ -30,7 +30,8 @@ import { POSTS } from '../../routes';
 import useCheckedErrorHandler from '../../util/hooks/useCheckedErrorHandler';
 import useInfoToast from '../../util/hooks/useInfoToast';
 import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
-import styles from './styles.module.scss';
+
+const MAX_DESCRIPTION_LENGTH = 200;
 
 const locationDropdownItems: DropdownItem<Location>[] = [
   {
@@ -275,24 +276,18 @@ export default function CreatePostPage() {
             <IonCol>
               <TextInputField
                 multiline
+                showLabel
                 label="Description"
-                placeholder="More details you would like others to know - like where you are or what you are studying!"
+                placeholder={
+                  'More details you would like others to know - like where you are or what you are studying!'
+                }
                 value={post.description}
                 errorMessage={errorMessages.description}
                 onChange={(description) => {
                   setPost({ ...post, description });
                 }}
+                maxlength={MAX_DESCRIPTION_LENGTH}
               />
-              <span
-                className={
-                  post.description !== undefined &&
-                  post.description.length > 200
-                    ? styles['error-text']
-                    : styles['normal-text']
-                }
-              >
-                {post.description.length} / 200
-              </span>
             </IonCol>
           </IonRow>
           <IonRow className="ion-justify-content-center">

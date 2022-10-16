@@ -52,7 +52,7 @@ export default function RegisterPage() {
       confirmationPassword: '',
     };
     if (!loginDetails.email) {
-      newErrorMessages.email = 'Please enter you NUS email.';
+      newErrorMessages.email = 'Please enter your NUS email.';
       haveError = true;
     } else if (!isValidNUSEmail(loginDetails.email)) {
       newErrorMessages.email = 'Email must be a NUS email.';
@@ -109,7 +109,7 @@ export default function RegisterPage() {
         <LoadingSpinner />
       ) : (
         <>
-          <IonRow className="ion-padding-bottom ion-justify-content-center">
+          <IonRow className="ion-justify-content-center">
             <IonCol size="10" className={styles['input-field-col']}>
               <TextInputField
                 label="NUS Email"
@@ -132,7 +132,7 @@ export default function RegisterPage() {
               </IonPopover>
             </IonCol>
           </IonRow>
-          <IonRow className="ion-padding-bottom ion-justify-content-center">
+          <IonRow className="ion-justify-content-center">
             <IonCol size="10">
               <TextInputField
                 label="Password"

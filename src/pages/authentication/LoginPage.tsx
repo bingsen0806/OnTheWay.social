@@ -99,7 +99,7 @@ export default function LoginPage() {
         <LoadingSpinner />
       ) : (
         <>
-          <IonRow className="ion-padding-bottom ion-justify-content-center">
+          <IonRow className="ion-justify-content-center">
             <IonCol size="10" className={styles['input-field-col']}>
               <TextInputField
                 label="Email"
@@ -126,7 +126,7 @@ export default function LoginPage() {
               />
             </IonCol>
           </IonRow>
-          <IonRow className="ion-padding-bottom ion-justify-content-center">
+          <IonRow className="ion-justify-content-center">
             <IonCol size="10">
               <IonButton
                 onClick={() => {

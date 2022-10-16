@@ -1,10 +1,11 @@
-.input-container {
-  border: 1px solid #000000;
-  border-radius: 16px;
-  width: 100%;
-  padding: 0px 8px 8px 8px;
-}
-
 .input-floating-label {
   font-size: 12px;
+}
+
+.error-message {
+  --color: --ion-color-danger;
+}
+
+.multiline-container {
+  width: 100%;
 }

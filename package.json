@@ -72,7 +72,7 @@
     "eject": "react-scripts eject",
     "prepare": "husky install",
     "deploy": "firebase use default && FIREBASE_ENV=dev && ionic build --prod && firebase deploy",
-    "deploy-prod": "firebase use prod && FIREBASE_ENV=prod && ionic build --prod && firebase deploy"
+    "deploy-prod": "firebase use production && FIREBASE_ENV=prod && ionic build --prod && firebase deploy"
   },
   "eslintConfig": {
     "extends": [

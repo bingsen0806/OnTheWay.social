@@ -2,6 +2,7 @@ import {
   DatetimeCustomEvent,
   IonDatetime,
   IonDatetimeButton,
+  IonItem,
   IonLabel,
   IonModal,
 } from '@ionic/react';
@@ -34,31 +35,34 @@ export default function DateTimePicker({
   const max = type === 'date' ? fourteen : `${todayDate}T22:00:00.000Z`;
 
   return (
-    <div className={styles['input-container']}>
-      <IonLabel className={styles['date-picker-label']}>{label}</IonLabel>
-      <div>
+    <>
+      <IonItem lines="full">
+        <IonLabel>
+          <h2>{label}</h2>
+        </IonLabel>
         <IonDatetimeButton
+          slot="end"
           className="ion-justify-content-start"
           datetime={`datetime-${label}`}
         ></IonDatetimeButton>
-      </div>
-      <IonModal keepContentsMounted={true}>
-        <IonDatetime
-          max={max}
-          min={min}
-          value={value}
-          minuteValues="0,15,30,45"
-          className={styles['date-picker']}
-          id={`datetime-${label}`}
-          presentation={type}
-          onIonChange={handleChange}
-        ></IonDatetime>
-      </IonModal>
+        <IonModal keepContentsMounted={true}>
+          <IonDatetime
+            max={max}
+            min={min}
+            value={value}
+            minuteValues="0,15,30,45"
+            className={styles['date-picker']}
+            id={`datetime-${label}`}
+            presentation={type}
+            onIonChange={handleChange}
+          ></IonDatetime>
+        </IonModal>
+      </IonItem>
       {errorMessage && (
-        <IonLabel color="danger" className={styles['date-picker-label']}>
+        <IonLabel color="danger" className="ion-padding-start">
           {errorMessage}
         </IonLabel>
       )}
-    </div>
+    </>
   );
 }

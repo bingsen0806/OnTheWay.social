@@ -1,4 +1,4 @@
-import { IonInput, IonLabel, IonTextarea } from '@ionic/react';
+import { IonInput, IonItem, IonLabel, IonTextarea } from '@ionic/react';
 import styles from './styles.module.scss';
 
 interface TextInputFieldProps {
@@ -12,6 +12,7 @@ interface TextInputFieldProps {
   debounce?: number;
   maxlength?: number;
   type?: 'password' | 'text';
+  showLabel?: boolean;
 }
 
 export default function TextInputField({
@@ -25,44 +26,51 @@ export default function TextInputField({
   debounce,
   maxlength,
   type,
+  showLabel,
 }: TextInputFieldProps) {
   return (
-    <div className={styles['input-container']}>
-      {label && (
-        <IonLabel
-          style={{ visibility: value ? 'visible' : 'hidden' }}
-          className={styles['input-floating-label']}
-        >
-          {label}
-        </IonLabel>
-      )}
-      {!multiline ? (
-        <IonInput
-          className="ion-no-padding"
-          value={value}
-          placeholder={placeholder}
-          debounce={debounce ? debounce : 0}
-          onIonChange={onChange ? (e) => onChange(e.detail.value!) : undefined}
-          maxlength={maxlength ? maxlength : undefined}
-          type={type}
-        />
-      ) : (
-        <IonTextarea
-          placeholder={placeholder}
-          debounce={debounce ? debounce : 0}
-          className="ion-no-padding"
-          value={value}
-          onIonChange={onChange ? (e) => onChange(e.detail.value!) : undefined}
-          rows={rows}
-          style={{ height: String(rows + 4) + 'rem' }}
-          autoGrow={true}
-        />
-      )}
+    <>
+      <IonItem lines="full">
+        {!multiline ? (
+          <>
+            <IonLabel position="floating">{label}</IonLabel>
+            <IonInput
+              value={value}
+              placeholder={placeholder}
+              debounce={debounce ? debounce : 0}
+              onIonChange={
+                onChange ? (e) => onChange(e.detail.value!) : undefined
+              }
+              maxlength={maxlength}
+              type={type}
+            />
+          </>
+        ) : (
+          <div className={styles['multiline-container']}>
+            <IonLabel>{label}</IonLabel>
+            <IonTextarea
+              className="ion-no-padding"
+              placeholder={placeholder}
+              debounce={debounce ? debounce : 0}
+              value={value}
+              onIonChange={
+                onChange ? (e) => onChange(e.detail.value!) : undefined
+              }
+              rows={rows}
+              maxlength={maxlength}
+              autoGrow
+            />
+            <p className="ion-no-margin ion-padding-bottom">
+              {value?.length ? value.length : 0} / {maxlength}
+            </p>
+          </div>
+        )}
+      </IonItem>
       {errorMessage && (
-        <IonLabel className={styles['input-floating-label']} color="danger">
+        <IonLabel color="danger" className="ion-padding-start">
           {errorMessage}
         </IonLabel>
       )}
-    </div>
+    </>
   );
 }
