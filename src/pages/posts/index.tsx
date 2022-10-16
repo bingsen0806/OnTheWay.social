@@ -220,14 +220,13 @@ export default function PostsPage() {
           <IonToolbar>
             <div className="ion-padding-start" slot="start">
               <h1>Study Sessions</h1>
-              <p>
-                Can't find a post that suits your schedule?{' '}
-                <span className={styles['create-post-link-text']}>
-                  <Link to={CREATE_POST}>Make a post</Link>
-                </span>
-              </p>
             </div>
             <IonMenuToggle slot="end">
+              <IonButton>
+                <span>
+                  <Link to={CREATE_POST}>Make a post</Link>
+                </span>
+              </IonButton>
               <IonButton fill="clear" color="dark">
                 <IonIcon icon={funnelOutline} slot="start"></IonIcon>
                 <p>Filter</p>
