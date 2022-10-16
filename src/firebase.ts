@@ -31,13 +31,15 @@ const firebaseConfigProduction = {
 
 // Initialize Firebase
 let app;
+export let bucket: string;
 if (process.env.NODE_ENV === 'production') {
-  console.log(process.env.FIREBASE_ENV);
   app = initializeApp(firebaseConfigProduction);
+  bucket = 'gs://' + firebaseConfigProduction.storageBucket;
 } else {
-  console.log(process.env.FIREBASE_ENV);
   app = initializeApp(firebaseConfig);
+  bucket = 'gs://' + firebaseConfig.storageBucket;
 }
+
 export const analytics = getAnalytics(app);
 
 export const firestoreFunctions = getFunctions(app, 'asia-southeast2');

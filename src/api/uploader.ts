@@ -1,13 +1,14 @@
-import { getApp } from "firebase/app";
+import { getApp } from 'firebase/app';
 import {
   getDownloadURL,
   getStorage,
   ref,
   StorageReference,
   uploadBytes,
-} from "firebase/storage";
-import Compressor from "compressorjs";
-const bucketName = "gs://cs3216-final-group-9.appspot.com";
+} from 'firebase/storage';
+import Compressor from 'compressorjs';
+import { bucket } from '../firebase';
+const bucketName = bucket;
 
 // Get a non-default Storage bucket
 const firebaseApp = getApp();
@@ -63,7 +64,7 @@ export function uploadImage(
   userId: string,
   callback: (urls: string[]) => Promise<void>
 ) {
-  const fileExt = image.name.split(".").pop();
+  const fileExt = image.name.split('.').pop();
   if (!fileExt) {
     return;
   }
