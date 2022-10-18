@@ -35,7 +35,7 @@ export let bucket: string;
 if (process.env.FIREBASE_ENV === 'production') {
   app = initializeApp(firebaseConfigProduction);
   bucket = 'gs://' + firebaseConfigProduction.storageBucket;
-} else if (process.env.FIREBASE_END === 'development') {
+} else if (process.env.FIREBASE_ENV === 'development') {
   app = initializeApp(firebaseConfig);
   bucket = 'gs://' + firebaseConfig.storageBucket;
 } else {
