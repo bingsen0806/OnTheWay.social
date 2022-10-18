@@ -43,7 +43,7 @@ export default function PostListItem({ post }: PostListItemProps) {
         <br />
         <p className={styles['post-text']}>{post.poster.name}</p>
         <p className={styles['post-text']}>
-          Y{post.poster.year}/{` ${facultyEnumToStr(post.poster.faculty)}`}
+          Y{post.poster.year},{` ${facultyEnumToStr(post.poster.faculty)}`}
         </p>
       </div>
       <PostModal isOpen={isModalOpen} onClose={closeModal} applyPost={post} />
