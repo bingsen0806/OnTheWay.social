@@ -14,11 +14,21 @@
 }
 
 .post-container {
-  padding: 8px;
+  margin-left: 10px;
+}
+
+.margin {
+  margin-top: 0px;
+  margin-bottom: 10px;
+}
+
+.post-text-location {
+  font-size: 1.3em;
 }
 
 p.post-text {
-  margin: 4px 0px;
+  margin: 0px 0px;
+  padding: 0px 0px;
 }
 
 .created-request-col {

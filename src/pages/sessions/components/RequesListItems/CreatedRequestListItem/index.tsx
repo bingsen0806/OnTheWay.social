@@ -27,30 +27,27 @@ export default function CreatedRequestListItem({
       {createdRequest.applicants.length > 0 && (
         <div className={styles['alert-line']} />
       )}
-      <IonGrid>
+      {createdRequest.post.participants.length > 0 && (
+        <div className={styles['success-line']} />
+      )}
+      <IonGrid className={styles['post-container']}>
         <IonRow className="ion-justify-content-between">
           <IonCol>
-            <p className={styles['post-text']}>
-              {locationEnumToStr(createdRequest.post.location)}
-            </p>
-            <p className={styles['post-text']}>
+            <h3 className="ion-no-margin">
               {convertDateToDateStr(createdRequest.post.startDateTime)}
-              {', '}
+            </h3>
+            <h3 className="ion-no-margin">
               {convertDateRangeToTimeRangeStr(
                 createdRequest.post.startDateTime,
                 createdRequest.post.endDateTime
               )}
-            </p>
-            <p className={styles['post-text']}>
-              {`${createdRequest.post.participants.length.toString()} ${
-                createdRequest.post.participants.length <= 1
-                  ? 'attendee'
-                  : 'attendees'
-              }`}
+            </h3>
+            <p className={styles['post-text-location']}>
+              {locationEnumToStr(createdRequest.post.location)}
             </p>
             <br />
             <p className={styles['post-text']}>
-              Description: {createdRequest.post.description}
+              {createdRequest.post.description}
             </p>
             <br />
           </IonCol>

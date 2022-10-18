@@ -29,22 +29,18 @@ export default function PostListItem({ post }: PostListItemProps) {
       }}
     >
       <div className={styles['post-container']}>
-        <p className={styles['post-text']}>
+        <h3 className="ion-no-margin">
+          {convertDateToDateStr(post.startDateTime)}
+        </h3>
+        <h3 className="ion-no-margin">
+          {convertDateRangeToTimeRangeStr(post.startDateTime, post.endDateTime)}
+        </h3>
+        <p className={styles['post-text-location']}>
           {locationEnumToStr(post.location)}
         </p>
-        <p className={styles['post-text']}>
-          {convertDateToDateStr(post.startDateTime)}
-          {', '}
-          {convertDateRangeToTimeRangeStr(post.startDateTime, post.endDateTime)}
-        </p>
-        <p className={styles['post-text']}>
-          {`${post.participants.length.toString()} ${
-            post.participants.length <= 1 ? 'attendee' : 'attendees'
-          }`}
-        </p>
-        <br></br>
+        <br />
         <p className={styles['post-text']}>{post.description}</p>
-        <br></br>
+        <br />
         <p className={styles['post-text']}>{post.poster.name}</p>
         <p className={styles['post-text']}>
           Y{post.poster.year}/{` ${facultyEnumToStr(post.poster.faculty)}`}

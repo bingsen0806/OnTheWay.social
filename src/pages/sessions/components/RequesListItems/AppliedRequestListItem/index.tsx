@@ -42,29 +42,23 @@ export default function AppliedRequestListItem({
         <div className={styles['alert-line']} />
       )}
       <div className={styles['post-container']}>
-        <p className={styles['post-text']}>
-          {locationEnumToStr(appliedRequest.post.location)}
-        </p>
-        <p className={styles['post-text']}>
+        <h3 className="ion-no-margin">
           {convertDateToDateStr(appliedRequest.post.startDateTime)}
-          {', '}
+        </h3>
+        <h3 className="ion-no-margin">
           {convertDateRangeToTimeRangeStr(
             appliedRequest.post.startDateTime,
             appliedRequest.post.endDateTime
           )}
-        </p>
-        <p className={styles['post-text']}>
-          {`${appliedRequest.post.participants.length.toString()} ${
-            appliedRequest.post.participants.length <= 1
-              ? 'attendee'
-              : 'attendees'
-          }`}
+        </h3>
+        <p className={styles['post-text-location']}>
+          {locationEnumToStr(appliedRequest.post.location)}
         </p>
         <br />
         <p className={styles['post-text']}>{appliedRequest.post.description}</p>
         <br />
         <p className={styles['post-text']}>{appliedRequest.post.poster.name}</p>
-        <p className={styles['post-text']}>
+        <p className={styles['margin']}>
           Y{appliedRequest.post.poster.year},
           {facultyEnumToStr(appliedRequest.post.poster.faculty)}
         </p>
