@@ -226,7 +226,7 @@ export default function PostsPage() {
                 expand="block"
                 slot="start"
               >
-                Create Post
+                Create Study Session
               </IonButton>
             </div>
 
@@ -260,7 +260,7 @@ export default function PostsPage() {
                       }}
                       expand="block"
                     >
-                      Post a study session
+                      Create a study session
                     </IonButton>
                   </div>
                 </NoData>

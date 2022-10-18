@@ -30,6 +30,7 @@ import { persistor } from '../../redux/store';
 import { requestReloadOfHomeData } from '../../redux/slices/homeSlice';
 import { requestReloadOfPosts } from '../../redux/slices/postsSlice';
 import LoadingSpinner from '../../components/LoadingSpinner';
+import useInfoToast from '../../util/hooks/useInfoToast';
 
 interface Image {
   preview: string;
@@ -49,7 +50,7 @@ export default function ProfilePage() {
     raw: [],
   };
   const [image, setImage] = useState(dummyImage);
-
+  const presentInfoToast = useInfoToast();
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
@@ -58,7 +59,7 @@ export default function ProfilePage() {
         raw: [file],
       });
       const successCallback = () => {
-        console.log('success 61 ');
+        presentInfoToast('Successfully changed profile photo!');
         getUser();
       };
       const failedCallback = (error: string) => handleCheckedError(error);

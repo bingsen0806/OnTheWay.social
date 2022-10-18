@@ -1,5 +1,4 @@
 import {
-  IonBackButton,
   IonButton,
   IonButtons,
   IonCol,
@@ -13,6 +12,7 @@ import {
 import { logEvent } from 'firebase/analytics';
 import moment from 'moment';
 import { useState } from 'react';
+import { useHistory } from 'react-router';
 import { createPost } from '../../api/posts';
 import { locationEnumToStr, Post } from '../../api/types';
 import { Location } from '../../api/types';
@@ -25,8 +25,7 @@ import TextInputField from '../../components/TextInputField/TextInputField';
 import { analytics } from '../../firebase';
 import { useAppDispatch } from '../../redux/hooks';
 import { reloadInitialData } from '../../redux/slices/homeSlice';
-import { reloadInitialPostsData } from '../../redux/slices/postsSlice';
-import { POSTS } from '../../routes';
+import { SESSIONS } from '../../routes';
 import useCheckedErrorHandler from '../../util/hooks/useCheckedErrorHandler';
 import useInfoToast from '../../util/hooks/useInfoToast';
 import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
@@ -103,6 +102,7 @@ export default function CreatePostPage() {
     startTime: new Date().toISOString(),
     endTime: new Date().toISOString(),
   });
+  const history = useHistory();
 
   const [errorMessages, setErrorMessages] = useState<InputErrorMessages>({
     date: '',
@@ -186,8 +186,9 @@ export default function CreatePostPage() {
           setPost({ description: '' } as Post);
           setIsLoading(false);
           presentInfoToast('Successfully created new post!');
-          void dispatch(reloadInitialData());
-          void dispatch(reloadInitialPostsData());
+          void dispatch(reloadInitialData()).then(() => {
+            history.replace(SESSIONS);
+          });
           logEvent(analytics, 'create_post');
         }
       })
@@ -201,20 +202,20 @@ export default function CreatePostPage() {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonButtons slot="start">
-            <IonBackButton defaultHref={POSTS}></IonBackButton>
-          </IonButtons>
-          <h1 className="ion-padding-start ion-no-margin">Make a Post</h1>
+          <IonButtons slot="start"></IonButtons>
+          <h1 className="ion-padding-start ion-no-margin">
+            Create a study session
+          </h1>
         </IonToolbar>
         <IonToolbar>
           <div className="ion-padding-start">
             <p>
-              Fill in the details of your post. You will be notified when others
-              apply to your post.
+              Fill in the details of your study session. You will be notified
+              via email when others apply for your session.
             </p>
             <p>
-              Your telegram handle will only be shared with users whom you
-              accept applications to your post.
+              Your telegram handle will only be shared with applicants after you
+              accept them.
             </p>
           </div>
         </IonToolbar>

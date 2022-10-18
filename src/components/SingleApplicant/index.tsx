@@ -55,7 +55,7 @@ export default function SingleApplicant({
               return;
             case ErrorType.APPLICATION_TO_POST_DELETED:
               presentErrorToast(
-                'This user is no longer applying to this post.'
+                'This user is no longer applying to this study session.'
               );
               return;
             default:

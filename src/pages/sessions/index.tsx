@@ -11,9 +11,7 @@ import {
   IonSegmentButton,
   IonToolbar,
   RefresherEventDetail,
-  IonFabButton,
-  IonFab,
-  IonIcon,
+  IonTitle,
 } from '@ionic/react';
 import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -29,20 +27,17 @@ import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
 import NoData from '../NoData';
 import AppliedRequestListItem from './components/RequesListItems/AppliedRequestListItem';
 import CreatedRequestListItem from './components/RequesListItems/CreatedRequestListItem';
-import { CREATE_POST, POSTS } from '../../routes';
+import { CREATE_POST, HOME } from '../../routes';
 import { useHistory } from 'react-router';
-import styles from './styles.module.scss';
-import { add } from 'ionicons/icons';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import { useAuthState } from '../../util/authentication';
-import LandingPage from './LandingPage';
 
 enum HomeTab {
   APPLIED_POST = 'Applied',
   CREATED_POST = 'Created',
 }
 
-export default function Homepage() {
+export default function Sessions() {
   const history = useHistory();
   const dispatch = useAppDispatch();
   const username = useAppSelector((state) => state.user.user.name);
@@ -51,7 +46,7 @@ export default function Homepage() {
   const isLoading = useAppSelector((state) => state.home.isLoading);
   const handleCheckedError = useCheckedErrorHandler();
   const handleUnknownError = useUnknownErrorHandler();
-  const [tabToShow, setTabToShow] = useState<HomeTab>(HomeTab.APPLIED_POST);
+  const [tabToShow, setTabToShow] = useState<HomeTab>(HomeTab.CREATED_POST);
 
   const { isAuthenticated } = useAuthState();
 
@@ -115,18 +110,6 @@ export default function Homepage() {
   }
 
   function renderListBasedOnTab() {
-    const fab = (
-      <IonFab vertical="bottom" horizontal="end" className={styles['fab']}>
-        <IonFabButton
-          color="primary"
-          onClick={() => {
-            history.replace(CREATE_POST);
-          }}
-        >
-          <IonIcon icon={add} />
-        </IonFabButton>
-      </IonFab>
-    );
     if (tabToShow === HomeTab.CREATED_POST) {
       if (createdPosts.length === 0) {
         return (
@@ -143,11 +126,10 @@ export default function Homepage() {
                   }}
                   expand="block"
                 >
-                  Post a study session
+                  Create a study session
                 </IonButton>
               </div>
             </NoData>
-            {fab}
           </>
         );
       }
@@ -165,7 +147,6 @@ export default function Homepage() {
               ></CreatedRequestListItem>
             ))}
           </IonList>
-          {fab}
         </>
       );
     } else {
@@ -180,7 +161,7 @@ export default function Homepage() {
                 <p>You have not applied for any study posts</p>
                 <IonButton
                   onClick={() => {
-                    history.replace(POSTS);
+                    history.replace(HOME);
                   }}
                   expand="block"
                 >
@@ -188,7 +169,6 @@ export default function Homepage() {
                 </IonButton>
               </div>
             </NoData>
-            {fab}
           </>
         );
       }
@@ -205,7 +185,6 @@ export default function Homepage() {
               />
             ))}
           </IonList>
-          {fab}
         </>
       );
     }
@@ -213,38 +192,29 @@ export default function Homepage() {
 
   return (
     <IonPage>
-      {isAuthenticated ? (
-        <>
-          <IonHeader>
-            <IonToolbar>
-              <h1 className="ion-padding-start">Hi {username}!</h1>
-              <p className="ion-padding-start">
-                Here are all the posts you've applied to or created
-              </p>
-            </IonToolbar>
-            <IonToolbar>
-              <IonSegment
-                value={tabToShow}
-                onIonChange={(e) => {
-                  setTabToShow(e.detail.value! as HomeTab);
-                }}
-              >
-                <IonSegmentButton value={HomeTab.APPLIED_POST}>
-                  <IonLabel>{HomeTab.APPLIED_POST}</IonLabel>
-                </IonSegmentButton>
-                <IonSegmentButton value={HomeTab.CREATED_POST}>
-                  <IonLabel>{HomeTab.CREATED_POST}</IonLabel>
-                </IonSegmentButton>
-              </IonSegment>
-            </IonToolbar>
-          </IonHeader>
-          <IonContent fullscreen>
-            {isLoading ? <LoadingSpinner /> : renderListBasedOnTab()}
-          </IonContent>
-        </>
-      ) : (
-        <LandingPage></LandingPage>
-      )}
+      <IonHeader>
+        <IonToolbar>
+          <IonTitle>
+            <h1 className="ion-padding-start">Your sessions</h1>
+          </IonTitle>
+          <IonSegment
+            value={tabToShow}
+            onIonChange={(e) => {
+              setTabToShow(e.detail.value! as HomeTab);
+            }}
+          >
+            <IonSegmentButton value={HomeTab.CREATED_POST}>
+              <IonLabel>{HomeTab.CREATED_POST}</IonLabel>
+            </IonSegmentButton>
+            <IonSegmentButton value={HomeTab.APPLIED_POST}>
+              <IonLabel>{HomeTab.APPLIED_POST}</IonLabel>
+            </IonSegmentButton>
+          </IonSegment>
+        </IonToolbar>
+      </IonHeader>
+      <IonContent fullscreen>
+        {isLoading ? <LoadingSpinner /> : renderListBasedOnTab()}
+      </IonContent>
     </IonPage>
   );
 }
