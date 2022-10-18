@@ -32,7 +32,8 @@ import {
   getNewPageOfPostsWithFilter,
   getNextPageOfPosts,
 } from '../../redux/slices/postsSlice';
-import { CREATE_POST } from '../../routes';
+import { CREATE_POST, LOGIN } from '../../routes';
+import { useAuthState } from '../../util/authentication';
 import useCheckedErrorHandler from '../../util/hooks/useCheckedErrorHandler';
 import usePageInitialLoad from '../../util/hooks/usePageInitialLoad';
 import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
@@ -46,6 +47,14 @@ export default function PostsPage() {
   const dispatch = useAppDispatch();
   const handleCheckedError = useCheckedErrorHandler();
   const handleUnknownError = useUnknownErrorHandler();
+  const { isAuthenticated } = useAuthState();
+
+  const routeToLogin = () => {
+    if (!isAuthenticated) {
+      history.replace(LOGIN);
+    }
+  };
+
   const [filterLocations, setFilterLocations] = useState<{
     [key in Location]: boolean;
   }>({
@@ -229,7 +238,11 @@ export default function PostsPage() {
                 Create Study Session
               </IonButton>
             </div>
-
+            {!isAuthenticated && (
+              <IonButton slot="end" onClick={routeToLogin}>
+                Login
+              </IonButton>
+            )}
             <IonMenuToggle slot="end">
               <IonButton fill="clear" color="dark">
                 <IonIcon icon={funnelOutline} slot="start"></IonIcon>
@@ -250,6 +263,14 @@ export default function PostsPage() {
               <IonRefresher slot="fixed" onIonRefresh={refreshContents}>
                 <IonRefresherContent></IonRefresherContent>
               </IonRefresher>
+              <IonButton
+                fill="clear"
+                color="dark"
+                className={styles['display-mobile']}
+              >
+                <IonIcon icon={funnelOutline} slot="start"></IonIcon>
+                <p>Filter</p>
+              </IonButton>
               {listOfPosts.length === 0 ? (
                 <NoData>
                   <div>
