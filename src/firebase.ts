@@ -32,12 +32,14 @@ const firebaseConfigProduction = {
 // Initialize Firebase
 let app;
 export let bucket: string;
-if (process.env.NODE_ENV === 'production') {
+if (process.env.FIREBASE_ENV === 'production') {
   app = initializeApp(firebaseConfigProduction);
   bucket = 'gs://' + firebaseConfigProduction.storageBucket;
-} else {
+} else if (process.env.FIREBASE_END === 'development') {
   app = initializeApp(firebaseConfig);
   bucket = 'gs://' + firebaseConfig.storageBucket;
+} else {
+  throw Error('Invalid FIREBASE_ENV');
 }
 
 export const analytics = getAnalytics(app);
