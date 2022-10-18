@@ -32,10 +32,10 @@ const firebaseConfigProduction = {
 // Initialize Firebase
 let app;
 export let bucket: string;
-if (process.env.FIREBASE_ENV === 'production') {
+if (process.env.REACT_APP_FIREBASE_ENV === 'production') {
   app = initializeApp(firebaseConfigProduction);
   bucket = 'gs://' + firebaseConfigProduction.storageBucket;
-} else if (process.env.FIREBASE_ENV === 'development') {
+} else if (process.env.REACT_APP_FIREBASE_ENV === 'development') {
   app = initializeApp(firebaseConfig);
   bucket = 'gs://' + firebaseConfig.storageBucket;
 } else {
