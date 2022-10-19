@@ -243,7 +243,7 @@ export default function PostsPage() {
                 Login
               </IonButton>
             )}
-            <IonMenuToggle slot="end">
+            <IonMenuToggle slot="end" className={styles['desktop']}>
               <IonButton fill="clear" color="dark">
                 <IonIcon icon={funnelOutline} slot="start"></IonIcon>
                 <p>Filter</p>
@@ -263,14 +263,12 @@ export default function PostsPage() {
               <IonRefresher slot="fixed" onIonRefresh={refreshContents}>
                 <IonRefresherContent></IonRefresherContent>
               </IonRefresher>
-              <IonButton
-                fill="clear"
-                color="dark"
-                className={styles['display-mobile']}
-              >
-                <IonIcon icon={funnelOutline} slot="start"></IonIcon>
-                <p>Filter</p>
-              </IonButton>
+              <IonMenuToggle className={styles['mobile']}>
+                <IonButton fill="clear" color="dark">
+                  <IonIcon icon={funnelOutline} slot="start"></IonIcon>
+                  <p>Filter</p>
+                </IonButton>
+              </IonMenuToggle>
               {listOfPosts.length === 0 ? (
                 <NoData>
                   <div>
