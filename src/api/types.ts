@@ -139,6 +139,7 @@ export interface Notification {
   id: string;
   type: NotificationType;
   hasBeenViewed: boolean;
+  title?: string;
   data?: AppliedRequest | CreatedRequest | string;
 }
 
