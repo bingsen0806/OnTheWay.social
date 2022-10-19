@@ -64,8 +64,10 @@ export default function PostModal({
 
   function handleApply(postId: string) {
     if (!isAuthenticated) {
-      onCloseAction();
-      history.push(LOGIN);
+      onClose(() => {
+        presentInfoToast('Please login to apply for this post.');
+        history.replace(LOGIN);
+      });
       return;
     }
     setIsLoading(true);
