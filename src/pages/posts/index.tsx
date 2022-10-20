@@ -229,21 +229,27 @@ export default function PostsPage() {
           <IonToolbar>
             <div className="ion-padding-start ion-padding-bottom" slot="start">
               <h1>Study Sessions</h1>
-              <IonButton
-                href={CREATE_POST}
-                size="small"
-                expand="block"
-                slot="start"
-              >
-                Create Study Session
-              </IonButton>
+              {isAuthenticated ? (
+                <IonButton
+                  href={CREATE_POST}
+                  size="small"
+                  expand="block"
+                  slot="start"
+                >
+                  Create Study Session
+                </IonButton>
+              ) : (
+                <IonButton
+                  href={LOGIN}
+                  size="small"
+                  expand="block"
+                  slot="start"
+                >
+                  Login
+                </IonButton>
+              )}
             </div>
-            {!isAuthenticated && (
-              <IonButton slot="end" onClick={routeToLogin}>
-                Login
-              </IonButton>
-            )}
-            <IonMenuToggle slot="end" className={styles['desktop']}>
+            <IonMenuToggle slot="end">
               <IonButton fill="clear" color="dark">
                 <IonIcon icon={funnelOutline} slot="start"></IonIcon>
                 <p>Filter</p>
@@ -263,12 +269,6 @@ export default function PostsPage() {
               <IonRefresher slot="fixed" onIonRefresh={refreshContents}>
                 <IonRefresherContent></IonRefresherContent>
               </IonRefresher>
-              <IonMenuToggle className={styles['mobile']}>
-                <IonButton fill="clear" color="dark">
-                  <IonIcon icon={funnelOutline} slot="start"></IonIcon>
-                  <p>Filter</p>
-                </IonButton>
-              </IonMenuToggle>
               {listOfPosts.length === 0 ? (
                 <NoData>
                   <div>

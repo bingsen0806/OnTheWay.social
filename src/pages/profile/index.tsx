@@ -2,7 +2,6 @@ import {
   IonContent,
   IonHeader,
   IonPage,
-  IonTitle,
   IonToolbar,
   IonItem,
   IonLabel,
@@ -114,7 +113,7 @@ export default function ProfilePage() {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>User Profile</IonTitle>
+          <h1 className="ion-padding-start">User Profile</h1>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>

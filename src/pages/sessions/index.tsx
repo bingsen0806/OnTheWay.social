@@ -11,7 +11,6 @@ import {
   IonSegmentButton,
   IonToolbar,
   RefresherEventDetail,
-  IonTitle,
 } from '@ionic/react';
 import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -194,9 +193,9 @@ export default function Sessions() {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>
-            <h1 className="ion-padding-start">Your sessions</h1>
-          </IonTitle>
+          <h1 className="ion-padding-start">Your sessions</h1>
+        </IonToolbar>
+        <IonToolbar>
           <IonSegment
             value={tabToShow}
             onIonChange={(e) => {
