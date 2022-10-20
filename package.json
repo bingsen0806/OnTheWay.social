@@ -75,7 +75,7 @@
     "windows-deploy-dev": "firebase use default && set \"REACT_APP_FIREBASE_ENV=development\" && ionic build --prod && firebase deploy",
     "windows-deploy-prod": "firebase use default && set \"REACT_APP_FIREBASE_ENV=production\" && ionic build --prod && firebase deploy",
     "deploy-dev": "firebase use default && REACT_APP_FIREBASE_ENV=development ionic build --prod && firebase deploy",
-    "deploy-prod": "firebase use production REACT_APP_FIREBASE_ENV=production ionic build --prod && firebase deploy"
+    "deploy-prod": "firebase use production && REACT_APP_FIREBASE_ENV=production ionic build --prod && firebase deploy"
   },
   "eslintConfig": {
     "extends": [
