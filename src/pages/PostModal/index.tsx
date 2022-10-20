@@ -31,6 +31,9 @@ import ButtonSpinner from '../../components/ButtonSpinner';
 import styles from './styles.module.scss';
 import { ErrorType } from '../../api/errors';
 import useErrorToast from '../../util/hooks/useErrorToast';
+import { useAuthState } from '../../util/authentication';
+import { LOGIN } from '../../routes';
+import { useHistory } from 'react-router';
 
 interface ApplyModalProps {
   isOpen: boolean;
@@ -56,8 +59,17 @@ export default function PostModal({
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const presentInfoToast = useInfoToast();
   const presentErrorToast = useErrorToast();
+  const { isAuthenticated } = useAuthState();
+  const history = useHistory();
 
   function handleApply(postId: string) {
+    if (!isAuthenticated) {
+      onClose(() => {
+        presentInfoToast('Please login to apply for this post.');
+        history.replace(LOGIN);
+      });
+      return;
+    }
     setIsLoading(true);
     createAppliedRequest(postId)
       .then((resp) => {

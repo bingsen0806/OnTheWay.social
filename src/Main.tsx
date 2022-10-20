@@ -77,18 +77,21 @@ export default function Main() {
               path={REGISTER}
               component={RegisterPage}
             />
-
+            <Route exact path={FAQ} component={Faq} />
+            <Route exact path="/">
+              <Redirect to={HOME} />
+            </Route>
+            <Route exact path={HOME} component={Posts} />
             <AuthenticatedRoute
               exact
               path={EMAIL_VERIFICATION}
               component={EmailVerificationPage}
             />
-            <Route
+            <AuthenticatedRoute
               exact
               path={PROFILE_CREATION}
               component={ProfileCreationPage}
             />
-            <Route exact path={HOME} component={Posts} />
             <AuthenticatedRoute
               exact
               path={CREATE_POST}
