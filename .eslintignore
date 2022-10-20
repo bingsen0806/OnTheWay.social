@@ -4,3 +4,4 @@
 service-worker.ts
 serviceWorkerRegistration.ts 
 reportWebVitals.ts
+firebase-messaging-sw.ts

@@ -58,3 +58,8 @@ export function getNotifications(): Promise<
 export function markNotificationAsViewed(id: string) {
   return Promise.resolve({ success: true, message: '' });
 }
+
+export function sendNotificationRegistrationToken(token: string) {
+  console.log(token);
+  return Promise.resolve({ success: true, message: '' });
+}

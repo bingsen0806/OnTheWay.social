@@ -58,14 +58,17 @@ import Sessions from './pages/sessions';
 import NotificationsPage from './pages/Notifications';
 import { useAppSelector } from './redux/hooks';
 import { getNumberOfUnviewedNotifications } from './constants';
+import useNotificationForegroundHandler from './util/hooks/useNotificationForegroundHandler';
 setupIonicReact();
 
 export default function Main() {
   const { isAuthenticated } = useAuthState();
+  useNotificationForegroundHandler();
   const haveNotifications = useAppSelector(
     (state) =>
       getNumberOfUnviewedNotifications(state.notifications.notifications) > 0
   );
+
   return (
     <IonApp>
       <IonReactRouter>
