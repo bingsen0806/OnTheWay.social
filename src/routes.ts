@@ -14,3 +14,4 @@ export const PROFILE = '/profile';
 export const FAQ = '/profile/faq';
 
 export const SESSIONS = '/sessions';
+export const NOTIFICATIONS = '/notifications';

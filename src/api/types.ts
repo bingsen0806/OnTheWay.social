@@ -127,7 +127,7 @@ export interface Post {
   description: string;
 }
 
-enum NotificationType {
+export enum BuddyNotificationType {
   APPLIED_TO_YOUR_POST,
   CANCELLED_THEIR_APPLICATION,
   ACCEPTED_YOUR_APPLICATION,
@@ -135,10 +135,11 @@ enum NotificationType {
   GENERIC_MESSAGE,
 }
 
-export interface Notification {
+export interface BuddyNotification {
   id: string;
-  type: NotificationType;
+  type: BuddyNotificationType;
   hasBeenViewed: boolean;
+  otherUser?: User;
   title?: string;
   data?: AppliedRequest | CreatedRequest | string;
 }

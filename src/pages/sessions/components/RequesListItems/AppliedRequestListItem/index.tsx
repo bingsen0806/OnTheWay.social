@@ -10,7 +10,7 @@ import {
   convertDateToDateStr,
   convertDateRangeToTimeRangeStr,
 } from '../../../../../util/dateUtils';
-import AppliedPostStatusModal from '../../../../AppliedPostStatusModal';
+import AppliedPostModal from '../../../../AppliedPostModal';
 import styles from '../styles.module.scss';
 
 interface AppliedRequestListItemProps {
@@ -64,7 +64,7 @@ export default function AppliedRequestListItem({
         </p>
       </div>
 
-      <AppliedPostStatusModal
+      <AppliedPostModal
         isOpen={isModalOpen}
         onClose={closeModal}
         appliedRequest={appliedRequest}

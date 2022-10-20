@@ -25,19 +25,18 @@ import { reloadInitialPostsData } from '../../redux/slices/postsSlice';
 import ButtonSpinner from '../../components/ButtonSpinner';
 import styles from './styles.module.scss';
 import { ErrorType } from '../../api/errors';
-import useErrorToast from '../../util/hooks/useErrorToast';
 
-interface AppliedPostStatusProps {
+interface AppliedPostModalProps {
   isOpen: boolean;
   onClose: (callback: () => void) => void;
   appliedRequest: AppliedRequest;
 }
 
-export default function AppliedPostStatusModal({
+export default function AppliedPostModal({
   isOpen,
   onClose,
   appliedRequest,
-}: AppliedPostStatusProps) {
+}: AppliedPostModalProps) {
   const [presentAlert] = useIonAlert();
   const handleCheckedError = useCheckedErrorHandler();
   const handleUnknownError = useUnknownErrorHandler();
@@ -45,7 +44,6 @@ export default function AppliedPostStatusModal({
   const [isCancelled, setIsCancelled] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const presentInfoToast = useInfoToast();
-  const presentErrorToast = useErrorToast();
 
   function handleCancel() {
     setIsLoading(true);

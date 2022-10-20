@@ -40,7 +40,6 @@ enum HomeTab {
 export default function Sessions() {
   const history = useHistory();
   const dispatch = useAppDispatch();
-  const username = useAppSelector((state) => state.user.user.name);
   const appliedPosts = useAppSelector((state) => state.home.appliedRequests);
   const createdPosts = useAppSelector((state) => state.home.createdRequests);
   const isLoading = useAppSelector((state) => state.home.isLoading);

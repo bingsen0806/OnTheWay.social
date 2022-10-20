@@ -40,6 +40,7 @@ import {
   FAQ,
   HOME,
   LOGIN,
+  NOTIFICATIONS,
   PROFILE,
   PROFILE_CREATION,
   REGISTER,
@@ -54,10 +55,17 @@ import EmailVerificationPage from './pages/authentication/EmailVerificationPage'
 import ProfileCreationPage from './pages/authentication/ProfileCreationPage';
 import CreatePostPage from './pages/posts/CreatePostPage';
 import Sessions from './pages/sessions';
+import NotificationsPage from './pages/Notifications';
+import { useAppSelector } from './redux/hooks';
+import { getNumberOfUnviewedNotifications } from './constants';
 setupIonicReact();
 
 export default function Main() {
   const { isAuthenticated } = useAuthState();
+  const haveNotifications = useAppSelector(
+    (state) =>
+      getNumberOfUnviewedNotifications(state.notifications.notifications) > 0
+  );
   return (
     <IonApp>
       <IonReactRouter>
@@ -88,6 +96,11 @@ export default function Main() {
             />
             <AuthenticatedRoute exact path={PROFILE} component={Profile} />
             <AuthenticatedRoute exact path={SESSIONS} component={Sessions} />
+            <AuthenticatedRoute
+              exact
+              path={NOTIFICATIONS}
+              component={NotificationsPage}
+            />
             <Route exact path={FAQ} component={Faq} />
             <Route exact path="/">
               <Redirect to={HOME} />
@@ -98,15 +111,31 @@ export default function Main() {
               <IonIcon icon={home} />
               <IonLabel className={styles['tab-button-text']}>Home</IonLabel>
             </IonTabButton>
+            {isAuthenticated && (
+              <IonTabButton tab="sessions" href={SESSIONS}>
+                <IonIcon icon={book} />
+                <IonLabel className={styles['tab-button-text']}>
+                  Sessions
+                </IonLabel>
+              </IonTabButton>
+            )}
+
             <IonTabButton tab="createPost" href={CREATE_POST}>
               <IonIcon icon={addCircleSharp} />
               <IonLabel className={styles['tab-button-text']}>Create</IonLabel>
             </IonTabButton>
             {isAuthenticated && (
-              <IonTabButton tab="sessions" href={SESSIONS}>
-                <IonIcon icon={book} />
+              <IonTabButton tab="notifications" href={NOTIFICATIONS}>
+                {haveNotifications ? (
+                  <IonIcon
+                    src="assets/icons/notification-tab-unviewed.svg"
+                    size="large"
+                  />
+                ) : (
+                  <IonIcon src="assets/icons/notification-tab-viewed.svg"></IonIcon>
+                )}
                 <IonLabel className={styles['tab-button-text']}>
-                  Your sessions
+                  Notifications
                 </IonLabel>
               </IonTabButton>
             )}
