@@ -61,7 +61,7 @@ export const loadNotifications = createAsyncThunk<
 });
 
 export const markNotification = createAsyncThunk<
-  ApiResponseBody<boolean>,
+  ApiResponseBody<string>,
   string
 >('notifications/markNotification', async (notificationId, _) => {
   const responseData = await markNotificationAsViewed(notificationId);

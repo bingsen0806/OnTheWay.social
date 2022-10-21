@@ -1,65 +1,30 @@
-import {
-  ApiResponseBody,
-  AppliedRequestStatus,
-  BuddyNotification,
-  BuddyNotificationType,
-  Faculty,
-  Gender,
-  Location,
-} from './types';
+import { httpsCallable } from 'firebase/functions';
+import { firestoreFunctions } from '../firebase';
+import { ApiRequestBody, ApiResponseBody, BuddyNotification } from './types';
 
-export function getNotifications(): Promise<
-  ApiResponseBody<BuddyNotification[]>
-> {
-  return Promise.resolve({
-    success: true,
-    message: [
-      {
-        id: '0',
-        type: BuddyNotificationType.ACCEPTED_YOUR_APPLICATION,
-        hasBeenViewed: false,
-        otherUser: {
-          id: '1',
-          name: 'james',
-          gender: Gender.MALE,
-          telegramHandle: 'james',
-          faculty: Faculty.ARTS_AND_SOCIAL_SCIENCES,
-          year: 2020,
-          profilePhoto: '',
-          thumbnailPhoto: '',
-        },
-        data: {
-          post: {
-            id: '0',
-            poster: {
-              id: '0',
-              name: 'murph',
-              gender: Gender.MALE,
-              telegramHandle: 'murph00',
-              faculty: Faculty.ARTS_AND_SOCIAL_SCIENCES,
-              year: 2020,
-              profilePhoto: '',
-              thumbnailPhoto: '',
-            },
-            startDateTime: new Date().toISOString(),
-            endDateTime: new Date().toISOString(),
-            personCapacity: 4,
-            participants: [],
-            location: Location.BIZ,
-            description: 'yo',
-          },
-          status: AppliedRequestStatus.ACCEPTED,
-        },
-      },
-    ],
-  });
+export async function getNotifications() {
+  const callApi = httpsCallable<
+    ApiRequestBody,
+    ApiResponseBody<BuddyNotification[]>
+  >(firestoreFunctions, 'getNotifications');
+  const result = await callApi({});
+  return result.data;
 }
 
-export function markNotificationAsViewed(id: string) {
-  return Promise.resolve({ success: true, message: '' });
+export async function markNotificationAsViewed(id: string) {
+  const callApi = httpsCallable<ApiRequestBody, ApiResponseBody<string>>(
+    firestoreFunctions,
+    'markNotification'
+  );
+  const result = await callApi({ id });
+  return result.data;
 }
 
-export function sendNotificationRegistrationToken(token: string) {
-  console.log(token);
-  return Promise.resolve({ success: true, message: '' });
+export async function sendNotificationRegistrationToken(token: string) {
+  const callApi = httpsCallable<ApiRequestBody, ApiResponseBody<string>>(
+    firestoreFunctions,
+    'sendNotificationToken'
+  );
+  const result = await callApi({ token });
+  return result.data;
 }

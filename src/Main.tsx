@@ -56,13 +56,21 @@ import ProfileCreationPage from './pages/authentication/ProfileCreationPage';
 import CreatePostPage from './pages/posts/CreatePostPage';
 import Sessions from './pages/sessions';
 import NotificationsPage from './pages/Notifications';
-import { useAppSelector } from './redux/hooks';
+import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { getNumberOfUnviewedNotifications } from './constants';
 import useNotificationForegroundHandler from './util/hooks/useNotificationForegroundHandler';
+import { useLayoutEffect } from 'react';
+import { loadNotifications } from './redux/slices/notificationsSlice';
 setupIonicReact();
 
 export default function Main() {
   const { isAuthenticated } = useAuthState();
+  const dispatch = useAppDispatch();
+
+  useLayoutEffect(() => {
+    void dispatch(loadNotifications());
+  }, [isAuthenticated]);
+
   useNotificationForegroundHandler();
   const haveNotifications = useAppSelector(
     (state) =>
