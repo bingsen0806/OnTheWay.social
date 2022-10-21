@@ -28,14 +28,14 @@ const firebaseConfigProduction = {
   appId: '1:41559472129:web:1912a28e1eea15493ee800',
   measurementId: 'G-KCCJ371DZ3',
 };
-
+console.log(process.env.REACT_APP_FIREBASE_ENV);
 // Initialize Firebase
 let app;
 export let bucket: string;
 if (process.env.REACT_APP_FIREBASE_ENV === 'production') {
   app = initializeApp(firebaseConfigProduction);
   bucket = 'gs://' + firebaseConfigProduction.storageBucket;
-} else if (process.env.REACT_APP_FIREBASE_ENV === 'development') {
+} else if (!process.env.REACT_APP_FIREBASE_ENV) {
   app = initializeApp(firebaseConfig);
   bucket = 'gs://' + firebaseConfig.storageBucket;
 } else {

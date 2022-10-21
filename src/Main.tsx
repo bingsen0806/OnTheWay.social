@@ -35,6 +35,7 @@ import './theme/variables.scss';
 import styles from './styles.module.scss';
 
 import {
+  CAMPAIGN,
   CREATE_POST,
   EMAIL_VERIFICATION,
   FAQ,
@@ -54,6 +55,7 @@ import EmailVerificationPage from './pages/authentication/EmailVerificationPage'
 import ProfileCreationPage from './pages/authentication/ProfileCreationPage';
 import CreatePostPage from './pages/posts/CreatePostPage';
 import Sessions from './pages/sessions';
+import Campaigns from './pages/campaigns';
 setupIonicReact();
 
 export default function Main() {
@@ -74,6 +76,7 @@ export default function Main() {
               <Redirect to={HOME} />
             </Route>
             <Route exact path={HOME} component={Posts} />
+            <AuthenticatedRoute exact path={CAMPAIGN} component={Campaigns} />
             <AuthenticatedRoute
               exact
               path={EMAIL_VERIFICATION}

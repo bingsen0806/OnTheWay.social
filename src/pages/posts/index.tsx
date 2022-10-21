@@ -49,12 +49,6 @@ export default function PostsPage() {
   const handleUnknownError = useUnknownErrorHandler();
   const { isAuthenticated } = useAuthState();
 
-  const routeToLogin = () => {
-    if (!isAuthenticated) {
-      history.replace(LOGIN);
-    }
-  };
-
   const [filterLocations, setFilterLocations] = useState<{
     [key in Location]: boolean;
   }>({

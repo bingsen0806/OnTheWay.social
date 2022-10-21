@@ -1,16 +1,15 @@
-import { httpsCallable } from "firebase/functions";
-import { firestoreFunctions } from "../firebase";
-import { User, ApiRequestBody, ApiResponseBody } from "./types";
-import { uploadImage } from "./uploader";
+import { httpsCallable } from 'firebase/functions';
+import { firestoreFunctions } from '../firebase';
+import { User, ApiRequestBody, ApiResponseBody } from './types';
+import { uploadImage } from './uploader';
 
 /**
  * Get user object
- * TODO: add firebase func call.
  */
 export async function getUser(userId: string) {
   const callApi = httpsCallable<ApiRequestBody, ApiResponseBody<User>>(
     firestoreFunctions,
-    "getUser"
+    'getUser'
   );
   const result = await callApi({ userId });
   return result.data;
@@ -19,7 +18,7 @@ export async function getUser(userId: string) {
 export async function getSelfUser() {
   const callApi = httpsCallable<ApiRequestBody, ApiResponseBody<User>>(
     firestoreFunctions,
-    "getCurrentUser"
+    'getCurrentUser'
   );
   const result = await callApi({});
   return result.data;
@@ -49,7 +48,7 @@ export function uploadImageAndStoreToDb(
     };
     const callApi = httpsCallable<ApiRequestBody, ApiResponseBody<string>>(
       firestoreFunctions,
-      "updateUser"
+      'updateUser'
     );
     const res = await callApi({ user: updatedUser });
     if (res.data.success) {

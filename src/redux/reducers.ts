@@ -4,12 +4,14 @@ import home from './slices/homeSlice';
 import posts from './slices/postsSlice';
 import faq from './slices/faqSlice';
 import user from './slices/userSlice';
+import campaigns from './slices/campaignSlice';
 
 const appReducer = combineReducers({
   home,
   posts,
   faq,
   user,
+  campaigns,
 });
 
 export const rootReducer: typeof appReducer = (state, action) => {

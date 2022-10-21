@@ -11,11 +11,11 @@ export enum Gender {
 export function genderEnumToStr(gender: Gender) {
   switch (gender) {
     case Gender.MALE:
-      return "Male";
+      return 'Male';
     case Gender.FEMALE:
-      return "female";
+      return 'female';
     case Gender.PREFER_NOT_TO_SAY:
-      return "Prefer not to say";
+      return 'Prefer not to say';
   }
 }
 
@@ -34,23 +34,23 @@ export enum Faculty {
 export function facultyEnumToStr(faculty: Faculty) {
   switch (faculty) {
     case Faculty.ARTS_AND_SOCIAL_SCIENCES:
-      return "Arts & Social Sciences";
+      return 'Arts & Social Sciences';
     case Faculty.BUSINESS:
-      return "Business";
+      return 'Business';
     case Faculty.COMPUTING:
-      return "Computing";
+      return 'Computing';
     case Faculty.DENTISTRY:
-      return "Dentistry";
+      return 'Dentistry';
     case Faculty.DESIGN_AND_ENGINEERING:
-      return "Design & Engineering";
+      return 'Design & Engineering';
     case Faculty.LAW:
-      return "Law";
+      return 'Law';
     case Faculty.MEDICINE:
-      return "Medicine";
+      return 'Medicine';
     case Faculty.MUSIC:
-      return "Music";
+      return 'Music';
     case Faculty.SCIENCE:
-      return "Science";
+      return 'Science';
   }
 }
 
@@ -69,23 +69,23 @@ export enum Location {
 export function locationEnumToStr(location: Location) {
   switch (location) {
     case Location.CLB:
-      return "Central Library";
+      return 'Central Library';
     case Location.UTOWN:
-      return "UTown";
+      return 'UTown';
     case Location.SCIENCE:
-      return "Science";
+      return 'Science';
     case Location.FASS:
-      return "FASS";
+      return 'FASS';
     case Location.ENGINEERING:
-      return "Engineering";
+      return 'Engineering';
     case Location.BIZ:
-      return "Biz";
+      return 'Biz';
     case Location.SDE:
-      return "SDE";
+      return 'SDE';
     case Location.SOC:
-      return "SOC";
+      return 'SOC';
     case Location.LAW:
-      return "Law";
+      return 'Law';
   }
 }
 
@@ -96,6 +96,18 @@ export enum AppliedRequestStatus {
   ACCEPTED,
   PENDING,
   REJECTED,
+}
+
+export interface Campaign {
+  id: string;
+  userId: string;
+  chances: number;
+  title: string;
+  description: string;
+  startDateTime: string;
+  endDateTime: string;
+  image: string;
+  tncs: string;
 }
 
 /**

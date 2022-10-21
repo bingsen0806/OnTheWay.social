@@ -16,7 +16,7 @@ import {
 } from '@ionic/react';
 import styles from './styles.module.scss';
 import { useHistory } from 'react-router';
-import { FAQ } from '../../routes';
+import { CAMPAIGN, FAQ } from '../../routes';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { getInitialSelf, reloadSelf } from '../../redux/slices/userSlice';
 import { logout } from '../../api/authentication';
@@ -28,8 +28,10 @@ import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
 import { persistor } from '../../redux/store';
 import { requestReloadOfHomeData } from '../../redux/slices/homeSlice';
 import { requestReloadOfPosts } from '../../redux/slices/postsSlice';
+import { resetCampaigns } from '../../redux/slices/campaignSlice';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import useInfoToast from '../../util/hooks/useInfoToast';
+import { getUserCampaignsThunk } from '../../redux/slices/campaignSlice';
 
 interface Image {
   preview: string;
@@ -77,6 +79,7 @@ export default function ProfilePage() {
   };
 
   usePageInitialLoad(() => {
+    void dispatch(getUserCampaignsThunk());
     dispatch(getInitialSelf())
       .unwrap()
       .then((resp) => {
@@ -96,11 +99,16 @@ export default function ProfilePage() {
         dispatch({ type: 'USER_LOGOUT' });
         dispatch(requestReloadOfHomeData());
         dispatch(requestReloadOfPosts());
+        dispatch(resetCampaigns());
       })
       .catch((error) => {
         handleUnknownError(error);
       });
   }
+
+  const routeToCampaign = () => {
+    history.push(CAMPAIGN);
+  };
 
   const routeToFAQ = () => {
     history.push(FAQ);
@@ -153,6 +161,14 @@ export default function ProfilePage() {
                       <h1 className={styles['username-text']}>{username}</h1>
                     </IonCardHeader>
                     <IonList lines="none">
+                      <IonItem>
+                        <IonLabel
+                          onClick={routeToCampaign}
+                          className={styles['pointer']}
+                        >
+                          <h1>Campaigns</h1>
+                        </IonLabel>
+                      </IonItem>
                       <IonItem>
                         <IonLabel
                           onClick={routeToFAQ}
