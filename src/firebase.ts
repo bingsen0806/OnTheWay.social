@@ -4,6 +4,7 @@ import { getFunctions } from 'firebase/functions';
 import { getAnalytics } from 'firebase/analytics';
 import { getMessaging, getToken, Messaging } from 'firebase/messaging';
 import { sendNotificationRegistrationToken } from './api/notifications';
+import { isPlatform } from '@ionic/react';
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -35,17 +36,22 @@ const firebaseConfigProduction = {
 // Initialize Firebase
 let app;
 export let messaging: Messaging;
-let messagingVapidKey: string;
+export let messagingVapidKey: string;
 export let bucket: string;
 if (process.env.REACT_APP_FIREBASE_ENV === 'production') {
   app = initializeApp(firebaseConfigProduction);
-  messaging = getMessaging(app);
+  // important to prevent black screen of death on ios, since they dont support Web push notifications
+  if (!isPlatform('ios')) {
+    messaging = getMessaging(app);
+  }
   messagingVapidKey =
     'BL9A9yG8MSn5FsPOhj4O8KC7LRVEqGcV5K2DGRBvW1m0Cn8RVYxBqROKAiG_7fXT7ulSpS3l8zh5_0_m_4blt-4';
   bucket = 'gs://' + firebaseConfigProduction.storageBucket;
 } else if (process.env.REACT_APP_FIREBASE_ENV === 'development') {
   app = initializeApp(firebaseConfig);
-  messaging = getMessaging(app);
+  if (!isPlatform('ios')) {
+    messaging = getMessaging(app);
+  }
   messagingVapidKey =
     'BJb3VUgYNO6eUCONrgGztXLAVb2J6zG1Cnq9wPrWlhOESB9uCDMiHLYgGVD0JM2qBPP8v5XlVGkkdXKwqBunNgE';
   bucket = 'gs://' + firebaseConfig.storageBucket;

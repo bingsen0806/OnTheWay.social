@@ -1,4 +1,4 @@
-import { useIonToast } from '@ionic/react';
+import { isPlatform, useIonToast } from '@ionic/react';
 import { NotificationPayload, onMessage } from 'firebase/messaging';
 import { notificationsOutline } from 'ionicons/icons';
 import { messaging } from '../../firebase';
@@ -20,10 +20,12 @@ export default function useNotificationForegroundHandler() {
       icon: notificationsOutline,
     });
   };
-  onMessage(messaging, (payload) => {
-    //TODO: remove console.log
-    console.log(payload);
-    void dispatch(loadNotifications(false));
-    presentToast(payload.notification!);
-  });
+  if (!isPlatform('ios')) {
+    onMessage(messaging, (payload) => {
+      //TODO: remove console.log
+      console.log(payload);
+      void dispatch(loadNotifications(false));
+      presentToast(payload.notification!);
+    });
+  }
 }

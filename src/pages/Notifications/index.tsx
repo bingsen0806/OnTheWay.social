@@ -10,6 +10,7 @@ import {
   IonRefresher,
   IonRefresherContent,
   IonToolbar,
+  isPlatform,
 } from '@ionic/react';
 import { arrowBackOutline } from 'ionicons/icons';
 import { useLayoutEffect, useState } from 'react';
@@ -30,9 +31,13 @@ export default function NotificationsPage() {
   const isLoading = useAppSelector((state) => state.notifications.isLoading);
   const dispatch = useAppDispatch();
   const [hasGivenNotificationPermission, setHasGivenNotificationPermission] =
-    useState<boolean>(Notification.permission === 'granted');
+    useState<boolean>(
+      !isPlatform('ios') && Notification.permission === 'granted'
+    );
   const [isNotificationPermissionDenied, setIsNotificationPermissionDenied] =
-    useState<boolean>(Notification.permission === 'denied');
+    useState<boolean>(
+      !isPlatform('ios') && Notification.permission === 'denied'
+    );
   const [
     isNotificationPermissionModalOpen,
     setIsNotificationPermissionModalOpen,
@@ -42,9 +47,11 @@ export default function NotificationsPage() {
   const presentErrorToast = useErrorToast();
 
   useLayoutEffect(() => {
-    setHasGivenNotificationPermission(Notification.permission === 'granted');
-    setIsNotificationPermissionDenied(Notification.permission === 'denied');
-  }, [Notification.permission]);
+    if (!isPlatform('ios')) {
+      setHasGivenNotificationPermission(Notification.permission === 'granted');
+      setIsNotificationPermissionDenied(Notification.permission === 'denied');
+    }
+  }, []);
 
   const refreshPage = () => {
     dispatch(loadNotifications(false))
@@ -97,24 +104,28 @@ export default function NotificationsPage() {
         <IonToolbar>
           <div className="ion-padding-start">
             <p>Notifications are sent to your email.</p>
-            {hasGivenNotificationPermission ? (
-              <p>
-                You will also receive notifications directly to your mobile or
-                desktop when your browser/BuddyNUS app is open in the
-                background!
-              </p>
-            ) : (
-              <p>
-                Want to receive notifications directly to your phone or
-                computer?{' '}
-                <a
-                  className={styles['open-notification-permission-modal-link']}
-                  onClick={openNotificationPermissionsModal}
-                >
-                  Click Here
-                </a>
-              </p>
-            )}
+            {!isPlatform('ios') ? (
+              hasGivenNotificationPermission ? (
+                <p>
+                  You will also receive notifications directly to your mobile or
+                  desktop when your browser/BuddyNUS app is open in the
+                  background!
+                </p>
+              ) : (
+                <p>
+                  Want to receive notifications directly to your phone or
+                  computer?{' '}
+                  <a
+                    className={
+                      styles['open-notification-permission-modal-link']
+                    }
+                    onClick={openNotificationPermissionsModal}
+                  >
+                    Click Here
+                  </a>
+                </p>
+              )
+            ) : null}
           </div>
         </IonToolbar>
       </IonHeader>

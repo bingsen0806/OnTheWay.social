@@ -7,6 +7,7 @@ import {
   IonTabBar,
   IonTabButton,
   IonTabs,
+  isPlatform,
   setupIonicReact,
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
@@ -61,6 +62,7 @@ import { getNumberOfUnviewedNotifications } from './constants';
 import useNotificationForegroundHandler from './util/hooks/useNotificationForegroundHandler';
 import { useLayoutEffect } from 'react';
 import { loadNotifications } from './redux/slices/notificationsSlice';
+import { generateAndSendNotificationRegistrationToken } from './firebase';
 setupIonicReact();
 
 export default function Main() {
@@ -71,6 +73,10 @@ export default function Main() {
    * Set up a check on notifications at regular intervals of 10s.
    */
   useLayoutEffect(() => {
+    if (!isPlatform('ios')) {
+      generateAndSendNotificationRegistrationToken();
+    }
+
     void dispatch(loadNotifications(true));
     const notificationChecker = setInterval(() => {
       void dispatch(loadNotifications(true));
