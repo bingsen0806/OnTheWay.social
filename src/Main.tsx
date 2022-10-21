@@ -67,8 +67,17 @@ export default function Main() {
   const { isAuthenticated } = useAuthState();
   const dispatch = useAppDispatch();
 
+  /**
+   * Set up a check on notifications at regular intervals of 10s.
+   */
   useLayoutEffect(() => {
-    void dispatch(loadNotifications());
+    void dispatch(loadNotifications(true));
+    const notificationChecker = setInterval(() => {
+      void dispatch(loadNotifications(true));
+    }, 10000);
+    return () => {
+      clearInterval(notificationChecker);
+    };
   }, [isAuthenticated]);
 
   useNotificationForegroundHandler();

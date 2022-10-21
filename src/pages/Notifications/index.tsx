@@ -47,7 +47,7 @@ export default function NotificationsPage() {
   }, [Notification.permission]);
 
   const refreshPage = () => {
-    dispatch(loadNotifications())
+    dispatch(loadNotifications(false))
       .unwrap()
       .then((resp) => {
         if (!resp.success) {

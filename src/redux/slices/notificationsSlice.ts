@@ -28,8 +28,11 @@ const NotificationsSlice = createSlice({
       }
       state.isLoading = false;
     });
-    builder.addCase(loadNotifications.pending, (state, _) => {
-      state.isLoading = true;
+    builder.addCase(loadNotifications.pending, (state, action) => {
+      // only if the load is not a silent load, then set loading
+      if (!action.meta.arg) {
+        state.isLoading = true;
+      }
     });
     builder.addCase(loadNotifications.rejected, (state, _) => {
       state.isLoading = false;
@@ -50,11 +53,11 @@ const NotificationsSlice = createSlice({
 });
 
 /**
- * Get user
+ * Get notifications
  */
 export const loadNotifications = createAsyncThunk<
   ApiResponseBody<BuddyNotification[]>,
-  undefined
+  boolean
 >('notifications/loadNotifications', async () => {
   const responseData = await getNotifications();
   return responseData;
