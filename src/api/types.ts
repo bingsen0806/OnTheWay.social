@@ -139,6 +139,23 @@ export interface Post {
   description: string;
 }
 
+export enum BuddyNotificationType {
+  APPLIED_TO_YOUR_POST,
+  CANCELLED_THEIR_APPLICATION,
+  ACCEPTED_YOUR_APPLICATION,
+  DELETED_POST_YOU_APPLIED_FOR,
+  GENERIC_MESSAGE,
+}
+
+export interface BuddyNotification {
+  id: string;
+  type: BuddyNotificationType;
+  hasBeenViewed: boolean;
+  otherUser?: User;
+  title?: string;
+  data?: AppliedRequest | CreatedRequest | string;
+}
+
 /**
  * Contains all details for an applied request.
  */

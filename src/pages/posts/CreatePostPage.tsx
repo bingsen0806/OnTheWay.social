@@ -1,6 +1,5 @@
 import {
   IonButton,
-  IonButtons,
   IonCol,
   IonContent,
   IonGrid,
@@ -202,7 +201,6 @@ export default function CreatePostPage() {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonButtons slot="start"></IonButtons>
           <h1 className="ion-padding-start ion-no-margin">
             Create a study session
           </h1>

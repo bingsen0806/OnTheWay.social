@@ -66,16 +66,16 @@
     "stylelint-config-standard-scss": "^5.0.0"
   },
   "scripts": {
-    "start": "REACT_APP_FIREBASE_ENV=development ionic serve",
-    "windows-start": "set \"REACT_APP_FIREBASE_ENV=development\" && ionic serve",
+    "start": "node firebase_sw_generator development && REACT_APP_FIREBASE_ENV=development ionic serve",
+    "windows-start": "node firebase_sw_generator development && set \"REACT_APP_FIREBASE_ENV=development\" && ionic serve",
     "build": "react-scripts build",
     "test": "react-scripts test --transformIgnorePatterns 'node_modules/(?!(@ionic/react|@ionic/react-router|@ionic/core|@stencil/core|ionicons)/)'",
     "eject": "react-scripts eject",
     "prepare": "husky install",
-    "windows-deploy-dev": "firebase use default && set \"REACT_APP_FIREBASE_ENV=development\" && ionic build --prod && firebase deploy",
-    "windows-deploy-prod": "firebase use default && set \"REACT_APP_FIREBASE_ENV=production\" && ionic build --prod && firebase deploy",
-    "deploy-dev": "firebase use default && REACT_APP_FIREBASE_ENV=development ionic build --prod && firebase deploy",
-    "deploy-prod": "firebase use production && REACT_APP_FIREBASE_ENV=production ionic build --prod && firebase deploy"
+    "windows-deploy-dev": "node firebase_sw_generator development && firebase use default && set \"REACT_APP_FIREBASE_ENV=development\" && ionic build --prod && firebase deploy",
+    "windows-deploy-prod": "node firebase_sw_generator production && firebase use default && set \"REACT_APP_FIREBASE_ENV=production\" && ionic build --prod && firebase deploy",
+    "deploy-dev": "node firebase_sw_generator development && firebase use default && REACT_APP_FIREBASE_ENV=development ionic build --prod && firebase deploy",
+    "deploy-prod": "node firebase_sw_generator production && firebase use production && REACT_APP_FIREBASE_ENV=production ionic build --prod && firebase deploy"
   },
   "eslintConfig": {
     "extends": [

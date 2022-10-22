@@ -15,3 +15,4 @@ export const FAQ = '/profile/faq';
 export const CAMPAIGN = '/profile/campaigns';
 
 export const SESSIONS = '/sessions';
+export const NOTIFICATIONS = '/notifications';

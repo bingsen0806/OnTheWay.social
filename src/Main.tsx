@@ -7,6 +7,7 @@ import {
   IonTabBar,
   IonTabButton,
   IonTabs,
+  isPlatform,
   setupIonicReact,
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
@@ -41,6 +42,7 @@ import {
   FAQ,
   HOME,
   LOGIN,
+  NOTIFICATIONS,
   PROFILE,
   PROFILE_CREATION,
   REGISTER,
@@ -56,10 +58,42 @@ import ProfileCreationPage from './pages/authentication/ProfileCreationPage';
 import CreatePostPage from './pages/posts/CreatePostPage';
 import Sessions from './pages/sessions';
 import Campaigns from './pages/campaigns';
+import NotificationsPage from './pages/Notifications';
+import { useAppDispatch, useAppSelector } from './redux/hooks';
+import { getNumberOfUnviewedNotifications } from './constants';
+import useNotificationForegroundHandler from './util/hooks/useNotificationForegroundHandler';
+import { useLayoutEffect } from 'react';
+import { loadNotifications } from './redux/slices/notificationsSlice';
+import { generateAndSendNotificationRegistrationToken } from './firebase';
 setupIonicReact();
 
 export default function Main() {
   const { isAuthenticated } = useAuthState();
+  const dispatch = useAppDispatch();
+
+  /**
+   * Set up a check on notifications at regular intervals of 10s.
+   */
+  useLayoutEffect(() => {
+    if (!isPlatform('ios') && Notification.permission === 'granted') {
+      generateAndSendNotificationRegistrationToken();
+    }
+
+    void dispatch(loadNotifications(true));
+    const notificationChecker = setInterval(() => {
+      void dispatch(loadNotifications(true));
+    }, 10000);
+    return () => {
+      clearInterval(notificationChecker);
+    };
+  }, [isAuthenticated]);
+
+  useNotificationForegroundHandler();
+  const haveNotifications = useAppSelector(
+    (state) =>
+      getNumberOfUnviewedNotifications(state.notifications.notifications) > 0
+  );
+
   return (
     <IonApp>
       <IonReactRouter>
@@ -94,21 +128,46 @@ export default function Main() {
             />
             <AuthenticatedRoute exact path={PROFILE} component={Profile} />
             <AuthenticatedRoute exact path={SESSIONS} component={Sessions} />
+            <AuthenticatedRoute
+              exact
+              path={NOTIFICATIONS}
+              component={NotificationsPage}
+            />
+            <Route exact path={FAQ} component={Faq} />
+            <Route exact path="/">
+              <Redirect to={HOME} />
+            </Route>
           </IonRouterOutlet>
           <IonTabBar slot="bottom">
             <IonTabButton tab="home" href={HOME}>
               <IonIcon icon={home} />
               <IonLabel className={styles['tab-button-text']}>Home</IonLabel>
             </IonTabButton>
+            {isAuthenticated && (
+              <IonTabButton tab="sessions" href={SESSIONS}>
+                <IonIcon icon={book} />
+                <IonLabel className={styles['tab-button-text']}>
+                  Sessions
+                </IonLabel>
+              </IonTabButton>
+            )}
+
             <IonTabButton tab="createPost" href={CREATE_POST}>
               <IonIcon icon={addCircleSharp} />
               <IonLabel className={styles['tab-button-text']}>Create</IonLabel>
             </IonTabButton>
             {isAuthenticated && (
-              <IonTabButton tab="sessions" href={SESSIONS}>
-                <IonIcon icon={book} />
+              <IonTabButton tab="notifications" href={NOTIFICATIONS}>
+                {haveNotifications ? (
+                  <IonIcon
+                    src="assets/icons/notification-tab-unviewed.svg"
+                    size="large"
+                  />
+                ) : (
+                  <IonIcon src="assets/icons/notification-tab-viewed.svg"></IonIcon>
+                )}
                 <IonLabel className={styles['tab-button-text']}>
-                  Your sessions
+                  Notifications
                 </IonLabel>
               </IonTabButton>
             )}

@@ -1,10 +1,11 @@
 /* eslint-disable */
-import { combineReducers, PayloadAction } from '@reduxjs/toolkit';
+import { combineReducers } from '@reduxjs/toolkit';
 import home from './slices/homeSlice';
 import posts from './slices/postsSlice';
 import faq from './slices/faqSlice';
 import user from './slices/userSlice';
 import campaigns from './slices/campaignSlice';
+import notifications from './slices/notificationsSlice';
 
 const appReducer = combineReducers({
   home,
@@ -12,6 +13,7 @@ const appReducer = combineReducers({
   faq,
   user,
   campaigns,
+  notifications,
 });
 
 export const rootReducer: typeof appReducer = (state, action) => {

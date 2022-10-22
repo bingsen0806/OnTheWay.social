@@ -39,7 +39,6 @@ enum HomeTab {
 export default function Sessions() {
   const history = useHistory();
   const dispatch = useAppDispatch();
-  const username = useAppSelector((state) => state.user.user.name);
   const appliedPosts = useAppSelector((state) => state.home.appliedRequests);
   const createdPosts = useAppSelector((state) => state.home.createdRequests);
   const isLoading = useAppSelector((state) => state.home.isLoading);
@@ -121,7 +120,7 @@ export default function Sessions() {
                 <p>You have not created any posts</p>
                 <IonButton
                   onClick={() => {
-                    history.replace(CREATE_POST);
+                    history.push(CREATE_POST);
                   }}
                   expand="block"
                 >
@@ -160,7 +159,7 @@ export default function Sessions() {
                 <p>You have not applied for any study posts</p>
                 <IonButton
                   onClick={() => {
-                    history.replace(HOME);
+                    history.push(HOME);
                   }}
                   expand="block"
                 >

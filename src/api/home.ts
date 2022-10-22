@@ -26,7 +26,6 @@ export async function getCreatedRequests(page: number) {
     ApiResponseBody<CreatedRequest[]>
   >(firestoreFunctions, 'getCreatedPosts');
   const result = await callApi({ page });
-  console.log(result.data);
   return result.data;
 }
 

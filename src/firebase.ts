@@ -2,6 +2,10 @@
 import { initializeApp } from 'firebase/app';
 import { getFunctions } from 'firebase/functions';
 import { getAnalytics } from 'firebase/analytics';
+import { getMessaging, getToken, Messaging } from 'firebase/messaging';
+import { sendNotificationRegistrationToken } from './api/notifications';
+import { isPlatform } from '@ionic/react';
+
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -31,15 +35,44 @@ const firebaseConfigProduction = {
 console.log(process.env.REACT_APP_FIREBASE_ENV);
 // Initialize Firebase
 let app;
+export let messaging: Messaging;
+export let messagingVapidKey: string;
 export let bucket: string;
 if (process.env.REACT_APP_FIREBASE_ENV === 'production') {
   app = initializeApp(firebaseConfigProduction);
+  // important to prevent black screen of death on ios, since they dont support Web push notifications
+  if (!isPlatform('ios')) {
+    messaging = getMessaging(app);
+  }
+  messagingVapidKey =
+    'BL9A9yG8MSn5FsPOhj4O8KC7LRVEqGcV5K2DGRBvW1m0Cn8RVYxBqROKAiG_7fXT7ulSpS3l8zh5_0_m_4blt-4';
   bucket = 'gs://' + firebaseConfigProduction.storageBucket;
 } else if (!process.env.REACT_APP_FIREBASE_ENV) {
   app = initializeApp(firebaseConfig);
+  if (!isPlatform('ios')) {
+    messaging = getMessaging(app);
+  }
+  messagingVapidKey =
+    'BJb3VUgYNO6eUCONrgGztXLAVb2J6zG1Cnq9wPrWlhOESB9uCDMiHLYgGVD0JM2qBPP8v5XlVGkkdXKwqBunNgE';
   bucket = 'gs://' + firebaseConfig.storageBucket;
 } else {
   throw Error('Invalid FIREBASE_ENV');
+}
+
+export function generateAndSendNotificationRegistrationToken() {
+  getToken(messaging, { vapidKey: messagingVapidKey })
+    .then((currentToken) => {
+      if (currentToken) {
+        console.log(currentToken);
+        void sendNotificationRegistrationToken(currentToken);
+      } else {
+        //TODO: error handling getting token
+        console.log('problem getting token');
+      }
+    })
+    .catch((error) => {
+      console.log('error occured while retrieving token: ', error);
+    });
 }
 
 export const analytics = getAnalytics(app);
