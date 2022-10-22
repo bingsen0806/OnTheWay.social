@@ -27,9 +27,10 @@ export default function CreatedRequestListItem({
       {createdRequest.applicants.length > 0 && (
         <div className={styles['alert-line']} />
       )}
-      {createdRequest.post.participants.length > 0 && (
-        <div className={styles['success-line']} />
-      )}
+      {createdRequest.post.participants.length > 0 &&
+        createdRequest.applicants.length === 0 && (
+          <div className={styles['success-line']} />
+        )}
       <IonGrid className={styles['post-container']}>
         <IonRow className="ion-justify-content-between">
           <IonCol>
