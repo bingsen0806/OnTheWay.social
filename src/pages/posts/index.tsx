@@ -231,7 +231,9 @@ export default function PostsPage() {
               <h1>Study Sessions</h1>
               {isAuthenticated ? (
                 <IonButton
-                  href={CREATE_POST}
+                  onClick={() => {
+                    history.push(CREATE_POST);
+                  }}
                   size="small"
                   expand="block"
                   slot="start"

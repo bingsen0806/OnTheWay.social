@@ -199,7 +199,7 @@ export default function PostModal({
           </IonButton>
         ) : (
           <IonButton
-            className="ion-padding-horizontal"
+            className={`${styles['accept-button']} ion-padding-horizontal`}
             expand="block"
             color="primary"
             onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {

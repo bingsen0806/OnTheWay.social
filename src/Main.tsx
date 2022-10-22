@@ -73,7 +73,7 @@ export default function Main() {
    * Set up a check on notifications at regular intervals of 10s.
    */
   useLayoutEffect(() => {
-    if (!isPlatform('ios')) {
+    if (!isPlatform('ios') && Notification.permission === 'granted') {
       generateAndSendNotificationRegistrationToken();
     }
 

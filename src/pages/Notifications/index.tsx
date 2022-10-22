@@ -21,6 +21,7 @@ import { loadNotifications } from '../../redux/slices/notificationsSlice';
 import useCheckedErrorHandler from '../../util/hooks/useCheckedErrorHandler';
 import useErrorToast from '../../util/hooks/useErrorToast';
 import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
+import NoData from '../NoData';
 import NotificationListItem from './components/NotificationListItem';
 import styles from './styles.module.scss';
 
@@ -138,12 +139,18 @@ export default function NotificationsPage() {
               <IonRefresherContent></IonRefresherContent>
             </IonRefresher>
             <IonList>
-              {notificationsList.map((notification) => (
-                <NotificationListItem
-                  notification={notification}
-                  key={notification.id}
-                />
-              ))}
+              {notificationsList.length > 0 ? (
+                notificationsList.map((notification) => (
+                  <NotificationListItem
+                    notification={notification}
+                    key={notification.id}
+                  />
+                ))
+              ) : (
+                <NoData>
+                  <p>You have no notifications. Check again later!</p>
+                </NoData>
+              )}
             </IonList>
           </>
         )}

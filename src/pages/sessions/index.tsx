@@ -120,7 +120,7 @@ export default function Sessions() {
                 <p>You have not created any posts</p>
                 <IonButton
                   onClick={() => {
-                    history.replace(CREATE_POST);
+                    history.push(CREATE_POST);
                   }}
                   expand="block"
                 >
@@ -159,7 +159,7 @@ export default function Sessions() {
                 <p>You have not applied for any study posts</p>
                 <IonButton
                   onClick={() => {
-                    history.replace(HOME);
+                    history.push(HOME);
                   }}
                   expand="block"
                 >
