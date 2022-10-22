@@ -32,12 +32,13 @@ const firebaseConfigProduction = {
   appId: '1:41559472129:web:1912a28e1eea15493ee800',
   measurementId: 'G-KCCJ371DZ3',
 };
-console.log(process.env.REACT_APP_FIREBASE_ENV);
+
 // Initialize Firebase
 let app;
 export let messaging: Messaging;
 export let messagingVapidKey: string;
 export let bucket: string;
+// DO NOT change this this block in any way, it is critical to proper set up of firebase in dev and prod
 if (process.env.REACT_APP_FIREBASE_ENV === 'production') {
   app = initializeApp(firebaseConfigProduction);
   // important to prevent black screen of death on ios, since they dont support Web push notifications
@@ -47,7 +48,7 @@ if (process.env.REACT_APP_FIREBASE_ENV === 'production') {
   messagingVapidKey =
     'BL9A9yG8MSn5FsPOhj4O8KC7LRVEqGcV5K2DGRBvW1m0Cn8RVYxBqROKAiG_7fXT7ulSpS3l8zh5_0_m_4blt-4';
   bucket = 'gs://' + firebaseConfigProduction.storageBucket;
-} else if (!process.env.REACT_APP_FIREBASE_ENV) {
+} else if (process.env.REACT_APP_FIREBASE_ENV === 'development') {
   app = initializeApp(firebaseConfig);
   if (!isPlatform('ios')) {
     messaging = getMessaging(app);
