@@ -1,4 +1,12 @@
-import { IonContent, IonItem, IonLabel, IonModal } from '@ionic/react';
+import {
+  IonContent,
+  IonHeader,
+  IonItem,
+  IonLabel,
+  IonModal,
+  IonTitle,
+  IonToolbar,
+} from '@ionic/react';
 import { useState } from 'react';
 import {
   AppliedRequest,
@@ -6,6 +14,7 @@ import {
   BuddyNotificationType,
   CreatedRequest,
   locationEnumToStr,
+  Post,
 } from '../../../api/types';
 import { useAppDispatch } from '../../../redux/hooks';
 import { markNotification } from '../../../redux/slices/notificationsSlice';
@@ -57,11 +66,19 @@ export default function NotificationListItem({
           ></AppliedPostModal>
         );
       case BuddyNotificationType.DELETED_POST_YOU_APPLIED_FOR:
+        return null;
       case BuddyNotificationType.GENERIC_MESSAGE:
         //TODO: fill in this modal for generic message
         return (
           <IonModal>
-            <IonContent>TODO</IonContent>
+            <IonHeader>
+              <IonToolbar>
+                <IonTitle>{notification.title}</IonTitle>
+              </IonToolbar>
+            </IonHeader>
+            <IonContent>
+              <p>{notification.data as string}</p>
+            </IonContent>
           </IonModal>
         );
       default:
@@ -124,12 +141,12 @@ export default function NotificationListItem({
           message: `${
             notification.otherUser!.name
           } cancelled study session at ${locationEnumToStr(
-            (notification.data as AppliedRequest).post.location
+            (notification.data as Post).location
           )}, ${convertDateToDateStr(
-            (notification.data as AppliedRequest).post.startDateTime
+            (notification.data as Post).startDateTime
           )} from ${convertDateRangeToTimeRangeStr(
-            (notification.data as AppliedRequest).post.startDateTime,
-            (notification.data as AppliedRequest).post.endDateTime
+            (notification.data as Post).startDateTime,
+            (notification.data as Post).endDateTime
           )}`,
         };
       case BuddyNotificationType.GENERIC_MESSAGE:

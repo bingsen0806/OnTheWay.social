@@ -153,7 +153,7 @@ export interface BuddyNotification {
   hasBeenViewed: boolean;
   otherUser?: User;
   title?: string;
-  data?: AppliedRequest | CreatedRequest | string;
+  data?: AppliedRequest | CreatedRequest | string | Post;
 }
 
 /**
