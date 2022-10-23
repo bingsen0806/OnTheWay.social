@@ -36,7 +36,6 @@ export default function useCheckedErrorHandler() {
         return;
       default:
         displayErrorToast('An unknown error occured.');
-        console.log(errorMessage);
     }
   }
 

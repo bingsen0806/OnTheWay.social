@@ -27,7 +27,6 @@ import CampaignModal from './CampaignTncModal';
 import { useState } from 'react';
 export default function Campaigns() {
   const campaigns = useAppSelector((state) => state.campaigns.campaigns);
-  console.log(campaigns);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   function openModal() {

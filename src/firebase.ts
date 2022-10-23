@@ -64,7 +64,6 @@ export function generateAndSendNotificationRegistrationToken() {
   getToken(messaging, { vapidKey: messagingVapidKey })
     .then((currentToken) => {
       if (currentToken) {
-        console.log(currentToken);
         void sendNotificationRegistrationToken(currentToken);
       } else {
         //TODO: error handling getting token

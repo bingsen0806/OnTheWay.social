@@ -22,8 +22,6 @@ export default function useNotificationForegroundHandler() {
   };
   if (!isPlatform('ios')) {
     onMessage(messaging, (payload) => {
-      //TODO: remove console.log
-      console.log(payload);
       void dispatch(loadNotifications(false));
       presentToast(payload.notification!);
     });

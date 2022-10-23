@@ -32,7 +32,6 @@ const campaignSlice = createSlice({
     builder.addCase(getUserCampaignsThunk.fulfilled, (state, action) => {
       if (action.payload.success) {
         state.campaigns = action.payload.message as Campaign[];
-        console.log(action.payload.message);
       }
       state.isLoading = false;
     });
@@ -53,7 +52,6 @@ export const getUserCampaignsThunk = createAsyncThunk<
   undefined,
   { state: RootState }
 >('campaigns/getUserCampaigns', async () => {
-  console.log('called');
   const responseData = await getUserCampaigns();
   return responseData;
 });
