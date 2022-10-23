@@ -27,12 +27,12 @@ export default function DateTimePicker({
   function handleChange(e: DatetimeCustomEvent) {
     onChange(e.detail.value ? (e.detail.value as string) : '');
   }
-  const fourteen = moment().add(15, 'days').toISOString();
+  const five = moment().add(5, 'days').toISOString();
   const today = new Date().toISOString();
   const todayDate = today.split('T')[0];
   const min =
     type === 'date' ? new Date().toISOString() : `${todayDate}T08:00:00.000Z`;
-  const max = type === 'date' ? fourteen : `${todayDate}T22:00:00.000Z`;
+  const max = type === 'date' ? five : `${todayDate}T22:00:00.000Z`;
 
   return (
     <>
