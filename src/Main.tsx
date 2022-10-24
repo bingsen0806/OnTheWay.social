@@ -79,13 +79,15 @@ export default function Main() {
       generateAndSendNotificationRegistrationToken();
     }
 
-    void dispatch(loadNotifications(true));
-    const notificationChecker = setInterval(() => {
+    if (isAuthenticated) {
       void dispatch(loadNotifications(true));
-    }, 10000);
-    return () => {
-      clearInterval(notificationChecker);
-    };
+      const notificationChecker = setInterval(() => {
+        void dispatch(loadNotifications(true));
+      }, 10000);
+      return () => {
+        clearInterval(notificationChecker);
+      };
+    }
   }, [isAuthenticated]);
 
   useNotificationForegroundHandler();
