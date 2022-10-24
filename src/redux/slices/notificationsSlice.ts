@@ -34,6 +34,20 @@ const NotificationsSlice = createSlice({
           action.payload
       );
     },
+    // update a notification in the list of notifications
+    replaceNotification: (state, action: PayloadAction<CreatedRequest>) => {
+      const newNotifs: BuddyNotification[] = [];
+      for (const notif of state.notifications) {
+        if (
+          !((notif.data as CreatedRequest).post?.id === action.payload.post.id)
+        ) {
+          newNotifs.push(notif);
+        } else {
+          newNotifs.push({ ...notif, data: action.payload });
+        }
+      }
+      state.notifications = newNotifs;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(loadNotifications.fulfilled, (state, action) => {
@@ -97,6 +111,7 @@ const persistedNotificationsReducer = persistReducer(
   NotificationsSlice.reducer
 );
 
-export const { removeNotification } = NotificationsSlice.actions;
+export const { removeNotification, replaceNotification } =
+  NotificationsSlice.actions;
 
 export default persistedNotificationsReducer;

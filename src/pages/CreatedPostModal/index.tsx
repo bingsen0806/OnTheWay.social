@@ -33,7 +33,10 @@ import useInfoToast from '../../util/hooks/useInfoToast';
 import ButtonSpinner from '../../components/ButtonSpinner';
 import styles from './styles.module.scss';
 import { ErrorType } from '../../api/errors';
-import { removeNotification } from '../../redux/slices/notificationsSlice';
+import {
+  removeNotification,
+  replaceNotification,
+} from '../../redux/slices/notificationsSlice';
 
 interface PosterViewRequestProps {
   isOpen: boolean;
@@ -122,6 +125,7 @@ export default function CreatedPostModal({
   function closeModal() {
     onClose(() => {
       if (createdRequestWasEdited) {
+        dispatch(replaceNotification(createdRequestState));
         dispatch(replaceCreatedRequest(createdRequestState));
         dispatch(requestReloadOfPosts());
       }
