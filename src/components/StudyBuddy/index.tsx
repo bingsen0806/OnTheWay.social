@@ -1,6 +1,8 @@
 import { IonCol, IonRow, IonAvatar, IonIcon } from '@ionic/react';
 import { copyOutline } from 'ionicons/icons';
+import { useState } from 'react';
 import { facultyEnumToStr, genderEnumToStr, User } from '../../api/types';
+import PublicProfileModal from '../../pages/PublicProfileModal';
 import useInfoToast from '../../util/hooks/useInfoToast';
 import styles from './styles.module.scss';
 
@@ -14,26 +16,26 @@ export default function StudyBuddy({
   inCreatedRequest,
 }: StudyBuddyProps) {
   const presentInfoToast = useInfoToast();
+  const [isOpen, setIsOpen] = useState(false);
+  const closeModal = () => setIsOpen(false);
+  const openModal = () => setIsOpen(true);
   return (
     <div className={styles['study-buddy']}>
-      <IonRow className="ion-padding-start">
-        <IonCol size="3">
+      <PublicProfileModal isOpen={isOpen} onClose={closeModal} user={buddy} />
+      <IonRow className="ion-padding-start ion-justify-content-center ion-align-items-center">
+        <IonCol size="3" onClick={openModal}>
           <IonAvatar className={styles['avatar']}>
             <img alt="profile" src={buddy.thumbnailPhoto} />
           </IonAvatar>
         </IonCol>
         <IonCol>
-          <IonRow className="ion-justify-content-center">
-            <IonCol className={styles['bold']}>{buddy.name ?? ''}</IonCol>
-          </IonRow>
-          <IonRow className="ion-justify-content-center">
-            <IonCol>
-              Y{buddy.year ?? 0}/{facultyEnumToStr(buddy.faculty) ?? ''}
-            </IonCol>
-          </IonRow>
-          <IonRow className="ion-justify-content-center">
-            <IonCol>{genderEnumToStr(buddy.gender) ?? ''}</IonCol>
-          </IonRow>
+          <IonCol className={styles['hover']} onClick={openModal}>
+            <IonRow className={styles['bold']}>{buddy.name}</IonRow>
+            <IonRow>
+              Y{buddy.year}/{facultyEnumToStr(buddy.faculty)}
+            </IonRow>
+            <IonRow>{genderEnumToStr(buddy.gender)}</IonRow>
+          </IonCol>
           {inCreatedRequest && (
             <IonRow className="ion-justify-content-center">
               <IonCol className="ion-no-padding">

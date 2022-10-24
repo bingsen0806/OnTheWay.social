@@ -36,6 +36,7 @@ import './theme/variables.scss';
 import styles from './styles.module.scss';
 
 import {
+  ART,
   CAMPAIGN,
   CREATE_POST,
   EMAIL_VERIFICATION,
@@ -65,6 +66,7 @@ import useNotificationForegroundHandler from './util/hooks/useNotificationForegr
 import { useLayoutEffect } from 'react';
 import { loadNotifications } from './redux/slices/notificationsSlice';
 import { generateAndSendNotificationRegistrationToken } from './firebase';
+import Art from './pages/Art';
 setupIonicReact();
 
 export default function Main() {
@@ -112,6 +114,7 @@ export default function Main() {
               <Redirect to={HOME} />
             </Route>
             <Route exact path={HOME} component={Posts} />
+            <AuthenticatedRoute exact path={ART} component={Art} />
             <AuthenticatedRoute exact path={CAMPAIGN} component={Campaigns} />
             <AuthenticatedRoute
               exact

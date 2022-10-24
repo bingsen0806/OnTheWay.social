@@ -5,12 +5,15 @@ import { IonGrid, IonRow } from '@ionic/react';
 
 interface NoDataContents {
   children: JSX.Element;
+  hideImage?: boolean;
 }
 
-export default function NoData({ children }: NoDataContents) {
+export default function NoData({ children, hideImage }: NoDataContents) {
   return (
     <>
-      <img className={styles['center-image']} src={noDataScreen} />
+      {!hideImage && (
+        <img className={styles['center-image']} src={noDataScreen} />
+      )}
       <IonGrid className={styles.row}>
         <IonRow>{children}</IonRow>
       </IonGrid>

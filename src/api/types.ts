@@ -89,6 +89,15 @@ export function locationEnumToStr(location: Location) {
   }
 }
 
+export type Art = {
+  id: string;
+  prompt: string;
+  date: string;
+  userId: string;
+  description: string;
+  image: string;
+};
+
 /**
  * Status values for a request.
  */
@@ -122,6 +131,7 @@ export interface User {
   year: number;
   profilePhoto: string;
   thumbnailPhoto: string;
+  art?: Art[];
 }
 
 /**

@@ -1,16 +1,19 @@
-.header {
-  font-weight: bold;
-  font-size: 1.3rem;
+.modal-container {
+  --min-height: 100%;
+  --min-width: 100%;
 }
 
-.poster-name {
+.bold {
   font-weight: bold;
-  cursor: pointer;
+  padding-bottom: 8px;
+}
+
+.padding {
+  padding-left: 8px;
 }
 
 .user-info {
-  padding-top: 10px;
-  justify-content: space-between;
+  padding-left: 16px;
 }
 
 .avatar {

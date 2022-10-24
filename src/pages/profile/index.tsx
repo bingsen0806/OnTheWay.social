@@ -16,7 +16,7 @@ import {
 } from '@ionic/react';
 import styles from './styles.module.scss';
 import { useHistory } from 'react-router';
-import { CAMPAIGN, FAQ } from '../../routes';
+import { ART, CAMPAIGN, FAQ } from '../../routes';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { getInitialSelf, reloadSelf } from '../../redux/slices/userSlice';
 import { logout } from '../../api/authentication';
@@ -110,6 +110,10 @@ export default function ProfilePage() {
     history.push(CAMPAIGN);
   };
 
+  const routeToArt = () => {
+    history.push(ART);
+  };
+
   const routeToFAQ = () => {
     history.push(FAQ);
   };
@@ -161,6 +165,14 @@ export default function ProfilePage() {
                       <h1 className={styles['username-text']}>{username}</h1>
                     </IonCardHeader>
                     <IonList lines="none">
+                      <IonItem>
+                        <IonLabel
+                          onClick={routeToArt}
+                          className={styles['pointer']}
+                        >
+                          <h1>Art</h1>
+                        </IonLabel>
+                      </IonItem>
                       <IonItem>
                         <IonLabel
                           onClick={routeToCampaign}

@@ -21,6 +21,7 @@ const initialState: UserState = {
     year: 0,
     profilePhoto: '',
     thumbnailPhoto: '',
+    art: [],
   },
   isLoading: false,
   selfLoadedOnce: false,

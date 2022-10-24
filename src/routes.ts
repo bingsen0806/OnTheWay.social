@@ -16,3 +16,5 @@ export const CAMPAIGN = '/profile/campaigns';
 
 export const SESSIONS = '/sessions';
 export const NOTIFICATIONS = '/notifications';
+
+export const ART = '/profile/art';
