@@ -25,6 +25,7 @@ import { reloadInitialPostsData } from '../../redux/slices/postsSlice';
 import ButtonSpinner from '../../components/ButtonSpinner';
 import styles from './styles.module.scss';
 import { ErrorType } from '../../api/errors';
+import { removeNotification } from '../../redux/slices/notificationsSlice';
 
 interface AppliedPostModalProps {
   isOpen: boolean;
@@ -83,6 +84,7 @@ export default function AppliedPostModal({
   function closeModal() {
     onClose(() => {
       if (isCancelled) {
+        dispatch(removeNotification(appliedRequest.post.id));
         dispatch(removeAppliedRequest(appliedRequest.post.id));
       }
     });
