@@ -1,11 +1,16 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import {
   getNotifications,
   markNotificationAsViewed,
 } from '../../api/notifications';
-import { ApiResponseBody, BuddyNotification } from '../../api/types';
+import {
+  ApiResponseBody,
+  AppliedRequest,
+  BuddyNotification,
+  CreatedRequest,
+} from '../../api/types';
 
 interface NotificationsState {
   notifications: BuddyNotification[];
@@ -20,7 +25,16 @@ const initialState: NotificationsState = {
 const NotificationsSlice = createSlice({
   name: 'notifications',
   initialState,
-  reducers: {},
+  reducers: {
+    // removes a notification that id of a request that has been deleted.
+    removeNotification: (state, action: PayloadAction<string>) => {
+      state.notifications = state.notifications.filter(
+        (notif) =>
+          (notif.data as AppliedRequest | CreatedRequest).post.id !==
+          action.payload
+      );
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(loadNotifications.fulfilled, (state, action) => {
       if (action.payload.success) {
@@ -82,5 +96,7 @@ const persistedNotificationsReducer = persistReducer(
   notificationsPersistConfig,
   NotificationsSlice.reducer
 );
+
+export const { removeNotification } = NotificationsSlice.actions;
 
 export default persistedNotificationsReducer;

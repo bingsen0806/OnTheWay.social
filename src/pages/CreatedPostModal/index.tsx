@@ -33,6 +33,7 @@ import useInfoToast from '../../util/hooks/useInfoToast';
 import ButtonSpinner from '../../components/ButtonSpinner';
 import styles from './styles.module.scss';
 import { ErrorType } from '../../api/errors';
+import { removeNotification } from '../../redux/slices/notificationsSlice';
 
 interface PosterViewRequestProps {
   isOpen: boolean;
@@ -74,12 +75,12 @@ export default function CreatedPostModal({
     setIsLoading(true);
     cancelRequest(postId)
       .then((resp) => {
-        console.log(resp);
         if (!resp.success) {
           switch (resp.message) {
             case ErrorType.POST_NOT_FOUND:
               presentInfoToast('Post has been deleted.');
               onClose(() => {
+                dispatch(removeNotification(createdRequest.post.id));
                 dispatch(removeCreatedRequest(createdRequest.post.id));
                 void dispatch(reloadInitialPostsData());
               });
@@ -92,6 +93,7 @@ export default function CreatedPostModal({
           logEvent(analytics, 'delete_post');
           presentInfoToast('Successfully deleted!');
           onClose(() => {
+            dispatch(removeNotification(createdRequest.post.id));
             dispatch(removeCreatedRequest(createdRequest.post.id));
             void dispatch(reloadInitialPostsData());
           });
