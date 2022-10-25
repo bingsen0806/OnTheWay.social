@@ -97,10 +97,11 @@ export default function CreatePostPage() {
     useState<boolean>(false);
   const [post, setPost] = useState<Post>({ description: '' } as Post);
   const [dateTimes, setDateTimes] = useState({
-    date: new Date().toISOString(),
-    startTime: new Date().toISOString(),
-    endTime: new Date().toISOString(),
+    date: moment().toISOString(true),
+    startTime: moment().toISOString(true),
+    endTime: moment().add(2, 'hours').toISOString(true),
   });
+
   const history = useHistory();
 
   const [errorMessages, setErrorMessages] = useState<InputErrorMessages>({
@@ -257,20 +258,20 @@ export default function CreatePostPage() {
                 errorMessage={errorMessages.startTime}
               ></DateTimePicker>
             </IonCol>
-          </IonRow>
-          <IonRow className="ion-justify-content-center">
             <IonCol>
               <DateTimePicker
                 value={dateTimes.endTime}
                 type="time"
                 label="End Time"
                 onChange={(endTime) => {
+                  console.log('endtime:', dateTimes);
                   setDateTimes({ ...dateTimes, endTime });
                 }}
                 errorMessage={errorMessages.endTime}
               ></DateTimePicker>
             </IonCol>
           </IonRow>
+          <IonRow className="ion-justify-content-center"></IonRow>
           <IonRow className="ion-justify-content-center">
             <IonCol>
               <TextInputField

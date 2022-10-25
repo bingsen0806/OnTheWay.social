@@ -27,16 +27,13 @@ export default function DateTimePicker({
   function handleChange(e: DatetimeCustomEvent) {
     onChange(e.detail.value ? (e.detail.value as string) : '');
   }
-  const five = moment().add(5, 'days').toISOString();
-  const today = new Date().toISOString();
-  const todayDate = today.split('T')[0];
-  const min =
-    type === 'date' ? new Date().toISOString() : `${todayDate}T08:00:00.000Z`;
-  const max = type === 'date' ? five : `${todayDate}T22:00:00.000Z`;
+  const maxDate = moment().add(7, 'days').toISOString();
+  const min = type === 'date' ? new Date().toISOString() : undefined;
+  const max = type === 'date' ? maxDate : undefined;
 
   return (
     <>
-      <IonItem lines="full">
+      <IonItem lines="full" button>
         <IonLabel>
           <h2>{label}</h2>
         </IonLabel>
@@ -50,11 +47,10 @@ export default function DateTimePicker({
             max={max}
             min={min}
             value={value}
-            minuteValues="0,15,30,45"
             className={styles['date-picker']}
             id={`datetime-${label}`}
             presentation={type}
-            onIonChange={handleChange}
+            onIonChange={() => handleChange}
           ></IonDatetime>
         </IonModal>
       </IonItem>
