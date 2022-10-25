@@ -32,3 +32,5 @@ package-lock.json
 .firebase/**/*
 
 .firebase/*
+
+public/firebase-messaging-sw.js
