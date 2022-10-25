@@ -26,6 +26,7 @@ import ButtonSpinner from '../../components/ButtonSpinner';
 import styles from './styles.module.scss';
 import { ErrorType } from '../../api/errors';
 import { removeNotification } from '../../redux/slices/notificationsSlice';
+import OtherStudyBuddies from '../../components/OtherStudyBuddies';
 
 interface AppliedPostModalProps {
   isOpen: boolean;
@@ -125,6 +126,9 @@ export default function AppliedPostModal({
           />
         )}
         <PostDetails post={appliedRequest.post} />
+        <OtherStudyBuddies
+          studyBuddies={appliedRequest.post.participants}
+        ></OtherStudyBuddies>
         <AboutPoster poster={appliedRequest.post?.poster} />
         {!isCancelled && (
           <IonButton
