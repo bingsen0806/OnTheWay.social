@@ -97,11 +97,13 @@ export default function CreatePostPage() {
   const [shouldShowDropdownErrors, setShouldShowDropdownErrors] =
     useState<boolean>(false);
   const [post, setPost] = useState<Post>({ description: '' } as Post);
-  const [dateTimes, setDateTimes] = useState({
-    date: moment().toISOString(true),
-    startTime: roundToNext15mins(moment()).toISOString(true),
-    endTime: roundToNext15mins(moment()).add(2, 'hours').toISOString(true),
-  });
+  const [date, setDate] = useState<string>(moment().toISOString(true));
+  const [startTime, setStartTime] = useState<string>(
+    roundToNext15mins(moment()).toISOString(true)
+  );
+  const [endTime, setEndTime] = useState<string>(
+    roundToNext15mins(moment()).add(2, 'hours').toISOString(true)
+  );
 
   const history = useHistory();
 
@@ -113,15 +115,15 @@ export default function CreatePostPage() {
   });
 
   function checkStartTimeBeforeEndTime() {
-    return dateTimes.startTime < dateTimes.endTime;
+    return startTime < endTime;
   }
 
   function areAllFieldsSelected() {
     if (
       post.location === undefined ||
-      dateTimes.date === undefined ||
-      dateTimes.startTime === undefined ||
-      dateTimes.endTime === undefined
+      date === undefined ||
+      startTime === undefined ||
+      endTime === undefined
     ) {
       return false;
     }
@@ -135,16 +137,16 @@ export default function CreatePostPage() {
       haveError = true;
     }
     const newErrorMessages = {} as InputErrorMessages;
-    if (!dateTimes.date) {
+    if (!date) {
       newErrorMessages.date = 'Please select a date for your study session';
       haveError = true;
     }
-    if (!dateTimes.startTime) {
+    if (!startTime) {
       newErrorMessages.startTime =
         'Please select the time that your study session starts at';
       haveError = true;
     }
-    if (!dateTimes.endTime) {
+    if (!endTime) {
       newErrorMessages.endTime =
         'Please select the time that your study session ends at';
       haveError = true;
@@ -152,7 +154,7 @@ export default function CreatePostPage() {
       newErrorMessages.endTime = 'End time must be later than start time';
       haveError = true;
     }
-    const start = combineDateAndTime(dateTimes.date, dateTimes.startTime);
+    const start = combineDateAndTime(date, startTime);
     const startIsInPast = moment(start).isBefore(new Date(), 'minute');
     if (startIsInPast) {
       newErrorMessages.startTime = 'Start time cannot be in the past';
@@ -171,8 +173,8 @@ export default function CreatePostPage() {
 
     const newPost = {
       ...post,
-      startDateTime: combineDateAndTime(dateTimes.date, dateTimes.startTime),
-      endDateTime: combineDateAndTime(dateTimes.date, dateTimes.endTime),
+      startDateTime: combineDateAndTime(date, startTime),
+      endDateTime: combineDateAndTime(date, endTime),
       description: post.description ? post.description : '',
     };
 
@@ -237,11 +239,11 @@ export default function CreatePostPage() {
           <IonRow className="ion-justify-content-center">
             <IonCol>
               <DateTimePicker
-                value={dateTimes.date}
+                value={date}
                 type="date"
                 label="Date"
                 onChange={(date) => {
-                  setDateTimes({ ...dateTimes, date });
+                  setDate(date);
                 }}
                 errorMessage={errorMessages.date}
               ></DateTimePicker>
@@ -250,23 +252,25 @@ export default function CreatePostPage() {
           <IonRow className="ion-justify-content-center">
             <IonCol>
               <DateTimePicker
-                value={dateTimes.startTime}
+                value={startTime}
                 type="time"
                 label="Start Time"
                 onChange={(startTime) => {
-                  setDateTimes({ ...dateTimes, startTime });
+                  setStartTime(startTime);
+                  setEndTime(
+                    moment(startTime).add(2, 'hours').toISOString(true)
+                  );
                 }}
                 errorMessage={errorMessages.startTime}
               ></DateTimePicker>
             </IonCol>
             <IonCol>
               <DateTimePicker
-                value={dateTimes.endTime}
+                value={endTime}
                 type="time"
                 label="End Time"
                 onChange={(endTime) => {
-                  console.log('endtime:', dateTimes);
-                  setDateTimes({ ...dateTimes, endTime });
+                  setEndTime(endTime);
                 }}
                 errorMessage={errorMessages.endTime}
               ></DateTimePicker>
