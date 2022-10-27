@@ -25,6 +25,7 @@ import { analytics } from '../../firebase';
 import { useAppDispatch } from '../../redux/hooks';
 import { reloadInitialData } from '../../redux/slices/homeSlice';
 import { SESSIONS } from '../../routes';
+import { roundToNext15mins } from '../../util/dateUtils';
 import useCheckedErrorHandler from '../../util/hooks/useCheckedErrorHandler';
 import useInfoToast from '../../util/hooks/useInfoToast';
 import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
@@ -98,8 +99,8 @@ export default function CreatePostPage() {
   const [post, setPost] = useState<Post>({ description: '' } as Post);
   const [dateTimes, setDateTimes] = useState({
     date: moment().toISOString(true),
-    startTime: moment().toISOString(true),
-    endTime: moment().add(2, 'hours').toISOString(true),
+    startTime: roundToNext15mins(moment()).toISOString(true),
+    endTime: roundToNext15mins(moment()).add(2, 'hours').toISOString(true),
   });
 
   const history = useHistory();
