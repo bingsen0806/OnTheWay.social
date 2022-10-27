@@ -50,7 +50,8 @@ export default function DateTimePicker({
             className={styles['date-picker']}
             id={`datetime-${label}`}
             presentation={type}
-            onIonChange={() => handleChange}
+            onIonChange={handleChange}
+            minuteValues="0, 15, 30, 45"
           ></IonDatetime>
         </IonModal>
       </IonItem>
