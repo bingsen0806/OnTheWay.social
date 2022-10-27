@@ -1,10 +1,6 @@
 import { httpsCallable } from 'firebase/functions';
 import { firestoreFunctions } from '../firebase';
-import { ApiRequestBody, ApiResponseBody, Location, Post } from './types';
-
-export interface PostsFilter {
-  locations: Location[];
-}
+import { ApiRequestBody, ApiResponseBody, Post, PostsFilter } from './types';
 
 export async function createPost(post: Post) {
   const callApi = httpsCallable<ApiRequestBody, ApiResponseBody<Post[]>>(
@@ -24,6 +20,6 @@ export async function getPosts(filter: PostsFilter, page: number) {
     firestoreFunctions,
     'getExplorePost'
   );
-  const result = await callApi({ page, location: filter.locations });
+  const result = await callApi({ page, filter });
   return result.data;
 }

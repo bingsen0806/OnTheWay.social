@@ -23,7 +23,14 @@ import {
 import { funnelOutline } from 'ionicons/icons';
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Location, locationEnumToStr } from '../../api/types';
+import {
+  DayOfTheWeek,
+  dayOfTheWeekEnumToStr,
+  Location,
+  locationEnumToStr,
+  TimeOfDay,
+  timeOfDayEnumToStr,
+} from '../../api/types';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import PostListItem from '../../components/PostListItem';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -63,12 +70,44 @@ export default function PostsPage() {
     [Location.LAW]: false,
   });
 
+  const [filterDays, setFilterDays] = useState<{
+    [key in DayOfTheWeek]: boolean;
+  }>({
+    [DayOfTheWeek.MONDAY]: false,
+    [DayOfTheWeek.TUESDAY]: false,
+    [DayOfTheWeek.WEDNESDAY]: false,
+    [DayOfTheWeek.THURSDAY]: false,
+    [DayOfTheWeek.FRIDAY]: false,
+    [DayOfTheWeek.SATURDAY]: false,
+    [DayOfTheWeek.SUNDAY]: false,
+  });
+
+  const [filterTimes, setFilterTimes] = useState<{
+    [key in TimeOfDay]: boolean;
+  }>({
+    [TimeOfDay.MORNING]: false,
+    [TimeOfDay.AFTERNOON]: false,
+    [TimeOfDay.EVENING]: false,
+    [TimeOfDay.NIGHT]: false,
+  });
+
   function resetFilter() {
     const newFilterLocations = {} as { [key in Location]: boolean };
+    const newFilterDays = {} as { [key in DayOfTheWeek]: boolean };
+    const newFilterTimes = {} as { [key in TimeOfDay]: boolean };
+
     for (const location in filterLocations) {
       newFilterLocations[location as unknown as Location] = false;
     }
+    for (const filterDay in filterDays) {
+      newFilterDays[filterDay as unknown as DayOfTheWeek] = false;
+    }
+    for (const filterTime in filterTimes) {
+      newFilterTimes[filterTime as unknown as TimeOfDay] = false;
+    }
     setFilterLocations(newFilterLocations);
+    setFilterDays(newFilterDays);
+    setFilterTimes(newFilterTimes);
     resetPostsList();
   }
 
@@ -76,8 +115,18 @@ export default function PostsPage() {
     return filterLocations[location] ? 'primary' : 'dark';
   }
 
+  function getColorOfDayFilterBasedOnClickStatus(day: DayOfTheWeek) {
+    return filterDays[day] ? 'primary' : 'dark';
+  }
+
+  function getColorOfTimeFilterBasedOnClickStatus(time: TimeOfDay) {
+    return filterTimes[time] ? 'primary' : 'dark';
+  }
+
   function resetPostsList() {
-    dispatch(getNewPageOfPostsWithFilter({ locations: [] }))
+    dispatch(
+      getNewPageOfPostsWithFilter({ locations: [], timesOfDay: [], days: [] })
+    )
       .unwrap()
       .then((resp) => {
         if (!resp.success) {
@@ -93,6 +142,14 @@ export default function PostsPage() {
     const prvState = filterLocations[location];
     setFilterLocations({ ...filterLocations, [location]: !prvState });
   }
+  function setFilterDayValue(day: DayOfTheWeek) {
+    const prvState = filterDays[day];
+    setFilterDays({ ...filterDays, [day]: !prvState });
+  }
+  function setFilterTimeValue(time: TimeOfDay) {
+    const prvState = filterTimes[time];
+    setFilterTimes({ ...filterTimes, [time]: !prvState });
+  }
 
   function applyNewFilter() {
     const newLocationFilter: Location[] = [];
@@ -101,7 +158,26 @@ export default function PostsPage() {
         newLocationFilter.push(Number(location) as unknown as Location);
       }
     }
-    dispatch(getNewPageOfPostsWithFilter({ locations: newLocationFilter }))
+    const newFilterDays: DayOfTheWeek[] = [];
+    for (const filterDay in filterDays) {
+      if (filterDays[filterDay as unknown as DayOfTheWeek]) {
+        newFilterDays.push(Number(filterDay) as unknown as DayOfTheWeek);
+      }
+    }
+    const newFilterTimes: TimeOfDay[] = [];
+    for (const filterTime in filterTimes) {
+      if (filterTimes[filterTime as unknown as TimeOfDay]) {
+        newFilterTimes.push(Number(filterTime) as unknown as TimeOfDay);
+      }
+    }
+
+    dispatch(
+      getNewPageOfPostsWithFilter({
+        locations: newLocationFilter,
+        timesOfDay: newFilterTimes,
+        days: newFilterDays,
+      })
+    )
       .unwrap()
       .then((resp) => {
         if (!resp.success) {
@@ -147,7 +223,25 @@ export default function PostsPage() {
         newLocationFilter.push(Number(location) as unknown as Location);
       }
     }
-    dispatch(getNewPageOfPostsWithFilter({ locations: newLocationFilter }))
+    const newFilterDays: DayOfTheWeek[] = [];
+    for (const filterDay in filterDays) {
+      if (filterDays[filterDay as unknown as DayOfTheWeek]) {
+        newFilterDays.push(Number(filterDay) as unknown as DayOfTheWeek);
+      }
+    }
+    const newFilterTimes: TimeOfDay[] = [];
+    for (const filterTime in filterTimes) {
+      if (filterTimes[filterTime as unknown as TimeOfDay]) {
+        newFilterTimes.push(Number(filterTime) as unknown as TimeOfDay);
+      }
+    }
+    dispatch(
+      getNewPageOfPostsWithFilter({
+        locations: newLocationFilter,
+        timesOfDay: newFilterTimes,
+        days: newFilterDays,
+      })
+    )
       .unwrap()
       .then((resp) => {
         if (!resp.success) {
@@ -183,6 +277,34 @@ export default function PostsPage() {
                 onClick={() => setFilterLocationValue(locationEnum as Location)}
               >
                 {locationEnumToStr(locationEnum as Location)}
+              </IonChip>
+            ))}
+          <h4 className={styles['filter-category-header']}>Days</h4>
+          {Object.values(DayOfTheWeek)
+            .filter((v) => !isNaN(Number(v)))
+            .map((dayOfTheWeek) => (
+              <IonChip
+                key={dayOfTheWeek}
+                color={getColorOfDayFilterBasedOnClickStatus(
+                  dayOfTheWeek as DayOfTheWeek
+                )}
+                onClick={() => setFilterDayValue(dayOfTheWeek as DayOfTheWeek)}
+              >
+                {dayOfTheWeekEnumToStr(dayOfTheWeek as DayOfTheWeek)}
+              </IonChip>
+            ))}
+          <h4 className={styles['filter-category-header']}>Times</h4>
+          {Object.values(TimeOfDay)
+            .filter((v) => !isNaN(Number(v)))
+            .map((time) => (
+              <IonChip
+                key={time}
+                color={getColorOfTimeFilterBasedOnClickStatus(
+                  time as TimeOfDay
+                )}
+                onClick={() => setFilterTimeValue(time as TimeOfDay)}
+              >
+                {timeOfDayEnumToStr(time as TimeOfDay)}
               </IonChip>
             ))}
         </IonContent>

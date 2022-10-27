@@ -44,12 +44,13 @@ export default function Art() {
   }
   const shareText =
     'Check out my AI-generated art piece that is owned exclusively by me on BuddyNUS!';
-  const title = 'Check out this lovely piece of art!';
 
-  const items = obtainedArt.map((art, i) => {
+  const title = 'Share your AI-generated art!';
+
+  const items = obtainedArt.map((art) => {
     const dateObtained = moment(art.date).calendar();
     return (
-      <IonCard key={i} className={styles['no-shadow']}>
+      <IonCard key={art.id} className={styles['no-shadow']}>
         <div className="ion-margin">
           <IonImg src={art.image} className={styles['center-image']} />
           <div>

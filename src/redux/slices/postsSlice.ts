@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import { getPosts, PostsFilter } from '../../api/posts';
-import { ApiResponseBody, Post } from '../../api/types';
+import { getPosts } from '../../api/posts';
+import { ApiResponseBody, Post, PostsFilter } from '../../api/types';
 import { RootState } from '../store';
 
 interface PostsState {
@@ -17,6 +17,8 @@ const initialState: PostsState = {
   posts: [],
   filter: {
     locations: [],
+    timesOfDay: [],
+    days: [],
   },
   page: 0,
   isLoading: false,
@@ -123,7 +125,9 @@ export const getInitialPostsData = createAsyncThunk<
     thunkApi.dispatch(setPostHasDoneInitialLoad(true));
     thunkApi.dispatch(setLoading(true));
     const resp = await thunkApi
-      .dispatch(getNewPageOfPostsWithFilter({ locations: [] }))
+      .dispatch(
+        getNewPageOfPostsWithFilter({ locations: [], timesOfDay: [], days: [] })
+      )
       .unwrap();
     return resp;
   }
@@ -136,7 +140,9 @@ export const reloadInitialPostsData = createAsyncThunk<
   { state: RootState }
 >('posts/reloadInitialPostsData', async (_, thunkApi) => {
   await thunkApi
-    .dispatch(getNewPageOfPostsWithFilter({ locations: [] }))
+    .dispatch(
+      getNewPageOfPostsWithFilter({ locations: [], timesOfDay: [], days: [] })
+    )
     .unwrap();
   return { success: true, message: '' };
 });
