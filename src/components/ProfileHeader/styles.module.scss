@@ -1,0 +1,31 @@
+.profile-photo-container {
+  height: 156px;
+  background-position: center;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+}
+
+.thumbnail-photo-container {
+  height: 100px;
+  width: 100px;
+  border: 1px solid black;
+  position: relative;
+  transform: translateY(-50px);
+}
+
+.thumbnail-photo-container-public {
+  cursor: pointer;
+}
+
+.profile-toolbar {
+  height: 206px;
+}
+
+.edit-cover-button {
+  --border-radius: 50%;
+  height: 32px;
+  width: 32px;
+  --padding-start: 0;
+  --padding-end: 0;
+}

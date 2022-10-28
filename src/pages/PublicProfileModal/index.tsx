@@ -1,27 +1,18 @@
 import {
-  IonAvatar,
-  IonButton,
-  IonButtons,
   IonCol,
   IonContent,
   IonGrid,
-  IonHeader,
   IonIcon,
   IonImg,
   IonModal,
   IonPopover,
   IonRow,
-  IonTitle,
-  IonToolbar,
 } from '@ionic/react';
-import {
-  facultyEnumToStr,
-  genderEnumToStr,
-  User,
-} from '../../api/types';
-import { arrowBackOutline, helpCircleOutline } from 'ionicons/icons';
+import { facultyEnumToStr, genderEnumToStr, User } from '../../api/types';
+import { helpCircleOutline } from 'ionicons/icons';
 import styles from './styles.module.scss';
 import NoData from '../NoData';
+import ProfileHeader from '../../components/ProfileHeader';
 
 interface PublicProfileModalProps {
   isOpen: boolean;
@@ -44,35 +35,17 @@ export default function PublicProfileModal({
       onWillDismiss={closeModal}
       className={styles['modal-container']}
     >
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>{user.name}</IonTitle>
-          <IonButtons slot="start">
-            <IonButton
-              fill="clear"
-              color="dark"
-              onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
-                event.stopPropagation();
-                closeModal();
-              }}
-            >
-              <IonIcon icon={arrowBackOutline} slot="start" />
-              <p>Back</p>
-            </IonButton>
-          </IonButtons>
-        </IonToolbar>
-      </IonHeader>
+      <ProfileHeader
+        thumbnailPhoto={user.thumbnailPhoto}
+        profilePhoto={user.profilePhoto}
+        isPublicProfile
+      ></ProfileHeader>
       <IonContent fullscreen>
         <IonGrid className="ion-margin">
           <IonRow className="ion-justify-content-center ion-align-items-start">
             <IonCol size="12" sizeMd="8" sizeLg="5">
               <IonGrid>
                 <IonRow className="ion-padding-start ion-justify-content-center">
-                  <IonCol size="3">
-                    <IonAvatar className={styles['avatar']}>
-                      <img alt="profilePic" src={user.thumbnailPhoto} />
-                    </IonAvatar>
-                  </IonCol>
                   <IonCol className={styles['user-info']}>
                     <IonRow className={styles['bold']}>{user.name}</IonRow>
                     <IonRow>

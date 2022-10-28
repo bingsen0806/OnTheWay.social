@@ -151,6 +151,7 @@ export type Art = {
   userId: string;
   description: string;
   image: string;
+  isPublic: boolean;
 };
 
 /**

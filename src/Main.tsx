@@ -36,6 +36,7 @@ import './theme/variables.scss';
 import styles from './styles.module.scss';
 
 import {
+  ABOUT_ART,
   ART,
   CAMPAIGN,
   CREATE_POST,
@@ -67,6 +68,7 @@ import { useLayoutEffect } from 'react';
 import { loadNotifications } from './redux/slices/notificationsSlice';
 import { generateAndSendNotificationRegistrationToken } from './firebase';
 import Art from './pages/Art';
+import AboutArtPage from './pages/Art/AboutArt';
 setupIonicReact();
 
 export default function Main() {
@@ -115,6 +117,11 @@ export default function Main() {
             </Route>
             <Route exact path={HOME} component={Posts} />
             <AuthenticatedRoute exact path={ART} component={Art} />
+            <AuthenticatedRoute
+              exact
+              path={ABOUT_ART}
+              component={AboutArtPage}
+            />
             <AuthenticatedRoute exact path={CAMPAIGN} component={Campaigns} />
             <AuthenticatedRoute
               exact

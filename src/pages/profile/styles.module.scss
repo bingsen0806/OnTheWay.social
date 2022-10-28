@@ -2,12 +2,6 @@
   cursor: pointer;
 }
 
-.avatar {
-  cursor: pointer;
-  width: 160px;
-  height: 160px;
-}
-
 .row {
   display: flex;
   align-items: center;
@@ -17,4 +11,8 @@
 .username-text {
   padding: 0;
   text-align: start;
+}
+
+.profile-art-banner-container {
+  cursor: pointer;
 }

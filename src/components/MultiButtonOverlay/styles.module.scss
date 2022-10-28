@@ -1,0 +1,28 @@
+// desktop sizing
+.overlay-container {
+  position: fixed;
+  z-index: 100;
+}
+
+@keyframes slidein {
+  from {
+    transform: translateY(100%);
+  }
+}
+
+@media only screen and (min-width: 769px) {
+  .overlay-container {
+    left: 50vw;
+    top: 50vh;
+    transform: translate(-50%, -50%);
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .overlay-container {
+    bottom: 0px;
+    width: 100vw;
+    animation-name: slidein;
+    animation-duration: 0.4s;
+  }
+}

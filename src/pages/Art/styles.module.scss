@@ -33,11 +33,13 @@
 }
 
 .background {
-  --background: #e5e9ec;
+  //--background: #e5e9ec;
 }
 
-.no-shadow {
+.art-card {
   box-shadow: none !important;
+  border-bottom: 1px solid black;
+  border-radius: 0;
 }
 
 .light-text {
@@ -45,15 +47,40 @@
 }
 
 .icon {
-  padding-left: 8px;
-  margin-top: 5px;
   font-size: 16px;
   cursor: pointer;
   @media screen and (min-width: 768px) {
     font-size: 24px;
   }
+  padding: 8px 8px;
 }
 
 .rws-header {
   color: black;
+}
+
+.art-header-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.art-header-text {
+  margin: 0px;
+}
+
+.share-button-container {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.menu-button {
+  --padding-bottom: 0px;
+  --padding-top: 0px;
+  --background-hover: white;
+}
+
+.pic-modal {
+  --height: 100px;
+  --bottom: 0;
 }

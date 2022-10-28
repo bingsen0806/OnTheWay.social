@@ -1,22 +1,17 @@
 import {
   IonContent,
-  IonHeader,
   IonPage,
-  IonToolbar,
   IonItem,
   IonLabel,
   IonList,
-  IonAvatar,
-  IonCardContent,
-  IonCard,
-  IonCardHeader,
   IonGrid,
   IonRow,
   IonCol,
+  IonImg,
 } from '@ionic/react';
 import styles from './styles.module.scss';
 import { useHistory } from 'react-router';
-import { ART, CAMPAIGN, FAQ } from '../../routes';
+import { ABOUT_ART, ART, CAMPAIGN, FAQ } from '../../routes';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { getInitialSelf, reloadSelf } from '../../redux/slices/userSlice';
 import { logout } from '../../api/authentication';
@@ -32,6 +27,7 @@ import { resetCampaigns } from '../../redux/slices/campaignSlice';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import useInfoToast from '../../util/hooks/useInfoToast';
 import { getUserCampaignsThunk } from '../../redux/slices/campaignSlice';
+import ProfileHeader from '../../components/ProfileHeader';
 
 interface Image {
   preview: string;
@@ -118,88 +114,77 @@ export default function ProfilePage() {
     history.push(FAQ);
   };
 
-  const imageURL = user.thumbnailPhoto;
-  const username = user.name;
-
   return (
     <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <h1 className="ion-padding-start">User Profile</h1>
-        </IonToolbar>
-      </IonHeader>
+      <ProfileHeader
+        thumbnailPhoto={image.preview ? image.preview : user.thumbnailPhoto}
+        profilePhoto={user.profilePhoto}
+        editThumbnailHandler={openUpload}
+      ></ProfileHeader>
       <IonContent fullscreen>
         {isLoading ? (
           <LoadingSpinner />
         ) : (
           <IonGrid>
-            <IonRow className="ion-justify-content-center">
+            <IonRow>
+              <IonCol className="ion-padding-start">
+                <h1>{user.name}</h1>
+              </IonCol>
+            </IonRow>
+            <IonRow>
               <IonCol size="12" sizeMd="6" sizeLg="4" sizeXl="3">
-                <IonCard>
-                  <IonCardContent>
-                    <input
-                      accept="image/*"
-                      ref={inputFile}
-                      type="file"
-                      id="upload-button"
-                      style={{ display: 'none' }}
-                      onChange={handleChange}
-                    />
-                    {image.preview ? (
-                      <IonAvatar
-                        onClick={openUpload}
-                        className={styles['avatar']}
-                      >
-                        <img alt="profile" src={image.preview} />
-                      </IonAvatar>
-                    ) : (
-                      <IonAvatar
-                        onClick={openUpload}
-                        className={styles['avatar']}
-                      >
-                        <img alt="profile" src={imageURL} />
-                      </IonAvatar>
-                    )}
-
-                    <IonCardHeader>
-                      <h1 className={styles['username-text']}>{username}</h1>
-                    </IonCardHeader>
-                    <IonList lines="none">
-                      <IonItem>
-                        <IonLabel
-                          onClick={routeToArt}
-                          className={styles['pointer']}
-                        >
-                          <h1>Art</h1>
-                        </IonLabel>
-                      </IonItem>
-                      <IonItem>
-                        <IonLabel
-                          onClick={routeToCampaign}
-                          className={styles['pointer']}
-                        >
-                          <h1>Campaigns</h1>
-                        </IonLabel>
-                      </IonItem>
-                      <IonItem>
-                        <IonLabel
-                          onClick={routeToFAQ}
-                          className={styles['pointer']}
-                        >
-                          <h1>FAQ</h1>
-                        </IonLabel>
-                      </IonItem>
-                      <IonItem>
-                        <IonLabel
-                          className={styles['pointer']}
-                          onClick={submitLogout}
-                        >
-                          <h1>Log out</h1>
-                        </IonLabel>
-                      </IonItem>
-                    </IonList>
-                  </IonCardContent>
-                </IonCard>
+                <input
+                  accept="image/*"
+                  ref={inputFile}
+                  type="file"
+                  id="upload-button"
+                  style={{ display: 'none' }}
+                  onChange={handleChange}
+                />
+                <IonList lines="none">
+                  <IonItem>
+                    <IonLabel
+                      onClick={routeToArt}
+                      className={styles['pointer']}
+                    >
+                      <h1>Art</h1>
+                    </IonLabel>
+                  </IonItem>
+                  <IonItem>
+                    <IonLabel
+                      onClick={routeToCampaign}
+                      className={styles['pointer']}
+                    >
+                      <h1>Campaigns</h1>
+                    </IonLabel>
+                  </IonItem>
+                  <IonItem>
+                    <IonLabel
+                      onClick={routeToFAQ}
+                      className={styles['pointer']}
+                    >
+                      <h1>FAQ</h1>
+                    </IonLabel>
+                  </IonItem>
+                  <IonItem>
+                    <IonLabel
+                      className={styles['pointer']}
+                      onClick={submitLogout}
+                    >
+                      <h1>Log out</h1>
+                    </IonLabel>
+                  </IonItem>
+                </IonList>
+              </IonCol>
+            </IonRow>
+            <IonRow>
+              <IonCol
+                onClick={() => {
+                  history.push(ABOUT_ART);
+                }}
+                className={styles['profile-art-banner-container']}
+              >
+                <IonImg src="assets/images/profile-art-banner.png"></IonImg>
               </IonCol>
             </IonRow>
           </IonGrid>
