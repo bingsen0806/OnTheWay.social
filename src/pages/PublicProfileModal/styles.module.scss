@@ -3,41 +3,20 @@
   --min-width: 100%;
 }
 
-.bold {
-  font-weight: bold;
-  padding-bottom: 8px;
+.back-button {
+  position: fixed;
+  top: 0px;
+  left: 16px;
+  z-index: 10000;
+  --padding-start: 0;
+  --padding-end: 0;
 }
 
-.padding {
-  padding-left: 8px;
+.art-header {
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
-.user-info {
-  padding-left: 16px;
-}
-
-.avatar {
-  width: 20vw;
-  height: 20vw;
+.art-popover-button {
   cursor: pointer;
-  @media screen and (min-width: 768px) {
-    width: 10vw;
-    height: 10vw;
-  }
-  @media screen and (min-width: 1024px) {
-    width: 8vw;
-    height: 8vw;
-  }
-  @media screen and (min-width: 1200px) {
-    width: 7vw;
-    height: 7vw;
-  }
-  @media screen and (min-width: 1600px) {
-    width: 5vw;
-    height: 5vw;
-  }
-  @media screen and (min-width: 2000px) {
-    width: 4vw;
-    height: 4vw;
-  }
 }

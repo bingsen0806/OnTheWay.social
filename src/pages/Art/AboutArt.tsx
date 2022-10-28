@@ -6,6 +6,8 @@ import {
   IonPage,
   IonToolbar,
 } from '@ionic/react';
+import noArtScreen from '../../assets/art.jpg';
+import styles from './styles.module.scss';
 
 export default function AboutArtPage() {
   return (
@@ -19,6 +21,7 @@ export default function AboutArtPage() {
         </IonToolbar>
       </IonHeader>
       <IonContent>
+        <img src={noArtScreen} className={styles['empty-image']} />
         <div className="ion-padding-start">
           <h2>
             Get your very first piece of digital art that you exclusively own!

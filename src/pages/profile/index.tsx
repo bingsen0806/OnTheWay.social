@@ -183,6 +183,7 @@ export default function ProfilePage() {
                   history.push(ABOUT_ART);
                 }}
                 className={styles['profile-art-banner-container']}
+                sizeMd="4"
               >
                 <IonImg src="assets/images/profile-art-banner.png"></IonImg>
               </IonCol>
