@@ -6,6 +6,8 @@ import {
   IonIcon,
 } from '@ionic/react';
 import { pencil } from 'ionicons/icons';
+import { useHistory } from 'react-router';
+import { CHANGE_COVER_PHOTO } from '../../routes';
 import styles from './styles.module.scss';
 
 interface ProfileHeaderProps {
@@ -21,6 +23,7 @@ export default function ProfileHeader({
   isPublicProfile = false,
   editThumbnailHandler,
 }: ProfileHeaderProps) {
+  const history = useHistory();
   return (
     <IonHeader className="ion-no-border">
       <IonToolbar className={styles['profile-toolbar']}>
@@ -29,7 +32,13 @@ export default function ProfileHeader({
           style={{ backgroundImage: `url("${profilePhoto})"` }}
         >
           {!isPublicProfile && (
-            <IonButton color="light" className={styles['edit-cover-button']}>
+            <IonButton
+              color="light"
+              className={styles['edit-cover-button']}
+              onClick={() => {
+                history.push(CHANGE_COVER_PHOTO);
+              }}
+            >
               <IonIcon icon={pencil}></IonIcon>
             </IonButton>
           )}

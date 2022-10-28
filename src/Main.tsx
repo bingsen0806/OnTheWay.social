@@ -39,6 +39,7 @@ import {
   ABOUT_ART,
   ART,
   CAMPAIGN,
+  CHANGE_COVER_PHOTO,
   CREATE_POST,
   EMAIL_VERIFICATION,
   FAQ,
@@ -69,6 +70,7 @@ import { loadNotifications } from './redux/slices/notificationsSlice';
 import { generateAndSendNotificationRegistrationToken } from './firebase';
 import Art from './pages/Art';
 import AboutArtPage from './pages/Art/AboutArt';
+import CoverPhotoSelectionPage from './pages/Art/CoverPhotoSelectionPage';
 setupIonicReact();
 
 export default function Main() {
@@ -121,6 +123,11 @@ export default function Main() {
               exact
               path={ABOUT_ART}
               component={AboutArtPage}
+            />
+            <AuthenticatedRoute
+              exact
+              path={CHANGE_COVER_PHOTO}
+              component={CoverPhotoSelectionPage}
             />
             <AuthenticatedRoute exact path={CAMPAIGN} component={Campaigns} />
             <AuthenticatedRoute
