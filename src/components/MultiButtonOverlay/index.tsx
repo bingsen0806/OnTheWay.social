@@ -1,5 +1,6 @@
 import { IonItem, IonLabel, IonList } from '@ionic/react';
 import { useEffect, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import styles from './styles.module.scss';
 
 export interface ButtonProps {
@@ -32,15 +33,28 @@ export default function MultiButtonOverlay({
     };
   }, [ref]);
 
-  return isShowing ? (
-    <div className={styles['overlay-container']} ref={ref}>
-      <IonList>
-        {buttons.map((button) => (
-          <IonItem button onClick={button.action} key={button.name}>
-            <IonLabel>{button.name}</IonLabel>
-          </IonItem>
-        ))}
-      </IonList>
-    </div>
-  ) : null;
+  return (
+    <AnimatePresence>
+      {isShowing && (
+        <motion.div
+          className={styles['overlay-container']}
+          ref={ref}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{
+            duration: 0.4,
+          }}
+        >
+          <IonList>
+            {buttons.map((button) => (
+              <IonItem button onClick={button.action} key={button.name}>
+                <IonLabel>{button.name}</IonLabel>
+              </IonItem>
+            ))}
+          </IonList>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
 }

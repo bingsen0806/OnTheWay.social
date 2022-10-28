@@ -22,6 +22,7 @@
     "@types/react-router": "^5.1.11",
     "@types/react-router-dom": "^5.1.7",
     "compressorjs": "^1.1.1",
+    "framer-motion": "^7.6.2",
     "ionic": "^5.4.16",
     "ionicons": "^6.0.3",
     "moment": "^2.29.4",
