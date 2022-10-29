@@ -24,6 +24,7 @@ import TextInputField from '../../components/TextInputField/TextInputField';
 import { analytics } from '../../firebase';
 import { useAppDispatch } from '../../redux/hooks';
 import { reloadInitialData } from '../../redux/slices/homeSlice';
+import { HOME } from '../../routes';
 import { roundToNext15mins } from '../../util/dateUtils';
 import useCheckedErrorHandler from '../../util/hooks/useCheckedErrorHandler';
 import useInfoToast from '../../util/hooks/useInfoToast';
@@ -181,14 +182,16 @@ export default function CreatePostPage() {
     setIsLoading(true);
     createPost(newPost)
       .then((resp) => {
-        setIsLoading(false);
         if (!resp.success) {
+          setIsLoading(false);
           handleCheckedError(resp.message as string);
         } else {
           setPost({ description: '' } as Post);
-          setIsLoading(false);
           presentInfoToast('Successfully created new post!');
-          void dispatch(reloadInitialData());
+          void dispatch(reloadInitialData()).then(() => {
+            history.push(HOME);
+            setIsLoading(false);
+          });
           logEvent(analytics, 'create_post');
         }
       })
