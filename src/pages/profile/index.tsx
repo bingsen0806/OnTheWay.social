@@ -33,7 +33,6 @@ interface Image {
 }
 
 export default function ProfilePage() {
-  console.log('render');
   const history = useHistory();
   const dispatch = useAppDispatch();
   const isLoading = useAppSelector((state) => state.user.isLoading);
