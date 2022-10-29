@@ -23,6 +23,7 @@ export default function ProfileHeader({
   isPublicProfile = false,
   editThumbnailHandler,
 }: ProfileHeaderProps) {
+  console.log(profilePhoto);
   const history = useHistory();
   return (
     <IonHeader className="ion-no-border">

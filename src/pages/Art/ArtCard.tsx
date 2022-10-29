@@ -14,8 +14,16 @@ import {
 import { shareOutline, shareSocialOutline, menu } from 'ionicons/icons';
 import { useState } from 'react';
 import { RWebShare } from 'react-web-share';
+import { changeArtVisibility, deleteArt, setCover } from '../../api/art';
 import { Art } from '../../api/types';
 import MultiButtonOverlay from '../../components/MultiButtonOverlay';
+import { useAppDispatch } from '../../redux/hooks';
+import {
+  editArtVisiblityFieldInRedux,
+  removeArtFromRedux,
+  setProfilePhotoInRedux,
+} from '../../redux/slices/userSlice';
+import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
 import styles from './styles.module.scss';
 
 export interface ArtCardProps {
@@ -31,29 +39,81 @@ const title = 'Share your AI-generated art!';
 export default function ArtCard({ art, isCover }: ArtCardProps) {
   const isIOS = getPlatforms().includes('ios');
   const [isOverlayShowing, setIsOverlayShowing] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const handleUnknownError = useUnknownErrorHandler();
+  const dispatch = useAppDispatch();
   const publicProfileButton = art.isPublic
     ? {
         name: 'Hide from public profile',
-        action: () => {
-          /*TODO: replace w api*/ console.log('Hide art from profile');
+        action: async () => {
+          try {
+            setIsLoading(true);
+            const resp = await changeArtVisibility(art.id, false);
+            if (!resp.success) {
+              handleUnknownError(resp.message);
+            }
+            dispatch(
+              editArtVisiblityFieldInRedux({ artId: art.id, visibility: false })
+            );
+          } catch (error) {
+            handleUnknownError(error);
+          } finally {
+            setIsLoading(false);
+          }
         },
       }
     : {
         name: 'Show on public profile',
-        action: () => {
-          /*TODO:*/ console.log('Show on public profile');
+        action: async () => {
+          try {
+            setIsLoading(true);
+            const resp = await changeArtVisibility(art.id, true);
+            if (!resp.success) {
+              handleUnknownError(resp.message);
+            }
+            dispatch(
+              editArtVisiblityFieldInRedux({ artId: art.id, visibility: true })
+            );
+          } catch (error) {
+            handleUnknownError(error);
+          } finally {
+            setIsLoading(false);
+          }
         },
       };
   const coverButton = {
     name: 'Set as cover photo',
-    action: () => {
-      /*TODO:*/ console.log('Set as cover photo');
+    action: async () => {
+      try {
+        setIsLoading(true);
+        const resp = await setCover(art.id);
+        if (!resp.success) {
+          handleUnknownError(resp.message);
+        }
+        dispatch(setProfilePhotoInRedux(art));
+        console.log(art);
+      } catch (error) {
+        handleUnknownError(error);
+      } finally {
+        setIsLoading(false);
+      }
     },
   };
   const deleteButton = {
     name: 'Delete',
-    action: () => {
-      /*TODO:*/ console.log('delete');
+    action: async () => {
+      try {
+        setIsLoading(true);
+        const resp = await deleteArt(art.id);
+        if (!resp.success) {
+          handleUnknownError(resp.message);
+        }
+        dispatch(removeArtFromRedux(art.id));
+      } catch (error) {
+        handleUnknownError(error);
+      } finally {
+        setIsLoading(false);
+      }
     },
   };
 
@@ -98,6 +158,7 @@ export default function ArtCard({ art, isCover }: ArtCardProps) {
         setIsShowing={(state) => {
           setIsOverlayShowing(state);
         }}
+        isLoading={isLoading}
       ></MultiButtonOverlay>
     </IonCard>
   );
