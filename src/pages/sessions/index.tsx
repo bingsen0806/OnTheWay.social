@@ -30,6 +30,7 @@ import { CREATE_POST, HOME } from '../../routes';
 import { useHistory } from 'react-router';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import { useAuthState } from '../../util/authentication';
+import styles from './styles.module.scss';
 
 enum HomeTab {
   APPLIED_POST = 'Applied',
@@ -108,10 +109,17 @@ export default function Sessions() {
   }
 
   function renderListBasedOnTab() {
+    if (isLoading) {
+      return (
+        <IonContent>
+          <LoadingSpinner />
+        </IonContent>
+      );
+    }
     if (tabToShow === HomeTab.CREATED_POST) {
       if (createdPosts.length === 0) {
         return (
-          <>
+          <IonContent fullscreen>
             <IonRefresher slot="fixed" onIonRefresh={refreshCreatedRequests}>
               <IonRefresherContent></IonRefresherContent>
             </IonRefresher>
@@ -128,16 +136,16 @@ export default function Sessions() {
                 </IonButton>
               </div>
             </NoData>
-          </>
+          </IonContent>
         );
       }
       return (
-        <>
+        <IonContent fullscreen className={styles['created-posts-container']}>
           {' '}
           <IonRefresher slot="fixed" onIonRefresh={refreshCreatedRequests}>
             <IonRefresherContent></IonRefresherContent>
           </IonRefresher>
-          <IonList>
+          <IonList className={styles['list-container-background']}>
             {createdPosts.map((post) => (
               <CreatedRequestListItem
                 key={post.post.id}
@@ -145,12 +153,12 @@ export default function Sessions() {
               ></CreatedRequestListItem>
             ))}
           </IonList>
-        </>
+        </IonContent>
       );
     } else {
       if (appliedPosts.length === 0) {
         return (
-          <>
+          <IonContent fullscreen>
             <IonRefresher slot="fixed" onIonRefresh={refreshCreatedRequests}>
               <IonRefresherContent></IonRefresherContent>
             </IonRefresher>
@@ -167,15 +175,15 @@ export default function Sessions() {
                 </IonButton>
               </div>
             </NoData>
-          </>
+          </IonContent>
         );
       }
       return (
-        <>
+        <IonContent fullscreen className={styles['applied-posts-container']}>
           <IonRefresher slot="fixed" onIonRefresh={refreshAppliedRequests}>
             <IonRefresherContent></IonRefresherContent>
           </IonRefresher>
-          <IonList>
+          <IonList className={styles['list-container-background']}>
             {appliedPosts.map((post) => (
               <AppliedRequestListItem
                 key={post.post.id}
@@ -183,7 +191,7 @@ export default function Sessions() {
               />
             ))}
           </IonList>
-        </>
+        </IonContent>
       );
     }
   }
@@ -210,9 +218,7 @@ export default function Sessions() {
           </IonSegment>
         </IonToolbar>
       </IonHeader>
-      <IonContent fullscreen>
-        {isLoading ? <LoadingSpinner /> : renderListBasedOnTab()}
-      </IonContent>
+      {renderListBasedOnTab()}
     </IonPage>
   );
 }

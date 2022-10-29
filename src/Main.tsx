@@ -113,10 +113,6 @@ export default function Main() {
               path={REGISTER}
               component={RegisterPage}
             />
-            <Route exact path={FAQ} component={Faq} />
-            <Route exact path="/">
-              <Redirect to={HOME} />
-            </Route>
             <Route exact path={HOME} component={Posts} />
             <AuthenticatedRoute exact path={ART} component={Art} />
             <AuthenticatedRoute

@@ -1,6 +1,4 @@
 import {
-  IonHeader,
-  IonToolbar,
   IonAvatar,
   IonButton,
   IonIcon,
@@ -23,46 +21,43 @@ export default function ProfileHeader({
   isPublicProfile = false,
   editThumbnailHandler,
 }: ProfileHeaderProps) {
-  console.log(profilePhoto);
   const history = useHistory();
   return (
-    <IonHeader className="ion-no-border">
-      <IonToolbar className={styles['profile-toolbar']}>
-        <div
-          className={styles['profile-photo-container']}
-          style={{ backgroundImage: `url("${profilePhoto})"` }}
-        >
-          {!isPublicProfile && (
-            <IonButton
-              color="light"
-              className={styles['edit-cover-button']}
-              onClick={() => {
-                history.push(CHANGE_COVER_PHOTO);
-              }}
-            >
-              <IonIcon icon={pencil}></IonIcon>
-            </IonButton>
-          )}
-        </div>
-        <IonAvatar
-          onClick={
-            !isPublicProfile
-              ? editThumbnailHandler
-              : () => {
-                  return;
-                }
-          }
-          className={`ion-margin-start ${styles['thumbnail-photo-container']} ${
-            !isPublicProfile ? styles['thumbnail-photo-container-public'] : ''
-          }`}
-        >
-          <img
-            alt="thumbnail"
-            className={styles['thumbnail-photo']}
-            src={thumbnailPhoto}
-          />
-        </IonAvatar>
-      </IonToolbar>
-    </IonHeader>
+    <div className={`${styles['profile-toolbar']}`}>
+      <div
+        className={styles['profile-photo-container']}
+        style={{ backgroundImage: `url("${profilePhoto})"` }}
+      >
+        {!isPublicProfile && (
+          <IonButton
+            color="light"
+            className={styles['edit-cover-button']}
+            onClick={() => {
+              history.push(CHANGE_COVER_PHOTO);
+            }}
+          >
+            <IonIcon icon={pencil}></IonIcon>
+          </IonButton>
+        )}
+      </div>
+      <IonAvatar
+        onClick={
+          !isPublicProfile
+            ? editThumbnailHandler
+            : () => {
+                return;
+              }
+        }
+        className={`ion-margin-start ${styles['thumbnail-photo-container']} ${
+          !isPublicProfile ? styles['thumbnail-photo-container-public'] : ''
+        }`}
+      >
+        <img
+          alt="thumbnail"
+          className={styles['thumbnail-photo']}
+          src={thumbnailPhoto}
+        />
+      </IonAvatar>
+    </div>
   );
 }

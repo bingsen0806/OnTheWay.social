@@ -42,21 +42,21 @@ export default function PublicProfileModal({
       onWillDismiss={closeModal}
       className={styles['modal-container']}
     >
-      <IonButton
-        color="dark"
-        fill="clear"
-        className={styles['back-button']}
-        size="large"
-        onClick={onClose}
-      >
-        <IonIcon icon={arrowBackOutline}></IonIcon>
-      </IonButton>
-      <ProfileHeader
-        thumbnailPhoto={user.thumbnailPhoto}
-        profilePhoto={user.profilePhoto}
-        isPublicProfile
-      ></ProfileHeader>
       <IonContent fullscreen>
+        <IonButton
+          color="dark"
+          fill="clear"
+          className={styles['back-button']}
+          size="large"
+          onClick={onClose}
+        >
+          <IonIcon icon={arrowBackOutline}></IonIcon>
+        </IonButton>
+        <ProfileHeader
+          thumbnailPhoto={user.thumbnailPhoto}
+          profilePhoto={user.profilePhoto}
+          isPublicProfile
+        ></ProfileHeader>
         <IonGrid>
           <IonRow>
             <IonCol className="ion-padding-start">

@@ -1,8 +1,9 @@
 /* eslint-disable */
 // @ts-nocheck
-import { Redirect, Route } from "react-router-dom";
-import { useAuthState } from ".";
-import { EMAIL_VERIFICATION, HOME } from "../../routes";
+import { createElement } from 'react';
+import { Redirect, Route } from 'react-router-dom';
+import { useAuthState } from '.';
+import { EMAIL_VERIFICATION, HOME } from '../../routes';
 
 interface UnauthenticatedRouteProps {
   exact?: boolean;
@@ -22,7 +23,7 @@ export default function UnauthenticatedRoute({
       path={path}
       render={(props) => {
         if (!isAuthenticated) {
-          return <Route {...props} component={component} />;
+          return createElement(component, { ...props }, null);
         } else {
           if (isEmailVerified || path === EMAIL_VERIFICATION) {
             return (

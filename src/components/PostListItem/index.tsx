@@ -6,6 +6,7 @@ import {
   convertDateRangeToTimeRangeStr,
   convertDateToDateStr,
 } from '../../util/dateUtils';
+import LocationImage from '../LocationImage';
 import styles from './styles.module.scss';
 
 interface PostListItemProps {
@@ -20,33 +21,34 @@ export default function PostListItem({ post }: PostListItemProps) {
   };
   return (
     <IonItem
-      className="ion-margin"
+      className={styles['item-container']}
       button
       onClick={() => {
         setIsModalOpen(true, () => {
           return;
         });
       }}
+      detail={false}
     >
-      <div className={styles['post-container']}>
-        <h3 className="ion-no-margin">
+      <div className="ion-padding-top" slot="start">
+        <h3 className="ion-no-margin">{locationEnumToStr(post.location)}</h3>
+        <p className={styles['key-details-text']}>
           {convertDateToDateStr(post.startDateTime)}
-        </h3>
-        <h3 className="ion-no-margin">
+        </p>
+        <p className={styles['key-details-text']}>
           {convertDateRangeToTimeRangeStr(post.startDateTime, post.endDateTime)}
-        </h3>
-        <p className={styles['post-text-location']}>
-          {locationEnumToStr(post.location)}
         </p>
         <br />
         <p className={styles['post-text']}>{post.description}</p>
-        <br />
         <p className={styles['post-text']}>{post.poster.name}</p>
         <p className={styles['post-text']}>
           Y{post.poster.year},{` ${facultyEnumToStr(post.poster.faculty)}`}
         </p>
       </div>
       <PostModal isOpen={isModalOpen} onClose={closeModal} applyPost={post} />
+      <div slot="end">
+        <LocationImage location={post.location}></LocationImage>
+      </div>
     </IonItem>
   );
 }

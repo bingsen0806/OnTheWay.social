@@ -1,3 +1,4 @@
+import { createElement } from 'react';
 import { Redirect, Route } from 'react-router-dom';
 import { useAuthState } from '.';
 import { EMAIL_VERIFICATION, LOGIN } from '../../routes';
@@ -21,7 +22,7 @@ export default function AuthenticatedRoute({
       render={(props) => {
         if (isAuthenticated) {
           if (isEmailVerified || path === EMAIL_VERIFICATION) {
-            return <Route {...props} component={component} />;
+            return createElement(component, { ...props }, null);
           }
           return (
             <Redirect
