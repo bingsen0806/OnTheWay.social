@@ -1,4 +1,9 @@
-import { IonButton, IonCol, IonRow } from '@ionic/react';
+import {
+  IonButton,
+  IonCol,
+  IonLabel,
+  IonRow,
+} from '@ionic/react';
 import { logEvent } from 'firebase/analytics';
 import { FirebaseError } from 'firebase/app';
 import { useState } from 'react';
@@ -15,6 +20,7 @@ import { useAppDispatch } from '../../redux/hooks';
 import { reloadInitialData } from '../../redux/slices/homeSlice';
 import { reloadInitialPostsData } from '../../redux/slices/postsSlice';
 import LoadingSpinner from '../../components/LoadingSpinner';
+import ResetPasswordModal from './ResetPasswordModal';
 interface LoginErrorMessages {
   email: string;
   password: string;
@@ -28,6 +34,8 @@ export default function LoginPage() {
   const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const presentErrorToast = useErrorToast();
+  const [isResetPasswordModalOpen, setIsResetPasswordModalOpen] =
+    useState<boolean>(false);
   const handleUnknownError = useUnknownErrorHandler();
   const [loginDetails, setLoginDetails] = useState<LoginDetails>({
     email: '',
@@ -139,6 +147,19 @@ export default function LoginPage() {
             </IonCol>
           </IonRow>
           <IonRow className="ion-justify-content-center">
+            <IonCol
+              size="10"
+              onClick={() => {
+                setIsResetPasswordModalOpen(true);
+              }}
+              className={styles['forgotten-password-container']}
+            >
+              <IonLabel>
+                <p>Forgotten password?</p>
+              </IonLabel>
+            </IonCol>
+          </IonRow>
+          <IonRow className="ion-justify-content-center">
             <IonCol size="10">
               <p>
                 Don't have an account?{' '}
@@ -148,6 +169,12 @@ export default function LoginPage() {
               </p>
             </IonCol>
           </IonRow>
+          <ResetPasswordModal
+            isOpen={isResetPasswordModalOpen}
+            closeCallback={() => {
+              setIsResetPasswordModalOpen(false);
+            }}
+          ></ResetPasswordModal>
         </>
       )}
     </AuthenticationPageContainer>
