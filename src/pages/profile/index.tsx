@@ -13,7 +13,7 @@ import styles from './styles.module.scss';
 import { useHistory } from 'react-router';
 import { ABOUT_ART, ART, CAMPAIGN, FAQ } from '../../routes';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { reloadSelf } from '../../redux/slices/userSlice';
+import { getInitialSelf, reloadSelf } from '../../redux/slices/userSlice';
 import { logout } from '../../api/authentication';
 import React, { useRef, useState } from 'react';
 import { uploadImageAndStoreToDb } from '../../api/user';
@@ -22,10 +22,14 @@ import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
 import { persistor } from '../../redux/store';
 import { requestReloadOfHomeData } from '../../redux/slices/homeSlice';
 import { requestReloadOfPosts } from '../../redux/slices/postsSlice';
-import { resetCampaigns } from '../../redux/slices/campaignSlice';
+import {
+  getUserCampaignsThunk,
+  resetCampaigns,
+} from '../../redux/slices/campaignSlice';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import useInfoToast from '../../util/hooks/useInfoToast';
 import ProfileHeader from '../../components/ProfileHeader';
+import usePageInitialLoad from '../../util/hooks/usePageInitialLoad';
 
 interface Image {
   preview: string;
@@ -71,7 +75,7 @@ export default function ProfilePage() {
   const getUser = () => {
     void dispatch(reloadSelf());
   };
-  /*
+
   usePageInitialLoad(() => {
     void dispatch(getUserCampaignsThunk());
     dispatch(getInitialSelf())
@@ -84,7 +88,7 @@ export default function ProfilePage() {
       .catch((error) => {
         handleUnknownError(error);
       });
-  }); */
+  });
 
   function submitLogout() {
     logout()
