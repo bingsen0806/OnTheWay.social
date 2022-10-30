@@ -58,7 +58,7 @@ export default function ArtCard({ art, isCover }: ArtCardProps) {
               editArtVisiblityFieldInRedux({ artId: art.id, visibility: false })
             );
             presentInfoToast(
-              'This art piece is now hidden on your public profile'
+              'This art piece is now hidden from your public profile'
             );
           } catch (error) {
             handleUnknownError(error);
