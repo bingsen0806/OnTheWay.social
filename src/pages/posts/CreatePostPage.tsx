@@ -24,7 +24,7 @@ import TextInputField from '../../components/TextInputField/TextInputField';
 import { analytics } from '../../firebase';
 import { useAppDispatch } from '../../redux/hooks';
 import { reloadInitialData } from '../../redux/slices/homeSlice';
-import { SESSIONS } from '../../routes';
+import { HOME } from '../../routes';
 import { roundToNext15mins } from '../../util/dateUtils';
 import useCheckedErrorHandler from '../../util/hooks/useCheckedErrorHandler';
 import useInfoToast from '../../util/hooks/useInfoToast';
@@ -102,7 +102,12 @@ export default function CreatePostPage() {
     roundToNext15mins(moment()).toISOString(true)
   );
   const [endTime, setEndTime] = useState<string>(
-    roundToNext15mins(moment()).add(2, 'hours').toISOString(true)
+    moment
+      .min([
+        roundToNext15mins(moment()).add(2, 'hours'),
+        moment().set('hour', 23).set('minute', 45),
+      ])
+      .toISOString(true)
   );
 
   const history = useHistory();
@@ -182,15 +187,15 @@ export default function CreatePostPage() {
     setIsLoading(true);
     createPost(newPost)
       .then((resp) => {
-        setIsLoading(false);
         if (!resp.success) {
+          setIsLoading(false);
           handleCheckedError(resp.message as string);
         } else {
           setPost({ description: '' } as Post);
-          setIsLoading(false);
           presentInfoToast('Successfully created new post!');
           void dispatch(reloadInitialData()).then(() => {
-            history.replace(SESSIONS);
+            history.push(HOME);
+            setIsLoading(false);
           });
           logEvent(analytics, 'create_post');
         }
@@ -258,7 +263,12 @@ export default function CreatePostPage() {
                 onChange={(startTime) => {
                   setStartTime(startTime);
                   setEndTime(
-                    moment(startTime).add(2, 'hours').toISOString(true)
+                    moment
+                      .min([
+                        moment(startTime).add(2, 'hours'),
+                        moment(startTime).set('hour', 23).set('minute', 45),
+                      ])
+                      .toISOString(true)
                   );
                 }}
                 errorMessage={errorMessages.startTime}

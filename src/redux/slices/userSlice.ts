@@ -1,8 +1,8 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import { RootState } from '../store';
-import { User, Gender, Faculty, ApiResponseBody } from '../../api/types';
+import { User, Gender, Faculty, ApiResponseBody, Art } from '../../api/types';
 import { getSelfUser, getUser } from '../../api/user';
 
 interface UserState {
@@ -30,7 +30,29 @@ const initialState: UserState = {
 const UserSlice = createSlice({
   name: 'user',
   initialState,
-  reducers: {},
+  reducers: {
+    editArtVisiblityFieldInRedux(
+      state,
+      action: PayloadAction<{ artId: string; visibility: boolean }>
+    ) {
+      const artToEdit = state.user.art?.find(
+        (art) => art.id === action.payload.artId
+      );
+      if (artToEdit) {
+        artToEdit.isPublic = action.payload.visibility;
+      }
+    },
+    setProfilePhotoInRedux(state, action: PayloadAction<Art>) {
+      state.user.profilePhoto = action.payload.image;
+    },
+    removeArtFromRedux(state, action: PayloadAction<string>) {
+      if (state.user.art) {
+        state.user.art = state.user.art.filter(
+          (art) => art.id !== action.payload
+        );
+      }
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(getUserObject.fulfilled, (state, action) => {
       if (action.payload.success) {
@@ -119,5 +141,11 @@ const persistedPostsReducer = persistReducer(
   userPersistConfig,
   UserSlice.reducer
 );
+
+export const {
+  editArtVisiblityFieldInRedux,
+  removeArtFromRedux,
+  setProfilePhotoInRedux,
+} = UserSlice.actions;
 
 export default persistedPostsReducer;

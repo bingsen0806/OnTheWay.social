@@ -18,3 +18,5 @@ export const SESSIONS = '/sessions';
 export const NOTIFICATIONS = '/notifications';
 
 export const ART = '/profile/art';
+export const ABOUT_ART = '/profile/art/aboutArt';
+export const CHANGE_COVER_PHOTO = '/profile/art/cover';

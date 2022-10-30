@@ -66,6 +66,29 @@ export enum Location {
   LAW,
 }
 
+export enum DayOfTheWeek {
+  MONDAY,
+  TUESDAY,
+  WEDNESDAY,
+  THURSDAY,
+  FRIDAY,
+  SATURDAY,
+  SUNDAY,
+}
+
+export enum TimeOfDay {
+  MORNING,
+  AFTERNOON,
+  EVENING,
+  NIGHT,
+}
+
+export interface PostsFilter {
+  days: DayOfTheWeek[];
+  timesOfDay: TimeOfDay[];
+  locations: Location[];
+}
+
 export function locationEnumToStr(location: Location) {
   switch (location) {
     case Location.CLB:
@@ -89,6 +112,38 @@ export function locationEnumToStr(location: Location) {
   }
 }
 
+export function dayOfTheWeekEnumToStr(day: DayOfTheWeek) {
+  switch (day) {
+    case DayOfTheWeek.MONDAY:
+      return 'Monday';
+    case DayOfTheWeek.TUESDAY:
+      return 'Tuesday';
+    case DayOfTheWeek.WEDNESDAY:
+      return 'Wednesday';
+    case DayOfTheWeek.THURSDAY:
+      return 'Thursday';
+    case DayOfTheWeek.FRIDAY:
+      return 'Friday';
+    case DayOfTheWeek.SATURDAY:
+      return 'Saturday';
+    case DayOfTheWeek.SUNDAY:
+      return 'Sunday';
+  }
+}
+
+export function timeOfDayEnumToStr(time: TimeOfDay) {
+  switch (time) {
+    case TimeOfDay.MORNING:
+      return 'Morning';
+    case TimeOfDay.AFTERNOON:
+      return 'Afternoon';
+    case TimeOfDay.EVENING:
+      return 'Evening';
+    case TimeOfDay.NIGHT:
+      return 'Night';
+  }
+}
+
 export type Art = {
   id: string;
   prompt: string;
@@ -96,6 +151,7 @@ export type Art = {
   userId: string;
   description: string;
   image: string;
+  isPublic: boolean;
 };
 
 /**
@@ -134,6 +190,15 @@ export interface User {
   art?: Art[];
 }
 
+export interface UserHistory {
+  totalCreatedStudySessions: number;
+  totalAppliedStudySessons: number;
+  numPeopleMet: number;
+  totalStudyHours: number;
+  recentBuddies: User[];
+  recentStudySessions: Post[];
+}
+
 /**
  * Contains all fields for a Post.
  */
@@ -155,6 +220,7 @@ export enum BuddyNotificationType {
   ACCEPTED_YOUR_APPLICATION,
   DELETED_POST_YOU_APPLIED_FOR,
   GENERIC_MESSAGE,
+  RECEIVED_NEW_ART,
 }
 
 export interface BuddyNotification {

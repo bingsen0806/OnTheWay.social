@@ -8,6 +8,7 @@ import {
   IonToolbar,
 } from '@ionic/react';
 import { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import {
   AppliedRequest,
   BuddyNotification,
@@ -18,6 +19,7 @@ import {
 } from '../../../api/types';
 import { useAppDispatch } from '../../../redux/hooks';
 import { markNotification } from '../../../redux/slices/notificationsSlice';
+import { ART } from '../../../routes';
 import {
   convertDateRangeToTimeRangeStr,
   convertDateToDateStr,
@@ -34,6 +36,7 @@ export default function NotificationListItem({
   notification,
 }: NotificationListItemProps) {
   const dispatch = useAppDispatch();
+  const history = useHistory();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   function closeModal() {
@@ -41,6 +44,9 @@ export default function NotificationListItem({
   }
 
   function clickHandler() {
+    if (notification.type === BuddyNotificationType.RECEIVED_NEW_ART) {
+      history.push(ART);
+    }
     // TODO: check if need any error handling here
     void dispatch(markNotification(notification.id));
     setIsModalOpen(true);
@@ -148,6 +154,11 @@ export default function NotificationListItem({
             (notification.data as Post).startDateTime,
             (notification.data as Post).endDateTime
           )}`,
+        };
+      case BuddyNotificationType.RECEIVED_NEW_ART:
+        return {
+          title: 'You have received a new art piece!',
+          message: 'Go check it out!',
         };
       case BuddyNotificationType.GENERIC_MESSAGE:
         return {

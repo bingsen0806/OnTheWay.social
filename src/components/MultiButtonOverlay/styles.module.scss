@@ -1,0 +1,31 @@
+// desktop sizing
+.overlay-container {
+  position: fixed;
+  z-index: 100;
+  /* for IE */
+  box-shadow: 0 0 0 1000px rgba(0, 0, 0, 0.3);
+  /* for real browsers */
+  box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.3);
+  background-color: white;
+  min-height: 160px;
+}
+
+@media only screen and (min-width: 769px) {
+  .overlay-container {
+    left: 50vw;
+    top: 50vh;
+    transform: translate(-50%, -50%);
+    padding: 8px 16px;
+    border-radius: 8px;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .overlay-container {
+    left: 0px;
+    bottom: 0px;
+    width: 100vw;
+    animation-name: slidein;
+    animation-duration: 0.4s;
+  }
+}

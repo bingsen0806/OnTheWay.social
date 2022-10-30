@@ -6,6 +6,7 @@ import {
   facultyEnumToStr,
   AppliedRequestStatus,
 } from '../../../../../api/types';
+import LocationImage from '../../../../../components/LocationImage';
 import {
   convertDateToDateStr,
   convertDateRangeToTimeRangeStr,
@@ -35,33 +36,36 @@ export default function AppliedRequestListItem({
           return;
         });
       }}
+      detail={false}
+      className={styles['item-container']}
     >
       {appliedRequest.status === AppliedRequestStatus.ACCEPTED ? (
         <div className={styles['success-line']} />
       ) : (
         <div className={styles['alert-line']} />
       )}
-      <div className={styles['post-container']}>
+      <div className="ion-padding-top">
         <h3 className="ion-no-margin">
-          {convertDateToDateStr(appliedRequest.post.startDateTime)}
+          {locationEnumToStr(appliedRequest.post.location)}
         </h3>
-        <h3 className="ion-no-margin">
+        <p className={styles['key-details-text']}>
+          {convertDateToDateStr(appliedRequest.post.startDateTime)}
+        </p>
+        <p className={styles['key-details-text']}>
           {convertDateRangeToTimeRangeStr(
             appliedRequest.post.startDateTime,
             appliedRequest.post.endDateTime
           )}
-        </h3>
-        <p className={styles['post-text-location']}>
-          {locationEnumToStr(appliedRequest.post.location)}
         </p>
-        <br />
-        <p className={styles['post-text']}>{appliedRequest.post.description}</p>
         <br />
         <p className={styles['post-text']}>{appliedRequest.post.poster.name}</p>
         <p className={styles['margin']}>
-          Y{appliedRequest.post.poster.year},
+          Y{appliedRequest.post.poster.year},{' '}
           {facultyEnumToStr(appliedRequest.post.poster.faculty)}
         </p>
+      </div>
+      <div slot="end">
+        <LocationImage location={appliedRequest.post.location}></LocationImage>
       </div>
 
       <AppliedPostModal

@@ -4,12 +4,16 @@
 }
 
 .success-line {
-  border-left: 6px solid #4bb543;
+  background-color: #4bb543;
+  width: 4px;
+  margin-right: 8px;
   height: 100%;
 }
 
 .alert-line {
-  border-left: 6px solid #fab732;
+  background-color: #fab732;
+  width: 4px;
+  margin-right: 8px;
   height: 100%;
 }
 
@@ -36,4 +40,17 @@ p.post-text {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.applicant-number-not-zero-text {
+  color: #ff735c;
+}
+
+.key-details-text {
+  margin: 0;
+  font-size: 18px;
+}
+
+.item-container {
+  margin-bottom: 8px;
 }

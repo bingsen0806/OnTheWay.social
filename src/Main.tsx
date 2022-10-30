@@ -36,8 +36,10 @@ import './theme/variables.scss';
 import styles from './styles.module.scss';
 
 import {
+  ABOUT_ART,
   ART,
   CAMPAIGN,
+  CHANGE_COVER_PHOTO,
   CREATE_POST,
   EMAIL_VERIFICATION,
   FAQ,
@@ -67,6 +69,8 @@ import { useLayoutEffect } from 'react';
 import { loadNotifications } from './redux/slices/notificationsSlice';
 import { generateAndSendNotificationRegistrationToken } from './firebase';
 import Art from './pages/Art';
+import AboutArtPage from './pages/Art/AboutArt';
+import CoverPhotoSelectionPage from './pages/Art/CoverPhotoSelectionPage';
 setupIonicReact();
 
 export default function Main() {
@@ -109,12 +113,18 @@ export default function Main() {
               path={REGISTER}
               component={RegisterPage}
             />
-            <Route exact path={FAQ} component={Faq} />
-            <Route exact path="/">
-              <Redirect to={HOME} />
-            </Route>
             <Route exact path={HOME} component={Posts} />
             <AuthenticatedRoute exact path={ART} component={Art} />
+            <AuthenticatedRoute
+              exact
+              path={ABOUT_ART}
+              component={AboutArtPage}
+            />
+            <AuthenticatedRoute
+              exact
+              path={CHANGE_COVER_PHOTO}
+              component={CoverPhotoSelectionPage}
+            />
             <AuthenticatedRoute exact path={CAMPAIGN} component={Campaigns} />
             <AuthenticatedRoute
               exact

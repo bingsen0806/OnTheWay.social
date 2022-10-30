@@ -1,10 +1,8 @@
 import styles from './styles.module.scss';
-import { RWebShare } from 'react-web-share';
 import {
   IonContent,
   IonHeader,
   IonPage,
-  IonTitle,
   IonToolbar,
   IonRefresher,
   IonRefresherContent,
@@ -15,98 +13,79 @@ import {
   IonCol,
   RefresherEventDetail,
   IonIcon,
-  IonCard,
-  getPlatforms,
-  IonImg,
   IonPopover,
 } from '@ionic/react';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import moment from 'moment';
-import {
-  helpCircleOutline,
-  shareOutline,
-  shareSocialOutline,
-} from 'ionicons/icons';
-import EmptyArtPage from './EmptyArtPage';
-import { getSelf } from '../../redux/slices/userSlice';
+import { helpCircleOutline } from 'ionicons/icons';
+import { reloadSelf } from '../../redux/slices/userSlice';
+import ArtCard from './ArtCard';
 
 export default function Art() {
-  const platforms = getPlatforms();
-  const isIOS = platforms.includes('ios');
   const obtainedArt = useAppSelector((state) => state.user.user.art ?? []);
   const dispatch = useAppDispatch();
   function refreshContents(event: CustomEvent<RefresherEventDetail>) {
-    dispatch(getSelf())
+    dispatch(reloadSelf())
       .unwrap()
       .finally(() => {
         event.detail.complete();
       });
   }
-  const shareText =
-    'Check out my AI-generated art piece that is owned exclusively by me on BuddyNUS!';
-  const title = 'Check out this lovely piece of art!';
-
-  const items = obtainedArt.map((art, i) => {
-    const dateObtained = moment(art.date).calendar();
-    return (
-      <IonCard key={i} className={styles['no-shadow']}>
-        <div className="ion-margin">
-          <IonImg src={art.image} className={styles['center-image']} />
-          <div>
-            <p className={styles['description']}>{art.description}</p>
-          </div>
-          <RWebShare data={{ text: shareText, title, url: art.image }}>
-            <IonIcon
-              icon={isIOS ? shareOutline : shareSocialOutline}
-              className={styles['share']}
-            ></IonIcon>
-          </RWebShare>
-          <p className={styles['light-text']}>{dateObtained}</p>
-        </div>
-      </IonCard>
-    );
-  });
 
   return (
     <IonPage>
       <IonHeader>
-        <IonToolbar className="ion-align-items-start">
-          <IonTitle>
-            Art
-            <IonIcon
-              className={styles['icon']}
-              icon={helpCircleOutline}
-              id="art-popover"
-            />
-          </IonTitle>
-
-          <IonPopover trigger="art-popover" triggerAction="click">
-            <IonContent class="ion-padding">
-              These are AI-generated art pieces owned by you. Art pieces are
-              randomly generated as you create, apply and accept study sessions
-            </IonContent>
-          </IonPopover>
+        <IonToolbar>
           <IonButtons slot="start">
             <IonBackButton />
           </IonButtons>
+          <h1
+            slot="start"
+            className={`ion-padding-start ${styles['art-header-text']}`}
+          >
+            Art
+          </h1>
+          <IonIcon
+            slot="start"
+            className={styles['icon']}
+            icon={helpCircleOutline}
+            id="art-popover"
+          />
+          <IonPopover trigger="art-popover" triggerAction="click">
+            <IonContent class="ion-padding">
+              These are AI-generated art pieces owned by you. You get a 1
+              randomly-generated art piece everyday if you create or apply to a
+              study session, or accept an study buddy.
+            </IonContent>
+          </IonPopover>
         </IonToolbar>
       </IonHeader>
       <IonContent
         fullscreen
-        className={items.length > 0 ? styles['background'] : ''}
+        className={obtainedArt.length > 0 ? styles['background'] : ''}
       >
         <IonRefresher slot="fixed" onIonRefresh={refreshContents}>
           <IonRefresherContent></IonRefresherContent>
         </IonRefresher>
 
-        <IonGrid>
-          <IonRow className={styles['row']}>
-            <IonCol size="11" sizeMd="8" sizeLg="6" sizeXl="5">
-              {items}
-            </IonCol>
-          </IonRow>
+        <IonGrid className="ion-no-padding">
+          {obtainedArt.length > 0 ? (
+            <IonRow className={styles['row']}>
+              <IonCol sizeMd="10" sizeLg="8" sizeXl="6">
+                {obtainedArt.map((art) => (
+                  <ArtCard art={art} isCover={false} key={art.id}></ArtCard>
+                ))}
+              </IonCol>
+            </IonRow>
+          ) : (
+            <IonRow className={styles['empty-row']}>
+              <IonCol size="10">
+                <h1 className="ion-text-center">
+                  No art pieces yet! Go create or apply to some study sessions!
+                </h1>
+              </IonCol>
+            </IonRow>
+          )}
         </IonGrid>
-        {items.length === 0 && <EmptyArtPage />}
       </IonContent>
     </IonPage>
   );
