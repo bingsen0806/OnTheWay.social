@@ -3,7 +3,9 @@ import { NotificationPayload, onMessage } from 'firebase/messaging';
 import { notificationsOutline } from 'ionicons/icons';
 import { messaging } from '../../firebase';
 import { useAppDispatch } from '../../redux/hooks';
+import { reloadInitialData } from '../../redux/slices/homeSlice';
 import { loadNotifications } from '../../redux/slices/notificationsSlice';
+import { reloadSelf } from '../../redux/slices/userSlice';
 
 function getNotificationToastColor(title: string) {
   if (
@@ -39,6 +41,28 @@ export default function useNotificationForegroundHandler() {
   if (!isPlatform('ios')) {
     onMessage(messaging, (payload) => {
       void dispatch(loadNotifications(false));
+      if (
+        payload.notification &&
+        (payload.notification.title?.endsWith(
+          ' has applied to the study session'
+        ) ||
+          payload.notification.title ===
+            'You have been accepted to study session' ||
+          payload.notification.title?.endsWith(
+            ' has cancelled their study session application'
+          ) ||
+          payload.notification.title ===
+            'The study session you applied for has been cancelled')
+      ) {
+        // refresh home page if related notification comes in
+        void dispatch(reloadInitialData());
+      } else if (
+        payload.notification &&
+        payload.notification.title ===
+          "You've got a new art piece! Go check it out!"
+      ) {
+        void dispatch(reloadSelf());
+      }
       presentToast(payload.notification!);
     });
   }

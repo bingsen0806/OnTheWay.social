@@ -17,14 +17,14 @@ import {
 } from '@ionic/react';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { helpCircleOutline } from 'ionicons/icons';
-import { getSelf } from '../../redux/slices/userSlice';
+import { reloadSelf } from '../../redux/slices/userSlice';
 import ArtCard from './ArtCard';
 
 export default function Art() {
   const obtainedArt = useAppSelector((state) => state.user.user.art ?? []);
   const dispatch = useAppDispatch();
   function refreshContents(event: CustomEvent<RefresherEventDetail>) {
-    dispatch(getSelf())
+    dispatch(reloadSelf())
       .unwrap()
       .finally(() => {
         event.detail.complete();
