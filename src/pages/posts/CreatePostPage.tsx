@@ -102,7 +102,12 @@ export default function CreatePostPage() {
     roundToNext15mins(moment()).toISOString(true)
   );
   const [endTime, setEndTime] = useState<string>(
-    roundToNext15mins(moment()).add(2, 'hours').toISOString(true)
+    moment
+      .min([
+        roundToNext15mins(moment()).add(2, 'hours'),
+        moment().set('hour', 23).set('minute', 45),
+      ])
+      .toISOString(true)
   );
 
   const history = useHistory();
@@ -258,7 +263,12 @@ export default function CreatePostPage() {
                 onChange={(startTime) => {
                   setStartTime(startTime);
                   setEndTime(
-                    moment(startTime).add(2, 'hours').toISOString(true)
+                    moment
+                      .min([
+                        moment(startTime).add(2, 'hours'),
+                        moment(startTime).set('hour', 23).set('minute', 45),
+                      ])
+                      .toISOString(true)
                   );
                 }}
                 errorMessage={errorMessages.startTime}

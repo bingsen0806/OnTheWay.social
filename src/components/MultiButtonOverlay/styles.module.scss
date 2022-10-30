@@ -7,6 +7,7 @@
   /* for real browsers */
   box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.3);
   background-color: white;
+  min-height: 160px;
 }
 
 @media only screen and (min-width: 769px) {

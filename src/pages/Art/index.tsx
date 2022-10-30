@@ -17,7 +17,6 @@ import {
 } from '@ionic/react';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { helpCircleOutline } from 'ionicons/icons';
-import EmptyArtPage from './EmptyArtPage';
 import { getSelf } from '../../redux/slices/userSlice';
 import ArtCard from './ArtCard';
 
@@ -53,8 +52,9 @@ export default function Art() {
           />
           <IonPopover trigger="art-popover" triggerAction="click">
             <IonContent class="ion-padding">
-              These are AI-generated art pieces owned by you. Art pieces are
-              randomly generated as you create, apply and accept study sessions
+              These are AI-generated art pieces owned by you. You get a 1
+              randomly-generated art piece everyday if you create or apply to a
+              study session, or accept an study buddy.
             </IonContent>
           </IonPopover>
         </IonToolbar>
@@ -68,15 +68,24 @@ export default function Art() {
         </IonRefresher>
 
         <IonGrid className="ion-no-padding">
-          <IonRow className={styles['row']}>
-            <IonCol sizeMd="10" sizeLg="8" sizeXl="6">
-              {obtainedArt.map((art) => (
-                <ArtCard art={art} isCover={false} key={art.id}></ArtCard>
-              ))}
-            </IonCol>
-          </IonRow>
+          {obtainedArt.length > 0 ? (
+            <IonRow className={styles['row']}>
+              <IonCol sizeMd="10" sizeLg="8" sizeXl="6">
+                {obtainedArt.map((art) => (
+                  <ArtCard art={art} isCover={false} key={art.id}></ArtCard>
+                ))}
+              </IonCol>
+            </IonRow>
+          ) : (
+            <IonRow className={styles['empty-row']}>
+              <IonCol size="10">
+                <h1 className="ion-text-center">
+                  No art pieces yet! Go create or apply to some study sessions!
+                </h1>
+              </IonCol>
+            </IonRow>
+          )}
         </IonGrid>
-        {obtainedArt.length === 0 && <EmptyArtPage />}
       </IonContent>
     </IonPage>
   );

@@ -1,8 +1,4 @@
-import {
-  IonAvatar,
-  IonButton,
-  IonIcon,
-} from '@ionic/react';
+import { IonAvatar, IonButton, IonIcon } from '@ionic/react';
 import { pencil } from 'ionicons/icons';
 import { useHistory } from 'react-router';
 import { CHANGE_COVER_PHOTO } from '../../routes';
@@ -22,11 +18,13 @@ export default function ProfileHeader({
   editThumbnailHandler,
 }: ProfileHeaderProps) {
   const history = useHistory();
+  console.log('profile: ', profilePhoto);
+  console.log('thumbnail: ', thumbnailPhoto);
   return (
     <div className={`${styles['profile-toolbar']}`}>
       <div
         className={styles['profile-photo-container']}
-        style={{ backgroundImage: `url("${profilePhoto})"` }}
+        style={{ backgroundImage: `url("${profilePhoto}")` }}
       >
         {!isPublicProfile && (
           <IonButton

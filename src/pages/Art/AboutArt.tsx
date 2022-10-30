@@ -27,16 +27,15 @@ export default function AboutArtPage() {
             Get your very first piece of digital art that you exclusively own!
           </h2>
           <p>
-            Everytime you create, apply for a study session or accept an
-            applicant, you have a chance of receiving an AI-generated piece of
-            art owned exclusively by you. This art is publicly visible by other
-            users and can be shared on your social media or exported as an NFT.
-            Own your very first NFT today!
+            Everyday if you create, apply for a study session or accept an
+            applicant, you have the chance to receive 1 AI-generated piece of
+            art. Your art collection is visible to other users on BuddyNUS on
+            your profile.
           </p>
           <p>
             What you get every time is completely random. It could be a
             masterpiece, or it could be less than aesthetic. Thats part of the
-            joy!
+            fun!
           </p>
         </div>
       </IonContent>

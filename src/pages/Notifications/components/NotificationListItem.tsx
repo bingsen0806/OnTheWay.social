@@ -157,8 +157,8 @@ export default function NotificationListItem({
         };
       case BuddyNotificationType.RECEIVED_NEW_ART:
         return {
-          title: 'You Have received new art!',
-          message: 'Go check it out',
+          title: 'You have received a new art piece!',
+          message: 'Go check it out!',
         };
       case BuddyNotificationType.GENERIC_MESSAGE:
         return {

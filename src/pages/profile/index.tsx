@@ -135,7 +135,12 @@ export default function ProfilePage() {
                     onChange={handleChange}
                   />
                   <IonList lines="none">
-                    <IonItem button routerLink={ART}>
+                    <IonItem
+                      button
+                      routerLink={
+                        user.art && user.art.length > 0 ? ART : ABOUT_ART
+                      }
+                    >
                       <IonLabel className={styles['pointer']}>
                         <h1>Art</h1>
                       </IonLabel>

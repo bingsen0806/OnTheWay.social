@@ -219,8 +219,8 @@ export enum BuddyNotificationType {
   CANCELLED_THEIR_APPLICATION,
   ACCEPTED_YOUR_APPLICATION,
   DELETED_POST_YOU_APPLIED_FOR,
-  RECEIVED_NEW_ART,
   GENERIC_MESSAGE,
+  RECEIVED_NEW_ART,
 }
 
 export interface BuddyNotification {

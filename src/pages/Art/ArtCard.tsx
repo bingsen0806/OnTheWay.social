@@ -23,6 +23,7 @@ import {
   removeArtFromRedux,
   setProfilePhotoInRedux,
 } from '../../redux/slices/userSlice';
+import useInfoToast from '../../util/hooks/useInfoToast';
 import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
 import styles from './styles.module.scss';
 
@@ -41,6 +42,7 @@ export default function ArtCard({ art, isCover }: ArtCardProps) {
   const [isOverlayShowing, setIsOverlayShowing] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const handleUnknownError = useUnknownErrorHandler();
+  const presentInfoToast = useInfoToast();
   const dispatch = useAppDispatch();
   const publicProfileButton = art.isPublic
     ? {
@@ -54,6 +56,9 @@ export default function ArtCard({ art, isCover }: ArtCardProps) {
             }
             dispatch(
               editArtVisiblityFieldInRedux({ artId: art.id, visibility: false })
+            );
+            presentInfoToast(
+              'This art piece is now hidden on your public profile'
             );
           } catch (error) {
             handleUnknownError(error);
@@ -74,6 +79,9 @@ export default function ArtCard({ art, isCover }: ArtCardProps) {
             dispatch(
               editArtVisiblityFieldInRedux({ artId: art.id, visibility: true })
             );
+            presentInfoToast(
+              'This art piece is now visible on your public profile'
+            );
           } catch (error) {
             handleUnknownError(error);
           } finally {
@@ -91,7 +99,7 @@ export default function ArtCard({ art, isCover }: ArtCardProps) {
           handleUnknownError(resp.message);
         }
         dispatch(setProfilePhotoInRedux(art));
-        console.log(art);
+        presentInfoToast('This art piece is now your cover photo');
       } catch (error) {
         handleUnknownError(error);
       } finally {
@@ -109,6 +117,7 @@ export default function ArtCard({ art, isCover }: ArtCardProps) {
           handleUnknownError(resp.message);
         }
         dispatch(removeArtFromRedux(art.id));
+        setIsOverlayShowing(false);
       } catch (error) {
         handleUnknownError(error);
       } finally {

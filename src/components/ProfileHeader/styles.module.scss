@@ -1,6 +1,8 @@
 .profile-photo-container {
   height: 156px;
   background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
   display: flex;
   justify-content: flex-end;
   align-items: flex-end;
