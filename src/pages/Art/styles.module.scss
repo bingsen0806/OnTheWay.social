@@ -39,10 +39,6 @@
   padding-top: 100px;
 }
 
-.background {
-  //--background: #e5e9ec;
-}
-
 .art-card {
   box-shadow: none !important;
   border-bottom: 1px solid black;
@@ -90,4 +86,8 @@
 .pic-modal {
   --height: 100px;
   --bottom: 0;
+}
+
+.cover-selection-image {
+  cursor: pointer;
 }

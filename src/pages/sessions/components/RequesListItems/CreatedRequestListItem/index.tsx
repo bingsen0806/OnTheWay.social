@@ -37,7 +37,7 @@ export default function CreatedRequestListItem({
         createdRequest.applicants.length === 0 && (
           <div className={styles['success-line']} />
         )}
-      <div slot="start" className="ion-padding-top">
+      <div className="ion-padding-top">
         <h3 className="ion-no-margin">
           {locationEnumToStr(createdRequest.post.location)}
         </h3>
