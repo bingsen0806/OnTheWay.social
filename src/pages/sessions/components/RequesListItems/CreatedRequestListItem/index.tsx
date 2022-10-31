@@ -50,11 +50,6 @@ export default function CreatedRequestListItem({
             createdRequest.post.endDateTime
           )}
         </p>
-        {createdRequest.post.description && (
-          <p className={styles['post-text']}>
-            Description: {createdRequest.post.description}
-          </p>
-        )}
 
         <br />
         <p

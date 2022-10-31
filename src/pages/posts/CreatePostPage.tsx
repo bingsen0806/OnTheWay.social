@@ -29,6 +29,7 @@ import { roundToNext15mins } from '../../util/dateUtils';
 import useCheckedErrorHandler from '../../util/hooks/useCheckedErrorHandler';
 import useInfoToast from '../../util/hooks/useInfoToast';
 import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
+import styles from './styles.module.scss';
 
 const MAX_DESCRIPTION_LENGTH = 200;
 
@@ -227,7 +228,7 @@ export default function CreatePostPage() {
           </div>
         </IonToolbar>
       </IonHeader>
-      <IonContent fullscreen>
+      <IonContent fullscreen className={styles['content-container']}>
         <IonGrid fixed className="ion-padding">
           <IonRow className="ion-justify-content-center">
             <IonCol>
@@ -309,6 +310,26 @@ export default function CreatePostPage() {
               <IonButton expand="block" onClick={submitCreatePost}>
                 {isLoading ? <ButtonSpinner /> : 'Post'}
               </IonButton>
+            </IonCol>
+          </IonRow>
+          <IonRow>
+            <IonCol>
+              <br></br>
+            </IonCol>
+          </IonRow>
+          <IonRow>
+            <IonCol>
+              <br></br>
+            </IonCol>
+          </IonRow>
+          <IonRow>
+            <IonCol>
+              <br></br>
+            </IonCol>
+          </IonRow>
+          <IonRow>
+            <IonCol>
+              <br></br>
             </IonCol>
           </IonRow>
         </IonGrid>

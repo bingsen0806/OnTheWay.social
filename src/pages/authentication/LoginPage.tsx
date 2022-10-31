@@ -1,9 +1,4 @@
-import {
-  IonButton,
-  IonCol,
-  IonLabel,
-  IonRow,
-} from '@ionic/react';
+import { IonButton, IonCol, IonLabel, IonRow } from '@ionic/react';
 import { logEvent } from 'firebase/analytics';
 import { FirebaseError } from 'firebase/app';
 import { useState } from 'react';
@@ -110,6 +105,8 @@ export default function LoginPage() {
           <IonRow className="ion-justify-content-center">
             <IonCol size="10" className={styles['input-field-col']}>
               <TextInputField
+                name="email"
+                autocomplete="email"
                 label="Email"
                 placeholder="Email"
                 value={loginDetails?.email}

@@ -2,7 +2,9 @@ import { IonInput, IonItem, IonLabel, IonTextarea } from '@ionic/react';
 import styles from './styles.module.scss';
 
 interface TextInputFieldProps {
-  value?: string;
+  name?: string;
+  value: string;
+  autocomplete?: 'name' | 'email' | 'tel' | 'username';
   onChange?: (value: string) => void;
   label?: string;
   multiline?: boolean;
@@ -16,6 +18,7 @@ interface TextInputFieldProps {
 
 export default function TextInputField({
   value,
+  autocomplete,
   onChange,
   label,
   multiline = false,
@@ -25,6 +28,7 @@ export default function TextInputField({
   debounce,
   maxlength,
   type,
+  name,
 }: TextInputFieldProps) {
   return (
     <>
@@ -33,6 +37,8 @@ export default function TextInputField({
           <>
             <IonLabel position="floating">{label}</IonLabel>
             <IonInput
+              name={name}
+              autocomplete="on"
               value={value}
               placeholder={placeholder}
               debounce={debounce ? debounce : 0}
@@ -47,6 +53,7 @@ export default function TextInputField({
           <div className={styles['multiline-container']}>
             <IonLabel>{label}</IonLabel>
             <IonTextarea
+              name={name}
               className="ion-no-padding"
               placeholder={placeholder}
               debounce={debounce ? debounce : 0}

@@ -33,6 +33,26 @@ export default function AuthenticationPageContainer({
             </IonCol>
             <IonCol size="12">{children}</IonCol>
           </IonRow>
+          <IonRow>
+            <IonCol>
+              <br></br>
+            </IonCol>
+          </IonRow>
+          <IonRow>
+            <IonCol>
+              <br></br>
+            </IonCol>
+          </IonRow>
+          <IonRow>
+            <IonCol>
+              <br></br>
+            </IonCol>
+          </IonRow>
+          <IonRow>
+            <IonCol>
+              <br></br>
+            </IonCol>
+          </IonRow>
         </IonGrid>
       </IonContent>
     </IonPage>

@@ -13,6 +13,8 @@ interface PostListItemProps {
   post: Post;
 }
 
+const DESCRIPTION_WORD_LIMIT = 50;
+
 export default function PostListItem({ post }: PostListItemProps) {
   const [isModalOpen, setIsModalOpen] =
     useStateWithCallbackLazy<boolean>(false);
@@ -30,7 +32,7 @@ export default function PostListItem({ post }: PostListItemProps) {
       }}
       detail={false}
     >
-      <div className="ion-padding-top" slot="start">
+      <div className="ion-padding-top">
         <h3 className="ion-no-margin">{locationEnumToStr(post.location)}</h3>
         <p className={styles['key-details-text']}>
           {convertDateToDateStr(post.startDateTime)}
@@ -39,10 +41,14 @@ export default function PostListItem({ post }: PostListItemProps) {
           {convertDateRangeToTimeRangeStr(post.startDateTime, post.endDateTime)}
         </p>
         <br />
-        <p className={styles['post-text']}>{post.description}</p>
         <p className={styles['post-text']}>{post.poster.name}</p>
         <p className={styles['post-text']}>
           Y{post.poster.year},{` ${facultyEnumToStr(post.poster.faculty)}`}
+        </p>
+        <p className={styles['post-text']}>
+          {post.description.length <= DESCRIPTION_WORD_LIMIT
+            ? post.description
+            : post.description.slice(0, DESCRIPTION_WORD_LIMIT - 3) + '...'}
         </p>
       </div>
       <PostModal isOpen={isModalOpen} onClose={closeModal} applyPost={post} />
