@@ -13,7 +13,7 @@ interface PostListItemProps {
   post: Post;
 }
 
-const DESCRIPTION_WORD_LIMIT = 50;
+const DESCRIPTION_WORD_LIMIT = 28;
 
 export default function PostListItem({ post }: PostListItemProps) {
   const [isModalOpen, setIsModalOpen] =
@@ -40,15 +40,15 @@ export default function PostListItem({ post }: PostListItemProps) {
         <p className={styles['key-details-text']}>
           {convertDateRangeToTimeRangeStr(post.startDateTime, post.endDateTime)}
         </p>
-        <br />
-        <p className={styles['post-text']}>{post.poster.name}</p>
-        <p className={styles['post-text']}>
-          Y{post.poster.year},{` ${facultyEnumToStr(post.poster.faculty)}`}
-        </p>
         <p className={styles['post-text']}>
           {post.description.length <= DESCRIPTION_WORD_LIMIT
             ? post.description
             : post.description.slice(0, DESCRIPTION_WORD_LIMIT - 3) + '...'}
+        </p>
+        <br />
+        <p className={styles['post-text']}>{post.poster.name}</p>
+        <p className={styles['post-text']}>
+          Y{post.poster.year},{` ${facultyEnumToStr(post.poster.faculty)}`}
         </p>
       </div>
       <PostModal isOpen={isModalOpen} onClose={closeModal} applyPost={post} />
