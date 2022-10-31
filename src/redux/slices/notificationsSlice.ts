@@ -28,11 +28,21 @@ const NotificationsSlice = createSlice({
   reducers: {
     // removes a notification that id of a request that has been deleted.
     removeNotification: (state, action: PayloadAction<string>) => {
-      state.notifications = state.notifications.filter(
-        (notif) =>
-          (notif.data as AppliedRequest | CreatedRequest).post.id !==
+      state.notifications = state.notifications.filter((notif) => {
+        if (
+          !notif.data ||
+          !(notif.data as CreatedRequest | AppliedRequest).post
+        ) {
+          return true;
+        } else if (
+          (notif.data as CreatedRequest | AppliedRequest).post.id ===
           action.payload
-      );
+        ) {
+          return false;
+        } else {
+          return true;
+        }
+      });
     },
     // update a notification in the list of notifications
     replaceNotification: (state, action: PayloadAction<CreatedRequest>) => {

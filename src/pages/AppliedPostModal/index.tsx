@@ -43,7 +43,6 @@ export default function AppliedPostModal({
   const handleCheckedError = useCheckedErrorHandler();
   const handleUnknownError = useUnknownErrorHandler();
   const dispatch = useAppDispatch();
-  const [isCancelled, setIsCancelled] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const presentInfoToast = useInfoToast();
 
@@ -55,22 +54,20 @@ export default function AppliedPostModal({
           switch (resp.message) {
             case ErrorType.POST_NOT_FOUND:
               presentInfoToast('The post has already been deleted');
-              setIsCancelled(true);
               void dispatch(reloadInitialPostsData());
-              closeModal();
+              cancelAndClose();
               return;
             case ErrorType.APPLIED_REQUEST_NOT_FOUND:
               presentInfoToast('You have already cancelled this application.');
-              setIsCancelled(true);
               void dispatch(reloadInitialPostsData());
-              closeModal();
+              cancelAndClose();
               return;
             default:
               handleCheckedError(resp.message);
           }
         } else {
-          setIsCancelled(true);
           presentInfoToast('Successfully cancelled!');
+          cancelAndClose();
           void dispatch(reloadInitialPostsData());
         }
       })
@@ -82,19 +79,21 @@ export default function AppliedPostModal({
       });
   }
 
-  function closeModal() {
+  function cancelAndClose() {
     onClose(() => {
-      if (isCancelled) {
-        dispatch(removeNotification(appliedRequest.post.id));
-        dispatch(removeAppliedRequest(appliedRequest.post.id));
-      }
+      dispatch(removeNotification(appliedRequest.post.id));
+      dispatch(removeAppliedRequest(appliedRequest.post.id));
     });
   }
 
   return (
     <IonModal
       isOpen={isOpen}
-      onWillDismiss={closeModal}
+      onWillDismiss={() => {
+        onClose(() => {
+          return;
+        });
+      }}
       className={styles['modal-container']}
     >
       <IonHeader>
@@ -109,7 +108,9 @@ export default function AppliedPostModal({
               color="dark"
               onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
                 event.stopPropagation();
-                closeModal();
+                onClose(() => {
+                  return;
+                });
               }}
             >
               <IonIcon icon={arrowBackOutline} slot="start" />
@@ -119,48 +120,46 @@ export default function AppliedPostModal({
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        {!isCancelled && (
-          <RequestStatus
-            status={appliedRequest.status}
-            telegramHandle={appliedRequest.post?.poster?.telegramHandle}
-          />
-        )}
+        <RequestStatus
+          status={appliedRequest.status}
+          telegramHandle={appliedRequest.post?.poster?.telegramHandle}
+        />
+
         <PostDetails post={appliedRequest.post} />
         <OtherStudyBuddies
           studyBuddies={appliedRequest.post.participants}
         ></OtherStudyBuddies>
         <AboutPoster poster={appliedRequest.post?.poster} />
-        {!isCancelled && (
-          <IonButton
-            className="ion-padding-horizontal"
-            expand="block"
-            fill="outline"
-            color="danger"
-            onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
-              event.stopPropagation();
-              if (isLoading) {
-                return;
-              }
-              void presentAlert({
-                header: 'Confirm Cancel Application?',
-                message: 'This action is irreversible',
-                buttons: [
-                  {
-                    text: 'Cancel',
-                    role: 'cancel',
-                  },
-                  {
-                    text: 'Confirm',
-                    role: 'confirm',
-                    handler: handleCancel,
-                  },
-                ],
-              });
-            }}
-          >
-            {isLoading ? <ButtonSpinner /> : 'Cancel'}
-          </IonButton>
-        )}
+
+        <IonButton
+          className="ion-padding-horizontal"
+          expand="block"
+          fill="outline"
+          color="danger"
+          onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
+            event.stopPropagation();
+            if (isLoading) {
+              return;
+            }
+            void presentAlert({
+              header: 'Confirm Cancel Application?',
+              message: 'This action is irreversible',
+              buttons: [
+                {
+                  text: 'Cancel',
+                  role: 'cancel',
+                },
+                {
+                  text: 'Confirm',
+                  role: 'confirm',
+                  handler: handleCancel,
+                },
+              ],
+            });
+          }}
+        >
+          {isLoading ? <ButtonSpinner /> : 'Cancel'}
+        </IonButton>
       </IonContent>
     </IonModal>
   );

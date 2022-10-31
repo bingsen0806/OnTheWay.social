@@ -90,7 +90,7 @@ export default function PublicProfileModal({
           </IonRow>
           <IonRow>
             {art.map((artPiece) => (
-              <IonCol size="6">
+              <IonCol size="6" key={artPiece.id}>
                 <IonImg src={artPiece.image}></IonImg>
               </IonCol>
             ))}
