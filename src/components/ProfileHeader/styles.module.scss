@@ -16,6 +16,12 @@
   transform: translateY(-50px);
 }
 
+@media only screen and (min-width: 768px) {
+  .thumbnail-photo-container {
+    left: 30%;
+  }
+}
+
 .thumbnail-photo-container-public {
   cursor: pointer;
 }

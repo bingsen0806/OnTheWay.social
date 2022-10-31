@@ -118,7 +118,7 @@ export default function ProfilePage() {
               profilePhoto={user.profilePhoto}
               editThumbnailHandler={openUpload}
             ></ProfileHeader>
-            <IonGrid>
+            <IonGrid className={styles['grid-container']}>
               <IonRow>
                 <IonCol className="ion-padding-start">
                   <h1>{user.name}</h1>
@@ -169,7 +169,9 @@ export default function ProfilePage() {
                     history.push(ABOUT_ART);
                   }}
                   className={styles['profile-art-banner-container']}
-                  sizeMd="4"
+                  sizeMd="6"
+                  sizeLg="4"
+                  sizeXl="3"
                 >
                   <IonImg src="assets/images/profile-art-banner.png"></IonImg>
                 </IonCol>
