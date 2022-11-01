@@ -114,5 +114,8 @@
     "*.css": [
       "stylelint --fix --allow-empty-input"
     ]
+  },
+  "config": {
+    "ionic_webpack": "./config/webpack.config.js"
   }
 }
