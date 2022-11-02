@@ -38,7 +38,7 @@ export default function PostListItem({ post }: PostListItemProps) {
           <IonCol size="4">
             <LocationImage location={post.location}></LocationImage>
           </IonCol>
-          <IonCol size="1" sizeLg="0"></IonCol>
+          <IonCol size="1"></IonCol>
           <IonCol size="7">
             <div>
               <p className={styles['post-text-location']}>
