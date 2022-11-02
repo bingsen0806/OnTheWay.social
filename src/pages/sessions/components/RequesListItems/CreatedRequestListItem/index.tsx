@@ -27,7 +27,7 @@ export default function CreatedRequestListItem({
     <IonItem button onClick={() => setIsModalOpen(true)} detail={false}>
       <IonGrid>
         <IonRow className={styles['post-container']}>
-          <IonCol size={createdRequest.applicants.length > 0 ? '4' : '3'}>
+          <IonCol size="4">
             <LocationImage
               location={createdRequest.post.location}
             ></LocationImage>
@@ -51,7 +51,7 @@ export default function CreatedRequestListItem({
               </p>
               {createdRequest.applicants.length > 0 && (
                 <p className={styles['applicant-number-not-zero-text']}>
-                  {createdRequest.applicants.length} pending applicants
+                  {createdRequest.applicants.length} pending applicant(s)
                 </p>
               )}
             </div>

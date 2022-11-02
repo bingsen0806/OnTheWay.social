@@ -11,10 +11,10 @@ import { useHistory } from 'react-router';
 import { createUserProfile } from '../../api/authentication';
 import { ErrorType } from '../../api/errors';
 import { Faculty, Gender, User } from '../../api/types';
+import ButtonSpinner from '../../components/ButtonSpinner';
 import DropdownSelection, {
   DropdownItem,
 } from '../../components/DropdownSelection';
-import LoadingSpinner from '../../components/LoadingSpinner';
 import TextInputField from '../../components/TextInputField/TextInputField';
 import { analytics } from '../../firebase';
 import { HOME } from '../../routes';
@@ -207,99 +207,91 @@ export default function ProfileCreationPage() {
 
   return (
     <AuthenticationPageContainer pageTitle="Complete your profile">
-      {isLoading ? (
-        <LoadingSpinner />
-      ) : (
-        <>
-          <IonRow className="ion-justify-content-center">
-            <IonCol size="10" sizeMd="6" sizeLg="4">
-              <TextInputField
-                label="Username"
-                placeholder="Username"
-                value={userDetails.name}
-                errorMessage={errorMessages.username}
-                onChange={(name) => {
-                  setUserDetails({ ...userDetails, name });
-                }}
-              />
-            </IonCol>
-          </IonRow>
-          <IonRow className="ion-justify-content-center">
-            <IonCol
-              size="10"
-              sizeMd="6"
-              sizeLg="4"
-              className={styles['input-field-col']}
-            >
-              <TextInputField
-                label="Telegram Handle"
-                placeholder="Telegram Handle"
-                value={userDetails.telegramHandle}
-                errorMessage={errorMessages.telegramHandle}
-                onChange={(telegramHandle) => {
-                  setUserDetails({ ...userDetails, telegramHandle });
-                }}
-              />
-              <p className={styles['popover-text']} id="telegram-popover">
-                Why do we need this?
-              </p>
-              <IonPopover trigger="telegram-popover" triggerAction="click">
-                <IonContent class="ion-padding">
-                  Telegram handles are shared between users when both users have
-                  a confirmed study session together, to allow for
-                  communication.
-                </IonContent>
-              </IonPopover>
-            </IonCol>
-          </IonRow>
-          <IonRow className="ion-justify-content-center">
-            <IonCol size="10" sizeMd="6" sizeLg="4">
-              <DropdownSelection<Gender>
-                placeholder="Gender"
-                dropdownItems={genderDropdownItems}
-                onChange={(gender) => {
-                  setUserDetails({ ...userDetails, gender });
-                }}
-                shouldShowError={shouldShowDropdownErrors}
-              ></DropdownSelection>
-            </IonCol>
-          </IonRow>
-          <IonRow className="ion-justify-content-center">
-            <IonCol size="10" sizeMd="6" sizeLg="2">
-              <DropdownSelection<Faculty>
-                placeholder="Faculty"
-                dropdownItems={facultyDropdownItems}
-                onChange={(faculty) => {
-                  setUserDetails({ ...userDetails, faculty });
-                }}
-                shouldShowError={shouldShowDropdownErrors}
-              ></DropdownSelection>
-            </IonCol>
-            <IonCol size="10" sizeMd="6" sizeLg="2">
-              <DropdownSelection<number>
-                placeholder="Year of study"
-                dropdownItems={yearOfStudyDropdownItems}
-                onChange={(year) => {
-                  setUserDetails({ ...userDetails, year });
-                }}
-                shouldShowError={shouldShowDropdownErrors}
-              ></DropdownSelection>
-            </IonCol>
-          </IonRow>
-          <IonRow className="ion-margin-top ion-justify-content-center">
-            <IonCol size="10" sizeMd="6" sizeLg="4">
-              <IonButton
-                onClick={() => {
-                  void submit();
-                }}
-                expand="block"
-              >
-                Submit
-              </IonButton>
-            </IonCol>
-          </IonRow>
-        </>
-      )}
+      <IonRow className="ion-justify-content-center">
+        <IonCol size="10" sizeMd="6">
+          <TextInputField
+            label="Username"
+            placeholder="Username"
+            value={userDetails.name}
+            errorMessage={errorMessages.username}
+            onChange={(name) => {
+              setUserDetails({ ...userDetails, name });
+            }}
+          />
+        </IonCol>
+      </IonRow>
+      <IonRow className="ion-justify-content-center">
+        <IonCol size="10" sizeMd="6" className={styles['input-field-col']}>
+          <TextInputField
+            label="Telegram Handle"
+            placeholder="Telegram Handle"
+            value={userDetails.telegramHandle}
+            errorMessage={errorMessages.telegramHandle}
+            onChange={(telegramHandle) => {
+              setUserDetails({ ...userDetails, telegramHandle });
+            }}
+          />
+          <p className={styles['popover-text']} id="telegram-popover">
+            Why do we need this?
+          </p>
+          <IonPopover trigger="telegram-popover" triggerAction="click">
+            <IonContent class="ion-padding">
+              Telegram handles are shared between users when both users have a
+              confirmed study session together, to allow for communication.
+            </IonContent>
+          </IonPopover>
+        </IonCol>
+      </IonRow>
+      <IonRow className="ion-justify-content-center">
+        <IonCol size="10" sizeMd="6">
+          <DropdownSelection<Gender>
+            placeholder="Gender"
+            dropdownItems={genderDropdownItems}
+            onChange={(gender) => {
+              setUserDetails({ ...userDetails, gender });
+            }}
+            shouldShowError={shouldShowDropdownErrors}
+          ></DropdownSelection>
+        </IonCol>
+      </IonRow>
+      <IonRow className="ion-justify-content-center">
+        <IonCol size="10" sizeMd="6">
+          <DropdownSelection<Faculty>
+            placeholder="Faculty"
+            dropdownItems={facultyDropdownItems}
+            onChange={(faculty) => {
+              setUserDetails({ ...userDetails, faculty });
+            }}
+            shouldShowError={shouldShowDropdownErrors}
+          ></DropdownSelection>
+        </IonCol>
+      </IonRow>
+      <IonRow className="ion-justify-content-center">
+        <IonCol size="10" sizeMd="6">
+          <DropdownSelection<number>
+            placeholder="Year of study"
+            dropdownItems={yearOfStudyDropdownItems}
+            onChange={(year) => {
+              setUserDetails({ ...userDetails, year });
+            }}
+            shouldShowError={shouldShowDropdownErrors}
+          ></DropdownSelection>
+        </IonCol>
+      </IonRow>
+      <IonRow className="ion-margin-top ion-justify-content-center">
+        <IonCol size="10" sizeMd="6" sizeLg="4">
+          <IonButton
+            onClick={() => {
+              if (!isLoading) {
+                void submit();
+              }
+            }}
+            expand="block"
+          >
+            {isLoading ? <ButtonSpinner /> : 'Submit'}
+          </IonButton>
+        </IonCol>
+      </IonRow>
     </AuthenticationPageContainer>
   );
 }

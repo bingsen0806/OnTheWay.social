@@ -58,9 +58,9 @@ export default function Art() {
           />
           <IonPopover trigger="art-popover" triggerAction="click">
             <IonContent class="ion-padding">
-              These are AI-generated art pieces owned by you. You get a 1
-              randomly-generated art piece everyday if you create or apply to a
-              study session, or accept an study buddy.
+              These are AI-generated art pieces owned exclusively by you in the
+              whole world. You get a randomly-generated art piece everyday if
+              you create or apply to a study session, or accept an study buddy.
             </IonContent>
           </IonPopover>
         </IonToolbar>

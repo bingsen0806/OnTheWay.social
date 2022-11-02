@@ -14,8 +14,8 @@ import styles from './styles.module.scss';
 import { useAppDispatch } from '../../redux/hooks';
 import { reloadInitialData } from '../../redux/slices/homeSlice';
 import { reloadInitialPostsData } from '../../redux/slices/postsSlice';
-import LoadingSpinner from '../../components/LoadingSpinner';
 import ResetPasswordModal from './ResetPasswordModal';
+import ButtonSpinner from '../../components/ButtonSpinner';
 interface LoginErrorMessages {
   email: string;
   password: string;
@@ -98,86 +98,80 @@ export default function LoginPage() {
 
   return (
     <AuthenticationPageContainer pageTitle="Login">
-      {isLoading ? (
-        <LoadingSpinner />
-      ) : (
-        <>
-          <IonRow className="ion-justify-content-center">
-            <IonCol
-              size="10"
-              sizeMd="6"
-              sizeLg="4"
-              className={styles['input-field-col']}
-            >
-              <TextInputField
-                name="email"
-                autocomplete="email"
-                label="Email"
-                placeholder="Email"
-                value={loginDetails?.email}
-                errorMessage={errorMessages?.email}
-                onChange={(email) => {
-                  setLoginDetails({ ...loginDetails, email });
-                }}
-              />
-            </IonCol>
-          </IonRow>
-          <IonRow className="ion-justify-content-center">
-            <IonCol size="10" sizeMd="6" sizeLg="4">
-              <TextInputField
-                label="Password"
-                placeholder="Password"
-                value={loginDetails?.password}
-                errorMessage={errorMessages?.password}
-                onChange={(password) => {
-                  setLoginDetails({ ...loginDetails, password });
-                }}
-                type="password"
-              />
-            </IonCol>
-          </IonRow>
-          <IonRow className="ion-margin-bottom ion-justify-content-center">
-            <IonCol
-              size="10"
-              sizeMd="6"
-              sizeLg="4"
-              onClick={() => {
-                setIsResetPasswordModalOpen(true);
-              }}
-              className={styles['forgotten-password-container']}
-            >
-              <IonLabel>
-                <p>Forgot your password?</p>
-              </IonLabel>
-            </IonCol>
-          </IonRow>
-          <IonRow className="ion-justify-content-center">
-            <IonCol size="10" sizeMd="4" sizeLg="2">
-              <IonButton
-                onClick={() => {
-                  void submitLogin();
-                }}
-                expand="block"
-              >
-                Login
-              </IonButton>
-            </IonCol>
-          </IonRow>
-
-          <p className="ion-text-center">
-            Don't have an account?{' '}
-            <a href={REGISTER}>
-              <u>Sign up</u>
-            </a>
-          </p>
-          <ResetPasswordModal
-            isOpen={isResetPasswordModalOpen}
-            closeCallback={() => {
-              setIsResetPasswordModalOpen(false);
+      <IonRow className="ion-justify-content-center">
+        <IonCol size="10" sizeMd="6" className={styles['input-field-col']}>
+          <TextInputField
+            name="email"
+            autocomplete="email"
+            label="Email"
+            placeholder="Email"
+            value={loginDetails?.email}
+            errorMessage={errorMessages?.email}
+            onChange={(email) => {
+              setLoginDetails({ ...loginDetails, email });
             }}
-          ></ResetPasswordModal>
-        </>
+          />
+        </IonCol>
+      </IonRow>
+      <IonRow className="ion-justify-content-center">
+        <IonCol size="10" sizeMd="6">
+          <TextInputField
+            label="Password"
+            placeholder="Password"
+            value={loginDetails?.password}
+            errorMessage={errorMessages?.password}
+            onChange={(password) => {
+              setLoginDetails({ ...loginDetails, password });
+            }}
+            type="password"
+          />
+        </IonCol>
+      </IonRow>
+      {!isLoading && (
+        <IonRow className="ion-margin-bottom ion-justify-content-center">
+          <IonCol
+            size="10"
+            sizeMd="6"
+            onClick={() => {
+              setIsResetPasswordModalOpen(true);
+            }}
+            className={styles['forgotten-password-container']}
+          >
+            <IonLabel>
+              <p>Forgot your password?</p>
+            </IonLabel>
+          </IonCol>
+        </IonRow>
       )}
+      <IonRow className="ion-justify-content-center">
+        <IonCol size="10" sizeMd="4">
+          <IonButton
+            onClick={() => {
+              if (!isLoading) {
+                void submitLogin();
+              }
+            }}
+            expand="block"
+          >
+            {isLoading ? <ButtonSpinner /> : 'Login'}
+          </IonButton>
+        </IonCol>
+      </IonRow>
+
+      {!isLoading && (
+        <p className="ion-text-center">
+          Don't have an account?{' '}
+          <a href={REGISTER}>
+            <u>Sign up</u>
+          </a>
+        </p>
+      )}
+      <ResetPasswordModal
+        isOpen={isResetPasswordModalOpen}
+        closeCallback={() => {
+          setIsResetPasswordModalOpen(false);
+        }}
+      ></ResetPasswordModal>
     </AuthenticationPageContainer>
   );
 }

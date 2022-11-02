@@ -401,7 +401,7 @@ export default function PostsPage() {
                   </div>
                 </NoData>
               ) : (
-                <IonGrid className="ion-no-margin ion-no-padding">
+                <IonGrid className="ion-margin-top">
                   <IonRow className="ion-justify-content-center">
                     <IonCol size="12" sizeMd="6">
                       {listOfPosts.map((data) => (

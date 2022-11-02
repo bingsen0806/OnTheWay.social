@@ -1,11 +1,8 @@
+import { IonCol, IonGrid, IonIcon, IonItem, IonRow } from '@ionic/react';
 import {
-  IonCol,
-  IonGrid,
-  IonIcon,
-  IonItem,
-  IonRow,
-} from '@ionic/react';
-import { calendarClearOutline, timeOutline } from 'ionicons/icons';
+  calendarClearOutline,
+  timeOutline,
+} from 'ionicons/icons';
 import { useStateWithCallbackLazy } from 'use-state-with-callback';
 import { facultyEnumToStr, locationEnumToStr, Post } from '../../api/types';
 import PostModal from '../../pages/PostModal';
@@ -66,7 +63,6 @@ export default function PostListItem({ post }: PostListItemProps) {
                 Y{post.poster.year},
                 {` ${facultyEnumToStr(post.poster.faculty)}`}
               </p>
-              <br />
             </div>
           </IonCol>
         </IonRow>

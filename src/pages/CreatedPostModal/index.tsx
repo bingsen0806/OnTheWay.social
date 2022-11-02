@@ -1,10 +1,13 @@
 import {
   IonButton,
   IonButtons,
+  IonCol,
   IonContent,
+  IonGrid,
   IonHeader,
   IonIcon,
   IonModal,
+  IonRow,
   IonTitle,
   IonToolbar,
   useIonAlert,
@@ -161,47 +164,54 @@ export default function CreatedPostModal({
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        <PostDetails post={createdRequestState.post} />
-        <OtherStudyBuddies
-          inCreatedRequest
-          studyBuddies={createdRequestState.post.participants}
-        ></OtherStudyBuddies>
-        <ApplicantList
-          postId={createdRequestState.post.id}
-          applicants={createdRequestState.applicants}
-          addParticipantToCreatedRequest={addParticipantToCreatedRequest}
-        />
-        <IonButton
-          className="ion-padding-horizontal ion-margin-top"
-          expand="block"
-          fill="outline"
-          color="danger"
-          onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
-            event.stopPropagation();
-            if (isLoading) {
-              return;
-            }
-            void presentAlert({
-              header: 'Warning!',
-              message: 'You are deleting a post. This is irreversible',
-              buttons: [
-                {
-                  text: 'Cancel',
-                  role: 'cancel',
-                },
-                {
-                  text: 'Delete Post',
-                  role: 'confirm',
-                  handler: () => {
-                    void handleDelete(createdRequestState.post?.id);
-                  },
-                },
-              ],
-            });
-          }}
-        >
-          {isLoading ? <ButtonSpinner /> : 'Delete'}
-        </IonButton>
+        <IonGrid>
+          <IonRow className="ion-justify-content-center">
+            <IonCol sizeMd="8" sizeLg="6">
+              <PostDetails post={createdRequestState.post} />
+              <OtherStudyBuddies
+                inCreatedRequest
+                studyBuddies={createdRequestState.post.participants}
+              ></OtherStudyBuddies>
+              <ApplicantList
+                postId={createdRequestState.post.id}
+                applicants={createdRequestState.applicants}
+                addParticipantToCreatedRequest={addParticipantToCreatedRequest}
+              />
+              <IonButton
+                className="ion-padding-horizontal ion-margin-top"
+                expand="block"
+                fill="outline"
+                color="danger"
+                onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
+                  event.stopPropagation();
+                  if (isLoading) {
+                    return;
+                  }
+                  void presentAlert({
+                    header: 'Warning!',
+                    message:
+                      'You are deleting a study session. This is irreversible',
+                    buttons: [
+                      {
+                        text: 'Cancel',
+                        role: 'cancel',
+                      },
+                      {
+                        text: 'Delete Post',
+                        role: 'confirm',
+                        handler: () => {
+                          void handleDelete(createdRequestState.post?.id);
+                        },
+                      },
+                    ],
+                  });
+                }}
+              >
+                {isLoading ? <ButtonSpinner /> : 'Delete'}
+              </IonButton>
+            </IonCol>
+          </IonRow>
+        </IonGrid>
       </IonContent>
     </IonModal>
   );

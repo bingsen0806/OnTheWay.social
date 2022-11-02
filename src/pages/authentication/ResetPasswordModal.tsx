@@ -4,11 +4,11 @@ import {
   IonToolbar,
   IonTitle,
   IonContent,
-  IonButtons,
   IonButton,
-  IonIcon,
+  IonGrid,
+  IonRow,
+  IonCol,
 } from '@ionic/react';
-import { arrowBackOutline } from 'ionicons/icons';
 import { useState } from 'react';
 import styles from './styles.module.scss';
 import TextInputField from '../../components/TextInputField/TextInputField';
@@ -59,11 +59,6 @@ export default function ResetPasswordModal({
     >
       <IonHeader>
         <IonToolbar>
-          <IonButtons slot="start">
-            <IonButton onClick={closeCallback} color="dark">
-              <IonIcon icon={arrowBackOutline}></IonIcon>
-            </IonButton>
-          </IonButtons>
           <IonTitle>Reset Password</IonTitle>
         </IonToolbar>
       </IonHeader>
@@ -76,27 +71,33 @@ export default function ResetPasswordModal({
           a few minutes after pressing submit to receieve it. It may be in your
           junk folder.
         </p>
-        <div className="ion-padding-start ion-padding-end">
-          <TextInputField
-            label="Email"
-            placeholder="Email"
-            value={email}
-            errorMessage={errorMessage}
-            onChange={(email) => {
-              setEmail(email);
-            }}
-          />
-        </div>
+        <IonGrid>
+          <IonRow className="ion-justify-content-center">
+            <IonCol sizeMd="6">
+              <div className="ion-padding-start">
+                <TextInputField
+                  label="Email"
+                  placeholder="Email"
+                  value={email}
+                  errorMessage={errorMessage}
+                  onChange={(email) => {
+                    setEmail(email);
+                  }}
+                />
+              </div>
 
-        <IonButton
-          expand="block"
-          className="ion-margin-top ion-padding-start ion-padding-end"
-          onClick={() => {
-            handleSubmit();
-          }}
-        >
-          Send
-        </IonButton>
+              <IonButton
+                expand="block"
+                className="ion-margin-top ion-padding-start ion-padding-end"
+                onClick={() => {
+                  handleSubmit();
+                }}
+              >
+                Send
+              </IonButton>
+            </IonCol>
+          </IonRow>
+        </IonGrid>
       </IonContent>
     </IonModal>
   );

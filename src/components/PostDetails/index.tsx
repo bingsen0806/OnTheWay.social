@@ -12,32 +12,28 @@ interface PostDetailsProps {
 
 export default function PostDetails({ post }: PostDetailsProps) {
   return (
-    <IonGrid className="ion-margin-vertical">
-      <IonRow
-        className={
-          styles['bold'] + ' ion-justify-content-start ion-padding-start'
-        }
-      >
+    <IonGrid>
+      <IonRow className={styles['bold'] + ' ion-justify-content-start'}>
         <IonCol>Details</IonCol>
       </IonRow>
-      <IonRow className="ion-padding-start ion-justify-content-center">
+      <IonRow className="ion-justify-content-center">
         <IonCol>Venue</IonCol>
         <IonCol>
           {locationEnumToStr(post.location) ?? 'unknown location'}
         </IonCol>
       </IonRow>
-      <IonRow className="ion-padding-start">
+      <IonRow>
         <IonCol>Date</IonCol>{' '}
         {/* TODO: Confirm format of date time passed in and split accordingly */}
         <IonCol>{convertDateToDateStr(post.startDateTime)}</IonCol>
       </IonRow>
-      <IonRow className="ion-padding-start">
+      <IonRow>
         <IonCol>Time</IonCol>
         <IonCol>
           {convertDateRangeToTimeRangeStr(post.startDateTime, post.endDateTime)}
         </IonCol>
       </IonRow>
-      <IonRow className="ion-padding">
+      <IonRow>
         <IonCol>
           <br />
           {post.description}

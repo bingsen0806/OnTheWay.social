@@ -76,7 +76,7 @@ export default function EmailVerificationPage() {
         </IonCol>
       </IonRow>
       <IonRow className="ion-padding-bottom ion-justify-content-center">
-        <IonCol size="5" sizeMd="2" sizeLg="1">
+        <IonCol size="3">
           <IonButton
             expand="block"
             fill="outline"
@@ -88,7 +88,7 @@ export default function EmailVerificationPage() {
             Cancel
           </IonButton>
         </IonCol>
-        <IonCol size="5" sizeMd="3" sizeLg="2">
+        <IonCol size="5">
           <IonButton
             expand="block"
             onClick={() => {

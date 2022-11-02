@@ -13,8 +13,8 @@ export default function OtherStudyBuddies({
   inCreatedRequest,
 }: OtherStudyBuddiesProp) {
   return (
-    <IonGrid className="ion-margin-vertical">
-      <IonRow className="ion-justify-content-start ion-padding-start">
+    <IonGrid>
+      <IonRow className="ion-justify-content-start ion-no-margin">
         <IonCol className={styles['header']} size="12">
           Confirmed Attendees
         </IonCol>

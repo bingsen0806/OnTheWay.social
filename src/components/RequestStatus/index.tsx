@@ -30,21 +30,15 @@ export default function RequestStatus({
 }: RequestStatusProps) {
   const presentInfoToast = useInfoToast();
   return (
-    <IonGrid className="ion-margin-vertical">
+    <IonGrid>
       <IonRow
-        className={
-          styles['non-bold-header'] +
-          ' ion-padding-start ion-justify-content-start'
-        }
+        className={styles['non-bold-header'] + 'ion-justify-content-start'}
       >
         <IonCol>Status:</IonCol>
         {getStatusLabel(status)}
       </IonRow>
       <IonRow
-        className={
-          styles['non-bold-header'] +
-          ' ion-padding-start ion-justify-content-start'
-        }
+        className={styles['non-bold-header'] + 'ion-justify-content-start'}
       >
         {status === AppliedRequestStatus.ACCEPTED && (
           <IonCol className="ion-no-padding">

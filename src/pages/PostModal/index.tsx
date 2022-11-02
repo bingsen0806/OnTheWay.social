@@ -1,10 +1,13 @@
 import {
   IonButton,
   IonButtons,
+  IonCol,
   IonContent,
+  IonGrid,
   IonHeader,
   IonIcon,
   IonModal,
+  IonRow,
   IonTitle,
   IonToolbar,
   useIonAlert,
@@ -163,71 +166,77 @@ export default function PostModal({
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        <PostDetails post={applyPost} />
-        <OtherStudyBuddies studyBuddies={applyPost.participants} />
-        <AboutPoster poster={applyPost?.poster} />
-        {isApplied ? (
-          <IonButton
-            className="ion-padding-horizontal"
-            fill="outline"
-            color="danger"
-            expand="block"
-            onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
-              event.stopPropagation();
-              if (isLoading) {
-                return;
-              }
-              void presentAlert({
-                header: 'Confirm cancelling study application?',
-                buttons: [
-                  {
-                    text: 'Cancel',
-                    role: 'cancel',
-                  },
-                  {
-                    text: 'Confirm',
-                    role: 'confirm',
-                    handler: () => {
-                      sendCancellationRequest(applyPost.id);
-                    },
-                  },
-                ],
-              });
-            }}
-          >
-            {isLoading ? <ButtonSpinner /> : 'Cancel'}
-          </IonButton>
-        ) : (
-          <IonButton
-            className={`${styles['accept-button']} ion-padding-horizontal`}
-            expand="block"
-            color="primary"
-            onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
-              event.stopPropagation();
-              if (isLoading) {
-                return;
-              }
-              void presentAlert({
-                header: 'Confirm Applying?',
-                buttons: [
-                  {
-                    text: 'Cancel',
-                    role: 'cancel',
-                  },
-                  {
-                    text: 'Apply',
-                    role: 'confirm',
-                    handler: () => {
-                      handleApply(applyPost.id);
-                    },
-                  },
-                ],
-              });
-            }}
-          >
-            {isLoading ? <ButtonSpinner /> : 'Apply'}
-          </IonButton>
-        )}
+        <IonGrid>
+          <IonRow className="ion-justify-content-center">
+            <IonCol sizeMd="8" sizeLg="6">
+              <PostDetails post={applyPost} />
+              <OtherStudyBuddies studyBuddies={applyPost.participants} />
+              <AboutPoster poster={applyPost?.poster} />
+              {isApplied ? (
+                <IonButton
+                  className="ion-padding-horizontal"
+                  fill="outline"
+                  color="danger"
+                  expand="block"
+                  onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
+                    event.stopPropagation();
+                    if (isLoading) {
+                      return;
+                    }
+                    void presentAlert({
+                      header: 'Confirm cancelling study application?',
+                      buttons: [
+                        {
+                          text: 'Cancel',
+                          role: 'cancel',
+                        },
+                        {
+                          text: 'Confirm',
+                          role: 'confirm',
+                          handler: () => {
+                            sendCancellationRequest(applyPost.id);
+                          },
+                        },
+                      ],
+                    });
+                  }}
+                >
+                  {isLoading ? <ButtonSpinner /> : 'Cancel'}
+                </IonButton>
+              ) : (
+                <IonButton
+                  className={`${styles['accept-button']} ion-padding-horizontal`}
+                  expand="block"
+                  color="primary"
+                  onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
+                    event.stopPropagation();
+                    if (isLoading) {
+                      return;
+                    }
+                    void presentAlert({
+                      header: 'Confirm Applying?',
+                      buttons: [
+                        {
+                          text: 'Cancel',
+                          role: 'cancel',
+                        },
+                        {
+                          text: 'Apply',
+                          role: 'confirm',
+                          handler: () => {
+                            handleApply(applyPost.id);
+                          },
+                        },
+                      ],
+                    });
+                  }}
+                >
+                  {isLoading ? <ButtonSpinner /> : 'Apply'}
+                </IonButton>
+              )}
+            </IonCol>
+          </IonRow>
+        </IonGrid>
       </IonContent>
     </IonModal>
   );

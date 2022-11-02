@@ -18,8 +18,6 @@ export default function ProfileHeader({
   editThumbnailHandler,
 }: ProfileHeaderProps) {
   const history = useHistory();
-  console.log('profile: ', profilePhoto);
-  console.log('thumbnail: ', thumbnailPhoto);
   return (
     <div className={`${styles['profile-toolbar']}`}>
       <div

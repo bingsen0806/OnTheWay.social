@@ -1,4 +1,11 @@
-import { IonCol, IonContent, IonGrid, IonPage, IonRow } from '@ionic/react';
+import {
+  IonCol,
+  IonContent,
+  IonGrid,
+  IonPage,
+  IonRow,
+  getPlatforms,
+} from '@ionic/react';
 import { ReactNode } from 'react';
 import styles from './styles.module.scss';
 
@@ -14,43 +21,28 @@ export default function AuthenticationPageContainer({
   children,
   pageTitle,
 }: AuthenticationPageContainerProps) {
+  const isMobile = getPlatforms().includes('mobile');
+  console.log(isMobile);
   return (
     <IonPage>
       <IonContent>
-        <IonGrid fixed className="ion-no-padding">
-          <IonRow className="ion-justify-content-center ion-no-padding">
-            <IonCol size="8" sizeMd="4" sizeLg="3" className="ion-no-padding">
+        <IonGrid className="ion-no-padding">
+          <IonRow className="ion-justify-content-center ion-align-items-center ion-no-padding">
+            <IonCol size="8" sizeLg="6" className="ion-no-padding">
               <img
                 className={styles['header']}
                 src="assets/images/login_background.jpg"
                 alt="Login and register header"
               ></img>
             </IonCol>
-          </IonRow>
-          <IonRow className="ion-justify-content-center">
-            <IonCol size-lg="8" className="ion-margin">
-              <h1 className={styles['page-header-text']}>{pageTitle}</h1>
-            </IonCol>
-            <IonCol size="12">{children}</IonCol>
-          </IonRow>
-          <IonRow>
-            <IonCol>
-              <br></br>
-            </IonCol>
-          </IonRow>
-          <IonRow>
-            <IonCol>
-              <br></br>
-            </IonCol>
-          </IonRow>
-          <IonRow>
-            <IonCol>
-              <br></br>
-            </IonCol>
-          </IonRow>
-          <IonRow>
-            <IonCol>
-              <br></br>
+            {isMobile && (
+              <IonCol size="12" sizeLg="6">
+                <h1 className="ion-text-center">{pageTitle}</h1>
+              </IonCol>
+            )}
+            <IonCol size="12" sizeLg="6">
+              {!isMobile && <h1 className="ion-text-center">{pageTitle}</h1>}
+              {children}
             </IonCol>
           </IonRow>
         </IonGrid>
