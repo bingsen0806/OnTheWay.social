@@ -1,4 +1,11 @@
-import { IonItem } from '@ionic/react';
+import {
+  IonCol,
+  IonGrid,
+  IonIcon,
+  IonItem,
+  IonRow,
+} from '@ionic/react';
+import { calendarClearOutline, timeOutline } from 'ionicons/icons';
 import { useStateWithCallbackLazy } from 'use-state-with-callback';
 import { facultyEnumToStr, locationEnumToStr, Post } from '../../api/types';
 import PostModal from '../../pages/PostModal';
@@ -32,29 +39,40 @@ export default function PostListItem({ post }: PostListItemProps) {
       }}
       detail={false}
     >
-      <div className="ion-padding-top">
-        <h3 className="ion-no-margin">{locationEnumToStr(post.location)}</h3>
-        <p className={styles['key-details-text']}>
-          {convertDateToDateStr(post.startDateTime)}
-        </p>
-        <p className={styles['key-details-text']}>
-          {convertDateRangeToTimeRangeStr(post.startDateTime, post.endDateTime)}
-        </p>
-        <p className={styles['post-text']}>
-          {post.description.length <= DESCRIPTION_WORD_LIMIT
-            ? post.description
-            : post.description.slice(0, DESCRIPTION_WORD_LIMIT - 3) + '...'}
-        </p>
-        <br />
-        <p className={styles['post-text']}>{post.poster.name}</p>
-        <p className={styles['post-text']}>
-          Y{post.poster.year},{` ${facultyEnumToStr(post.poster.faculty)}`}
-        </p>
-      </div>
+      <IonGrid>
+        <IonRow className="ion-align-items-center">
+          <IonCol size="4">
+            <LocationImage location={post.location}></LocationImage>
+          </IonCol>
+          <IonCol size="1"></IonCol>
+          <IonCol size="7">
+            <div>
+              <p className={styles['post-text-location']}>
+                {locationEnumToStr(post.location)}
+              </p>
+              <p className={styles['key-details-text']}>
+                <IonIcon icon={calendarClearOutline} />{' '}
+                {convertDateToDateStr(post.startDateTime)}
+              </p>
+              <p className={styles['key-details-text']}>
+                <IonIcon icon={timeOutline} />{' '}
+                {convertDateRangeToTimeRangeStr(
+                  post.startDateTime,
+                  post.endDateTime
+                )}
+              </p>
+              <p className={styles['post-text']}>{post.poster.name}</p>
+              <p className={styles['post-text']}>
+                Y{post.poster.year},
+                {` ${facultyEnumToStr(post.poster.faculty)}`}
+              </p>
+              <br />
+            </div>
+          </IonCol>
+        </IonRow>
+      </IonGrid>
+
       <PostModal isOpen={isModalOpen} onClose={closeModal} applyPost={post} />
-      <div slot="end">
-        <LocationImage location={post.location}></LocationImage>
-      </div>
     </IonItem>
   );
 }

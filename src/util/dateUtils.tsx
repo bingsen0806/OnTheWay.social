@@ -5,7 +5,7 @@ import moment, { Moment } from 'moment';
  */
 export function convertDateRangeToTimeRangeStr(date1: string, date2: string) {
   return (
-    moment(date1).format('hh:mm A') + ' - ' + moment(date2).format('hh:mm A')
+    moment(date1).format('h:mm A') + ' - ' + moment(date2).format('h:mm A')
   );
 }
 

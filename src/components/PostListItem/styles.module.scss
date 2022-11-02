@@ -1,20 +1,18 @@
 .post-container {
-  padding: 16px;
+  height: 200px;
 }
 
 .post-text-location {
-  font-size: 1.3em;
+  font-weight: bold;
+  margin: 8px 0px;
 }
 
 p.post-text {
-  margin: 4px 0px;
+  font-weight: 300;
+  margin: 0;
 }
 
 .key-details-text {
-  margin: 0;
+  margin: 4px 0;
   font-size: 18px;
-}
-
-.item-container {
-  margin-bottom: 8px;
 }

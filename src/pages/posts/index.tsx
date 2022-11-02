@@ -9,7 +9,6 @@ import {
   IonIcon,
   IonInfiniteScroll,
   IonInfiniteScrollContent,
-  IonList,
   IonMenu,
   IonMenuToggle,
   IonPage,
@@ -402,11 +401,15 @@ export default function PostsPage() {
                   </div>
                 </NoData>
               ) : (
-                <IonList className={styles['posts-list']} lines="none">
-                  {listOfPosts.map((data) => (
-                    <PostListItem post={data} key={data.id}></PostListItem>
-                  ))}
-                </IonList>
+                <IonGrid className="ion-no-margin ion-no-padding">
+                  <IonRow className="ion-justify-content-center">
+                    <IonCol size="12" sizeMd="6">
+                      {listOfPosts.map((data) => (
+                        <PostListItem post={data} key={data.id}></PostListItem>
+                      ))}
+                    </IonCol>
+                  </IonRow>
+                </IonGrid>
               )}
 
               <IonInfiniteScroll

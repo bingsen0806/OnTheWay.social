@@ -6,28 +6,28 @@
 .success-line {
   background-color: #4bb543;
   width: 4px;
-  margin-right: 8px;
-  height: 100%;
+  margin: 8px 8px;
+  height: 90%;
 }
 
 .alert-line {
   background-color: #fab732;
   width: 4px;
-  margin-right: 8px;
-  height: 100%;
+  margin: 8px 8px;
+  height: 90%;
 }
 
 .post-container {
-  margin-left: 10px;
-}
-
-.margin {
-  margin-top: 0px;
-  margin-bottom: 10px;
+  margin: 0;
 }
 
 .post-text-location {
-  font-size: 1.3em;
+  font-weight: bold;
+  margin: 8px 0;
+  @media screen and (min-width: 1024px) {
+    margin: 16px 0;
+    font-size: 1.3em;
+  }
 }
 
 p.post-text {
@@ -42,15 +42,16 @@ p.post-text {
   align-items: center;
 }
 
+p.applicant-number {
+  margin-top: 8px;
+}
+
 .applicant-number-not-zero-text {
   color: #ff735c;
+  margin-top: 8px;
 }
 
 .key-details-text {
   margin: 0;
   font-size: 18px;
-}
-
-.item-container {
-  margin-bottom: 8px;
 }

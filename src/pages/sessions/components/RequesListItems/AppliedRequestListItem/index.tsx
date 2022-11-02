@@ -1,9 +1,9 @@
-import { IonItem } from '@ionic/react';
+import { IonCol, IonGrid, IonIcon, IonItem, IonRow } from '@ionic/react';
+import { calendarClearOutline, timeOutline } from 'ionicons/icons';
 import { useStateWithCallbackLazy } from 'use-state-with-callback';
 import {
   AppliedRequest,
   locationEnumToStr,
-  facultyEnumToStr,
   AppliedRequestStatus,
 } from '../../../../../api/types';
 import LocationImage from '../../../../../components/LocationImage';
@@ -39,34 +39,39 @@ export default function AppliedRequestListItem({
       detail={false}
       className={styles['item-container']}
     >
-      {appliedRequest.status === AppliedRequestStatus.ACCEPTED ? (
-        <div className={styles['success-line']} />
-      ) : (
-        <div className={styles['alert-line']} />
-      )}
-      <div className="ion-padding-top">
-        <h3 className="ion-no-margin">
-          {locationEnumToStr(appliedRequest.post.location)}
-        </h3>
-        <p className={styles['key-details-text']}>
-          {convertDateToDateStr(appliedRequest.post.startDateTime)}
-        </p>
-        <p className={styles['key-details-text']}>
-          {convertDateRangeToTimeRangeStr(
-            appliedRequest.post.startDateTime,
-            appliedRequest.post.endDateTime
-          )}
-        </p>
-        <br />
-        <p className={styles['post-text']}>{appliedRequest.post.poster.name}</p>
-        <p className={styles['margin']}>
-          Y{appliedRequest.post.poster.year},{' '}
-          {facultyEnumToStr(appliedRequest.post.poster.faculty)}
-        </p>
-      </div>
-      <div slot="end">
-        <LocationImage location={appliedRequest.post.location}></LocationImage>
-      </div>
+      <hr
+        className={
+          appliedRequest.status === AppliedRequestStatus.ACCEPTED
+            ? styles['success-line']
+            : styles['alert-line']
+        }
+      />
+      <IonGrid className="ion-margin-left">
+        <IonRow className={`${styles['post-container']}`}>
+          <IonCol size="3">
+            <LocationImage
+              location={appliedRequest.post.location}
+            ></LocationImage>
+          </IonCol>
+          <IonCol size="1"></IonCol>
+          <IonCol size="8" className="ion-no-margin ion-no-padding">
+            <p className={styles['post-text-location']}>
+              {locationEnumToStr(appliedRequest.post.location)}
+            </p>
+            <p className={styles['key-details-text']}>
+              <IonIcon icon={calendarClearOutline} />{' '}
+              {convertDateToDateStr(appliedRequest.post.startDateTime)}
+            </p>
+            <p className={styles['key-details-text']}>
+              <IonIcon icon={timeOutline} />{' '}
+              {convertDateRangeToTimeRangeStr(
+                appliedRequest.post.startDateTime,
+                appliedRequest.post.endDateTime
+              )}
+            </p>
+          </IonCol>
+        </IonRow>
+      </IonGrid>
 
       <AppliedPostModal
         isOpen={isModalOpen}

@@ -1,4 +1,5 @@
-import { IonItem } from '@ionic/react';
+import { IonCol, IonGrid, IonIcon, IonItem, IonRow } from '@ionic/react';
+import { calendarClearOutline, timeOutline } from 'ionicons/icons';
 import { useState } from 'react';
 import { locationEnumToStr, CreatedRequest } from '../../../../../api/types';
 import LocationImage from '../../../../../components/LocationImage';
@@ -17,54 +18,47 @@ export default function CreatedRequestListItem({
   createdRequest,
 }: CreatedRequestListItemProps) {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-
   function closeModal(callback: () => void) {
     setIsModalOpen(false);
     setTimeout(callback, 200);
   }
 
   return (
-    <IonItem
-      button
-      onClick={() => setIsModalOpen(true)}
-      className={styles['item-container']}
-      detail={false}
-    >
-      {createdRequest.applicants.length > 0 && (
-        <div className={styles['alert-line']} />
-      )}
-      {createdRequest.post.participants.length > 0 &&
-        createdRequest.applicants.length === 0 && (
-          <div className={styles['success-line']} />
-        )}
-      <div className="ion-padding-top">
-        <h3 className="ion-no-margin">
-          {locationEnumToStr(createdRequest.post.location)}
-        </h3>
-        <p className={styles['key-details-text']}>
-          {convertDateToDateStr(createdRequest.post.startDateTime)}
-        </p>
-        <p className={styles['key-details-text']}>
-          {convertDateRangeToTimeRangeStr(
-            createdRequest.post.startDateTime,
-            createdRequest.post.endDateTime
-          )}
-        </p>
+    <IonItem button onClick={() => setIsModalOpen(true)} detail={false}>
+      <IonGrid>
+        <IonRow className={styles['post-container']}>
+          <IonCol size={createdRequest.applicants.length > 0 ? '4' : '3'}>
+            <LocationImage
+              location={createdRequest.post.location}
+            ></LocationImage>
+          </IonCol>
+          <IonCol size="1"></IonCol>
+          <IonCol size="7" className="ion-no-margin">
+            <div>
+              <p className={styles['post-text-location']}>
+                {locationEnumToStr(createdRequest.post.location)}
+              </p>
+              <p className={styles['key-details-text']}>
+                <IonIcon icon={calendarClearOutline} />{' '}
+                {convertDateToDateStr(createdRequest.post.startDateTime)}
+              </p>
+              <p className={styles['key-details-text']}>
+                <IonIcon icon={timeOutline} />{' '}
+                {convertDateRangeToTimeRangeStr(
+                  createdRequest.post.startDateTime,
+                  createdRequest.post.endDateTime
+                )}
+              </p>
+              {createdRequest.applicants.length > 0 && (
+                <p className={styles['applicant-number-not-zero-text']}>
+                  {createdRequest.applicants.length} pending applicants
+                </p>
+              )}
+            </div>
+          </IonCol>
+        </IonRow>
+      </IonGrid>
 
-        <br />
-        <p
-          className={
-            createdRequest.applicants.length > 0
-              ? styles['applicant-number-not-zero-text']
-              : ''
-          }
-        >
-          {createdRequest.applicants.length} pending applicants
-        </p>
-      </div>
-      <div slot="end">
-        <LocationImage location={createdRequest.post.location}></LocationImage>
-      </div>
       <CreatedPostModal
         isOpen={isModalOpen}
         onClose={closeModal}

@@ -1,37 +1,37 @@
 import { Location } from '../../api/types';
 
-import utownSVG from '../../assets/location_images/utown.svg';
-import lawSVG from '../../assets/location_images/law.svg';
-import clbSVG from '../../assets/location_images/clb.svg';
-import computingSVG from '../../assets/location_images/computing.svg';
-import engineeringSVG from '../../assets/location_images/engineering.svg';
-import fassSVG from '../../assets/location_images/fass.svg';
-import scienceSVG from '../../assets/location_images/science.svg';
-import bizSVG from '../../assets/location_images/biz.svg';
-import sdeSVG from '../../assets/location_images/sde.svg';
-import { IonImg } from '@ionic/react';
+import utown from '../../assets/location_images/utown.jpg';
+import law from '../../assets/location_images/law.jpg';
+import clb from '../../assets/location_images/clb.jpg';
+import soc from '../../assets/location_images/soc.jpg';
+import science from '../../assets/location_images/science.jpg';
+import fass from '../../assets/location_images/fass.jpg';
+import engineering from '../../assets/location_images/engineering.jpg';
+import biz from '../../assets/location_images/biz.jpg';
+import sde from '../../assets/location_images/sde.jpg';
+
 import styles from './styles.module.scss';
 
 function getLocationIcon(location: Location) {
   switch (location) {
     case Location.UTOWN:
-      return utownSVG;
+      return utown;
     case Location.LAW:
-      return lawSVG;
+      return law;
     case Location.CLB:
-      return clbSVG;
+      return clb;
     case Location.SOC:
-      return computingSVG;
+      return soc;
     case Location.SCIENCE:
-      return scienceSVG;
+      return science;
     case Location.FASS:
-      return fassSVG;
+      return fass;
     case Location.ENGINEERING:
-      return engineeringSVG;
+      return engineering;
     case Location.BIZ:
-      return bizSVG;
+      return biz;
     case Location.SDE:
-      return sdeSVG;
+      return sde;
   }
 }
 
@@ -41,9 +41,9 @@ interface LocationImageProps {
 
 export default function LocationImage({ location }: LocationImageProps) {
   return (
-    <IonImg
+    <img
       src={getLocationIcon(location)}
       className={styles['image-container']}
-    ></IonImg>
+    />
   );
 }

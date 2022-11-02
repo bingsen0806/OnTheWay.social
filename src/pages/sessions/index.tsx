@@ -2,7 +2,6 @@ import {
   IonContent,
   IonHeader,
   IonLabel,
-  IonList,
   IonButton,
   IonPage,
   IonRefresher,
@@ -11,6 +10,9 @@ import {
   IonSegmentButton,
   IonToolbar,
   RefresherEventDetail,
+  IonGrid,
+  IonRow,
+  IonCol,
 } from '@ionic/react';
 import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -30,7 +32,6 @@ import { CREATE_POST, HOME } from '../../routes';
 import { useHistory } from 'react-router';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import { useAuthState } from '../../util/authentication';
-import styles from './styles.module.scss';
 
 enum HomeTab {
   APPLIED_POST = 'Applied',
@@ -140,19 +141,22 @@ export default function Sessions() {
         );
       }
       return (
-        <IonContent fullscreen className={styles['created-posts-container']}>
-          {' '}
+        <IonContent fullscreen>
           <IonRefresher slot="fixed" onIonRefresh={refreshCreatedRequests}>
             <IonRefresherContent></IonRefresherContent>
           </IonRefresher>
-          <IonList className={styles['list-container-background']}>
-            {createdPosts.map((post) => (
-              <CreatedRequestListItem
-                key={post.post.id}
-                createdRequest={post}
-              ></CreatedRequestListItem>
-            ))}
-          </IonList>
+          <IonGrid className="ion-margin-top ion-no-padding">
+            <IonRow className="ion-justify-content-center ion-no-padding">
+              <IonCol size="12" sizeMd="6" sizeLg="4">
+                {createdPosts.map((post) => (
+                  <CreatedRequestListItem
+                    key={post.post.id}
+                    createdRequest={post}
+                  ></CreatedRequestListItem>
+                ))}
+              </IonCol>
+            </IonRow>
+          </IonGrid>
         </IonContent>
       );
     } else {
@@ -179,18 +183,22 @@ export default function Sessions() {
         );
       }
       return (
-        <IonContent fullscreen className={styles['applied-posts-container']}>
+        <IonContent fullscreen>
           <IonRefresher slot="fixed" onIonRefresh={refreshAppliedRequests}>
             <IonRefresherContent></IonRefresherContent>
           </IonRefresher>
-          <IonList className={styles['list-container-background']}>
-            {appliedPosts.map((post) => (
-              <AppliedRequestListItem
-                key={post.post.id}
-                appliedRequest={post}
-              />
-            ))}
-          </IonList>
+          <IonGrid className="ion-margin-top ion-no-padding">
+            <IonRow className="ion-justify-content-center ion-no-padding">
+              <IonCol size="12" sizeMd="6" sizeLg="4">
+                {appliedPosts.map((post) => (
+                  <AppliedRequestListItem
+                    key={post.post.id}
+                    appliedRequest={post}
+                  />
+                ))}
+              </IonCol>
+            </IonRow>
+          </IonGrid>
         </IonContent>
       );
     }
