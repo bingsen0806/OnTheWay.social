@@ -1,8 +1,5 @@
 import { IonCol, IonGrid, IonIcon, IonItem, IonRow } from '@ionic/react';
-import {
-  calendarClearOutline,
-  timeOutline,
-} from 'ionicons/icons';
+import { calendarClearOutline, timeOutline } from 'ionicons/icons';
 import { useStateWithCallbackLazy } from 'use-state-with-callback';
 import { facultyEnumToStr, locationEnumToStr, Post } from '../../api/types';
 import PostModal from '../../pages/PostModal';
@@ -41,7 +38,7 @@ export default function PostListItem({ post }: PostListItemProps) {
           <IonCol size="4">
             <LocationImage location={post.location}></LocationImage>
           </IonCol>
-          <IonCol size="1"></IonCol>
+          <IonCol size="1" sizeLg="0"></IonCol>
           <IonCol size="7">
             <div>
               <p className={styles['post-text-location']}>

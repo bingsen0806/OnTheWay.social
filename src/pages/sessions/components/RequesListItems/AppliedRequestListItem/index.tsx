@@ -53,7 +53,7 @@ export default function AppliedRequestListItem({
               location={appliedRequest.post.location}
             ></LocationImage>
           </IonCol>
-          <IonCol size="1"></IonCol>
+          <IonCol size="1" sizeLg="0"></IonCol>
           <IonCol size="8" className="ion-no-margin ion-no-padding">
             <p className={styles['post-text-location']}>
               {locationEnumToStr(appliedRequest.post.location)}
