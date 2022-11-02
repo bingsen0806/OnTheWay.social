@@ -14,6 +14,7 @@ import {
   RefresherEventDetail,
   IonIcon,
   IonPopover,
+  useIonViewDidEnter,
 } from '@ionic/react';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { helpCircleOutline } from 'ionicons/icons';
@@ -23,6 +24,11 @@ import ArtCard from './ArtCard';
 export default function Art() {
   const obtainedArt = useAppSelector((state) => state.user.user.art ?? []);
   const dispatch = useAppDispatch();
+
+  useIonViewDidEnter(() => {
+    void dispatch(reloadSelf());
+  });
+
   function refreshContents(event: CustomEvent<RefresherEventDetail>) {
     dispatch(reloadSelf())
       .unwrap()
@@ -70,7 +76,7 @@ export default function Art() {
         <IonGrid className="ion-no-padding">
           {obtainedArt.length > 0 ? (
             <IonRow className={styles['row']}>
-              <IonCol sizeMd="10" sizeLg="8" sizeXl="6">
+              <IonCol sizeMd="6" sizeLg="4">
                 {obtainedArt.map((art) => (
                   <ArtCard art={art} isCover={false} key={art.id}></ArtCard>
                 ))}

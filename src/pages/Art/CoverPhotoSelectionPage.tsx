@@ -58,7 +58,7 @@ export default function CoverPhotoSelectionPage() {
           </h1>
         </IonToolbar>
       </IonHeader>
-      <IonContent>
+      <IonContent className="ion-text-center">
         {isLoading ? (
           <LoadingSpinner />
         ) : (
@@ -68,8 +68,8 @@ export default function CoverPhotoSelectionPage() {
             </h2>
             <p className="ion-padding-start">
               Art pieces are randomly created as you create, apply and accept
-              study sessions. These art pieces are AI-generated and
-              one-of-a-kind.
+              study sessions. These art pieces are AI-generated and owned
+              exclusively by you in the entire world.
             </p>
             {!art || art?.length === 0 ? (
               <p className="ion-padding-start">
@@ -77,9 +77,9 @@ export default function CoverPhotoSelectionPage() {
               </p>
             ) : (
               <IonGrid>
-                <IonRow>
+                <IonRow className="ion-justify-content-center">
                   {art.map((artPiece) => (
-                    <IonCol size="6" key={artPiece.id}>
+                    <IonCol size="3" sizeLg="2" key={artPiece.id}>
                       <IonImg
                         className={styles['cover-selection-image']}
                         src={artPiece.image}
@@ -87,7 +87,6 @@ export default function CoverPhotoSelectionPage() {
                       ></IonImg>
                     </IonCol>
                   ))}
-                  <IonCol></IonCol>
                 </IonRow>
               </IonGrid>
             )}
