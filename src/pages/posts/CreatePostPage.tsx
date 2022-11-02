@@ -216,10 +216,9 @@ export default function CreatePostPage() {
           </h1>
         </IonToolbar>
         <IonToolbar>
-          <div className="ion-padding-start">
+          <div className="ion-margin">
             <p>
-              Fill in the details of your study session. You will be notified
-              via email when others apply for your session.
+              You will be notified via email when others apply for your session.
             </p>
             <p>
               Your telegram handle will only be shared with applicants after you
@@ -231,7 +230,7 @@ export default function CreatePostPage() {
       <IonContent fullscreen className={styles['content-container']}>
         <IonGrid fixed className="ion-padding">
           <IonRow className="ion-justify-content-center">
-            <IonCol>
+            <IonCol sizeMd="8" sizeLg="4">
               <DropdownSelection<Location>
                 placeholder="Location"
                 dropdownItems={locationDropdownItems}
@@ -243,7 +242,7 @@ export default function CreatePostPage() {
             </IonCol>
           </IonRow>
           <IonRow className="ion-justify-content-center">
-            <IonCol>
+            <IonCol sizeMd="8" sizeLg="4">
               <DateTimePicker
                 value={date}
                 type="date"
@@ -256,11 +255,11 @@ export default function CreatePostPage() {
             </IonCol>
           </IonRow>
           <IonRow className="ion-justify-content-center">
-            <IonCol>
+            <IonCol sizeMd="4" sizeLg="2">
               <DateTimePicker
                 value={startTime}
                 type="time"
-                label="Start Time"
+                label="Start"
                 onChange={(startTime) => {
                   setStartTime(startTime);
                   setEndTime(
@@ -275,11 +274,11 @@ export default function CreatePostPage() {
                 errorMessage={errorMessages.startTime}
               ></DateTimePicker>
             </IonCol>
-            <IonCol>
+            <IonCol sizeMd="4" sizeLg="2">
               <DateTimePicker
                 value={endTime}
                 type="time"
-                label="End Time"
+                label="End"
                 onChange={(endTime) => {
                   setEndTime(endTime);
                 }}
@@ -289,7 +288,7 @@ export default function CreatePostPage() {
           </IonRow>
           <IonRow className="ion-justify-content-center"></IonRow>
           <IonRow className="ion-justify-content-center">
-            <IonCol>
+            <IonCol sizeMd="8" sizeLg="4">
               <TextInputField
                 multiline
                 label="Description"
@@ -306,7 +305,7 @@ export default function CreatePostPage() {
             </IonCol>
           </IonRow>
           <IonRow className="ion-justify-content-center">
-            <IonCol>
+            <IonCol sizeMd="5" sizeLg="4">
               <IonButton expand="block" onClick={submitCreatePost}>
                 {isLoading ? <ButtonSpinner /> : 'Post'}
               </IonButton>
