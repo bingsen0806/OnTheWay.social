@@ -211,8 +211,8 @@ export default function ProfileCreationPage() {
         <LoadingSpinner />
       ) : (
         <>
-          <IonRow className="ion-padding-bottom ion-justify-content-center">
-            <IonCol size="10">
+          <IonRow className="ion-justify-content-center">
+            <IonCol size="10" sizeMd="6" sizeLg="4">
               <TextInputField
                 label="Username"
                 placeholder="Username"
@@ -224,8 +224,13 @@ export default function ProfileCreationPage() {
               />
             </IonCol>
           </IonRow>
-          <IonRow className="ion-padding-bottom ion-justify-content-center">
-            <IonCol size="10" className={styles['input-field-col']}>
+          <IonRow className="ion-justify-content-center">
+            <IonCol
+              size="10"
+              sizeMd="6"
+              sizeLg="4"
+              className={styles['input-field-col']}
+            >
               <TextInputField
                 label="Telegram Handle"
                 placeholder="Telegram Handle"
@@ -247,8 +252,8 @@ export default function ProfileCreationPage() {
               </IonPopover>
             </IonCol>
           </IonRow>
-          <IonRow className="ion-padding-bottom ion-justify-content-center">
-            <IonCol size="10">
+          <IonRow className="ion-justify-content-center">
+            <IonCol size="10" sizeMd="6" sizeLg="4">
               <DropdownSelection<Gender>
                 placeholder="Gender"
                 dropdownItems={genderDropdownItems}
@@ -259,8 +264,8 @@ export default function ProfileCreationPage() {
               ></DropdownSelection>
             </IonCol>
           </IonRow>
-          <IonRow className="ion-padding-bottom ion-justify-content-center">
-            <IonCol size="10">
+          <IonRow className="ion-justify-content-center">
+            <IonCol size="10" sizeMd="6" sizeLg="2">
               <DropdownSelection<Faculty>
                 placeholder="Faculty"
                 dropdownItems={facultyDropdownItems}
@@ -270,9 +275,7 @@ export default function ProfileCreationPage() {
                 shouldShowError={shouldShowDropdownErrors}
               ></DropdownSelection>
             </IonCol>
-          </IonRow>
-          <IonRow className="ion-padding-bottom ion-justify-content-center">
-            <IonCol size="10">
+            <IonCol size="10" sizeMd="6" sizeLg="2">
               <DropdownSelection<number>
                 placeholder="Year of study"
                 dropdownItems={yearOfStudyDropdownItems}
@@ -283,8 +286,8 @@ export default function ProfileCreationPage() {
               ></DropdownSelection>
             </IonCol>
           </IonRow>
-          <IonRow className="ion-padding-bottom ion-justify-content-center">
-            <IonCol size="10">
+          <IonRow className="ion-margin-top ion-justify-content-center">
+            <IonCol size="10" sizeMd="6" sizeLg="4">
               <IonButton
                 onClick={() => {
                   void submit();

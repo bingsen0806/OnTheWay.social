@@ -167,10 +167,14 @@ export default function Main() {
               </IonTabButton>
             )}
 
-            <IonTabButton tab="createPost" href={CREATE_POST}>
-              <IonIcon icon={addCircleSharp} />
-              <IonLabel className={styles['tab-button-text']}>Create</IonLabel>
-            </IonTabButton>
+            {isAuthenticated && (
+              <IonTabButton tab="createPost" href={CREATE_POST}>
+                <IonIcon icon={addCircleSharp} />
+                <IonLabel className={styles['tab-button-text']}>
+                  Create
+                </IonLabel>
+              </IonTabButton>
+            )}
             {isAuthenticated && (
               <IonTabButton tab="notifications" href={NOTIFICATIONS}>
                 {haveNotifications ? (

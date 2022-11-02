@@ -12,7 +12,6 @@ import { PROFILE_CREATION } from '../../routes';
 import { useAuthState } from '../../util/authentication';
 import useInfoToast from '../../util/hooks/useInfoToast';
 import AuthenticationPageContainer from './AuthenticationPageContainer';
-import styles from './styles.module.scss';
 
 /**
  * Email verification page.
@@ -64,22 +63,24 @@ export default function EmailVerificationPage() {
   }
 
   return (
-    <AuthenticationPageContainer pageTitle="Email Verification">
+    <AuthenticationPageContainer pageTitle="">
       <IonRow className="ion-padding-bottom ion-justify-content-center">
-        <IonCol size="10" className={styles['input-field-col']}>
+        <IonCol size="10" className="ion-text-center">
           <h2>
             Please click on the verification link sent to your email at{' '}
             {auth.currentUser?.email}
           </h2>
-          <p>The email might be in your spam or junk folder.</p>
+          <p className="ion-text-center">
+            The email might be in your spam or junk folder.
+          </p>
         </IonCol>
       </IonRow>
       <IonRow className="ion-padding-bottom ion-justify-content-center">
-        <IonCol size="5">
+        <IonCol size="5" sizeMd="2" sizeLg="1">
           <IonButton
             expand="block"
             fill="outline"
-            color="danger"
+            color="medium"
             onClick={() => {
               void cancelSignUp();
             }}
@@ -87,7 +88,7 @@ export default function EmailVerificationPage() {
             Cancel
           </IonButton>
         </IonCol>
-        <IonCol size="5">
+        <IonCol size="5" sizeMd="3" sizeLg="2">
           <IonButton
             expand="block"
             onClick={() => {

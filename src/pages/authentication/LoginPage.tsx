@@ -103,7 +103,12 @@ export default function LoginPage() {
       ) : (
         <>
           <IonRow className="ion-justify-content-center">
-            <IonCol size="10" className={styles['input-field-col']}>
+            <IonCol
+              size="10"
+              sizeMd="6"
+              sizeLg="4"
+              className={styles['input-field-col']}
+            >
               <TextInputField
                 name="email"
                 autocomplete="email"
@@ -117,8 +122,8 @@ export default function LoginPage() {
               />
             </IonCol>
           </IonRow>
-          <IonRow className="ion-padding-bottom ion-justify-content-center">
-            <IonCol size="10">
+          <IonRow className="ion-justify-content-center">
+            <IonCol size="10" sizeMd="6" sizeLg="4">
               <TextInputField
                 label="Password"
                 placeholder="Password"
@@ -131,8 +136,23 @@ export default function LoginPage() {
               />
             </IonCol>
           </IonRow>
+          <IonRow className="ion-margin-bottom ion-justify-content-center">
+            <IonCol
+              size="10"
+              sizeMd="6"
+              sizeLg="4"
+              onClick={() => {
+                setIsResetPasswordModalOpen(true);
+              }}
+              className={styles['forgotten-password-container']}
+            >
+              <IonLabel>
+                <p>Forgot your password?</p>
+              </IonLabel>
+            </IonCol>
+          </IonRow>
           <IonRow className="ion-justify-content-center">
-            <IonCol size="10">
+            <IonCol size="10" sizeMd="4" sizeLg="2">
               <IonButton
                 onClick={() => {
                   void submitLogin();
@@ -143,29 +163,13 @@ export default function LoginPage() {
               </IonButton>
             </IonCol>
           </IonRow>
-          <IonRow className="ion-justify-content-center">
-            <IonCol
-              size="10"
-              onClick={() => {
-                setIsResetPasswordModalOpen(true);
-              }}
-              className={styles['forgotten-password-container']}
-            >
-              <IonLabel>
-                <p>Forgotten password?</p>
-              </IonLabel>
-            </IonCol>
-          </IonRow>
-          <IonRow className="ion-justify-content-center">
-            <IonCol size="10">
-              <p>
-                Don't have an account?{' '}
-                <a href={REGISTER}>
-                  <u>Sign up</u>
-                </a>
-              </p>
-            </IonCol>
-          </IonRow>
+
+          <p className="ion-text-center">
+            Don't have an account?{' '}
+            <a href={REGISTER}>
+              <u>Sign up</u>
+            </a>
+          </p>
           <ResetPasswordModal
             isOpen={isResetPasswordModalOpen}
             closeCallback={() => {

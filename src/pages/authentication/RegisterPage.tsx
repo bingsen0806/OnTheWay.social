@@ -110,7 +110,12 @@ export default function RegisterPage() {
       ) : (
         <>
           <IonRow className="ion-justify-content-center">
-            <IonCol size="10" className={styles['input-field-col']}>
+            <IonCol
+              size="10"
+              sizeMd="6"
+              sizeLg="4"
+              className={styles['input-field-col']}
+            >
               <TextInputField
                 label="NUS Email"
                 placeholder="NUS Email"
@@ -133,7 +138,7 @@ export default function RegisterPage() {
             </IonCol>
           </IonRow>
           <IonRow className="ion-justify-content-center">
-            <IonCol size="10">
+            <IonCol size="10" sizeMd="6" sizeLg="4">
               <TextInputField
                 label="Password"
                 placeholder="Password"
@@ -147,7 +152,7 @@ export default function RegisterPage() {
             </IonCol>
           </IonRow>
           <IonRow className="ion-padding-bottom ion-justify-content-center">
-            <IonCol size="10">
+            <IonCol size="10" sizeMd="6" sizeLg="4">
               <TextInputField
                 label="Confirm Password"
                 placeholder="Confirm Password"
@@ -161,7 +166,7 @@ export default function RegisterPage() {
             </IonCol>
           </IonRow>
           <IonRow className="ion-padding-bottom ion-justify-content-center">
-            <IonCol size="10">
+            <IonCol size="10" sizeMd="4" sizeLg="2">
               <IonButton
                 onClick={() => {
                   void submitSignUp();
@@ -172,14 +177,12 @@ export default function RegisterPage() {
               </IonButton>
             </IonCol>
           </IonRow>
-          <IonRow className="ion-justify-content-center">
-            <IonCol size="10">
-              Already have an account?{' '}
-              <a href={LOGIN}>
-                <u>Login</u>
-              </a>
-            </IonCol>
-          </IonRow>
+          <p className="ion-text-center">
+            Already have an account?{' '}
+            <a href={LOGIN}>
+              <u>Login</u>
+            </a>
+          </p>
         </>
       )}
     </AuthenticationPageContainer>
