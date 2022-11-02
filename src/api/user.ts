@@ -34,7 +34,6 @@ export function uploadImageAndStoreToDb(
     if (urls.length !== 2) {
       return;
     }
-    const profilePhoto = urls[0];
     const thumbnailPhoto = urls[1];
     const updatedUser: User = {
       id: user.id,
@@ -43,7 +42,7 @@ export function uploadImageAndStoreToDb(
       faculty: user.faculty,
       telegramHandle: user.telegramHandle,
       year: user.year,
-      profilePhoto: profilePhoto,
+      profilePhoto: user.profilePhoto,
       thumbnailPhoto: thumbnailPhoto,
     };
     const callApi = httpsCallable<ApiRequestBody, ApiResponseBody<string>>(
