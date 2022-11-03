@@ -27,13 +27,13 @@ export default function CreatedRequestListItem({
     <IonItem button onClick={() => setIsModalOpen(true)} detail={false}>
       <IonGrid>
         <IonRow className={styles['post-container']}>
-          <IonCol size="4">
+          <IonCol size="4" sizeLg="5">
             <LocationImage
               location={createdRequest.post.location}
             ></LocationImage>
           </IonCol>
           <IonCol size="1"></IonCol>
-          <IonCol size="7" className="ion-no-margin">
+          <IonCol size="6" className="ion-no-margin">
             <div>
               <p className={styles['post-text-location']}>
                 {locationEnumToStr(createdRequest.post.location)}

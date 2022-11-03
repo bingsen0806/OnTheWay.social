@@ -1,7 +1,7 @@
 .desktop {
   ion-router-outlet {
     margin-top: 64px;
-    margin-bottom: 56px;
+    margin-bottom: 70px;
   }
 
   .logo-container {
@@ -34,16 +34,36 @@
   }
 }
 
+.footer-text:hover {
+  border-bottom: 2px solid #ff735c;
+  cursor: pointer;
+}
+
 .footer {
   width: 100%;
-  color: #fff;
-  font-weight: bold;
-  background: #374168;
-  height: 56px;
-  line-height: 56px;
-  text-align: center;
+  height: 65px;
+  line-height: 50px;
   position: fixed;
   bottom: 0px;
+  padding: 0px 32px;
+  font-size: 0.8em;
+  opacity: 0.6;
+  background-image: url('../../assets/wave.svg');
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+.footer-toolbar {
+  margin-left: 50px;
+}
+
+.animation-snow {
+  position: fixed;
+  bottom: 20px;
+}
+
+.animation {
+  position: fixed;
+  bottom: 12px;
 }
 
 .desktop-wrapper {

@@ -28,6 +28,7 @@ import {
   dayOfTheWeekEnumToStr,
   Location,
   locationEnumToStr,
+  Post,
   TimeOfDay,
   timeOfDayEnumToStr,
 } from '../../api/types';
@@ -45,6 +46,7 @@ import useCheckedErrorHandler from '../../util/hooks/useCheckedErrorHandler';
 import usePageInitialLoad from '../../util/hooks/usePageInitialLoad';
 import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
 import NoData from '../NoData';
+import SelectedPost from './SelectedPost';
 import styles from './styles.module.scss';
 
 export default function PostsPage() {
@@ -56,6 +58,9 @@ export default function PostsPage() {
   const handleUnknownError = useUnknownErrorHandler();
   const { isAuthenticated } = useAuthState();
   const isMobile = getPlatforms().includes('mobile');
+  const [selectedPost, setSelectedPost] = useState<Post | null>(null);
+
+  const setPostOnClick = (post: Post) => setSelectedPost(post);
 
   const [filterLocations, setFilterLocations] = useState<{
     [key in Location]: boolean;
@@ -405,12 +410,21 @@ export default function PostsPage() {
                 </NoData>
               ) : (
                 <IonGrid className="ion-margin-top">
-                  <IonRow className="ion-justify-content-center">
+                  <IonRow>
                     <IonCol size="12" sizeMd="6">
                       {listOfPosts.map((data) => (
-                        <PostListItem post={data} key={data.id}></PostListItem>
+                        <PostListItem
+                          post={data}
+                          key={data.id}
+                          onClick={setPostOnClick}
+                        ></PostListItem>
                       ))}
                     </IonCol>
+                    {!isMobile && (
+                      <IonCol size="6">
+                        <SelectedPost post={selectedPost} />
+                      </IonCol>
+                    )}
                   </IonRow>
                 </IonGrid>
               )}

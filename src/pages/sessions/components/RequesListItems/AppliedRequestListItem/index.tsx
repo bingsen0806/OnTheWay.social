@@ -46,15 +46,15 @@ export default function AppliedRequestListItem({
             : styles['alert-line']
         }
       />
-      <IonGrid className="ion-margin-left">
+      <IonGrid>
         <IonRow className={`${styles['post-container']}`}>
-          <IonCol size="3">
+          <IonCol size="4" sizeLg="5">
             <LocationImage
               location={appliedRequest.post.location}
             ></LocationImage>
           </IonCol>
           <IonCol size="1"></IonCol>
-          <IonCol size="8">
+          <IonCol size="6">
             <p className={styles['post-text-location']}>
               {locationEnumToStr(appliedRequest.post.location)}
             </p>

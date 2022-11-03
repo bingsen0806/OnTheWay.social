@@ -3,6 +3,7 @@ import {
   IonButton,
   IonContent,
   IonHeader,
+  IonIcon,
   IonRouterOutlet,
   IonText,
   IonToolbar,
@@ -11,6 +12,9 @@ import Posts from '../../pages/posts';
 import Profile from '../../pages/profile';
 import Faq from '../../pages/faq';
 import styles from './styles.module.scss';
+import deer from '../../assets/deer.json';
+import snow from '../../assets/snow.json';
+import Lottie from 'lottie-react';
 import {
   ABOUT_ART,
   ART,
@@ -20,6 +24,7 @@ import {
   EMAIL_VERIFICATION,
   FAQ,
   HOME,
+  INSTAGRAM,
   LOGIN,
   NOTIFICATIONS,
   PROFILE,
@@ -42,17 +47,32 @@ import Sessions from '../../pages/sessions';
 import NotificationsPage from '../../pages/Notifications';
 import { useAuthState } from '../../util/authentication';
 import logo from '../../assets/icon/favicon.png';
+import { person } from 'ionicons/icons';
+import { useAppSelector } from '../../redux/hooks';
+import { getNumberOfUnviewedNotifications } from '../../constants';
 
 function DesktopNavbar() {
   const location = useLocation();
   const pathName = location.pathname;
   const { isAuthenticated } = useAuthState();
+  const haveNotifications = useAppSelector(
+    (state) =>
+      getNumberOfUnviewedNotifications(state.notifications.notifications) > 0
+  );
   const history = useHistory();
   const routeToHome = () => {
     if (pathName.includes(HOME)) {
       return;
     }
     history.replace(HOME);
+  };
+  const routeToFaq = () => {
+    if (isAuthenticated) {
+      history.replace(FAQ);
+    }
+  };
+  const openInstagram = () => {
+    window.open(INSTAGRAM, '_blank');
   };
   return (
     <div className={styles.desktop}>
@@ -92,13 +112,13 @@ function DesktopNavbar() {
               )}
               {isAuthenticated && (
                 <IonButton
-                  fill="clear"
+                  color="primary"
                   routerLink={CREATE_POST}
-                  color={pathName.includes(CREATE_POST) ? 'primary' : 'dark'}
                   routerDirection="root"
                   className="link"
+                  size="small"
                 >
-                  Create
+                  Create Session
                 </IonButton>
               )}
               {isAuthenticated && (
@@ -109,7 +129,14 @@ function DesktopNavbar() {
                   routerDirection="root"
                   className="link"
                 >
-                  Notifications
+                  {haveNotifications ? (
+                    <IonIcon src="assets/icons/notification-tab-unviewed.svg" />
+                  ) : (
+                    <IonIcon
+                      src="assets/icons/notification-tab-viewed.svg"
+                      size="small"
+                    ></IonIcon>
+                  )}
                 </IonButton>
               )}
               <IonButton
@@ -117,9 +144,9 @@ function DesktopNavbar() {
                 color={pathName.includes(PROFILE) ? 'primary' : 'dark'}
                 routerLink={PROFILE}
                 routerDirection="root"
-                className="link"
+                className="link ion-no-margin"
               >
-                Profile
+                <IonIcon icon={person} size="small"></IonIcon>
               </IonButton>
             </div>
           </div>
@@ -170,8 +197,35 @@ function DesktopNavbar() {
           </Route>
         </IonRouterOutlet>
       </IonContent>
-
-      {/* <div className="footer">FOOTER</div> */}
+      <div className={styles.footer}>
+        <Lottie
+          className={styles['animation-snow']}
+          animationData={snow}
+          loop={true}
+          style={{ height: 40 }}
+        />
+        <Lottie
+          className={styles.animation}
+          animationData={deer}
+          loop={true}
+          style={{ height: 50 }}
+        />
+        <div slot="start" className={styles['footer-toolbar']}>
+          <span className="ion-padding-horizontal">BuddyNUS</span>
+          <span
+            onClick={routeToFaq}
+            className={`${styles['footer-text']} ion-margin-horizontal`}
+          >
+            FAQ
+          </span>
+          <span
+            onClick={openInstagram}
+            className={`${styles['footer-text']} ion-margin-horizontal`}
+          >
+            Instagram
+          </span>
+        </div>
+      </div>
     </div>
   );
 }

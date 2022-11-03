@@ -208,9 +208,11 @@ export default function Sessions() {
   return (
     <IonPage>
       <IonHeader className="ion-no-margin">
-        <IonToolbar>
-          <h1 className="ion-padding-start">Your sessions</h1>
-        </IonToolbar>
+        {isMobile && (
+          <IonToolbar>
+            <h1 className="ion-padding-start">Your sessions</h1>
+          </IonToolbar>
+        )}
         <IonToolbar>
           <IonSegment
             value={tabToShow}

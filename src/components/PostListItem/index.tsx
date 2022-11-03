@@ -1,4 +1,11 @@
-import { IonCol, IonGrid, IonIcon, IonItem, IonRow } from '@ionic/react';
+import {
+  getPlatforms,
+  IonCol,
+  IonGrid,
+  IonIcon,
+  IonItem,
+  IonRow,
+} from '@ionic/react';
 import { calendarClearOutline, timeOutline } from 'ionicons/icons';
 import { useStateWithCallbackLazy } from 'use-state-with-callback';
 import { facultyEnumToStr, locationEnumToStr, Post } from '../../api/types';
@@ -13,16 +20,16 @@ import styles from './styles.module.scss';
 
 interface PostListItemProps {
   post: Post;
+  onClick: (post: Post) => void;
 }
 
-const DESCRIPTION_WORD_LIMIT = 28;
-
-export default function PostListItem({ post }: PostListItemProps) {
+export default function PostListItem({ post, onClick }: PostListItemProps) {
   const [isModalOpen, setIsModalOpen] =
     useStateWithCallbackLazy<boolean>(false);
   const closeModal = (callback: () => void) => {
     setIsModalOpen(false, callback);
   };
+  const isMobile = getPlatforms().includes('mobile');
   const { isAuthenticated } = useAuthState();
   return (
     <IonItem
@@ -32,6 +39,7 @@ export default function PostListItem({ post }: PostListItemProps) {
         setIsModalOpen(true, () => {
           return;
         });
+        onClick(post);
       }}
       detail={false}
     >
@@ -71,7 +79,9 @@ export default function PostListItem({ post }: PostListItemProps) {
         </IonRow>
       </IonGrid>
 
-      <PostModal isOpen={isModalOpen} onClose={closeModal} applyPost={post} />
+      {isMobile && (
+        <PostModal isOpen={isModalOpen} onClose={closeModal} applyPost={post} />
+      )}
     </IonItem>
   );
 }
