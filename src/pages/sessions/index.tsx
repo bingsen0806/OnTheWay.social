@@ -33,6 +33,8 @@ import { CREATE_POST, HOME } from '../../routes';
 import { useHistory } from 'react-router';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import { useAuthState } from '../../util/authentication';
+import SelectedCreatedRequest from './components/SelectedCreatedRequest';
+import { CreatedRequest } from '../../api/types';
 
 enum HomeTab {
   APPLIED_POST = 'Applied',
@@ -50,6 +52,12 @@ export default function Sessions() {
   const [tabToShow, setTabToShow] = useState<HomeTab>(HomeTab.CREATED_POST);
   const isMobile = getPlatforms().includes('mobile');
   const { isAuthenticated } = useAuthState();
+  const [selectedRequest, setSelectedRequest] = useState<CreatedRequest | null>(
+    null
+  );
+
+  const setRequestOnClick = (request: CreatedRequest) =>
+    setSelectedRequest(request);
 
   usePageInitialLoad(() => {
     if (isAuthenticated) {
@@ -148,14 +156,21 @@ export default function Sessions() {
           </IonRefresher>
           <IonGrid className="ion-margin-top ion-no-padding">
             <IonRow className="ion-justify-content-center ion-no-padding">
-              <IonCol size="12" sizeMd="6" sizeLg="4">
+              <IonCol size="12" sizeMd="6">
                 {createdPosts.map((post) => (
                   <CreatedRequestListItem
                     key={post.post.id}
                     createdRequest={post}
+                    onClick={setRequestOnClick}
+                    selected={selectedRequest?.post.id === post.post.id}
                   ></CreatedRequestListItem>
                 ))}
               </IonCol>
+              {!isMobile && (
+                <IonCol sizeMd="6">
+                  <SelectedCreatedRequest createdRequest={selectedRequest} />
+                </IonCol>
+              )}
             </IonRow>
           </IonGrid>
         </IonContent>

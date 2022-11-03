@@ -3,11 +3,8 @@ import { Post } from '../../api/types';
 import study from '../../assets/study.json';
 import Lottie from 'lottie-react';
 
-
-import PostDetails from '../../components/PostDetails';
 import { useAuthState } from '../../util/authentication';
-import OtherStudyBuddies from '../../components/OtherStudyBuddies';
-import AboutPoster from '../../components/AboutPoster';
+import PostInformation from '../PostModal/PostInformation';
 
 interface SelectedPostProps {
   post: Post | null;
@@ -18,20 +15,14 @@ function SelectedPost({ post }: SelectedPostProps) {
   if (post === null) {
     return (
       <div>
+        <p className="ion-text-center ion-no-margin ion-no-padding">
+          No session selected. Click on a session to find out more
+        </p>
         <Lottie animationData={study} loop={true} />
       </div>
     );
   }
-  return (
-    <div>
-      <PostDetails post={post} />
-      {isAuthenticated && (
-        <OtherStudyBuddies studyBuddies={post.participants} />
-      )}
-      {isAuthenticated && <AboutPoster poster={post.poster} />}
-      <p> {post.description}</p>
-    </div>
-  );
+  return <PostInformation applyPost={post} />;
 }
 
 export default SelectedPost;

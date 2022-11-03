@@ -1,22 +1,8 @@
 import {
-  IonButton,
-  IonButtons,
-  IonCol,
-  IonContent,
-  IonGrid,
-  IonHeader,
-  IonIcon,
   IonModal,
-  IonRow,
-  IonTitle,
-  IonToolbar,
   useIonAlert,
 } from '@ionic/react';
-import { locationEnumToStr, Post } from '../../api/types';
-import { arrowBackOutline } from 'ionicons/icons';
-import PostDetails from '../../components/PostDetails';
-import AboutPoster from '../../components/AboutPoster';
-import OtherStudyBuddies from '../../components/OtherStudyBuddies';
+import { Post } from '../../api/types';
 import {
   createAppliedRequest,
   deleteAppliedRequest,
@@ -30,13 +16,12 @@ import { logEvent } from 'firebase/analytics';
 import { analytics } from '../../firebase';
 import { reloadInitialData } from '../../redux/slices/homeSlice';
 import useInfoToast from '../../util/hooks/useInfoToast';
-import ButtonSpinner from '../../components/ButtonSpinner';
 import styles from './styles.module.scss';
 import { ErrorType } from '../../api/errors';
 import useErrorToast from '../../util/hooks/useErrorToast';
 import { useAuthState } from '../../util/authentication';
-import { LOGIN } from '../../routes';
 import { useHistory } from 'react-router';
+import PostInformation from './PostInformation';
 
 interface ApplyModalProps {
   isOpen: boolean;
@@ -138,110 +123,7 @@ export default function PostModal({
       onWillDismiss={onCloseAction}
       className={styles['modal-container']}
     >
-      <IonHeader>
-        <IonToolbar>
-          <IonButtons slot="start">
-            <IonButton
-              fill="clear"
-              color="dark"
-              onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
-                event.stopPropagation();
-                onCloseAction();
-              }}
-            >
-              <IonIcon icon={arrowBackOutline} slot="start" />
-              <p>Back</p>
-            </IonButton>
-          </IonButtons>
-          <IonTitle>
-            Study Session @ {locationEnumToStr(applyPost.location) ?? 'UNKNOWN'}
-          </IonTitle>
-        </IonToolbar>
-      </IonHeader>
-      <IonContent fullscreen>
-        <IonGrid>
-          <IonRow className="ion-justify-content-center">
-            <IonCol sizeMd="8" sizeLg="6">
-              <PostDetails post={applyPost} />
-              {isAuthenticated && (
-                <OtherStudyBuddies studyBuddies={applyPost.participants} />
-              )}
-              {isAuthenticated && <AboutPoster poster={applyPost?.poster} />}
-              {isApplied ? (
-                <IonButton
-                  className="ion-padding-horizontal"
-                  fill="outline"
-                  color="danger"
-                  expand="block"
-                  onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
-                    event.stopPropagation();
-                    if (isLoading) {
-                      return;
-                    }
-                    void presentAlert({
-                      header: 'Confirm cancelling study application?',
-                      buttons: [
-                        {
-                          text: 'Cancel',
-                          role: 'cancel',
-                        },
-                        {
-                          text: 'Confirm',
-                          role: 'confirm',
-                          handler: () => {
-                            sendCancellationRequest(applyPost.id);
-                          },
-                        },
-                      ],
-                    });
-                  }}
-                >
-                  {isLoading ? <ButtonSpinner /> : 'Cancel'}
-                </IonButton>
-              ) : (
-                <IonButton
-                  className={`${styles['accept-button']} ion-padding-horizontal`}
-                  expand="block"
-                  color="primary"
-                  onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
-                    event.stopPropagation();
-                    if (isLoading) {
-                      return;
-                    }
-                    if (!isAuthenticated) {
-                      onClose(() => {
-                        presentInfoToast(
-                          'Please login to apply for this session'
-                        );
-                        history.replace(LOGIN);
-                      });
-                      return;
-                    }
-                    void presentAlert({
-                      header: 'Confirm Applying?',
-                      buttons: [
-                        {
-                          text: 'Cancel',
-                          role: 'cancel',
-                        },
-                        {
-                          text: 'Apply',
-                          role: 'confirm',
-                          handler: () => {
-                            handleApply(applyPost.id);
-                          },
-                        },
-                      ],
-                    });
-                  }}
-                >
-                  {isLoading ? <ButtonSpinner /> : 'Apply'}
-                </IonButton>
-              )}
-            </IonCol>
-          </IonRow>
-        </IonGrid>
-      </IonContent>
+      <PostInformation onClose={onClose} applyPost={applyPost} />
     </IonModal>
   );
 }

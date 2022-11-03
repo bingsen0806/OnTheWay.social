@@ -23,7 +23,7 @@ export default function StudyBuddy({
     <div className={styles['study-buddy']}>
       <PublicProfileModal isOpen={isOpen} onClose={closeModal} user={buddy} />
       <IonRow className="ion-padding-start ion-justify-content-center ion-align-items-center">
-        <IonCol size="3" onClick={openModal}>
+        <IonCol size="3" sizeMd="6" onClick={openModal}>
           <IonAvatar className={styles['avatar']}>
             <img alt="profile" src={buddy.thumbnailPhoto} />
           </IonAvatar>
@@ -31,10 +31,12 @@ export default function StudyBuddy({
         <IonCol>
           <IonCol className={styles['hover']} onClick={openModal}>
             <IonRow className={styles['bold']}>{buddy.name}</IonRow>
-            <IonRow>
+            <IonRow className={styles['light']}>
               Y{buddy.year}/{facultyEnumToStr(buddy.faculty)}
             </IonRow>
-            <IonRow>{genderEnumToStr(buddy.gender)}</IonRow>
+            <IonRow className={styles['light']}>
+              {genderEnumToStr(buddy.gender)}
+            </IonRow>
           </IonCol>
           {inCreatedRequest && (
             <IonRow className="ion-justify-content-center">

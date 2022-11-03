@@ -411,14 +411,17 @@ export default function PostsPage() {
               ) : (
                 <IonGrid className="ion-margin-top">
                   <IonRow>
-                    <IonCol size="12" sizeMd="6">
-                      {listOfPosts.map((data) => (
-                        <PostListItem
-                          post={data}
-                          key={data.id}
-                          onClick={setPostOnClick}
-                        ></PostListItem>
-                      ))}
+                    <IonCol size="12" sizeLg="6">
+                      {listOfPosts.map((data) => {
+                        return (
+                          <PostListItem
+                            selected={selectedPost?.id === data.id}
+                            post={data}
+                            key={data.id}
+                            onClick={setPostOnClick}
+                          ></PostListItem>
+                        );
+                      })}
                     </IonCol>
                     {!isMobile && (
                       <IonCol size="6">

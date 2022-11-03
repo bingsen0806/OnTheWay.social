@@ -20,10 +20,15 @@ import styles from './styles.module.scss';
 
 interface PostListItemProps {
   post: Post;
+  selected: boolean;
   onClick: (post: Post) => void;
 }
 
-export default function PostListItem({ post, onClick }: PostListItemProps) {
+export default function PostListItem({
+  post,
+  selected,
+  onClick,
+}: PostListItemProps) {
   const [isModalOpen, setIsModalOpen] =
     useStateWithCallbackLazy<boolean>(false);
   const closeModal = (callback: () => void) => {
@@ -33,7 +38,7 @@ export default function PostListItem({ post, onClick }: PostListItemProps) {
   const { isAuthenticated } = useAuthState();
   return (
     <IonItem
-      className={styles['item-container']}
+      color={selected ? 'tertiary' : ''}
       button
       onClick={() => {
         setIsModalOpen(true, () => {
@@ -42,6 +47,7 @@ export default function PostListItem({ post, onClick }: PostListItemProps) {
         onClick(post);
       }}
       detail={false}
+      className={selected ? styles['selected-item'] : ''}
     >
       <IonGrid>
         <IonRow className="ion-align-items-center">

@@ -3,9 +3,32 @@
   --min-width: 100%;
 }
 
+.margin {
+  @media screen and (min-width: 1024px) {
+    margin-top: 50px;
+  }
+}
+
+.cancel-button {
+  @media screen and (min-width: 1024px) {
+    position: absolute;
+    top: 0;
+    left: 40%;
+    width: 200px;
+    height: 30px;
+  }
+}
+
 // this class is needed to fix some bug with ionic regarding the color of apply
 // button being removed after apply->cancel application is pressed.
 .accept-button {
   --background: #ff735c;
   --color: white;
+  @media screen and (min-width: 1024px) {
+    position: absolute;
+    top: 0;
+    left: 40%;
+    width: 200px;
+    height: 30px;
+  }
 }

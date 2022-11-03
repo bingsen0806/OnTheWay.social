@@ -12,7 +12,7 @@ interface PostDetailsProps {
 
 export default function PostDetails({ post }: PostDetailsProps) {
   return (
-    <IonGrid>
+    <IonGrid className="ion-no-padding ion-no-margin">
       <IonRow className={styles['bold'] + ' ion-justify-content-start'}>
         <IonCol>Details</IonCol>
       </IonRow>

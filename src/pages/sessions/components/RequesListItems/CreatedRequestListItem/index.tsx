@@ -1,4 +1,11 @@
-import { IonCol, IonGrid, IonIcon, IonItem, IonRow } from '@ionic/react';
+import {
+  getPlatforms,
+  IonCol,
+  IonGrid,
+  IonIcon,
+  IonItem,
+  IonRow,
+} from '@ionic/react';
 import { calendarClearOutline, timeOutline } from 'ionicons/icons';
 import { useState } from 'react';
 import { locationEnumToStr, CreatedRequest } from '../../../../../api/types';
@@ -12,19 +19,32 @@ import styles from '../styles.module.scss';
 
 interface CreatedRequestListItemProps {
   createdRequest: CreatedRequest;
+  selected: boolean;
+  onClick: (request: CreatedRequest) => void;
 }
 
 export default function CreatedRequestListItem({
   createdRequest,
+  selected,
+  onClick,
 }: CreatedRequestListItemProps) {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   function closeModal(callback: () => void) {
     setIsModalOpen(false);
     setTimeout(callback, 200);
   }
+  const isMobile = getPlatforms().includes('mobile');
 
   return (
-    <IonItem button onClick={() => setIsModalOpen(true)} detail={false}>
+    <IonItem
+      button
+      onClick={() => {
+        setIsModalOpen(true);
+        onClick(createdRequest);
+      }}
+      detail={false}
+      color={selected ? 'tertiary' : ''}
+    >
       <IonGrid>
         <IonRow className={styles['post-container']}>
           <IonCol size="4" sizeLg="5">
@@ -58,12 +78,13 @@ export default function CreatedRequestListItem({
           </IonCol>
         </IonRow>
       </IonGrid>
-
-      <CreatedPostModal
-        isOpen={isModalOpen}
-        onClose={closeModal}
-        createdRequest={createdRequest}
-      />
+      {isMobile && (
+        <CreatedPostModal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          createdRequest={createdRequest}
+        />
+      )}
     </IonItem>
   );
 }

@@ -15,12 +15,12 @@ export default function ApplicantList({
   addParticipantToCreatedRequest,
 }: ApplicantListProps) {
   return (
-    <IonGrid>
+    <IonGrid className="ion-no-margin ion-no-padding">
       <IonRow className="ion-justify-content-start ion-no-margin">
         <IonCol className={styles['header']}>Applicants</IonCol>
       </IonRow>
       {applicants.length <= 0 ? (
-        <IonRow className="ion-justify-content-start ion-padding-start">
+        <IonRow className="ion-justify-content-start">
           <IonCol>
             <p>No one has applied to your post yet. Check again later!</p>
           </IonCol>

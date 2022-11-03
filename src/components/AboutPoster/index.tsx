@@ -15,19 +15,12 @@ export default function AboutPoster({ poster }: AboutPosterProps) {
   return (
     <>
       <PublicProfileModal isOpen={isOpen} onClose={closeModal} user={poster} />
-      <IonGrid className="ion-margin-vertical">
-        <IonRow
-          className={
-            styles['header'] + ' ion-justify-content-start ion-padding-start'
-          }
-        >
+      <IonGrid className="">
+        <IonRow className={styles['header'] + ' ion-justify-content-start'}>
           <IonCol>About the poster</IonCol>
         </IonRow>
-        <IonRow
-          className="ion-padding-start ion-justify-content-center"
-          onClick={openModal}
-        >
-          <IonCol size="3">
+        <IonRow className="ion-justify-content-start" onClick={openModal}>
+          <IonCol size="3" sizeMd="4" sizeLg="5">
             <IonAvatar className={styles['avatar']}>
               <img alt="profilePic" src={poster.thumbnailPhoto} />{' '}
             </IonAvatar>
