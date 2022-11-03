@@ -3,6 +3,7 @@ import { calendarClearOutline, timeOutline } from 'ionicons/icons';
 import { useStateWithCallbackLazy } from 'use-state-with-callback';
 import { facultyEnumToStr, locationEnumToStr, Post } from '../../api/types';
 import PostModal from '../../pages/PostModal';
+import { useAuthState } from '../../util/authentication';
 import {
   convertDateRangeToTimeRangeStr,
   convertDateToDateStr,
@@ -22,6 +23,7 @@ export default function PostListItem({ post }: PostListItemProps) {
   const closeModal = (callback: () => void) => {
     setIsModalOpen(false, callback);
   };
+  const { isAuthenticated } = useAuthState();
   return (
     <IonItem
       className={styles['item-container']}
@@ -55,11 +57,15 @@ export default function PostListItem({ post }: PostListItemProps) {
                   post.endDateTime
                 )}
               </p>
-              <p className={styles['post-text']}>{post.poster.name}</p>
-              <p className={styles['post-text']}>
-                Y{post.poster.year},
-                {` ${facultyEnumToStr(post.poster.faculty)}`}
-              </p>
+              {isAuthenticated && (
+                <>
+                  <p className={styles['post-text']}>{post.poster.name}</p>
+                  <p className={styles['post-text']}>
+                    Y{post.poster.year},
+                    {` ${facultyEnumToStr(post.poster.faculty)}`}
+                  </p>
+                </>
+              )}
             </div>
           </IonCol>
         </IonRow>

@@ -1,4 +1,5 @@
 import {
+  getPlatforms,
   IonButton,
   IonChip,
   IonCol,
@@ -54,6 +55,7 @@ export default function PostsPage() {
   const handleCheckedError = useCheckedErrorHandler();
   const handleUnknownError = useUnknownErrorHandler();
   const { isAuthenticated } = useAuthState();
+  const isMobile = getPlatforms().includes('mobile');
 
   const [filterLocations, setFilterLocations] = useState<{
     [key in Location]: boolean;
@@ -292,7 +294,7 @@ export default function PostsPage() {
                 {dayOfTheWeekEnumToStr(dayOfTheWeek as DayOfTheWeek)}
               </IonChip>
             ))}
-          <h4 className={styles['filter-category-header']}>Times</h4>
+          <h4 className={styles['filter-category-header']}>Start Time</h4>
           {Object.values(TimeOfDay)
             .filter((v) => !isNaN(Number(v)))
             .map((time) => (
@@ -342,9 +344,9 @@ export default function PostsPage() {
       <IonPage id="main-content">
         <IonHeader>
           <IonToolbar>
-            <div className="ion-padding-start ion-padding-bottom" slot="start">
+            <div>
               <h1>Study Sessions</h1>
-              {isAuthenticated ? (
+              {isMobile && isAuthenticated && (
                 <IonButton
                   onClick={() => {
                     history.push(CREATE_POST);
@@ -355,7 +357,8 @@ export default function PostsPage() {
                 >
                   Create Study Session
                 </IonButton>
-              ) : (
+              )}
+              {isMobile && !isAuthenticated && (
                 <IonButton
                   href={LOGIN}
                   size="small"

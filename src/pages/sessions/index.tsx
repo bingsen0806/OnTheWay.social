@@ -13,6 +13,7 @@ import {
   IonGrid,
   IonRow,
   IonCol,
+  getPlatforms,
 } from '@ionic/react';
 import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -47,7 +48,7 @@ export default function Sessions() {
   const handleCheckedError = useCheckedErrorHandler();
   const handleUnknownError = useUnknownErrorHandler();
   const [tabToShow, setTabToShow] = useState<HomeTab>(HomeTab.CREATED_POST);
-
+  const isMobile = getPlatforms().includes('mobile');
   const { isAuthenticated } = useAuthState();
 
   usePageInitialLoad(() => {
@@ -206,7 +207,7 @@ export default function Sessions() {
 
   return (
     <IonPage>
-      <IonHeader>
+      <IonHeader className="ion-no-margin">
         <IonToolbar>
           <h1 className="ion-padding-start">Your sessions</h1>
         </IonToolbar>

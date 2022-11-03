@@ -1,5 +1,6 @@
 import { Redirect, Route } from 'react-router-dom';
 import {
+  getPlatforms,
   IonApp,
   IonIcon,
   IonLabel,
@@ -11,7 +12,12 @@ import {
   setupIonicReact,
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { addCircleSharp, book, home, person } from 'ionicons/icons';
+import {
+  addCircleSharp,
+  book,
+  home,
+  person,
+} from 'ionicons/icons';
 import Posts from './pages/posts';
 import Profile from './pages/profile';
 import Faq from './pages/faq';
@@ -71,11 +77,13 @@ import { generateAndSendNotificationRegistrationToken } from './firebase';
 import Art from './pages/Art';
 import AboutArtPage from './pages/Art/AboutArt';
 import CoverPhotoSelectionPage from './pages/Art/CoverPhotoSelectionPage';
+import DesktopNavbar from './components/Navbar/DesktopNavbar';
 setupIonicReact();
 
 export default function Main() {
   const { isAuthenticated } = useAuthState();
   const dispatch = useAppDispatch();
+  const isMobile = getPlatforms().includes('mobile');
 
   /**
    * Set up a check on notifications at regular intervals of 10s.
@@ -105,97 +113,104 @@ export default function Main() {
   return (
     <IonApp>
       <IonReactRouter>
-        <IonTabs>
-          <IonRouterOutlet>
-            <UnauthenticatedRoute exact path={LOGIN} component={LoginPage} />
-            <UnauthenticatedRoute
-              exact
-              path={REGISTER}
-              component={RegisterPage}
-            />
-            <Route exact path={HOME} component={Posts} />
-            <AuthenticatedRoute exact path={ART} component={Art} />
-            <AuthenticatedRoute
-              exact
-              path={ABOUT_ART}
-              component={AboutArtPage}
-            />
-            <AuthenticatedRoute
-              exact
-              path={CHANGE_COVER_PHOTO}
-              component={CoverPhotoSelectionPage}
-            />
-            <AuthenticatedRoute exact path={CAMPAIGN} component={Campaigns} />
-            <AuthenticatedRoute
-              exact
-              path={EMAIL_VERIFICATION}
-              component={EmailVerificationPage}
-            />
-            <AuthenticatedRoute
-              exact
-              path={PROFILE_CREATION}
-              component={ProfileCreationPage}
-            />
-            <AuthenticatedRoute
-              exact
-              path={CREATE_POST}
-              component={CreatePostPage}
-            />
-            <AuthenticatedRoute exact path={PROFILE} component={Profile} />
-            <AuthenticatedRoute exact path={SESSIONS} component={Sessions} />
-            <AuthenticatedRoute
-              exact
-              path={NOTIFICATIONS}
-              component={NotificationsPage}
-            />
-            <Route exact path={FAQ} component={Faq} />
-            <Route exact path="/">
-              <Redirect to={HOME} />
-            </Route>
-          </IonRouterOutlet>
-          <IonTabBar slot="bottom">
-            <IonTabButton tab="home" href={HOME}>
-              <IonIcon icon={home} />
-              <IonLabel className={styles['tab-button-text']}>Home</IonLabel>
-            </IonTabButton>
-            {isAuthenticated && (
-              <IonTabButton tab="sessions" href={SESSIONS}>
-                <IonIcon icon={book} />
-                <IonLabel className={styles['tab-button-text']}>
-                  Sessions
-                </IonLabel>
-              </IonTabButton>
-            )}
+        {isMobile && (
+          <IonTabs>
+            <IonRouterOutlet>
+              <UnauthenticatedRoute exact path={LOGIN} component={LoginPage} />
+              <UnauthenticatedRoute
+                exact
+                path={REGISTER}
+                component={RegisterPage}
+              />
+              <Route exact path={HOME} component={Posts} />
+              <AuthenticatedRoute exact path={ART} component={Art} />
+              <AuthenticatedRoute
+                exact
+                path={ABOUT_ART}
+                component={AboutArtPage}
+              />
+              <AuthenticatedRoute
+                exact
+                path={CHANGE_COVER_PHOTO}
+                component={CoverPhotoSelectionPage}
+              />
+              <AuthenticatedRoute exact path={CAMPAIGN} component={Campaigns} />
+              <AuthenticatedRoute
+                exact
+                path={EMAIL_VERIFICATION}
+                component={EmailVerificationPage}
+              />
+              <AuthenticatedRoute
+                exact
+                path={PROFILE_CREATION}
+                component={ProfileCreationPage}
+              />
+              <AuthenticatedRoute
+                exact
+                path={CREATE_POST}
+                component={CreatePostPage}
+              />
+              <AuthenticatedRoute exact path={PROFILE} component={Profile} />
+              <AuthenticatedRoute exact path={SESSIONS} component={Sessions} />
+              <AuthenticatedRoute
+                exact
+                path={NOTIFICATIONS}
+                component={NotificationsPage}
+              />
+              <Route exact path={FAQ} component={Faq} />
+              <Route exact path="/">
+                <Redirect to={HOME} />
+              </Route>
+            </IonRouterOutlet>
 
-            {isAuthenticated && (
-              <IonTabButton tab="createPost" href={CREATE_POST}>
-                <IonIcon icon={addCircleSharp} />
+            <IonTabBar slot="bottom">
+              <IonTabButton tab="home" href={HOME}>
+                <IonIcon icon={home} />
+                <IonLabel className={styles['tab-button-text']}>Home</IonLabel>
+              </IonTabButton>
+              {isAuthenticated && (
+                <IonTabButton tab="sessions" href={SESSIONS}>
+                  <IonIcon icon={book} />
+                  <IonLabel className={styles['tab-button-text']}>
+                    Sessions
+                  </IonLabel>
+                </IonTabButton>
+              )}
+
+              {isAuthenticated && (
+                <IonTabButton tab="createPost" href={CREATE_POST}>
+                  <IonIcon icon={addCircleSharp} />
+                  <IonLabel className={styles['tab-button-text']}>
+                    Create
+                  </IonLabel>
+                </IonTabButton>
+              )}
+              {isAuthenticated && (
+                <IonTabButton tab="notifications" href={NOTIFICATIONS}>
+                  {haveNotifications ? (
+                    <IonIcon
+                      src="assets/icons/notification-tab-unviewed.svg"
+                      size="large"
+                    />
+                  ) : (
+                    <IonIcon src="assets/icons/notification-tab-viewed.svg"></IonIcon>
+                  )}
+                  <IonLabel className={styles['tab-button-text']}>
+                    Notifications
+                  </IonLabel>
+                </IonTabButton>
+              )}
+              <IonTabButton tab="profile" href={PROFILE}>
+                <IonIcon icon={person} />
                 <IonLabel className={styles['tab-button-text']}>
-                  Create
+                  Profile
                 </IonLabel>
               </IonTabButton>
-            )}
-            {isAuthenticated && (
-              <IonTabButton tab="notifications" href={NOTIFICATIONS}>
-                {haveNotifications ? (
-                  <IonIcon
-                    src="assets/icons/notification-tab-unviewed.svg"
-                    size="large"
-                  />
-                ) : (
-                  <IonIcon src="assets/icons/notification-tab-viewed.svg"></IonIcon>
-                )}
-                <IonLabel className={styles['tab-button-text']}>
-                  Notifications
-                </IonLabel>
-              </IonTabButton>
-            )}
-            <IonTabButton tab="profile" href={PROFILE}>
-              <IonIcon icon={person} />
-              <IonLabel className={styles['tab-button-text']}>Profile</IonLabel>
-            </IonTabButton>
-          </IonTabBar>
-        </IonTabs>
+            </IonTabBar>
+          </IonTabs>
+        )}
+
+        {!isMobile && <DesktopNavbar />}
       </IonReactRouter>
     </IonApp>
   );

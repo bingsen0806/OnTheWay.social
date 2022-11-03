@@ -66,13 +66,6 @@ export default function PostModal({
   const history = useHistory();
 
   function handleApply(postId: string) {
-    if (!isAuthenticated) {
-      onClose(() => {
-        presentInfoToast('Please login to apply for this post.');
-        history.replace(LOGIN);
-      });
-      return;
-    }
     setIsLoading(true);
     createAppliedRequest(postId)
       .then((resp) => {
@@ -170,8 +163,10 @@ export default function PostModal({
           <IonRow className="ion-justify-content-center">
             <IonCol sizeMd="8" sizeLg="6">
               <PostDetails post={applyPost} />
-              <OtherStudyBuddies studyBuddies={applyPost.participants} />
-              <AboutPoster poster={applyPost?.poster} />
+              {isAuthenticated && (
+                <OtherStudyBuddies studyBuddies={applyPost.participants} />
+              )}
+              {isAuthenticated && <AboutPoster poster={applyPost?.poster} />}
               {isApplied ? (
                 <IonButton
                   className="ion-padding-horizontal"
@@ -211,6 +206,15 @@ export default function PostModal({
                   onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
                     event.stopPropagation();
                     if (isLoading) {
+                      return;
+                    }
+                    if (!isAuthenticated) {
+                      onClose(() => {
+                        presentInfoToast(
+                          'Please login to apply for this session'
+                        );
+                        history.replace(LOGIN);
+                      });
                       return;
                     }
                     void presentAlert({

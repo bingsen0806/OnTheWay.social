@@ -16,12 +16,8 @@ export default function ApplicantList({
 }: ApplicantListProps) {
   return (
     <IonGrid>
-      <IonRow
-        className={
-          styles['header'] + ' ion-justify-content-start ion-padding-start'
-        }
-      >
-        <IonCol>Applicants</IonCol>
+      <IonRow className="ion-justify-content-start ion-no-margin">
+        <IonCol className={styles['header']}>Applicants</IonCol>
       </IonRow>
       {applicants.length <= 0 ? (
         <IonRow className="ion-justify-content-start ion-padding-start">
