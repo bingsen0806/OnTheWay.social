@@ -349,11 +349,11 @@ export default function PostsPage() {
               {isMobile && isAuthenticated && (
                 <IonButton
                   onClick={() => {
-                    history.push(CREATE_POST);
+                    history.replace(CREATE_POST);
                   }}
                   size="small"
-                  expand="block"
                   slot="start"
+                  className="ion-margin-bottom"
                 >
                   Create Study Session
                 </IonButton>
