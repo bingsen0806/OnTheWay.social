@@ -29,7 +29,7 @@ import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
 import NoData from '../NoData';
 import AppliedRequestListItem from './components/RequesListItems/AppliedRequestListItem';
 import CreatedRequestListItem from './components/RequesListItems/CreatedRequestListItem';
-import { CREATE_POST, HOME } from '../../routes';
+import { BROWSE, CREATE_POST } from '../../routes';
 import { useHistory } from 'react-router';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import { useAuthState } from '../../util/authentication';
@@ -208,15 +208,15 @@ export default function Sessions() {
             <NoData>
               <div>
                 <p className="ion-text-center">
-                  You have not applied for any study posts
+                  You have not applied for any study session
                 </p>
                 <IonButton
                   onClick={() => {
-                    history.push(HOME);
+                    history.push(BROWSE);
                   }}
                   expand="block"
                 >
-                  Find a study buddy
+                  Find a session
                 </IonButton>
               </div>
             </NoData>

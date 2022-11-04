@@ -1,4 +1,4 @@
-import { Redirect, Route, useHistory, useLocation } from 'react-router-dom';
+import { Route, useHistory, useLocation } from 'react-router-dom';
 import {
   IonButton,
   IonContent,
@@ -18,11 +18,13 @@ import Lottie from 'lottie-react';
 import {
   ABOUT_ART,
   ART,
+  BROWSE,
   CAMPAIGN,
   CHANGE_COVER_PHOTO,
   CREATE_POST,
   EMAIL_VERIFICATION,
   FAQ,
+  FEEDBACK,
   HOME,
   INSTAGRAM,
   LOGIN,
@@ -52,6 +54,8 @@ import { person } from 'ionicons/icons';
 import { useAppSelector } from '../../redux/hooks';
 import { getNumberOfUnviewedNotifications } from '../../constants';
 import { useState } from 'react';
+import Home from '../../pages/Home';
+import HomeContents from '../../pages/Home/HomeContents';
 
 function DesktopNavbar() {
   const location = useLocation();
@@ -75,6 +79,10 @@ function DesktopNavbar() {
   const openInstagram = () => {
     window.open(INSTAGRAM, '_blank');
   };
+  const openFeedback = () => {
+    window.open(FEEDBACK, '_blank');
+  };
+
   return (
     <div className={styles.desktop}>
       <IonHeader mode="ios">
@@ -93,12 +101,12 @@ function DesktopNavbar() {
             <div className={`ion-text-center`}>
               <IonButton
                 fill="clear"
-                color={pathName.includes(HOME) ? 'primary' : 'dark'}
-                routerLink={HOME}
+                color={pathName.includes(BROWSE) ? 'primary' : 'dark'}
+                routerLink={BROWSE}
                 routerDirection="root"
                 className="link"
               >
-                Home
+                Browse
               </IonButton>
               {isAuthenticated && (
                 <IonButton
@@ -161,7 +169,8 @@ function DesktopNavbar() {
             path={REGISTER}
             component={RegisterPage}
           />
-          <Route exact path={HOME} component={Posts} />
+          <Route exact path={HOME} component={HomeContents} />
+          <Route exact path={BROWSE} component={Posts} />
           <AuthenticatedRoute exact path={ART} component={Art} />
           <AuthenticatedRoute exact path={ABOUT_ART} component={AboutArtPage} />
           <AuthenticatedRoute
@@ -194,9 +203,7 @@ function DesktopNavbar() {
             component={NotificationsPage}
           />
           <Route exact path={FAQ} component={Faq} />
-          <Route exact path="/">
-            <Redirect to={HOME} />
-          </Route>
+          <Route exact path="/" component={Home} />
         </IonRouterOutlet>
       </IonContent>
       <div className={styles.footer}>
@@ -232,6 +239,12 @@ function DesktopNavbar() {
             className={`${styles['footer-text']} ion-margin-horizontal`}
           >
             Instagram
+          </span>
+          <span
+            onClick={openFeedback}
+            className={`${styles['footer-text']} ion-margin-horizontal`}
+          >
+            Feedback
           </span>
         </div>
       </div>

@@ -11,7 +11,7 @@ import {
 } from '@ionic/react';
 import styles from './styles.module.scss';
 import { useHistory } from 'react-router';
-import { ABOUT_ART, ART, CAMPAIGN, PROFILE_FAQ } from '../../routes';
+import { ABOUT_ART, ART, CAMPAIGN, FEEDBACK, PROFILE_FAQ } from '../../routes';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { getInitialSelf, reloadSelf } from '../../redux/slices/userSlice';
 import { logout } from '../../api/authentication';
@@ -74,6 +74,10 @@ export default function ProfilePage() {
 
   const getUser = () => {
     void dispatch(reloadSelf());
+  };
+
+  const routeToFeedback = () => {
+    window.open(FEEDBACK, '_blank');
   };
 
   usePageInitialLoad(() => {
@@ -153,6 +157,11 @@ export default function ProfilePage() {
                     <IonItem button routerLink={PROFILE_FAQ}>
                       <IonLabel className={styles['pointer']}>
                         <h1>FAQ</h1>
+                      </IonLabel>
+                    </IonItem>
+                    <IonItem button onClick={routeToFeedback}>
+                      <IonLabel className={styles['pointer']}>
+                        <h1>Feedback</h1>
                       </IonLabel>
                     </IonItem>
                     <IonItem button onClick={submitLogout}>

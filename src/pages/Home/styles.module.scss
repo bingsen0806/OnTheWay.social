@@ -1,0 +1,98 @@
+.hero {
+  height: 100vh;
+  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.3)),
+    url('../../assets/fun.jpeg');
+  background-position: center; /* Center the image */
+  background-repeat: no-repeat; /* Do not repeat the image */
+  background-size: cover; /* Resize the background image to cover the entire container */
+  @media screen and (min-width: 1024px) {
+    background: linear-gradient(
+        to right,
+        rgba(0, 0, 0, 0.6),
+        rgba(0, 0, 0, 0.3)
+      ),
+      url('../../assets/fun.jpeg');
+    background-position: center; /* Center the image */
+    background-repeat: no-repeat; /* Do not repeat the image */
+    background-size: cover; /* Resize the background image to cover the entire container */
+  }
+  .contents {
+    margin-left: 5vw;
+    .title {
+      margin-top: 20vh;
+      font-size: 3em;
+      color: #fff;
+    }
+    .description {
+      color: #fff;
+      font-weight: 300;
+    }
+  }
+
+  .discussion {
+    height: 80vh;
+  }
+}
+
+.info {
+  height: 40vh;
+  .contents {
+    opacity: 0;
+  }
+  .contents-visible {
+    margin-left: 5vw;
+    margin-right: 5vw;
+    @media screen and (min-width: 1024px) {
+      margin-top: 10vh;
+    }
+    .title {
+      margin-top: 5vh;
+      font-size: 2em;
+    }
+    .subcontents {
+      margin: 0;
+      @media screen and (min-width: 1024px) {
+        margin-left: 5vw;
+      }
+    }
+    animation: fadeIn 2s;
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.cta {
+  height: 60vh;
+  background-color: #f9f9f9;
+  .contents {
+    opacity: 0;
+  }
+  .contents-visible {
+    margin-top: 10vh;
+    padding-top: 5vh;
+    margin-left: 5vw;
+
+    .title {
+      font-size: 2em;
+    }
+    .img {
+      @media screen and (max-width: 1023px) {
+        width: 80vw;
+      }
+      border-radius: 10px;
+      margin: 0;
+      padding: 0;
+      @media screen and (min-width: 1024px) {
+        height: 50vh;
+      }
+    }
+    animation: fadeIn 1s;
+  }
+}
