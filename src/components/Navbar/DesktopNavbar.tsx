@@ -50,11 +50,13 @@ import logo from '../../assets/icon/favicon.png';
 import { person } from 'ionicons/icons';
 import { useAppSelector } from '../../redux/hooks';
 import { getNumberOfUnviewedNotifications } from '../../constants';
+import { useState } from 'react';
 
 function DesktopNavbar() {
   const location = useLocation();
   const pathName = location.pathname;
   const { isAuthenticated } = useAuthState();
+  const [isAnimating, setIsAnimating] = useState<boolean>(false);
   const haveNotifications = useAppSelector(
     (state) =>
       getNumberOfUnviewedNotifications(state.notifications.notifications) > 0
@@ -201,7 +203,15 @@ function DesktopNavbar() {
           animationData={snow}
           loop={true}
         />
-        <Lottie className={styles.animation} animationData={deer} loop={true} />
+        <Lottie
+          onClick={() => setIsAnimating(true)}
+          onAnimationEnd={() => setIsAnimating(false)}
+          className={
+            isAnimating ? styles['moving-animation'] : styles['animation']
+          }
+          animationData={deer}
+          loop={true}
+        />
         <div slot="start" className={styles['footer-toolbar']}>
           <span className="ion-padding-horizontal">BuddyNUS</span>
           <span

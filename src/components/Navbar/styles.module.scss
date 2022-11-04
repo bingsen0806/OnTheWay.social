@@ -51,7 +51,7 @@
   bottom: 0px;
   padding: 0px 32px;
 
-  background-image: url('../../assets/wave.svg');
+  background-image: url('../../assets/wave2.svg');
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 
   span {
@@ -81,10 +81,32 @@
   left: 2px;
   height: 50px;
   width: 50px;
+  cursor: pointer;
 }
 
 .desktop-wrapper {
   ion-toolbar {
     text-align: center;
+  }
+}
+
+.moving-animation {
+  position: fixed;
+  bottom: 3px;
+  left: 2px;
+  height: 50px;
+  width: 50px;
+  animation: moving 2s linear;
+}
+
+@keyframes moving {
+  0% {
+    transform: translate(0, 0);
+  }
+  35% {
+    transform: translate(20vw, 0);
+  }
+  100% {
+    transform: translate(100vw, 0);
   }
 }
