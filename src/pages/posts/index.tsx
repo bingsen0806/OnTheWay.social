@@ -8,8 +8,6 @@ import {
   IonGrid,
   IonHeader,
   IonIcon,
-  IonInfiniteScroll,
-  IonInfiniteScrollContent,
   IonMenu,
   IonMenuToggle,
   IonPage,
@@ -28,39 +26,29 @@ import {
   dayOfTheWeekEnumToStr,
   Location,
   locationEnumToStr,
-  Post,
   TimeOfDay,
   timeOfDayEnumToStr,
 } from '../../api/types';
-import LoadingSpinner from '../../components/LoadingSpinner';
-import PostListItem from '../../components/PostListItem';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { useAppDispatch } from '../../redux/hooks';
 import {
   getInitialPostsData,
   getNewPageOfPostsWithFilter,
-  getNextPageOfPosts,
 } from '../../redux/slices/postsSlice';
 import { CREATE_POST, LOGIN } from '../../routes';
 import { useAuthState } from '../../util/authentication';
 import useCheckedErrorHandler from '../../util/hooks/useCheckedErrorHandler';
 import usePageInitialLoad from '../../util/hooks/usePageInitialLoad';
 import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
-import NoData from '../NoData';
-import SelectedPost from './SelectedPost';
+import PostsPageBody from './PostsPageBody';
 import styles from './styles.module.scss';
 
 export default function PostsPage() {
   const history = useHistory();
-  const listOfPosts = useAppSelector((state) => state.posts.posts);
-  const isLoading = useAppSelector((state) => state.posts.isLoading);
   const dispatch = useAppDispatch();
   const handleCheckedError = useCheckedErrorHandler();
   const handleUnknownError = useUnknownErrorHandler();
   const { isAuthenticated } = useAuthState();
   const isMobile = getPlatforms().includes('mobile');
-  const [selectedPost, setSelectedPost] = useState<Post | null>(null);
-
-  const setPostOnClick = (post: Post) => setSelectedPost(post);
 
   const [filterLocations, setFilterLocations] = useState<{
     [key in Location]: boolean;
@@ -184,19 +172,6 @@ export default function PostsPage() {
         days: newFilterDays,
       })
     )
-      .unwrap()
-      .then((resp) => {
-        if (!resp.success) {
-          handleCheckedError(resp.message as string);
-        }
-      })
-      .catch((error) => {
-        handleUnknownError(error);
-      });
-  }
-
-  function requestNextPageOfPosts() {
-    dispatch(getNextPageOfPosts())
       .unwrap()
       .then((resp) => {
         if (!resp.success) {
@@ -366,10 +341,12 @@ export default function PostsPage() {
                 )}
                 {isMobile && !isAuthenticated && (
                   <IonButton
-                    href={LOGIN}
+                    onClick={() => {
+                      history.replace(LOGIN);
+                    }}
                     size="small"
-                    expand="block"
                     slot="start"
+                    className="ion-margin-bottom"
                   >
                     Login
                   </IonButton>
@@ -384,84 +361,18 @@ export default function PostsPage() {
             </IonToolbar>
           </IonHeader>
         </div>
-
-        <IonContent
-          fullscreen
-          className={
-            listOfPosts.length === 0 ? '' : styles['posts-list-container']
-          }
-        >
-          {isLoading && <LoadingSpinner />}
-          {!isLoading && (
-            <>
-              <IonRefresher slot="fixed" onIonRefresh={refreshContents}>
-                <IonRefresherContent></IonRefresherContent>
-              </IonRefresher>
-              {listOfPosts.length === 0 ? (
-                <NoData>
-                  <div>
-                    <p>No study sessions!</p>
-                    <IonButton
-                      onClick={() => {
-                        history.replace(CREATE_POST);
-                      }}
-                      expand="block"
-                    >
-                      Create a study session
-                    </IonButton>
-                  </div>
-                </NoData>
-              ) : (
-                <IonGrid className="ion-margin-top">
-                  <IonRow>
-                    <IonCol size="12" sizeLg="5">
-                      {isMobile ? (
-                        <>
-                          {listOfPosts.map((data) => {
-                            return (
-                              <PostListItem
-                                selected={selectedPost?.id === data.id}
-                                post={data}
-                                key={data.id}
-                                onClick={setPostOnClick}
-                              ></PostListItem>
-                            );
-                          })}
-                        </>
-                      ) : (
-                        <IonContent fullscreen>
-                          {listOfPosts.map((data) => {
-                            return (
-                              <PostListItem
-                                selected={selectedPost?.id === data.id}
-                                post={data}
-                                key={data.id}
-                                onClick={setPostOnClick}
-                              ></PostListItem>
-                            );
-                          })}
-                        </IonContent>
-                      )}
-                    </IonCol>
-                    {!isMobile && (
-                      <IonCol size="7">
-                        <SelectedPost post={selectedPost} />
-                      </IonCol>
-                    )}
-                  </IonRow>
-                </IonGrid>
-              )}
-
-              <IonInfiniteScroll
-                onIonInfinite={requestNextPageOfPosts}
-                threshold="50px"
-                disabled={listOfPosts.length < 20}
-              >
-                <IonInfiniteScrollContent loadingSpinner="circles"></IonInfiniteScrollContent>
-              </IonInfiniteScroll>
-            </>
-          )}
-        </IonContent>
+        {isMobile ? (
+          <IonContent fullscreen>
+            <IonRefresher slot="fixed" onIonRefresh={refreshContents}>
+              <IonRefresherContent></IonRefresherContent>
+            </IonRefresher>
+            <PostsPageBody />
+          </IonContent>
+        ) : (
+          <IonContent>
+            <PostsPageBody />
+          </IonContent>
+        )}
       </IonPage>
     </>
   );

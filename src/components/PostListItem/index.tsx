@@ -38,7 +38,7 @@ export default function PostListItem({
   const { isAuthenticated } = useAuthState();
   return (
     <IonItem
-      color={selected ? 'tertiary' : ''}
+      color={selected && !isMobile ? 'tertiary' : ''}
       button
       onClick={() => {
         setIsModalOpen(true, () => {

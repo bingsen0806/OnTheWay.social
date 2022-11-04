@@ -1,6 +1,6 @@
-import noDataScreen from '../../assets/nodata.jpg';
+import noDataScreen from '../../assets/nodata.json';
 import styles from './styles.module.scss';
-
+import Lottie from 'lottie-react';
 import { IonGrid, IonRow } from '@ionic/react';
 
 interface NoDataContents {
@@ -12,7 +12,11 @@ export default function NoData({ children, hideImage }: NoDataContents) {
   return (
     <>
       {!hideImage && (
-        <img className={styles['center-image']} src={noDataScreen} />
+        <Lottie
+          className={styles['animation']}
+          animationData={noDataScreen}
+          loop={true}
+        />
       )}
       <IonGrid className={styles.row}>
         <IonRow>{children}</IonRow>

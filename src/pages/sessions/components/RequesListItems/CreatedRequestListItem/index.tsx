@@ -43,7 +43,7 @@ export default function CreatedRequestListItem({
         onClick(createdRequest);
       }}
       detail={false}
-      color={selected ? 'tertiary' : ''}
+      color={selected && !isMobile ? 'tertiary' : ''}
     >
       <IonGrid>
         <IonRow className={styles['post-container']}>

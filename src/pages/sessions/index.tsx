@@ -141,7 +141,9 @@ export default function Sessions() {
             </IonRefresher>
             <NoData>
               <div>
-                <p>You have not created any posts</p>
+                <p className="ion-text-center">
+                  You have not created any posts
+                </p>
                 <IonButton
                   onClick={() => {
                     history.push(CREATE_POST);
@@ -162,7 +164,7 @@ export default function Sessions() {
           </IonRefresher>
           <IonGrid className="ion-margin-top ion-no-padding">
             <IonRow className="ion-justify-content-center ion-no-padding">
-              <IonCol size="12" sizeMd="5">
+              <IonCol size="12" sizeLg="5">
                 {isMobile ? (
                   <>
                     {createdPosts.map((post) => (
@@ -205,7 +207,9 @@ export default function Sessions() {
             </IonRefresher>
             <NoData>
               <div>
-                <p>You have not applied for any study posts</p>
+                <p className="ion-text-center">
+                  You have not applied for any study posts
+                </p>
                 <IonButton
                   onClick={() => {
                     history.push(HOME);

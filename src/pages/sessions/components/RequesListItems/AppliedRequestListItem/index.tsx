@@ -48,7 +48,7 @@ export default function AppliedRequestListItem({
         });
         onClick(appliedRequest);
       }}
-      color={selected ? 'tertiary' : ''}
+      color={selected && !isMobile ? 'tertiary' : ''}
       detail={false}
       className={styles['item-container']}
     >

@@ -97,7 +97,7 @@ export default function LoginPage() {
   }
 
   return (
-    <AuthenticationPageContainer pageTitle="Login">
+    <AuthenticationPageContainer pageTitle="Welcome back!">
       <IonRow className="ion-justify-content-center">
         <IonCol size="10" sizeMd="6" className={styles['input-field-col']}>
           <TextInputField

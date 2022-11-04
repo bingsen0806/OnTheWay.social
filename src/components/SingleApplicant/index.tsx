@@ -76,7 +76,7 @@ export default function SingleApplicant({
   }
 
   return (
-    <IonRow className="ion-padding-start ion-justify-content-center">
+    <IonRow className="ion-padding-vertical ion-justify-content-center">
       <IonCol size="3">
         <IonAvatar className={styles['avatar']}>
           <img alt="profilePic" src={applicant.thumbnailPhoto} />{' '}

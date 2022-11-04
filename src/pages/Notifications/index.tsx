@@ -148,7 +148,9 @@ export default function NotificationsPage() {
                 ))
               ) : (
                 <NoData>
-                  <p>You have no notifications. Check again later!</p>
+                  <p className="ion-text-center">
+                    You have no notifications. Check again later!
+                  </p>
                 </NoData>
               )}
             </IonList>

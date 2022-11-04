@@ -14,7 +14,7 @@ interface PostDetailsProps {
 export default function PostDetails({ post }: PostDetailsProps) {
   const { isAuthenticated } = useAuthState();
   return (
-    <IonGrid className={styles['margin']}>
+    <IonGrid className={isAuthenticated ? styles['margin'] : ''}>
       <IonRow className={styles['bold'] + ' ion-justify-content-start'}>
         <IonCol>Details</IonCol>
       </IonRow>

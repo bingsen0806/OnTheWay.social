@@ -81,7 +81,7 @@ function DesktopNavbar() {
             className={styles['logo-container']}
             onClick={routeToHome}
           >
-            <img src={logo} className={styles.logo} />
+            <img src={logo} className={styles.logo} alt="logo" />
             <IonText color="primary">
               <span className={styles['brand-name']}>BuddyNUS</span>
             </IonText>
@@ -200,14 +200,8 @@ function DesktopNavbar() {
           className={styles['animation-snow']}
           animationData={snow}
           loop={true}
-          style={{ height: 40, width: 50 }}
         />
-        <Lottie
-          className={styles.animation}
-          animationData={deer}
-          loop={true}
-          style={{ height: 50, width: 50 }}
-        />
+        <Lottie className={styles.animation} animationData={deer} loop={true} />
         <div slot="start" className={styles['footer-toolbar']}>
           <span className="ion-padding-horizontal">BuddyNUS</span>
           <span

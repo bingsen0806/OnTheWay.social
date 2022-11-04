@@ -70,6 +70,11 @@ export default function CreatedPostInformation({
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   function handleDelete(postId: string) {
+    const postDeleteCallback = () => {
+      dispatch(removeNotification(createdRequest.post.id));
+      dispatch(removeCreatedRequest(createdRequest.post.id));
+      void dispatch(reloadInitialPostsData());
+    };
     setIsLoading(true);
     cancelRequest(postId)
       .then((resp) => {
@@ -77,12 +82,7 @@ export default function CreatedPostInformation({
           switch (resp.message) {
             case ErrorType.POST_NOT_FOUND:
               presentInfoToast('Post has been deleted.');
-              onClose &&
-                onClose(() => {
-                  dispatch(removeNotification(createdRequest.post.id));
-                  dispatch(removeCreatedRequest(createdRequest.post.id));
-                  void dispatch(reloadInitialPostsData());
-                });
+              onClose && onClose(postDeleteCallback);
               return;
             default:
               handleCheckedError(resp.message);
@@ -91,12 +91,10 @@ export default function CreatedPostInformation({
           setIsLoading(false);
           logEvent(analytics, 'delete_post');
           presentInfoToast('Successfully deleted!');
-          onClose &&
-            onClose(() => {
-              dispatch(removeNotification(createdRequest.post.id));
-              dispatch(removeCreatedRequest(createdRequest.post.id));
-              void dispatch(reloadInitialPostsData());
-            });
+          onClose && onClose(postDeleteCallback);
+        }
+        if (!onClose) {
+          postDeleteCallback();
         }
       })
       .catch((error) => {
@@ -171,7 +169,7 @@ export default function CreatedPostInformation({
               />
               <PostDetails post={createdRequestState.post} />
               <IonButton
-                className="ion-padding-horizontal ion-margin-top"
+                className="ion-padding-horizontal ion-margin-vertical"
                 expand="block"
                 fill="outline"
                 color="danger"

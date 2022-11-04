@@ -35,7 +35,8 @@ import styles from './styles.module.scss';
 import { ErrorType } from '../../api/errors';
 import useErrorToast from '../../util/hooks/useErrorToast';
 import { useAuthState } from '../../util/authentication';
-import { LOGIN } from '../../routes';
+import UnauthenticatedPostDetails from '../../components/UnauthenticatedPostDetails';
+import { SESSIONS } from '../../routes';
 import { useHistory } from 'react-router';
 
 interface ApplyModalProps {
@@ -56,8 +57,8 @@ export default function PostInformation({
   const presentInfoToast = useInfoToast();
   const presentErrorToast = useErrorToast();
   const { isAuthenticated } = useAuthState();
-  const history = useHistory();
   const isMobile = getPlatforms().includes('mobile');
+  const history = useHistory();
 
   function handleApply(postId: string) {
     setIsLoading(true);
@@ -67,6 +68,7 @@ export default function PostInformation({
           switch (resp.message) {
             case ErrorType.USER_PROFILE_NOT_CREATED:
               onClose && onClose(() => handleCheckedError(resp.message));
+              !onClose && handleCheckedError(resp.message);
               return;
             case ErrorType.POST_ALREADY_APPLIED:
               presentInfoToast('You have applied for this post.');
@@ -86,7 +88,10 @@ export default function PostInformation({
           logEvent(analytics, 'apply_post');
           setIsApplied(true);
           presentInfoToast('Successfully applied!');
-          void dispatch(reloadInitialData());
+          void dispatch(reloadInitialData()).then(() => {
+            history.replace(SESSIONS);
+          });
+          !onClose && dispatch(removePost(applyPost));
         }
       })
       .catch((error) => {
@@ -119,17 +124,18 @@ export default function PostInformation({
   }
 
   function onCloseAction() {
-    onClose &&
-      onClose(() => {
-        if (isApplied) {
-          dispatch(removePost(applyPost));
-        }
-      });
+    const callback = () => {
+      if (isApplied) {
+        dispatch(removePost(applyPost));
+      }
+    };
+    onClose && onClose(callback);
+    !onClose && callback();
   }
 
   return (
     <>
-      {onClose && (
+      {isMobile && (
         <IonHeader>
           <IonToolbar>
             <IonButtons slot="start">
@@ -152,95 +158,85 @@ export default function PostInformation({
           </IonToolbar>
         </IonHeader>
       )}
-      <IonContent
-        fullscreen={isMobile ? true : false}
-        className={styles['no-padding']}
-      >
+      <IonContent fullscreen={isMobile} className={styles['no-padding']}>
         <IonGrid>
           <IonRow className="ion-justify-content-center">
-            <IonCol sizeMd="8" sizeLg="12">
+            <IonCol sizeMd="8" sizeLg="11">
               <PostDetails post={applyPost} />
-              {isAuthenticated && (
-                <OtherStudyBuddies studyBuddies={applyPost.participants} />
+              {!isAuthenticated && (
+                <UnauthenticatedPostDetails closeDialog={onClose} />
               )}
-              {isAuthenticated && <AboutPoster poster={applyPost?.poster} />}
-              {isApplied ? (
-                <IonButton
-                  className={`ion-padding-horizontal ${styles['cancel-button']}`}
-                  fill="outline"
-                  color="danger"
-                  expand="block"
-                  onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
-                    event.stopPropagation();
-                    if (isLoading) {
-                      return;
-                    }
-                    void presentAlert({
-                      header: 'Confirm cancelling study application?',
-                      buttons: [
-                        {
-                          text: 'Cancel',
-                          role: 'cancel',
-                        },
-                        {
-                          text: 'Confirm',
-                          role: 'confirm',
-                          handler: () => {
-                            sendCancellationRequest(applyPost.id);
-                          },
-                        },
-                      ],
-                    });
-                  }}
-                >
-                  {isLoading ? <ButtonSpinner /> : 'Cancel'}
-                </IonButton>
-              ) : (
-                <IonButton
-                  className={`${styles['accept-button']} ion-padding-horizontal`}
-                  expand="block"
-                  color="primary"
-                  onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
-                    event.stopPropagation();
-                    if (isLoading) {
-                      return;
-                    }
-                    if (!isAuthenticated) {
-                      if (onClose) {
-                        onClose(() => {
-                          presentInfoToast(
-                            'Please login to apply for this session'
-                          );
-                          history.replace(LOGIN);
+              {isAuthenticated && (
+                <>
+                  <OtherStudyBuddies studyBuddies={applyPost.participants} />
+                  <AboutPoster poster={applyPost?.poster} />
+                  {isApplied ? (
+                    <IonButton
+                      className={`ion-padding-horizontal ${styles['cancel-button']}`}
+                      fill="outline"
+                      color="danger"
+                      expand="block"
+                      onClick={(
+                        event: React.MouseEvent<HTMLIonButtonElement>
+                      ) => {
+                        event.stopPropagation();
+                        if (isLoading) {
+                          return;
+                        }
+                        void presentAlert({
+                          header: 'Confirm cancelling study application?',
+                          buttons: [
+                            {
+                              text: 'Cancel',
+                              role: 'cancel',
+                            },
+                            {
+                              text: 'Confirm',
+                              role: 'confirm',
+                              handler: () => {
+                                sendCancellationRequest(applyPost.id);
+                              },
+                            },
+                          ],
                         });
-                      } else {
-                        presentInfoToast(
-                          'Please login to apply for this session'
-                        );
-                        history.replace(LOGIN);
-                      }
-                      return;
-                    }
-                    void presentAlert({
-                      header: 'Confirm Applying?',
-                      buttons: [
-                        {
-                          text: 'Cancel',
-                          role: 'cancel',
-                        },
-                        {
-                          text: 'Apply',
-                          role: 'confirm',
-                          handler: () => {
-                            handleApply(applyPost.id);
-                          },
-                        },
-                      ],
-                    });
-                  }}
-                >
-                  {isLoading ? <ButtonSpinner /> : 'Apply'}
-                </IonButton>
+                      }}
+                    >
+                      {isLoading ? <ButtonSpinner /> : 'Cancel'}
+                    </IonButton>
+                  ) : (
+                    <IonButton
+                      className={`${styles['accept-button']} ion-padding-horizontal`}
+                      expand="block"
+                      color="primary"
+                      onClick={(
+                        event: React.MouseEvent<HTMLIonButtonElement>
+                      ) => {
+                        event.stopPropagation();
+                        if (isLoading) {
+                          return;
+                        }
+                        void presentAlert({
+                          header: 'Confirm Applying?',
+                          buttons: [
+                            {
+                              text: 'Cancel',
+                              role: 'cancel',
+                            },
+                            {
+                              text: 'Apply',
+                              role: 'confirm',
+                              handler: () => {
+                                handleApply(applyPost.id);
+                              },
+                            },
+                          ],
+                        });
+                      }}
+                    >
+                      {isLoading ? <ButtonSpinner /> : 'Apply'}
+                    </IonButton>
+                  )}
+                </>
               )}
             </IonCol>
           </IonRow>

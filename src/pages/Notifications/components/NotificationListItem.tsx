@@ -1,4 +1,5 @@
 import {
+  getPlatforms,
   IonContent,
   IonHeader,
   IonItem,
@@ -19,7 +20,7 @@ import {
 } from '../../../api/types';
 import { useAppDispatch } from '../../../redux/hooks';
 import { markNotification } from '../../../redux/slices/notificationsSlice';
-import { ART } from '../../../routes';
+import { ART, SESSIONS } from '../../../routes';
 import {
   convertDateRangeToTimeRangeStr,
   convertDateToDateStr,
@@ -38,6 +39,7 @@ export default function NotificationListItem({
   const dispatch = useAppDispatch();
   const history = useHistory();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const isMobile = getPlatforms().includes('mobile');
 
   function closeModal() {
     setIsModalOpen(false);
@@ -49,7 +51,17 @@ export default function NotificationListItem({
     }
     // TODO: check if need any error handling here
     void dispatch(markNotification(notification.id));
-    setIsModalOpen(true);
+    if (isMobile) {
+      setIsModalOpen(true);
+    } else {
+      if (notification.type === BuddyNotificationType.APPLIED_TO_YOUR_POST) {
+        history.push(SESSIONS);
+      } else if (
+        notification.type === BuddyNotificationType.ACCEPTED_YOUR_APPLICATION
+      ) {
+        history.push(SESSIONS);
+      }
+    }
   }
 
   function getModalComponent() {
@@ -181,7 +193,7 @@ export default function NotificationListItem({
         <h2>{getTitleAndMessage().title}</h2>
         <p>{getTitleAndMessage().message}</p>
       </IonLabel>
-      {getModalComponent()}
+      {isMobile && getModalComponent()}
     </IonItem>
   );
 }

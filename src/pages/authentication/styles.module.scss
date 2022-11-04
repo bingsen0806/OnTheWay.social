@@ -7,6 +7,13 @@
   cursor: pointer;
 }
 
+.animation {
+  height: 20vh;
+  @media screen and (min-width: 1024px) {
+    height: 50vh;
+  }
+}
+
 .forgotten-password-container {
   cursor: pointer;
   margin-top: 4px;

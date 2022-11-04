@@ -82,11 +82,12 @@ export default function AppliedPostContent({
   }
 
   function cancelAndClose() {
-    onClose &&
-      onClose(() => {
-        dispatch(removeNotification(appliedRequest.post.id));
-        dispatch(removeAppliedRequest(appliedRequest.post.id));
-      });
+    const callback = () => {
+      dispatch(removeNotification(appliedRequest.post.id));
+      dispatch(removeAppliedRequest(appliedRequest.post.id));
+    };
+    onClose && onClose(callback);
+    !onClose && callback();
   }
 
   return (
@@ -132,7 +133,7 @@ export default function AppliedPostContent({
               ></OtherStudyBuddies>
               <AboutPoster poster={appliedRequest.post?.poster} />
               <IonButton
-                className="ion-padding-horizontal"
+                className="ion-padding-horizontal ion-margin-vertical"
                 expand="block"
                 fill="outline"
                 color="danger"

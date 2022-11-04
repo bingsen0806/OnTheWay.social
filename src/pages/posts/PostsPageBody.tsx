@@ -1,0 +1,139 @@
+import {
+  getPlatforms,
+  IonButton,
+  IonCol,
+  IonContent,
+  IonGrid,
+  IonInfiniteScroll,
+  IonInfiniteScrollContent,
+  IonRow,
+} from '@ionic/react';
+import { useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import { Post } from '../../api/types';
+import LoadingSpinner from '../../components/LoadingSpinner';
+import PostListItem from '../../components/PostListItem';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import {
+  getInitialPostsData,
+  getNextPageOfPosts,
+} from '../../redux/slices/postsSlice';
+import { CREATE_POST } from '../../routes';
+import useCheckedErrorHandler from '../../util/hooks/useCheckedErrorHandler';
+import usePageInitialLoad from '../../util/hooks/usePageInitialLoad';
+import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
+import NoData from '../NoData';
+import SelectedPost from './SelectedPost';
+export default function PostsPageBody() {
+  const history = useHistory();
+  const listOfPosts = useAppSelector((state) => state.posts.posts);
+  const isLoading = useAppSelector((state) => state.posts.isLoading);
+  const dispatch = useAppDispatch();
+  const handleCheckedError = useCheckedErrorHandler();
+  const handleUnknownError = useUnknownErrorHandler();
+  const isMobile = getPlatforms().includes('mobile');
+  const [selectedPost, setSelectedPost] = useState<Post | null>(null);
+
+  const setPostOnClick = (post: Post) => setSelectedPost(post);
+
+  function requestNextPageOfPosts() {
+    dispatch(getNextPageOfPosts())
+      .unwrap()
+      .then((resp) => {
+        if (!resp.success) {
+          handleCheckedError(resp.message as string);
+        }
+      })
+      .catch((error) => {
+        handleUnknownError(error);
+      });
+  }
+
+  // fetch the data right before this scren is opened
+  usePageInitialLoad(() => {
+    dispatch(getInitialPostsData())
+      .unwrap()
+      .then((resp) => {
+        if (!resp.success) {
+          handleCheckedError(resp.message as string);
+        }
+      })
+      .catch((error) => {
+        handleUnknownError(error);
+      });
+  });
+
+  return (
+    <>
+      {isLoading && <LoadingSpinner />}
+      {!isLoading && (
+        <>
+          {listOfPosts.length === 0 ? (
+            <NoData>
+              <div>
+                <p className="ion-text-center">No study sessions!</p>
+                <IonButton
+                  onClick={() => {
+                    history.replace(CREATE_POST);
+                  }}
+                  expand="block"
+                >
+                  Create a study session
+                </IonButton>
+              </div>
+            </NoData>
+          ) : (
+            <IonGrid className="ion-margin-top ion-no-padding">
+              <IonRow className="ion-justify-content-center ion-no-padding">
+                <IonCol size="12" sizeLg="5">
+                  {isMobile ? (
+                    <>
+                      {listOfPosts.map((data) => {
+                        return (
+                          <PostListItem
+                            selected={selectedPost?.id === data.id}
+                            post={data}
+                            key={data.id}
+                            onClick={setPostOnClick}
+                          ></PostListItem>
+                        );
+                      })}
+                    </>
+                  ) : (
+                    <IonContent fullscreen>
+                      {listOfPosts.map((data) => {
+                        return (
+                          <PostListItem
+                            selected={selectedPost?.id === data.id}
+                            post={data}
+                            key={data.id}
+                            onClick={setPostOnClick}
+                          ></PostListItem>
+                        );
+                      })}
+                    </IonContent>
+                  )}
+                </IonCol>
+                {!isMobile && (
+                  <IonCol size="7">
+                    <SelectedPost post={selectedPost} />
+                  </IonCol>
+                )}
+              </IonRow>
+            </IonGrid>
+          )}
+
+          {isMobile && (
+            <IonInfiniteScroll
+              onIonInfinite={requestNextPageOfPosts}
+              threshold="50px"
+              disabled={listOfPosts.length < 20}
+            >
+              <IonInfiniteScrollContent loadingSpinner="circles"></IonInfiniteScrollContent>
+            </IonInfiniteScroll>
+          )}
+        </>
+      )}
+    </>
+  );
+}
