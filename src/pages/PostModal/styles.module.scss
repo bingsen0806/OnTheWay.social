@@ -3,9 +3,9 @@
   --min-width: 100%;
 }
 
-.margin {
+.no-padding {
   @media screen and (min-width: 1024px) {
-    margin-top: 50px;
+    height: 50vh;
   }
 }
 

@@ -39,6 +39,7 @@ import {
   removeNotification,
   replaceNotification,
 } from '../../redux/slices/notificationsSlice';
+import styles from './styles.module.scss';
 
 interface PosterViewRequestProps {
   onClose?: (callback: () => void) => void;
@@ -155,7 +156,7 @@ export default function CreatedPostInformation({
           </IonToolbar>
         </IonHeader>
       )}
-      <IonContent fullscreen>
+      <IonContent fullscreen={isMobile} className={styles['no-padding']}>
         <IonGrid>
           <IonRow className="ion-justify-content-center">
             <IonCol sizeMd="11">

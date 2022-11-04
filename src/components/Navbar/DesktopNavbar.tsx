@@ -67,9 +67,7 @@ function DesktopNavbar() {
     history.replace(HOME);
   };
   const routeToFaq = () => {
-    if (isAuthenticated) {
-      history.replace(FAQ);
-    }
+    history.replace(FAQ);
   };
   const openInstagram = () => {
     window.open(INSTAGRAM, '_blank');
@@ -85,7 +83,7 @@ function DesktopNavbar() {
           >
             <img src={logo} className={styles.logo} />
             <IonText color="primary">
-              <span className="ion-padding-horizontal">BuddyNUS</span>
+              <span className={styles['brand-name']}>BuddyNUS</span>
             </IonText>
           </div>
           <div slot="end">
@@ -202,13 +200,13 @@ function DesktopNavbar() {
           className={styles['animation-snow']}
           animationData={snow}
           loop={true}
-          style={{ height: 40 }}
+          style={{ height: 40, width: 50 }}
         />
         <Lottie
           className={styles.animation}
           animationData={deer}
           loop={true}
-          style={{ height: 50 }}
+          style={{ height: 50, width: 50 }}
         />
         <div slot="start" className={styles['footer-toolbar']}>
           <span className="ion-padding-horizontal">BuddyNUS</span>

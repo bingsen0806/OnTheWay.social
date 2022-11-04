@@ -17,6 +17,10 @@
     width: 50px;
   }
 
+  .brand-name {
+    padding: 0 4px;
+  }
+
   .logo {
     max-height: 40px;
   }
@@ -46,10 +50,17 @@
   position: fixed;
   bottom: 0px;
   padding: 0px 32px;
-  font-size: 0.8em;
-  opacity: 0.6;
+
   background-image: url('../../assets/wave2.svg');
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+
+  span {
+    font-size: 0.8em;
+    opacity: 0.6;
+    color: #000;
+    position: relative;
+    left: 10px;
+  }
 }
 
 .footer-toolbar {
@@ -59,11 +70,13 @@
 .animation-snow {
   position: fixed;
   bottom: 15px;
+  left: 2px;
 }
 
 .animation {
   position: fixed;
-  bottom: 7px;
+  bottom: 3px;
+  left: 2px;
 }
 
 .desktop-wrapper {

@@ -1,4 +1,11 @@
-import { IonCol, IonGrid, IonIcon, IonItem, IonRow } from '@ionic/react';
+import {
+  getPlatforms,
+  IonCol,
+  IonGrid,
+  IonIcon,
+  IonItem,
+  IonRow,
+} from '@ionic/react';
 import { calendarClearOutline, timeOutline } from 'ionicons/icons';
 import { useStateWithCallbackLazy } from 'use-state-with-callback';
 import {
@@ -16,14 +23,18 @@ import styles from '../styles.module.scss';
 
 interface AppliedRequestListItemProps {
   appliedRequest: AppliedRequest;
+  selected: boolean;
+  onClick: (request: AppliedRequest) => void;
 }
 
 export default function AppliedRequestListItem({
   appliedRequest,
+  selected,
+  onClick,
 }: AppliedRequestListItemProps) {
   const [isModalOpen, setIsModalOpen] =
     useStateWithCallbackLazy<boolean>(false);
-
+  const isMobile = getPlatforms().includes('mobile');
   function closeModal(callback: () => void) {
     setIsModalOpen(false, callback);
   }
@@ -35,7 +46,9 @@ export default function AppliedRequestListItem({
         setIsModalOpen(true, () => {
           return;
         });
+        onClick(appliedRequest);
       }}
+      color={selected ? 'tertiary' : ''}
       detail={false}
       className={styles['item-container']}
     >
@@ -73,11 +86,13 @@ export default function AppliedRequestListItem({
         </IonRow>
       </IonGrid>
 
-      <AppliedPostModal
-        isOpen={isModalOpen}
-        onClose={closeModal}
-        appliedRequest={appliedRequest}
-      />
+      {isMobile && (
+        <AppliedPostModal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          appliedRequest={appliedRequest}
+        />
+      )}
     </IonItem>
   );
 }

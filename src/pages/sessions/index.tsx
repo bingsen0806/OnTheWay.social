@@ -34,7 +34,8 @@ import { useHistory } from 'react-router';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import { useAuthState } from '../../util/authentication';
 import SelectedCreatedRequest from './components/SelectedCreatedRequest';
-import { CreatedRequest } from '../../api/types';
+import { AppliedRequest, CreatedRequest } from '../../api/types';
+import SelectedAppliedRequest from './components/SelectedAppliedRequest';
 
 enum HomeTab {
   APPLIED_POST = 'Applied',
@@ -55,9 +56,14 @@ export default function Sessions() {
   const [selectedRequest, setSelectedRequest] = useState<CreatedRequest | null>(
     null
   );
+  const [selectedAppliedRequest, setSelectedAppliedRequest] =
+    useState<AppliedRequest | null>(null);
 
   const setRequestOnClick = (request: CreatedRequest) =>
     setSelectedRequest(request);
+
+  const setAppliedRequestOnClick = (request: AppliedRequest) =>
+    setSelectedAppliedRequest(request);
 
   usePageInitialLoad(() => {
     if (isAuthenticated) {
@@ -156,18 +162,33 @@ export default function Sessions() {
           </IonRefresher>
           <IonGrid className="ion-margin-top ion-no-padding">
             <IonRow className="ion-justify-content-center ion-no-padding">
-              <IonCol size="12" sizeMd="6">
-                {createdPosts.map((post) => (
-                  <CreatedRequestListItem
-                    key={post.post.id}
-                    createdRequest={post}
-                    onClick={setRequestOnClick}
-                    selected={selectedRequest?.post.id === post.post.id}
-                  ></CreatedRequestListItem>
-                ))}
+              <IonCol size="12" sizeMd="5">
+                {isMobile ? (
+                  <>
+                    {createdPosts.map((post) => (
+                      <CreatedRequestListItem
+                        key={post.post.id}
+                        createdRequest={post}
+                        onClick={setRequestOnClick}
+                        selected={selectedRequest?.post.id === post.post.id}
+                      ></CreatedRequestListItem>
+                    ))}
+                  </>
+                ) : (
+                  <IonContent fullscreen>
+                    {createdPosts.map((post) => (
+                      <CreatedRequestListItem
+                        key={post.post.id}
+                        createdRequest={post}
+                        onClick={setRequestOnClick}
+                        selected={selectedRequest?.post.id === post.post.id}
+                      ></CreatedRequestListItem>
+                    ))}
+                  </IonContent>
+                )}
               </IonCol>
               {!isMobile && (
-                <IonCol sizeMd="6">
+                <IonCol sizeMd="7">
                   <SelectedCreatedRequest createdRequest={selectedRequest} />
                 </IonCol>
               )}
@@ -205,14 +226,42 @@ export default function Sessions() {
           </IonRefresher>
           <IonGrid className="ion-margin-top ion-no-padding">
             <IonRow className="ion-justify-content-center ion-no-padding">
-              <IonCol size="12" sizeMd="6" sizeLg="4">
-                {appliedPosts.map((post) => (
-                  <AppliedRequestListItem
-                    key={post.post.id}
-                    appliedRequest={post}
-                  />
-                ))}
+              <IonCol size="12" sizeLg="5">
+                {isMobile ? (
+                  <>
+                    {appliedPosts.map((post) => (
+                      <AppliedRequestListItem
+                        onClick={setSelectedAppliedRequest}
+                        selected={
+                          selectedAppliedRequest?.post.id === post.post.id
+                        }
+                        key={post.post.id}
+                        appliedRequest={post}
+                      />
+                    ))}
+                  </>
+                ) : (
+                  <IonContent fullscreen>
+                    {appliedPosts.map((post) => (
+                      <AppliedRequestListItem
+                        onClick={setSelectedAppliedRequest}
+                        selected={
+                          selectedAppliedRequest?.post.id === post.post.id
+                        }
+                        key={post.post.id}
+                        appliedRequest={post}
+                      />
+                    ))}
+                  </IonContent>
+                )}
               </IonCol>
+              {!isMobile && (
+                <IonCol sizeLg="7">
+                  <SelectedAppliedRequest
+                    appliedRequest={selectedAppliedRequest}
+                  />
+                </IonCol>
+              )}
             </IonRow>
           </IonGrid>
         </IonContent>

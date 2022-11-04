@@ -12,12 +12,7 @@ import {
   setupIonicReact,
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import {
-  addCircleSharp,
-  book,
-  home,
-  person,
-} from 'ionicons/icons';
+import { addCircleSharp, book, home, person } from 'ionicons/icons';
 import Posts from './pages/posts';
 import Profile from './pages/profile';
 import Faq from './pages/faq';
@@ -54,6 +49,7 @@ import {
   NOTIFICATIONS,
   PROFILE,
   PROFILE_CREATION,
+  PROFILE_FAQ,
   REGISTER,
   SESSIONS,
 } from './routes';
@@ -157,7 +153,8 @@ export default function Main() {
                 path={NOTIFICATIONS}
                 component={NotificationsPage}
               />
-              <Route exact path={FAQ} component={Faq} />
+              <AuthenticatedRoute exact path={PROFILE_FAQ} component={Faq} />
+              <UnauthenticatedRoute exact path={FAQ} component={Faq} />
               <Route exact path="/">
                 <Redirect to={HOME} />
               </Route>

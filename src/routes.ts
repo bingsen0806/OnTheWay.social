@@ -11,7 +11,8 @@ export const HOME = '/home';
 export const CREATE_POST = '/create';
 
 export const PROFILE = '/profile';
-export const FAQ = '/profile/faq';
+export const FAQ = '/faq';
+export const PROFILE_FAQ = '/profile/faq';
 export const CAMPAIGN = '/profile/campaigns';
 
 export const SESSIONS = '/sessions';

@@ -1,4 +1,5 @@
 import {
+  getPlatforms,
   IonButton,
   IonButtons,
   IonCol,
@@ -56,6 +57,7 @@ export default function PostInformation({
   const presentErrorToast = useErrorToast();
   const { isAuthenticated } = useAuthState();
   const history = useHistory();
+  const isMobile = getPlatforms().includes('mobile');
 
   function handleApply(postId: string) {
     setIsLoading(true);
@@ -150,10 +152,13 @@ export default function PostInformation({
           </IonToolbar>
         </IonHeader>
       )}
-      <IonContent fullscreen>
-        <IonGrid className={styles['margin']}>
+      <IonContent
+        fullscreen={isMobile ? true : false}
+        className={styles['no-padding']}
+      >
+        <IonGrid>
           <IonRow className="ion-justify-content-center">
-            <IonCol sizeMd="8" sizeLg="6">
+            <IonCol sizeMd="8" sizeLg="12">
               <PostDetails post={applyPost} />
               {isAuthenticated && (
                 <OtherStudyBuddies studyBuddies={applyPost.participants} />

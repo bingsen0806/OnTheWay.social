@@ -11,7 +11,7 @@ import {
 } from '@ionic/react';
 import styles from './styles.module.scss';
 import { useHistory } from 'react-router';
-import { ABOUT_ART, ART, CAMPAIGN, FAQ } from '../../routes';
+import { ABOUT_ART, ART, CAMPAIGN, PROFILE_FAQ } from '../../routes';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { getInitialSelf, reloadSelf } from '../../redux/slices/userSlice';
 import { logout } from '../../api/authentication';
@@ -150,7 +150,7 @@ export default function ProfilePage() {
                         <h1>Campaigns</h1>
                       </IonLabel>
                     </IonItem>
-                    <IonItem button routerLink={FAQ}>
+                    <IonItem button routerLink={PROFILE_FAQ}>
                       <IonLabel className={styles['pointer']}>
                         <h1>FAQ</h1>
                       </IonLabel>

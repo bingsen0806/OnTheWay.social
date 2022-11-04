@@ -1,5 +1,6 @@
 import { IonCol, IonGrid, IonRow } from '@ionic/react';
 import { locationEnumToStr, Post } from '../../api/types';
+import { useAuthState } from '../../util/authentication';
 import {
   convertDateRangeToTimeRangeStr,
   convertDateToDateStr,
@@ -11,8 +12,9 @@ interface PostDetailsProps {
 }
 
 export default function PostDetails({ post }: PostDetailsProps) {
+  const { isAuthenticated } = useAuthState();
   return (
-    <IonGrid className="ion-no-padding ion-no-margin">
+    <IonGrid className={styles['margin']}>
       <IonRow className={styles['bold'] + ' ion-justify-content-start'}>
         <IonCol>Details</IonCol>
       </IonRow>
@@ -33,12 +35,7 @@ export default function PostDetails({ post }: PostDetailsProps) {
           {convertDateRangeToTimeRangeStr(post.startDateTime, post.endDateTime)}
         </IonCol>
       </IonRow>
-      <IonRow>
-        <IonCol>
-          <br />
-          {post.description}
-        </IonCol>
-      </IonRow>
+      {isAuthenticated && <p className="ion-text-center">{post.description}</p>}
     </IonGrid>
   );
 }

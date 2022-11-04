@@ -347,41 +347,44 @@ export default function PostsPage() {
         </IonFooter>
       </IonMenu>
       <IonPage id="main-content">
-        <IonHeader>
-          <IonToolbar>
-            <div>
-              <h1>Study Sessions</h1>
-              {isMobile && isAuthenticated && (
-                <IonButton
-                  onClick={() => {
-                    history.replace(CREATE_POST);
-                  }}
-                  size="small"
-                  slot="start"
-                  className="ion-margin-bottom"
-                >
-                  Create Study Session
+        <div className={styles['header']}>
+          <IonHeader>
+            <IonToolbar>
+              <div>
+                <h1>Study Sessions</h1>
+                {isMobile && isAuthenticated && (
+                  <IonButton
+                    onClick={() => {
+                      history.replace(CREATE_POST);
+                    }}
+                    size="small"
+                    slot="start"
+                    className="ion-margin-bottom"
+                  >
+                    Create Study Session
+                  </IonButton>
+                )}
+                {isMobile && !isAuthenticated && (
+                  <IonButton
+                    href={LOGIN}
+                    size="small"
+                    expand="block"
+                    slot="start"
+                  >
+                    Login
+                  </IonButton>
+                )}
+              </div>
+              <IonMenuToggle slot="end">
+                <IonButton fill="clear" color="dark">
+                  <IonIcon icon={funnelOutline} slot="start"></IonIcon>
+                  <p>Filter</p>
                 </IonButton>
-              )}
-              {isMobile && !isAuthenticated && (
-                <IonButton
-                  href={LOGIN}
-                  size="small"
-                  expand="block"
-                  slot="start"
-                >
-                  Login
-                </IonButton>
-              )}
-            </div>
-            <IonMenuToggle slot="end">
-              <IonButton fill="clear" color="dark">
-                <IonIcon icon={funnelOutline} slot="start"></IonIcon>
-                <p>Filter</p>
-              </IonButton>
-            </IonMenuToggle>
-          </IonToolbar>
-        </IonHeader>
+              </IonMenuToggle>
+            </IonToolbar>
+          </IonHeader>
+        </div>
+
         <IonContent
           fullscreen
           className={
@@ -411,20 +414,37 @@ export default function PostsPage() {
               ) : (
                 <IonGrid className="ion-margin-top">
                   <IonRow>
-                    <IonCol size="12" sizeLg="6">
-                      {listOfPosts.map((data) => {
-                        return (
-                          <PostListItem
-                            selected={selectedPost?.id === data.id}
-                            post={data}
-                            key={data.id}
-                            onClick={setPostOnClick}
-                          ></PostListItem>
-                        );
-                      })}
+                    <IonCol size="12" sizeLg="5">
+                      {isMobile ? (
+                        <>
+                          {listOfPosts.map((data) => {
+                            return (
+                              <PostListItem
+                                selected={selectedPost?.id === data.id}
+                                post={data}
+                                key={data.id}
+                                onClick={setPostOnClick}
+                              ></PostListItem>
+                            );
+                          })}
+                        </>
+                      ) : (
+                        <IonContent fullscreen>
+                          {listOfPosts.map((data) => {
+                            return (
+                              <PostListItem
+                                selected={selectedPost?.id === data.id}
+                                post={data}
+                                key={data.id}
+                                onClick={setPostOnClick}
+                              ></PostListItem>
+                            );
+                          })}
+                        </IonContent>
+                      )}
                     </IonCol>
                     {!isMobile && (
-                      <IonCol size="6">
+                      <IonCol size="7">
                         <SelectedPost post={selectedPost} />
                       </IonCol>
                     )}

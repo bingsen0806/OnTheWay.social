@@ -34,3 +34,16 @@
     display: none;
   }
 }
+
+.animation {
+  height: 50vh;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.header {
+  ion-toolbar {
+    --min-height: 50px !important;
+  }
+}
