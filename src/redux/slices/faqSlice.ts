@@ -1,6 +1,6 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { persistReducer } from "redux-persist";
-import storage from "redux-persist/lib/storage";
+import { createSlice } from '@reduxjs/toolkit';
+import { persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 
 interface Faq {
   question: string;
@@ -13,29 +13,39 @@ interface FaqState {
 
 const faqs: Faq[] = [
   {
-    question: "How does BuddyNUS work?",
+    question: 'How does BuddyNUS work?',
     answer:
-      "It's simple! Create an account, browse the available postings to find someone to study with. If none of the postings fit your schedule, create a new post and wait for others to apply!",
+      "It's simple! Create an account, browse the available sessions to find someone to study with. If none of the sessions fit your schedule, create a new post and wait for others to apply!",
   },
   {
-    question: "What makes BuddyNUS different?",
+    question: 'What makes BuddyNUS different?',
     answer:
       "Being in NUS is not easy. Studying can take up a large amount of time. That doesn't mean we cant socialize! We focus on making friends while studying! BuddyNUS designs our feature such that users only use it for the intention of meeting up and studying together - not tomorrow, not next week, but right now (or the near future)",
   },
   {
-    question: "How does BuddyNUS ensure a safe environment?",
+    question: 'How does BuddyNUS ensure a safe environment?',
     answer:
-      "First, contact details are not shared until both parties accept to study together. Second, only verified NUS members can register on our platform",
+      'First, contact details are not shared until both parties accept to study together. Second, only verified NUS members can register on our platform',
   },
   {
-    question: "Why do you need NUS email address for signing up?",
+    question: 'Why do you need NUS email address for signing up?',
     answer:
-      "We require NUS email addresses to ensure everyone is a member of the NUS community",
+      'We require NUS email addresses to ensure everyone is a member of the NUS community',
   },
   {
-    question: "What happens after I apply for a posting?",
+    question: 'What happens after I apply for a session?',
     answer:
-      "The poster will be notified and if the poster accepts, you will be notified. Both parties will receive each other's telegram handles to handle logistics. We are also working on a chat system to make this easier :)",
+      "The poster will be notified and if the poster accepts, you will be notified. Both parties will receive each other's telegram handles to handle logistics.",
+  },
+  {
+    question: 'Do you have a mobile app?',
+    answer:
+      "Currently, no, but you can bookmark this app on your home page for convenient access. To do so, google 'How to bookmark website on <your browser, e.g. Chrome> <your operating system, e.g. Android or iOS>",
+  },
+  {
+    question: 'I have feedback or questions, who do I reach out to?',
+    answer:
+      'You can drop us an email at contact@buddynus.com or DM us at @buddynus.official on Instagram',
   },
 ];
 
@@ -44,14 +54,14 @@ const initialState: FaqState = {
 };
 
 const FaqSlice = createSlice({
-  name: "faq",
+  name: 'faq',
   initialState,
   reducers: {},
 });
 
 // set up persistence, uses local storage to persist this reducer
 const faqPersistConfig = {
-  key: "faq",
+  key: 'faq',
   storage,
 };
 
