@@ -103,7 +103,6 @@ const HomeSlice = createSlice({
       state.createdRequests = newCreatedRequests;
     },
     removeCreatedRequest: (state, action: PayloadAction<string>) => {
-      console.log('106 called', action.payload);
       state.createdRequests = state.createdRequests.filter(
         (req) => req.post.id !== action.payload
       );

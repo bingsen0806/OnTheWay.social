@@ -15,11 +15,14 @@ import {
   IonRow,
   IonCol,
   getPlatforms,
+  useIonViewDidEnter,
 } from '@ionic/react';
-import { useAppSelector } from '../../redux/hooks';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { updateFaqs } from '../../redux/slices/faqSlice';
 export default function Faq() {
   const FAQs = useAppSelector((state) => state.faq.faqs);
   const isMobile = getPlatforms().includes('mobile');
+  const dispatch = useAppDispatch();
   const items = FAQs.map((faq, i) => (
     <IonAccordion value={i.toString()} color="light" key={faq.question}>
       <IonItem slot="header" color="light">
@@ -30,6 +33,10 @@ export default function Faq() {
       </div>
     </IonAccordion>
   ));
+
+  useIonViewDidEnter(() => {
+    dispatch(updateFaqs());
+  });
 
   return (
     <IonPage>

@@ -40,7 +40,7 @@ const faqs: Faq[] = [
   {
     question: 'Do you have a mobile app?',
     answer:
-      "Currently, no, but you can bookmark this app on your home page for convenient access. To do so, google 'How to bookmark website on <your browser, e.g. Chrome> <your operating system, e.g. Android or iOS>",
+      "Currently, no, but you can bookmark this app on your home page for convenient access. To do so, google 'How to bookmark website on <your browser> <your operating system>', e.g. 'How to bookmark website on Chrome on Android'",
   },
   {
     question: 'I have feedback or questions, who do I reach out to?',
@@ -56,7 +56,11 @@ const initialState: FaqState = {
 const FaqSlice = createSlice({
   name: 'faq',
   initialState,
-  reducers: {},
+  reducers: {
+    updateFaqs(state) {
+      state.faqs = faqs;
+    },
+  },
 });
 
 // set up persistence, uses local storage to persist this reducer
@@ -68,3 +72,5 @@ const faqPersistConfig = {
 const persistedFaqReducer = persistReducer(faqPersistConfig, FaqSlice.reducer);
 
 export default persistedFaqReducer;
+
+export const { updateFaqs } = FaqSlice.actions;

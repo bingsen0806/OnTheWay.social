@@ -29,6 +29,7 @@ import {
   NOTIFICATIONS,
   PROFILE,
   PROFILE_CREATION,
+  PROFILE_FAQ,
   REGISTER,
   SESSIONS,
 } from '../../routes';
@@ -186,6 +187,7 @@ function DesktopNavbar() {
           />
           <AuthenticatedRoute exact path={PROFILE} component={Profile} />
           <AuthenticatedRoute exact path={SESSIONS} component={Sessions} />
+          <AuthenticatedRoute exact path={PROFILE_FAQ} component={Faq} />
           <AuthenticatedRoute
             exact
             path={NOTIFICATIONS}
@@ -213,7 +215,12 @@ function DesktopNavbar() {
           loop={true}
         />
         <div slot="start" className={styles['footer-toolbar']}>
-          <span className="ion-padding-horizontal">BuddyNUS</span>
+          <span
+            className={`${styles['footer-text']} ion-margin-horizontal`}
+            onClick={routeToHome}
+          >
+            BuddyNUS
+          </span>
           <span
             onClick={routeToFaq}
             className={`${styles['footer-text']} ion-margin-horizontal`}
