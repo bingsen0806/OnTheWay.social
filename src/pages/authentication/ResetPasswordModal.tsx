@@ -8,6 +8,10 @@ import {
   IonGrid,
   IonRow,
   IonCol,
+  IonButtons,
+  getPlatforms,
+  IonPage,
+  IonIcon,
 } from '@ionic/react';
 import { useState } from 'react';
 import styles from './styles.module.scss';
@@ -16,6 +20,7 @@ import useInfoToast from '../../util/hooks/useInfoToast';
 import { resetPassword } from '../../api/authentication';
 import { isValidNUSEmail } from './constants';
 import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
+import { arrowBackOutline } from 'ionicons/icons';
 
 interface ResetPasswordModalProps {
   isOpen: boolean;
@@ -26,6 +31,7 @@ export default function ResetPasswordModal({
   isOpen,
   closeCallback,
 }: ResetPasswordModalProps) {
+  const isMobile = getPlatforms().includes('mobile');
   const [email, setEmail] = useState<string>('');
   const [errorMessage, setErrorMessage] = useState<string>('');
   const presentInfoToast = useInfoToast();
@@ -57,48 +63,65 @@ export default function ResetPasswordModal({
       onWillDismiss={closeCallback}
       mode="ios"
     >
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>Reset Password</IonTitle>
-        </IonToolbar>
-      </IonHeader>
-      <IonContent>
-        <h2 className="ion-padding-start">
-          Enter the email registered to your account
-        </h2>
-        <p className="ion-padding-start">
-          A password recovery email will be sent to this email. Please wait for
-          a few minutes after pressing submit to receieve it. It may be in your
-          junk folder.
-        </p>
-        <IonGrid>
-          <IonRow className="ion-justify-content-center">
-            <IonCol sizeMd="6">
-              <div className="ion-padding-start">
-                <TextInputField
-                  label="Email"
-                  placeholder="Email"
-                  value={email}
-                  errorMessage={errorMessage}
-                  onChange={(email) => {
-                    setEmail(email);
+      <IonPage>
+        <IonHeader>
+          <IonToolbar>
+            {isMobile && (
+              <IonButtons slot="start">
+                <IonButton
+                  fill="clear"
+                  color="dark"
+                  onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
+                    event.stopPropagation();
+                    closeCallback();
                   }}
-                />
-              </div>
+                >
+                  <IonIcon icon={arrowBackOutline} slot="start" />
+                  <p>Back</p>
+                </IonButton>
+              </IonButtons>
+            )}
+            <IonTitle>Reset Password</IonTitle>
+          </IonToolbar>
+        </IonHeader>
+        <IonContent>
+          <h2 className="ion-padding-start">
+            Enter the email registered to your account
+          </h2>
+          <p className="ion-padding-start">
+            A password recovery email will be sent to this email. Please wait
+            for a few minutes after pressing submit to receieve it. It may be in
+            your junk folder.
+          </p>
+          <IonGrid>
+            <IonRow className="ion-justify-content-center">
+              <IonCol sizeMd="6">
+                <div className="ion-padding-start">
+                  <TextInputField
+                    label="Email"
+                    placeholder="Email"
+                    value={email}
+                    errorMessage={errorMessage}
+                    onChange={(email) => {
+                      setEmail(email);
+                    }}
+                  />
+                </div>
 
-              <IonButton
-                expand="block"
-                className="ion-margin-top ion-padding-start ion-padding-end"
-                onClick={() => {
-                  handleSubmit();
-                }}
-              >
-                Send
-              </IonButton>
-            </IonCol>
-          </IonRow>
-        </IonGrid>
-      </IonContent>
+                <IonButton
+                  expand="block"
+                  className="ion-margin-top ion-padding-start ion-padding-end"
+                  onClick={() => {
+                    handleSubmit();
+                  }}
+                >
+                  Send
+                </IonButton>
+              </IonCol>
+            </IonRow>
+          </IonGrid>
+        </IonContent>
+      </IonPage>
     </IonModal>
   );
 }

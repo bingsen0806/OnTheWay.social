@@ -11,7 +11,7 @@ import {
 } from '@ionic/react';
 import styles from './styles.module.scss';
 import { useHistory } from 'react-router';
-import { ABOUT_ART, ART, CAMPAIGN, FEEDBACK, PROFILE_FAQ } from '../../routes';
+import { ABOUT_ART, ART, FEEDBACK, PROFILE_FAQ } from '../../routes';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { getInitialSelf, reloadSelf } from '../../redux/slices/userSlice';
 import { logout } from '../../api/authentication';
@@ -22,10 +22,6 @@ import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
 import { persistor } from '../../redux/store';
 import { requestReloadOfHomeData } from '../../redux/slices/homeSlice';
 import { requestReloadOfPosts } from '../../redux/slices/postsSlice';
-import {
-  getUserCampaignsThunk,
-  resetCampaigns,
-} from '../../redux/slices/campaignSlice';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import useInfoToast from '../../util/hooks/useInfoToast';
 import ProfileHeader from '../../components/ProfileHeader';
@@ -81,7 +77,6 @@ export default function ProfilePage() {
   };
 
   usePageInitialLoad(() => {
-    void dispatch(getUserCampaignsThunk());
     dispatch(getInitialSelf())
       .unwrap()
       .then((resp) => {
@@ -101,7 +96,6 @@ export default function ProfilePage() {
         dispatch({ type: 'USER_LOGOUT' });
         dispatch(requestReloadOfHomeData());
         dispatch(requestReloadOfPosts());
-        dispatch(resetCampaigns());
       })
       .catch((error) => {
         handleUnknownError(error);
@@ -147,11 +141,6 @@ export default function ProfilePage() {
                     >
                       <IonLabel className={styles['pointer']}>
                         <h1>Art</h1>
-                      </IonLabel>
-                    </IonItem>
-                    <IonItem button routerLink={CAMPAIGN}>
-                      <IonLabel className={styles['pointer']}>
-                        <h1>Campaigns</h1>
                       </IonLabel>
                     </IonItem>
                     <IonItem button routerLink={PROFILE_FAQ}>
