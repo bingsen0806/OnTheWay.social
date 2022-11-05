@@ -26,6 +26,8 @@ function TabBarWrapper() {
   const { isAuthenticated } = useAuthState();
   const isOnHome =
     currentPath.includes(HOME) || (currentPath === '/' && !isAuthenticated);
+  const isOnBrowse =
+    currentPath.includes(BROWSE) || (currentPath === '/' && isAuthenticated);
   const haveNotifications = useAppSelector(
     (state) =>
       getNumberOfUnviewedNotifications(state.notifications.notifications) > 0
@@ -36,7 +38,6 @@ function TabBarWrapper() {
     currentPath.includes(EMAIL_VERIFICATION) ||
     currentPath.includes(PROFILE_CREATION);
   const routeToPage = (page: string) => history.replace(page);
-  console.log(currentPath.includes(SESSIONS));
   return (
     <>
       {
@@ -46,11 +47,7 @@ function TabBarWrapper() {
           <div className={styles.footer}>
             <div
               onClick={() => routeToPage(BROWSE)}
-              className={
-                currentPath.includes(BROWSE)
-                  ? styles['tab-selected']
-                  : styles['tab']
-              }
+              className={isOnBrowse ? styles['tab-selected'] : styles['tab']}
             >
               <IonIcon icon={home}></IonIcon>
             </div>

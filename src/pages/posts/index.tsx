@@ -4,7 +4,6 @@ import {
   IonChip,
   IonCol,
   IonContent,
-  IonFooter,
   IonGrid,
   IonHeader,
   IonIcon,
@@ -288,38 +287,34 @@ export default function PostsPage() {
                 {timeOfDayEnumToStr(time as TimeOfDay)}
               </IonChip>
             ))}
+          <IonGrid>
+            <IonRow>
+              <IonCol>
+                <IonMenuToggle>
+                  <IonButton
+                    color="medium"
+                    fill="outline"
+                    expand="block"
+                    onClick={resetFilter}
+                  >
+                    Reset
+                  </IonButton>
+                </IonMenuToggle>
+              </IonCol>
+              <IonCol>
+                <IonMenuToggle>
+                  <IonButton
+                    color="primary"
+                    expand="block"
+                    onClick={applyNewFilter}
+                  >
+                    Apply
+                  </IonButton>
+                </IonMenuToggle>
+              </IonCol>
+            </IonRow>
+          </IonGrid>
         </IonContent>
-        <IonFooter>
-          <IonToolbar>
-            <IonGrid>
-              <IonRow>
-                <IonCol>
-                  <IonMenuToggle>
-                    <IonButton
-                      color="medium"
-                      fill="outline"
-                      expand="block"
-                      onClick={resetFilter}
-                    >
-                      Reset
-                    </IonButton>
-                  </IonMenuToggle>
-                </IonCol>
-                <IonCol>
-                  <IonMenuToggle>
-                    <IonButton
-                      color="primary"
-                      expand="block"
-                      onClick={applyNewFilter}
-                    >
-                      Apply
-                    </IonButton>
-                  </IonMenuToggle>
-                </IonCol>
-              </IonRow>
-            </IonGrid>
-          </IonToolbar>
-        </IonFooter>
       </IonMenu>
       <IonPage id="main-content">
         <div className={styles['header']}>
