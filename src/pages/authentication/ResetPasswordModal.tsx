@@ -94,9 +94,9 @@ export default function ResetPasswordModal({
             your junk folder.
           </p>
           <IonGrid>
-            <IonRow className="ion-justify-content-center">
-              <IonCol sizeMd="6">
-                <div className="ion-padding-start">
+            <IonRow className="ion-justify-content-center ion-margin-top">
+              <IonCol sizeMd="11">
+                <div>
                   <TextInputField
                     label="Email"
                     placeholder="Email"
@@ -110,7 +110,7 @@ export default function ResetPasswordModal({
 
                 <IonButton
                   expand="block"
-                  className="ion-margin-top ion-padding-start ion-padding-end"
+                  className="ion-margin-top"
                   onClick={() => {
                     handleSubmit();
                   }}
