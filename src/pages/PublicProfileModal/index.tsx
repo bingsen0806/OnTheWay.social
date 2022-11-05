@@ -44,10 +44,10 @@ export default function PublicProfileModal({
     >
       <IonContent fullscreen>
         <IonButton
-          color="dark"
-          fill="clear"
+          color="light"
+          fill="solid"
           className={styles['back-button']}
-          size="large"
+          size="small"
           onClick={onClose}
         >
           <IonIcon icon={arrowBackOutline}></IonIcon>

@@ -2,6 +2,7 @@ import {
   IonAvatar,
   IonButton,
   IonCol,
+  IonItem,
   IonRow,
   useIonAlert,
 } from '@ionic/react';
@@ -22,6 +23,7 @@ import useInfoToast from '../../util/hooks/useInfoToast';
 import ButtonSpinner from '../ButtonSpinner';
 import { ErrorType } from '../../api/errors';
 import useErrorToast from '../../util/hooks/useErrorToast';
+import PublicProfileModal from '../../pages/PublicProfileModal';
 interface SingleApplicantProps {
   postId: string;
   applicant: User;
@@ -36,8 +38,13 @@ export default function SingleApplicant({
   const handleCheckedError = useCheckedErrorHandler();
   const handleUnknownError = useUnknownErrorHandler();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const presentInfoToast = useInfoToast();
   const presentErrorToast = useErrorToast();
+
+  function closeModal() {
+    setIsOpen(false);
+  }
 
   function handleAccept(postId: string, applicantUserId: string) {
     setIsLoading(true);
@@ -76,55 +83,73 @@ export default function SingleApplicant({
   }
 
   return (
-    <IonRow className="ion-padding-vertical ion-justify-content-center">
-      <IonCol size="3">
-        <IonAvatar className={styles['avatar']}>
-          <img alt="profilePic" src={applicant.thumbnailPhoto} />{' '}
-        </IonAvatar>
-      </IonCol>
-      <IonCol size="5" className={styles['user-info']}>
-        <IonRow className={styles['bold']}>
-          {applicant.name ?? 'No Name'}
+    <>
+      <PublicProfileModal
+        isOpen={isOpen}
+        onClose={closeModal}
+        user={applicant}
+      />
+      <IonItem
+        lines="none"
+        button
+        detail={false}
+        onClick={() => {
+          setIsOpen(true);
+        }}
+      >
+        <IonRow className="ion-padding-vertical ion-justify-content-center">
+          <IonCol size="3">
+            <IonAvatar className={styles['avatar']}>
+              <img alt="profilePic" src={applicant.thumbnailPhoto} />{' '}
+            </IonAvatar>
+          </IonCol>
+          <IonCol size="5" className={styles['user-info']}>
+            <IonRow className={styles['bold']}>
+              {applicant.name ?? 'No Name'}
+            </IonRow>
+            <IonRow>
+              Y{applicant.year ?? 0}/
+              {facultyEnumToStr(applicant.faculty) ?? 'unknown faculty'}
+            </IonRow>
+            <IonRow>
+              {genderEnumToStr(applicant.gender) ?? 'unknown gender'}
+            </IonRow>
+          </IonCol>
+          <IonCol size="4" className={styles['accept-col']}>
+            <IonButton
+              shape="round"
+              fill="solid"
+              size="small"
+              onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
+                event.stopPropagation();
+                if (isLoading) {
+                  return;
+                }
+                void presentAlert({
+                  header: 'Confirm Accept Applicant?',
+                  message:
+                    'Once accepted, telegram details of the applicant will be shown, and they will be notified with your telegram details as well.',
+                  buttons: [
+                    {
+                      text: 'Cancel',
+                      role: 'cancel',
+                    },
+                    {
+                      text: 'Accept',
+                      role: 'confirm',
+                      handler: () => {
+                        handleAccept(postId, applicant.id);
+                      },
+                    },
+                  ],
+                });
+              }}
+            >
+              {isLoading ? <ButtonSpinner /> : 'Accept'}
+            </IonButton>
+          </IonCol>
         </IonRow>
-        <IonRow>
-          Y{applicant.year ?? 0}/
-          {facultyEnumToStr(applicant.faculty) ?? 'unknown faculty'}
-        </IonRow>
-        <IonRow>{genderEnumToStr(applicant.gender) ?? 'unknown gender'}</IonRow>
-      </IonCol>
-      <IonCol size="4" className={styles['accept-col']}>
-        <IonButton
-          shape="round"
-          fill="solid"
-          size="small"
-          onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
-            event.stopPropagation();
-            if (isLoading) {
-              return;
-            }
-            void presentAlert({
-              header: 'Confirm Accept Applicant?',
-              message:
-                'Once accepted, telegram details of the applicant will be shown, and they will be notified with your telegram details as well.',
-              buttons: [
-                {
-                  text: 'Cancel',
-                  role: 'cancel',
-                },
-                {
-                  text: 'Accept',
-                  role: 'confirm',
-                  handler: () => {
-                    handleAccept(postId, applicant.id);
-                  },
-                },
-              ],
-            });
-          }}
-        >
-          {isLoading ? <ButtonSpinner /> : 'Accept'}
-        </IonButton>
-      </IonCol>
-    </IonRow>
+      </IonItem>
+    </>
   );
 }

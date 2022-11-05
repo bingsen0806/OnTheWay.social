@@ -184,7 +184,7 @@ export default function PostInformation({
                           return;
                         }
                         void presentAlert({
-                          header: 'Confirm cancelling study application?',
+                          header: 'Confirm cancelllation?',
                           buttons: [
                             {
                               text: 'Cancel',
@@ -216,7 +216,7 @@ export default function PostInformation({
                           return;
                         }
                         void presentAlert({
-                          header: 'Confirm Applying?',
+                          header: 'Confirm Application?',
                           buttons: [
                             {
                               text: 'Cancel',
