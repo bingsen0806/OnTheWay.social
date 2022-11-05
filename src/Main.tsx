@@ -142,8 +142,7 @@ export default function Main() {
           <UnauthenticatedRoute exact path={FAQ} component={Faq} />
           <Route exact path="/" component={Home} />
         </IonRouterOutlet>
-        {isMobile && <TabBarWrapper />}
-        {!isMobile && <DesktopNavbar />}
+        {isMobile ? <TabBarWrapper /> : <DesktopNavbar />}
       </IonReactRouter>
     </IonApp>
   );
