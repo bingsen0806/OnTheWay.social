@@ -57,7 +57,7 @@ import { getNumberOfUnviewedNotifications } from '../../constants';
 import { useState } from 'react';
 import Home from '../../pages/Home';
 import HomeContents from '../../pages/Home/HomeContents';
-import LoadingSpinner from '../LoadingSpinner';
+import LoadingSpinner from '../FullScreenLoadingSpinner';
 
 function DesktopNavbar() {
   const location = useLocation();

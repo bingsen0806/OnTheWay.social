@@ -71,7 +71,7 @@ import DesktopNavbar from './components/Navbar/DesktopNavbar';
 import Home from './pages/Home';
 import TabBarWrapper from './util/TabBarWrapper';
 import HomeContents from './pages/Home/HomeContents';
-import LoadingSpinner from './components/LoadingSpinner';
+import LoadingSpinner from './components/FullScreenLoadingSpinner';
 setupIonicReact();
 
 export default function Main() {
