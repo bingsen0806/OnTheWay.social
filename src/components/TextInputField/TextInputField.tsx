@@ -18,7 +18,6 @@ interface TextInputFieldProps {
 
 export default function TextInputField({
   value,
-  autocomplete,
   onChange,
   label,
   multiline = false,
