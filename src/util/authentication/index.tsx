@@ -10,6 +10,7 @@ import {
 export interface AuthenticationState {
   isAuthenticated: boolean;
   isEmailVerified: boolean;
+  isLoading: boolean;
   // firebase user object of the current authenticated user
   user?: User | null;
   error?: Error | null;
@@ -23,9 +24,17 @@ export const AuthContext = createContext<AuthenticationState>(
 export const AuthProvider = ({ children, ...rest }: PropsWithChildren) => {
   const [user, setUser] = useState<User | null>();
   const [error, setError] = useState<Error | null>();
+  const [loading, setLoading] = useState<boolean>(true);
 
   useLayoutEffect(() => {
-    const unsubscribe = onAuthStateChanged(getAuth(), setUser, setError);
+    const unsubscribe = onAuthStateChanged(
+      getAuth(),
+      (user) => {
+        setUser(user);
+        setLoading(false);
+      },
+      setError
+    );
     return () => unsubscribe();
   }, []);
 
@@ -38,6 +47,7 @@ export const AuthProvider = ({ children, ...rest }: PropsWithChildren) => {
       await auth.currentUser.reload();
       auth = getAuth();
       setUser(Object.assign({}, auth.currentUser));
+      setLoading(false);
     } catch (error) {
       setError(error as Error);
     }
@@ -48,6 +58,7 @@ export const AuthProvider = ({ children, ...rest }: PropsWithChildren) => {
       value={{
         user,
         isAuthenticated: user ? true : false,
+        isLoading: loading,
         error,
         isEmailVerified: user?.emailVerified ? true : false,
         reloadUser,
