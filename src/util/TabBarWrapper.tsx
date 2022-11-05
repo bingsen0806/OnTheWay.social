@@ -1,6 +1,4 @@
-import {
-  IonIcon,
-} from '@ionic/react';
+import { IonIcon } from '@ionic/react';
 import React from 'react';
 import { useHistory, useLocation } from 'react-router';
 import { useAuthState } from './authentication';
@@ -17,13 +15,7 @@ import {
   REGISTER,
   SESSIONS,
 } from '../routes';
-import {
-  addCircleSharp,
-  book,
-  helpCircle,
-  home,
-  person,
-} from 'ionicons/icons';
+import { addCircleSharp, book, helpCircle, home, person } from 'ionicons/icons';
 import styles from './styles.module.scss';
 import { useAppSelector } from '../redux/hooks';
 import { getNumberOfUnviewedNotifications } from '../constants';
@@ -31,8 +23,9 @@ import { getNumberOfUnviewedNotifications } from '../constants';
 function TabBarWrapper() {
   const history = useHistory();
   const currentPath = useLocation().pathname;
-  const isOnHome = currentPath.includes(HOME) || currentPath === '/';
   const { isAuthenticated } = useAuthState();
+  const isOnHome =
+    currentPath.includes(HOME) || (currentPath === '/' && !isAuthenticated);
   const haveNotifications = useAppSelector(
     (state) =>
       getNumberOfUnviewedNotifications(state.notifications.notifications) > 0

@@ -7,7 +7,6 @@ import {
   IonModal,
 } from '@ionic/react';
 import moment from 'moment';
-import { useState } from 'react';
 import styles from './styles.module.scss';
 
 export interface DateTimePickerProps {
@@ -31,18 +30,10 @@ export default function DateTimePicker({
   const maxDate = moment().add(7, 'days').toISOString();
   const min = type === 'date' ? new Date().toISOString() : undefined;
   const max = type === 'date' ? maxDate : undefined;
-  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <>
-      <IonItem
-        lines="full"
-        button
-        onClick={() => {
-          console.log('click');
-          setIsOpen(true);
-        }}
-      >
+      <IonItem lines="full" button>
         <IonLabel>
           <h2>{label}</h2>
         </IonLabel>
@@ -51,11 +42,7 @@ export default function DateTimePicker({
           className="ion-justify-content-start"
           datetime={`datetime-${label}`}
         ></IonDatetimeButton>
-        <IonModal
-          keepContentsMounted={true}
-          isOpen={isOpen}
-          onDidDismiss={() => setIsOpen(false)}
-        >
+        <IonModal keepContentsMounted={true}>
           <IonDatetime
             max={max}
             min={min}
