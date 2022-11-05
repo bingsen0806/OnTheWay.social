@@ -4,6 +4,7 @@ import {
   IonContent,
   IonHeader,
   IonIcon,
+  IonPage,
   IonRouterOutlet,
   IonText,
   IonToolbar,
@@ -84,171 +85,181 @@ function DesktopNavbar() {
   };
 
   return (
-    <div className={styles.desktop}>
-      <IonHeader mode="ios">
-        <IonToolbar>
-          <div
-            slot="start"
-            className={styles['logo-container']}
-            onClick={routeToHome}
-          >
-            <img src={logo} className={styles.logo} alt="logo" />
-            <IonText color="primary">
-              <span className={styles['brand-name']}>BuddyNUS</span>
-            </IonText>
-          </div>
-          <div slot="end">
-            <div className={`ion-text-center`}>
-              <IonButton
-                fill="clear"
-                color={pathName.includes(BROWSE) ? 'primary' : 'dark'}
-                routerLink={BROWSE}
-                routerDirection="root"
-                className="link"
+    <IonPage>
+      <IonContent fullscreen>
+        <div className={styles.desktop}>
+          <IonHeader mode="ios">
+            <IonToolbar>
+              <div
+                slot="start"
+                className={styles['logo-container']}
+                onClick={routeToHome}
               >
-                Browse
-              </IonButton>
-              {isAuthenticated && (
-                <IonButton
-                  fill="clear"
-                  color={pathName.includes(SESSIONS) ? 'primary' : 'dark'}
-                  routerLink={SESSIONS}
-                  routerDirection="root"
-                  className="link"
-                >
-                  My Sessions
-                </IonButton>
-              )}
-              {isAuthenticated && (
-                <IonButton
-                  color="primary"
-                  routerLink={CREATE_POST}
-                  routerDirection="root"
-                  className="link"
-                  size="small"
-                >
-                  Create Session
-                </IonButton>
-              )}
-              {isAuthenticated && (
-                <IonButton
-                  fill="clear"
-                  color={pathName.includes(NOTIFICATIONS) ? 'primary' : 'dark'}
-                  routerLink={NOTIFICATIONS}
-                  routerDirection="root"
-                  className="link"
-                >
-                  {haveNotifications ? (
-                    <IonIcon src="assets/icons/notification-tab-unviewed.svg" />
-                  ) : (
-                    <IonIcon
-                      src="assets/icons/notification-tab-viewed.svg"
-                      size="small"
-                    ></IonIcon>
+                <img src={logo} className={styles.logo} alt="logo" />
+                <IonText color="primary">
+                  <span className={styles['brand-name']}>BuddyNUS</span>
+                </IonText>
+              </div>
+              <div slot="end">
+                <div className={`ion-text-center`}>
+                  <IonButton
+                    fill="clear"
+                    color={pathName.includes(BROWSE) ? 'primary' : 'dark'}
+                    routerLink={BROWSE}
+                    routerDirection="root"
+                    className="link"
+                  >
+                    Browse
+                  </IonButton>
+                  {isAuthenticated && (
+                    <IonButton
+                      fill="clear"
+                      color={pathName.includes(SESSIONS) ? 'primary' : 'dark'}
+                      routerLink={SESSIONS}
+                      routerDirection="root"
+                      className="link"
+                    >
+                      My Sessions
+                    </IonButton>
                   )}
-                </IonButton>
-              )}
-              <IonButton
-                fill="clear"
-                color={pathName.includes(PROFILE) ? 'primary' : 'dark'}
-                routerLink={PROFILE}
-                routerDirection="root"
-                className="link ion-no-margin"
+                  {isAuthenticated && (
+                    <IonButton
+                      color="primary"
+                      routerLink={CREATE_POST}
+                      routerDirection="root"
+                      className="link"
+                      size="small"
+                    >
+                      Create Session
+                    </IonButton>
+                  )}
+                  {isAuthenticated && (
+                    <IonButton
+                      fill="clear"
+                      color={
+                        pathName.includes(NOTIFICATIONS) ? 'primary' : 'dark'
+                      }
+                      routerLink={NOTIFICATIONS}
+                      routerDirection="root"
+                      className="link"
+                    >
+                      {haveNotifications ? (
+                        <IonIcon src="assets/icons/notification-tab-unviewed.svg" />
+                      ) : (
+                        <IonIcon
+                          src="assets/icons/notification-tab-viewed.svg"
+                          size="small"
+                        ></IonIcon>
+                      )}
+                    </IonButton>
+                  )}
+                  <IonButton
+                    fill="clear"
+                    color={pathName.includes(PROFILE) ? 'primary' : 'dark'}
+                    routerLink={PROFILE}
+                    routerDirection="root"
+                    className="link ion-no-margin"
+                  >
+                    <IonIcon icon={person} size="small"></IonIcon>
+                  </IonButton>
+                </div>
+              </div>
+            </IonToolbar>
+          </IonHeader>
+          <IonContent fullscreen>
+            <IonRouterOutlet className={styles['desktop-wrapper']}>
+              <UnauthenticatedRoute exact path={LOGIN} component={LoginPage} />
+              <UnauthenticatedRoute
+                exact
+                path={REGISTER}
+                component={RegisterPage}
+              />
+              <Route exact path={HOME} component={HomeContents} />
+              <Route exact path={BROWSE} component={Posts} />
+              <AuthenticatedRoute exact path={ART} component={Art} />
+              <AuthenticatedRoute
+                exact
+                path={ABOUT_ART}
+                component={AboutArtPage}
+              />
+              <AuthenticatedRoute
+                exact
+                path={CHANGE_COVER_PHOTO}
+                component={CoverPhotoSelectionPage}
+              />
+              <AuthenticatedRoute exact path={CAMPAIGN} component={Campaigns} />
+              <AuthenticatedRoute
+                exact
+                path={EMAIL_VERIFICATION}
+                component={EmailVerificationPage}
+              />
+              <AuthenticatedRoute
+                exact
+                path={PROFILE_CREATION}
+                component={ProfileCreationPage}
+              />
+              <AuthenticatedRoute
+                exact
+                path={CREATE_POST}
+                component={CreatePostPage}
+              />
+              <AuthenticatedRoute exact path={PROFILE} component={Profile} />
+              <AuthenticatedRoute exact path={SESSIONS} component={Sessions} />
+              <AuthenticatedRoute exact path={PROFILE_FAQ} component={Faq} />
+              <AuthenticatedRoute
+                exact
+                path={NOTIFICATIONS}
+                component={NotificationsPage}
+              />
+              <Route exact path={FAQ} component={Faq} />
+              <Route exact path="/" component={Home} />
+            </IonRouterOutlet>
+          </IonContent>
+          <div className={styles.footer}>
+            <Lottie
+              className={styles['animation-snow']}
+              animationData={snow}
+              loop={true}
+            />
+            <Lottie
+              onClick={() => setIsAnimating(true)}
+              onAnimationEnd={() => setIsAnimating(false)}
+              className={
+                isAnimating ? styles['moving-animation'] : styles['animation']
+              }
+              animationData={deer}
+              loop={true}
+            />
+            <div slot="start" className={styles['footer-toolbar']}>
+              <span
+                className={`${styles['footer-text']} ion-margin-horizontal`}
+                onClick={routeToHome}
               >
-                <IonIcon icon={person} size="small"></IonIcon>
-              </IonButton>
+                BuddyNUS
+              </span>
+              <span
+                onClick={routeToFaq}
+                className={`${styles['footer-text']} ion-margin-horizontal`}
+              >
+                FAQ
+              </span>
+              <span
+                onClick={openInstagram}
+                className={`${styles['footer-text']} ion-margin-horizontal`}
+              >
+                Instagram
+              </span>
+              <span
+                onClick={openFeedback}
+                className={`${styles['footer-text']} ion-margin-horizontal`}
+              >
+                Feedback
+              </span>
             </div>
           </div>
-        </IonToolbar>
-      </IonHeader>
-      <IonContent fullscreen>
-        <IonRouterOutlet className={styles['desktop-wrapper']}>
-          <UnauthenticatedRoute exact path={LOGIN} component={LoginPage} />
-          <UnauthenticatedRoute
-            exact
-            path={REGISTER}
-            component={RegisterPage}
-          />
-          <Route exact path={HOME} component={HomeContents} />
-          <Route exact path={BROWSE} component={Posts} />
-          <AuthenticatedRoute exact path={ART} component={Art} />
-          <AuthenticatedRoute exact path={ABOUT_ART} component={AboutArtPage} />
-          <AuthenticatedRoute
-            exact
-            path={CHANGE_COVER_PHOTO}
-            component={CoverPhotoSelectionPage}
-          />
-          <AuthenticatedRoute exact path={CAMPAIGN} component={Campaigns} />
-          <AuthenticatedRoute
-            exact
-            path={EMAIL_VERIFICATION}
-            component={EmailVerificationPage}
-          />
-          <AuthenticatedRoute
-            exact
-            path={PROFILE_CREATION}
-            component={ProfileCreationPage}
-          />
-          <AuthenticatedRoute
-            exact
-            path={CREATE_POST}
-            component={CreatePostPage}
-          />
-          <AuthenticatedRoute exact path={PROFILE} component={Profile} />
-          <AuthenticatedRoute exact path={SESSIONS} component={Sessions} />
-          <AuthenticatedRoute exact path={PROFILE_FAQ} component={Faq} />
-          <AuthenticatedRoute
-            exact
-            path={NOTIFICATIONS}
-            component={NotificationsPage}
-          />
-          <Route exact path={FAQ} component={Faq} />
-          <Route exact path="/" component={Home} />
-        </IonRouterOutlet>
-      </IonContent>
-      <div className={styles.footer}>
-        <Lottie
-          className={styles['animation-snow']}
-          animationData={snow}
-          loop={true}
-        />
-        <Lottie
-          onClick={() => setIsAnimating(true)}
-          onAnimationEnd={() => setIsAnimating(false)}
-          className={
-            isAnimating ? styles['moving-animation'] : styles['animation']
-          }
-          animationData={deer}
-          loop={true}
-        />
-        <div slot="start" className={styles['footer-toolbar']}>
-          <span
-            className={`${styles['footer-text']} ion-margin-horizontal`}
-            onClick={routeToHome}
-          >
-            BuddyNUS
-          </span>
-          <span
-            onClick={routeToFaq}
-            className={`${styles['footer-text']} ion-margin-horizontal`}
-          >
-            FAQ
-          </span>
-          <span
-            onClick={openInstagram}
-            className={`${styles['footer-text']} ion-margin-horizontal`}
-          >
-            Instagram
-          </span>
-          <span
-            onClick={openFeedback}
-            className={`${styles['footer-text']} ion-margin-horizontal`}
-          >
-            Feedback
-          </span>
         </div>
-      </div>
-    </div>
+      </IonContent>
+    </IonPage>
   );
 }
 
