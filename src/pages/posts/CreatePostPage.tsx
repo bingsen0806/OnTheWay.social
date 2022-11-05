@@ -310,6 +310,27 @@ export default function CreatePostPage() {
               </IonButton>
             </IonCol>
           </IonRow>
+          {/* below for spacing for keyboard on mobile  */}
+          <IonRow>
+            <IonCol>
+              <br></br>
+            </IonCol>
+          </IonRow>
+          <IonRow>
+            <IonCol>
+              <br></br>
+            </IonCol>
+          </IonRow>
+          <IonRow>
+            <IonCol>
+              <br></br>
+            </IonCol>
+          </IonRow>
+          <IonRow>
+            <IonCol>
+              <br></br>
+            </IonCol>
+          </IonRow>
         </IonGrid>
       </IonContent>
     </IonPage>
