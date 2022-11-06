@@ -176,7 +176,9 @@ export default function PostInformation({
                   <AboutPoster poster={applyPost?.poster} post={applyPost} />
                   {isApplied ? (
                     <IonButton
-                      className={`ion-padding-horizontal ion-margin-top ${styles['cancel-button']}`}
+                      className={`ion-padding-horizontal ion-margin-top ${
+                        isMobile ? styles['cancel-button'] : ''
+                      }`}
                       fill="outline"
                       color="danger"
                       expand="block"
@@ -209,7 +211,11 @@ export default function PostInformation({
                     </IonButton>
                   ) : (
                     <IonButton
-                      className={`${styles['accept-button']} ion-padding-horizontal ion-margin-top`}
+                      className={
+                        isMobile
+                          ? `${styles['accept-button']} ion-padding-horizontal ion-margin-top`
+                          : `${styles['accept-button']} ${styles['accept-button-top']} ion-padding-horizontal ion-margin-top`
+                      }
                       expand="block"
                       color="primary"
                       onClick={(

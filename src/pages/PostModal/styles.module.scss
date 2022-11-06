@@ -9,7 +9,7 @@
   }
 }
 
-.cancel-button {
+.cancel-button-top {
   @media screen and (min-width: 1024px) {
     position: absolute;
     top: 0;
@@ -24,6 +24,9 @@
 .accept-button {
   --background: #ff735c;
   --color: white;
+}
+
+.accept-button-top {
   @media screen and (min-width: 1024px) {
     position: absolute;
     top: 0;
