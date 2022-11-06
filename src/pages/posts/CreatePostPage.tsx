@@ -100,7 +100,12 @@ export default function CreatePostPage() {
   const [post, setPost] = useState<Post>({ description: '' } as Post);
   const [date, setDate] = useState<string>(moment().toISOString(true));
   const [startTime, setStartTime] = useState<string>(
-    roundToNext15mins(moment()).toISOString(true)
+    moment
+      .min([
+        roundToNext15mins(moment()),
+        moment().set('hour', 23).set('minute', 45),
+      ])
+      .toISOString(true)
   );
   const [endTime, setEndTime] = useState<string>(
     moment
