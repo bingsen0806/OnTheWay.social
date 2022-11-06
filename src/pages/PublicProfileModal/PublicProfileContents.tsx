@@ -45,12 +45,13 @@ export default function PublicProfileContents({
   const state: StateObject = location.state as StateObject;
   const otherUser = useAppSelector((state) => state.user.otherUser);
   if (state) {
-    const stateObject: User = state.user ;
+    const stateObject: User = state.user;
     userObject = stateObject;
   }
 
   useIonViewDidEnter(() => {
     if (userId) {
+      console.log('dispatching');
       void dispatch(getUserObject(userId));
     }
   });
