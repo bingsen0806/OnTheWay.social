@@ -5,9 +5,11 @@ import {
   IonItem,
   IonLabel,
   IonModal,
+  IonPopover,
   IonTitle,
   IonToolbar,
 } from '@ionic/react';
+import moment from 'moment';
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import {
@@ -68,6 +70,28 @@ export default function NotificationListItem({
     switch (notification.type) {
       case BuddyNotificationType.APPLIED_TO_YOUR_POST:
       case BuddyNotificationType.CANCELLED_THEIR_APPLICATION:
+        if (
+          moment(
+            (notification.data as CreatedRequest).post.endDateTime,
+            true
+          ).isBefore(moment())
+        ) {
+          return (
+            <IonPopover
+              isOpen={isModalOpen}
+              onDidDismiss={() => {
+                setIsModalOpen(false);
+              }}
+            >
+              <IonContent class="ion-padding">
+                <p>
+                  The post associated with this application is already past and
+                  no longer exists.
+                </p>
+              </IonContent>
+            </IonPopover>
+          );
+        }
         return (
           <CreatedPostModal
             isOpen={isModalOpen}
@@ -76,6 +100,32 @@ export default function NotificationListItem({
           ></CreatedPostModal>
         );
       case BuddyNotificationType.ACCEPTED_YOUR_APPLICATION:
+        console.log(
+          moment((notification.data as AppliedRequest).post.endDateTime, true)
+        );
+        if (
+          moment(
+            (notification.data as AppliedRequest).post.endDateTime,
+            true
+          ).isBefore(moment())
+        ) {
+          return (
+            <IonPopover
+              isOpen={isModalOpen}
+              onDidDismiss={() => {
+                setIsModalOpen(false);
+              }}
+            >
+              <IonContent>
+                <p>
+                  The post associated with this application is already past and
+                  no longer exists.
+                </p>
+              </IonContent>
+            </IonPopover>
+          );
+        }
+
         return (
           <AppliedPostModal
             isOpen={isModalOpen}

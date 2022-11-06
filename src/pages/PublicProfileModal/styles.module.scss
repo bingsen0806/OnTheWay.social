@@ -6,10 +6,11 @@
 .back-button {
   position: fixed;
   top: 0px;
-  left: 16px;
+  left: 8px;
   z-index: 10000;
   --padding-start: 0;
   --padding-end: 0;
+  width: 40px;
 }
 
 .art-header {

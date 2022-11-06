@@ -1,4 +1,4 @@
-import { IonButton, IonCol, IonRow } from '@ionic/react';
+import { IonButton, IonCol, IonRow, useIonAlert } from '@ionic/react';
 import { logEvent } from 'firebase/analytics';
 import { getAuth } from 'firebase/auth';
 import { useEffect } from 'react';
@@ -21,6 +21,7 @@ export default function EmailVerificationPage() {
   const authState = useAuthState();
   const presentInfoToast = useInfoToast();
   const history = useHistory();
+  const [presentAlert] = useIonAlert();
 
   useEffect(() => {
     // try reloading the user every second to see if email was verified
@@ -76,7 +77,7 @@ export default function EmailVerificationPage() {
         </IonCol>
       </IonRow>
       <IonRow className="ion-padding-bottom ion-justify-content-center">
-        <IonCol size="3">
+        <IonCol size="4">
           <IonButton
             expand="block"
             fill="outline"
@@ -88,11 +89,26 @@ export default function EmailVerificationPage() {
             Cancel
           </IonButton>
         </IonCol>
-        <IonCol size="5">
+        <IonCol size="4">
           <IonButton
             expand="block"
             onClick={() => {
-              void submitResendEmailRequest();
+              void presentAlert({
+                header: 'Confirm Resend?',
+                buttons: [
+                  {
+                    text: 'Cancel',
+                    role: 'cancel',
+                  },
+                  {
+                    text: 'OK',
+                    role: 'confirm',
+                    handler: () => {
+                      void submitResendEmailRequest();
+                    },
+                  },
+                ],
+              });
             }}
           >
             Resend

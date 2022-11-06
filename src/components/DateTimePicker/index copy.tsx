@@ -7,7 +7,6 @@ import {
   IonModal,
 } from '@ionic/react';
 import moment from 'moment';
-import { useState } from 'react';
 import styles from './styles.module.scss';
 
 export interface DateTimePickerProps {
@@ -28,56 +27,31 @@ export default function DateTimePicker({
   function handleChange(e: DatetimeCustomEvent) {
     onChange(e.detail.value ? (e.detail.value as string) : '');
   }
-  const [isOpen, setIsOpen] = useState<boolean>(false);
   const maxDate = moment().add(7, 'days').toISOString();
   const min = type === 'date' ? new Date().toISOString() : undefined;
   const max = type === 'date' ? maxDate : undefined;
 
   return (
     <>
-      <IonItem
-        lines="full"
-        button
-        detail={false}
-        onClick={() => {
-          setIsOpen(true);
-        }}
-      >
+      <IonItem lines="full" button>
         <IonLabel>
-          <h2>{`${label}: `}</h2>
+          <h2>{label}</h2>
         </IonLabel>
-        <IonLabel slot="end">
-          <h2>
-            {`
-            ${
-              type === 'date'
-                ? moment(value, true).format('DD/MM/YYYY')
-                : moment(value, true).format('HH:MM A')
-            }`}
-          </h2>
-        </IonLabel>
-
         <IonDatetimeButton
+          slot="end"
+          className="ion-justify-content-start"
           datetime={`datetime-${label}`}
-          className={styles['datetime-button']}
         ></IonDatetimeButton>
-        <IonModal
-          keepContentsMounted={true}
-          isOpen={isOpen}
-          onWillDismiss={() => {
-            setIsOpen(false);
-          }}
-        >
+        <IonModal keepContentsMounted={true}>
           <IonDatetime
-            id={`datetime-${label}`}
             max={max}
             min={min}
             value={value}
             className={styles['date-picker']}
+            id={`datetime-${label}`}
             presentation={type}
             onIonChange={handleChange}
             minuteValues="0, 15, 30, 45"
-            showDefaultTitle
           ></IonDatetime>
         </IonModal>
       </IonItem>

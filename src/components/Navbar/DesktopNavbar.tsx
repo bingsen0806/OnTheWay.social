@@ -62,7 +62,6 @@ import { useState } from 'react';
 import Home from '../../pages/Home';
 import HomeContents from '../../pages/Home/HomeContents';
 import LoadingSpinner from '../FullScreenLoadingSpinner';
-import PublicProfile from '../../pages/PublicProfile';
 
 function DesktopNavbar() {
   const location = useLocation();
@@ -234,7 +233,7 @@ function DesktopNavbar() {
                 />
                 <Route exact path={FAQ} component={Faq} />
                 <Route exact path="/" component={Home} />
-                <Route path={PUBLIC_PROFILE} component={PublicProfile} />
+                <Route path={PUBLIC_PROFILE} component={Profile} />
                 <IonGrid>
                   <IonRow>
                     <IonCol>

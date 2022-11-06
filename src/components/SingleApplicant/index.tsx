@@ -3,6 +3,7 @@ import {
   IonAvatar,
   IonButton,
   IonCol,
+  IonItem,
   IonRow,
   useIonAlert,
 } from '@ionic/react';
@@ -39,11 +40,11 @@ export default function SingleApplicant({
   const handleCheckedError = useCheckedErrorHandler();
   const handleUnknownError = useUnknownErrorHandler();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const presentInfoToast = useInfoToast();
   const presentErrorToast = useErrorToast();
   const history = useHistory();
   const isMobile = getPlatforms().includes('mobile');
-  const [isOpen, setIsOpen] = useState(false);
   const closeModal = () => setIsOpen(false);
 
   const openModal = () => {
@@ -103,56 +104,67 @@ export default function SingleApplicant({
           user={applicant}
         />
       )}
-      <IonRow className="ion-padding-vertical ion-justify-content-center">
-        <IonCol size="3" onClick={openModal}>
-          <IonAvatar className={styles['avatar']}>
-            <img alt="profilePic" src={applicant.thumbnailPhoto} />{' '}
-          </IonAvatar>
-        </IonCol>
-        <IonCol size="5" className={styles['user-info']} onClick={openModal}>
-          <IonRow className={styles['bold']}>{applicant.name}</IonRow>
-          <IonRow>
-            Y{applicant.year}/
-            {facultyEnumToStr(applicant.faculty) ?? 'unknown faculty'}
-          </IonRow>
-          <IonRow>
-            {genderEnumToStr(applicant.gender) ?? 'unknown gender'}
-          </IonRow>
-        </IonCol>
-        <IonCol size="4" className={styles['accept-col']}>
-          <IonButton
-            shape="round"
-            fill="solid"
-            size="small"
-            onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
-              event.stopPropagation();
-              if (isLoading) {
-                return;
-              }
-              void presentAlert({
-                header: 'Confirm Accept Applicant?',
-                message:
-                  'Once accepted, telegram details of the applicant will be shown, and they will be notified with your telegram details as well.',
-                buttons: [
-                  {
-                    text: 'Cancel',
-                    role: 'cancel',
-                  },
-                  {
-                    text: 'Accept',
-                    role: 'confirm',
-                    handler: () => {
-                      handleAccept(postId, applicant.id);
+      <IonItem
+        lines="none"
+        button
+        detail={false}
+        onClick={() => {
+          setIsOpen(true);
+        }}
+      >
+        <IonRow className="ion-padding-vertical ion-justify-content-center">
+          <IonCol size="3">
+            <IonAvatar className={styles['avatar']}>
+              <img alt="profilePic" src={applicant.thumbnailPhoto} />{' '}
+            </IonAvatar>
+          </IonCol>
+          <IonCol size="5" className={styles['user-info']}>
+            <IonRow className={styles['bold']}>
+              {applicant.name ?? 'No Name'}
+            </IonRow>
+            <IonRow>
+              Y{applicant.year ?? 0}/
+              {facultyEnumToStr(applicant.faculty) ?? 'unknown faculty'}
+            </IonRow>
+            <IonRow>
+              {genderEnumToStr(applicant.gender) ?? 'unknown gender'}
+            </IonRow>
+          </IonCol>
+          <IonCol size="4" className={styles['accept-col']}>
+            <IonButton
+              shape="round"
+              fill="solid"
+              size="small"
+              onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
+                event.stopPropagation();
+                if (isLoading) {
+                  return;
+                }
+                void presentAlert({
+                  header: 'Confirm Accept Applicant?',
+                  message:
+                    'Once accepted, telegram details of the applicant will be shown, and they will be notified with your telegram details as well.',
+                  buttons: [
+                    {
+                      text: 'Cancel',
+                      role: 'cancel',
                     },
-                  },
-                ],
-              });
-            }}
-          >
-            {isLoading ? <ButtonSpinner /> : 'Accept'}
-          </IonButton>
-        </IonCol>
-      </IonRow>
+                    {
+                      text: 'Accept',
+                      role: 'confirm',
+                      handler: () => {
+                        handleAccept(postId, applicant.id);
+                      },
+                    },
+                  ],
+                });
+              }}
+            >
+              {isLoading ? <ButtonSpinner /> : 'Accept'}
+            </IonButton>
+          </IonCol>
+        </IonRow>
+      </IonItem>
     </>
   );
 }
