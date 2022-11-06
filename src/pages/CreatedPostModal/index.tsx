@@ -1,4 +1,4 @@
-import { IonModal } from '@ionic/react';
+import { IonContent, IonModal } from '@ionic/react';
 import { CreatedRequest } from '../../api/types';
 import { useEffect, useState } from 'react';
 import { useAppDispatch } from '../../redux/hooks';
@@ -48,10 +48,12 @@ export default function CreatedPostModal({
       onWillDismiss={closeModal}
       className={styles['modal-container']}
     >
-      <CreatedPostInformation
-        onClose={onClose}
-        createdRequest={createdRequest}
-      />
+      <IonContent fullscreen>
+        <CreatedPostInformation
+          onClose={onClose}
+          createdRequest={createdRequest}
+        />
+      </IonContent>
     </IonModal>
   );
 }

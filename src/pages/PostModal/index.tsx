@@ -1,4 +1,4 @@
-import { IonModal } from '@ionic/react';
+import { IonContent, IonModal } from '@ionic/react';
 import { Post } from '../../api/types';
 import styles from './styles.module.scss';
 import PostInformation from './PostInformation';
@@ -31,7 +31,9 @@ export default function PostModal({
       onWillDismiss={onCloseAction}
       className={styles['modal-container']}
     >
-      <PostInformation onClose={onClose} applyPost={applyPost} />
+      <IonContent fullscreen>
+        <PostInformation onClose={onClose} applyPost={applyPost} />
+      </IonContent>
     </IonModal>
   );
 }

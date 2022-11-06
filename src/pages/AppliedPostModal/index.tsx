@@ -1,4 +1,4 @@
-import { IonModal } from '@ionic/react';
+import { IonContent, IonModal } from '@ionic/react';
 import { AppliedRequest } from '../../api/types';
 import styles from './styles.module.scss';
 import AppliedPostContent from './AppliedPostContent';
@@ -24,7 +24,9 @@ export default function AppliedPostModal({
       }}
       className={styles['modal-container']}
     >
-      <AppliedPostContent onClose={onClose} appliedRequest={appliedRequest} />
+      <IonContent fullscreen>
+        <AppliedPostContent onClose={onClose} appliedRequest={appliedRequest} />
+      </IonContent>
     </IonModal>
   );
 }
