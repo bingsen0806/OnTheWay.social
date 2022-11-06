@@ -23,7 +23,6 @@ interface LoginErrorMessages {
 
 /**
  * Login page component.
- * TODO: forgot password functionality after MVP.
  */
 export default function LoginPage() {
   const dispatch = useAppDispatch();

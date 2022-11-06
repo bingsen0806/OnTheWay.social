@@ -90,7 +90,6 @@ export default function PostInformation({
           presentInfoToast('Successfully applied!');
           void dispatch(reloadInitialData());
           const callback = () => {
-            console.log('92 callback');
             dispatch(removePost(applyPost));
             history.replace(SESSIONS);
           };

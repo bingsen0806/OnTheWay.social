@@ -26,7 +26,6 @@ export default function PostDetails({ post }: PostDetailsProps) {
       </IonRow>
       <IonRow>
         <IonCol>Date</IonCol>{' '}
-        {/* TODO: Confirm format of date time passed in and split accordingly */}
         <IonCol>{convertDateToDateStr(post.startDateTime)}</IonCol>
       </IonRow>
       <IonRow>

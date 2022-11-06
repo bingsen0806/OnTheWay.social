@@ -174,7 +174,6 @@ export default function ProfileCreationPage() {
     try {
       setIsLoading(true);
       const resp = await createUserProfile(userDetails);
-      console.log(resp);
       if (resp.success) {
         history.replace(BROWSE);
         presentInfoToast(

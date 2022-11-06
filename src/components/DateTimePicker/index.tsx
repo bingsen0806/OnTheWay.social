@@ -27,8 +27,6 @@ export default function DateTimePicker({
 }: DateTimePickerProps) {
   function handleChange(e: DatetimeCustomEvent) {
     onChange(e.detail.value ? (e.detail.value as string) : '');
-    //console.log(e.detail.value)
-    console.log(value);
   }
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const maxDate = moment().add(7, 'days').toISOString();

@@ -6,9 +6,6 @@ import { getMessaging, getToken, Messaging } from 'firebase/messaging';
 import { sendNotificationRegistrationToken } from './api/notifications';
 import { isPlatform } from '@ionic/react';
 
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
@@ -66,7 +63,6 @@ export function generateAndSendNotificationRegistrationToken() {
       if (currentToken) {
         void sendNotificationRegistrationToken(currentToken);
       } else {
-        //TODO: error handling getting token
         console.log('problem getting token');
       }
     })

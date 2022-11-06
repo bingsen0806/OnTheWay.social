@@ -68,7 +68,6 @@ export default function NotificationsPage() {
   };
 
   function requestNotificationPermissionsPopup() {
-    console.log(Notification.permission);
     if (Notification.permission === 'denied') {
       presentErrorToast(
         'Notifications from BuddyNUS on your browser are currently blocked!'

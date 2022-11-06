@@ -31,74 +31,12 @@ const HomeSlice = createSlice({
   name: 'home',
   initialState,
   reducers: {
-    /**
-    cancelApplicantOfCreatedRequest: (
-      state,
-      action: PayloadAction<{ applicantUserId: string; postId: string }>
-    ) => {
-      const newCreatedRequests = [];
-      for (let i = 0; i < state.createdRequests.length; i++) {
-        let changedParticipant;
-        const createdRequest = state.createdRequests[i];
-        if (createdRequest.post.id === action.payload.postId) {
-          const newParticipants = [];
-          for (const participant of createdRequest.post.participants) {
-            if (participant.id !== action.payload.applicantUserId) {
-              newParticipants.push(participant);
-            } else {
-              changedParticipant = participant;
-            }
-          }
-          const newApplicants = [...createdRequest.applicants] as User[];
-          newApplicants.push(changedParticipant as User);
-          createdRequest.post.participants = newParticipants;
-          createdRequest.applicants = newApplicants;
-          //TODO: check if this mutable change is fine
-          newCreatedRequests.push(createdRequest);
-        } else {
-          newCreatedRequests.push(createdRequest);
-        }
-        state.createdRequests = newCreatedRequests;
-      }
-    },
-    acceptApplicantOfCreatedRequest: (
-      state,
-      action: PayloadAction<{ applicantUserId: string; postId: string }>
-    ) => {
-      const newCreatedRequests = [];
-      for (let i = 0; i < state.createdRequests.length; i++) {
-        let changedParticipant;
-        const createdRequest = state.createdRequests[i];
-        if (createdRequest.post.id === action.payload.postId) {
-          const newApplicants = [];
-          for (const applicant of createdRequest.applicants) {
-            if (applicant.id !== action.payload.applicantUserId) {
-              newApplicants.push(applicant);
-            } else {
-              changedParticipant = applicant;
-            }
-          }
-          const newParticipants = [...createdRequest.post.participants] as User[];
-          newParticipants.push(changedParticipant as User);
-          createdRequest.post.participants = newParticipants;
-          createdRequest.applicants = newApplicants;
-          //TODO: check if this mutable change is fine
-          newCreatedRequests.push(createdRequest);
-        } else {
-          newCreatedRequests.push(createdRequest);
-        }
-        state.createdRequests = newCreatedRequests;
-      }
-    },
-    */
     replaceCreatedRequest: (state, action: PayloadAction<CreatedRequest>) => {
-      console.log('homeslice called');
       const newCreatedRequests: CreatedRequest[] = [];
       for (const createdRequest of state.createdRequests) {
         if (createdRequest.post.id !== action.payload.post.id) {
           newCreatedRequests.push(createdRequest);
         } else {
-          console.log('101');
           newCreatedRequests.push(action.payload);
         }
       }

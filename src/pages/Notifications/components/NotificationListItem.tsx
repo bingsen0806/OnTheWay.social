@@ -51,7 +51,6 @@ export default function NotificationListItem({
     if (notification.type === BuddyNotificationType.RECEIVED_NEW_ART) {
       history.push(ART);
     }
-    // TODO: check if need any error handling here
     void dispatch(markNotification(notification.id));
     if (isMobile) {
       setIsModalOpen(true);
@@ -100,9 +99,6 @@ export default function NotificationListItem({
           ></CreatedPostModal>
         );
       case BuddyNotificationType.ACCEPTED_YOUR_APPLICATION:
-        console.log(
-          moment((notification.data as AppliedRequest).post.endDateTime, true)
-        );
         if (
           moment(
             (notification.data as AppliedRequest).post.endDateTime,
@@ -136,7 +132,6 @@ export default function NotificationListItem({
       case BuddyNotificationType.DELETED_POST_YOU_APPLIED_FOR:
         return null;
       case BuddyNotificationType.GENERIC_MESSAGE:
-        //TODO: fill in this modal for generic message
         return (
           <IonModal>
             <IonHeader>

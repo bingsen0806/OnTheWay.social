@@ -72,7 +72,6 @@ export default function SingleApplicant({
           switch (resp.message) {
             case ErrorType.USER_NOT_FOUND:
               presentErrorToast('User does not exist anymore.');
-              //TODO: add removal of the user item from the modal
               return;
             case ErrorType.APPLICATION_TO_POST_DELETED:
               presentErrorToast(

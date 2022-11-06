@@ -42,7 +42,6 @@ export async function resendEmailVerification() {
 
 export async function resetPassword(email: string) {
   const auth = getAuth();
-  console.log(email);
   await sendPasswordResetEmail(auth, email);
 }
 
