@@ -27,6 +27,8 @@ export default function DateTimePicker({
 }: DateTimePickerProps) {
   function handleChange(e: DatetimeCustomEvent) {
     onChange(e.detail.value ? (e.detail.value as string) : '');
+    //console.log(e.detail.value)
+    console.log(value);
   }
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const maxDate = moment().add(7, 'days').toISOString();
@@ -52,7 +54,7 @@ export default function DateTimePicker({
             ${
               type === 'date'
                 ? moment(value, true).format('DD/MM/YYYY')
-                : moment(value, true).format('HH:MM A')
+                : moment(value, true).format('HH:mm A')
             }`}
           </h2>
         </IonLabel>
