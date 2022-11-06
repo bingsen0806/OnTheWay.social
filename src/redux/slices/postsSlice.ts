@@ -65,7 +65,7 @@ const PostsSlice = createSlice({
       }
     });
     builder.addCase(getNextPageOfPosts.pending, (state, _) => {
-      state.isLoading = true;
+      state.isLoading = false;
     });
     builder.addCase(getNextPageOfPosts.rejected, (state, _) => {
       state.isLoading = false;
@@ -108,7 +108,7 @@ export const getNextPageOfPosts = createAsyncThunk<
 >('posts/getNextPageOfPosts', async (_, thunkApi) => {
   const responseData = await getPosts(
     thunkApi.getState().posts.filter,
-    thunkApi.getState().home.appliedRequestsPage + 1
+    thunkApi.getState().posts.page + 1
   );
   return responseData;
 });

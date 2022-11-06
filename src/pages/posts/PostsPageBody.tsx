@@ -46,7 +46,8 @@ export default function PostsPageBody() {
 
   const setPostOnClick = (post: Post) => setSelectedPost(post);
 
-  function requestNextPageOfPosts() {
+  // eslint-disable-next-line
+  function requestNextPageOfPosts(ev: any) {
     dispatch(getNextPageOfPosts())
       .unwrap()
       .then((resp) => {
@@ -56,6 +57,9 @@ export default function PostsPageBody() {
       })
       .catch((error) => {
         handleUnknownError(error);
+      })
+      .finally(() => {
+        ev.target.complete(); // eslint-disable-line
       });
   }
 
@@ -136,7 +140,7 @@ export default function PostsPageBody() {
           {isMobile && (
             <IonInfiniteScroll
               onIonInfinite={requestNextPageOfPosts}
-              threshold="50px"
+              threshold="100px"
               disabled={listOfPosts.length < 20}
             >
               <IonInfiniteScrollContent loadingSpinner="circles"></IonInfiniteScrollContent>

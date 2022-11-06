@@ -46,6 +46,7 @@ export default function TextInputField({
               }
               maxlength={maxlength}
               type={type}
+              className={styles['input-field']}
             />
           </>
         ) : (
