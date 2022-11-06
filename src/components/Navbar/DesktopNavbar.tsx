@@ -1,11 +1,14 @@
 import { Route, useHistory, useLocation } from 'react-router-dom';
 import {
   IonButton,
+  IonCol,
   IonContent,
+  IonGrid,
   IonHeader,
   IonIcon,
   IonPage,
   IonRouterOutlet,
+  IonRow,
   IonText,
   IonToolbar,
 } from '@ionic/react';
@@ -33,6 +36,7 @@ import {
   PROFILE,
   PROFILE_CREATION,
   PROFILE_FAQ,
+  PUBLIC_PROFILE,
   REGISTER,
   SESSIONS,
 } from '../../routes';
@@ -58,6 +62,7 @@ import { useState } from 'react';
 import Home from '../../pages/Home';
 import HomeContents from '../../pages/Home/HomeContents';
 import LoadingSpinner from '../FullScreenLoadingSpinner';
+import PublicProfile from '../../pages/PublicProfile';
 
 function DesktopNavbar() {
   const location = useLocation();
@@ -229,6 +234,14 @@ function DesktopNavbar() {
                 />
                 <Route exact path={FAQ} component={Faq} />
                 <Route exact path="/" component={Home} />
+                <Route path={PUBLIC_PROFILE} component={PublicProfile} />
+                <IonGrid>
+                  <IonRow>
+                    <IonCol>
+                      <br></br>
+                    </IonCol>
+                  </IonRow>
+                </IonGrid>
               </IonRouterOutlet>
             )}
           </IonContent>

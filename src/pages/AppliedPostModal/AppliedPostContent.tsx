@@ -131,7 +131,10 @@ export default function AppliedPostContent({
               <OtherStudyBuddies
                 studyBuddies={appliedRequest.post.participants}
               ></OtherStudyBuddies>
-              <AboutPoster poster={appliedRequest.post?.poster} />
+              <AboutPoster
+                poster={appliedRequest.post.poster}
+                post={appliedRequest.post}
+              />
               <IonButton
                 className="ion-padding-horizontal ion-margin-vertical"
                 expand="block"

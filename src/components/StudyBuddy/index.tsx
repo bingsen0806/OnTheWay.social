@@ -1,6 +1,7 @@
-import { IonCol, IonRow, IonAvatar, IonIcon } from '@ionic/react';
+import { IonCol, IonRow, IonAvatar, IonIcon, getPlatforms } from '@ionic/react';
 import { copyOutline } from 'ionicons/icons';
 import { useState } from 'react';
+import { useHistory } from 'react-router';
 import { facultyEnumToStr, genderEnumToStr, User } from '../../api/types';
 import PublicProfileModal from '../../pages/PublicProfileModal';
 import useInfoToast from '../../util/hooks/useInfoToast';
@@ -18,10 +19,24 @@ export default function StudyBuddy({
   const presentInfoToast = useInfoToast();
   const [isOpen, setIsOpen] = useState(false);
   const closeModal = () => setIsOpen(false);
-  const openModal = () => setIsOpen(true);
+  const history = useHistory();
+  const isMobile = getPlatforms().includes('mobile');
+  const openModal = () => {
+    if (isMobile) {
+      setIsOpen(true);
+    } else {
+      history.push({
+        pathname: '/profile',
+        search: `?userId=${buddy.id}`,
+        state: { user: buddy },
+      });
+    }
+  };
   return (
     <div className={styles['study-buddy']}>
-      <PublicProfileModal isOpen={isOpen} onClose={closeModal} user={buddy} />
+      {isMobile && (
+        <PublicProfileModal isOpen={isOpen} onClose={closeModal} user={buddy} />
+      )}
       <IonRow className="ion-padding-start ion-justify-content-center ion-align-items-center">
         <IonCol size="3" sizeMd="6" onClick={openModal}>
           <IonAvatar className={styles['avatar']}>

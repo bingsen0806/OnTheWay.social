@@ -11,7 +11,7 @@ import {
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Post } from '../../api/types';
-import LoadingSpinner from '../../components/LoadingSpinner';
+import FullScreenLoadingSpinner from '../../components/FullScreenLoadingSpinner';
 import PostListItem from '../../components/PostListItem';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import {
@@ -65,7 +65,7 @@ export default function PostsPageBody() {
 
   return (
     <>
-      {isLoading && <LoadingSpinner />}
+      {isLoading && <FullScreenLoadingSpinner />}
       {!isLoading && (
         <>
           {listOfPosts.length === 0 ? (
@@ -83,7 +83,7 @@ export default function PostsPageBody() {
               </div>
             </NoData>
           ) : (
-            <IonGrid className="ion-margin-top ion-no-padding">
+            <IonGrid className="ion-margin-top ion-no-padding ion-margin-bottom">
               <IonRow className="ion-justify-content-center ion-no-padding">
                 <IonCol size="12" sizeLg="5">
                   {isMobile ? (

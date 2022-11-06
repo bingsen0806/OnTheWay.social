@@ -31,11 +31,11 @@ import AppliedRequestListItem from './components/RequesListItems/AppliedRequestL
 import CreatedRequestListItem from './components/RequesListItems/CreatedRequestListItem';
 import { BROWSE, CREATE_POST } from '../../routes';
 import { useHistory } from 'react-router';
-import LoadingSpinner from '../../components/LoadingSpinner';
 import { useAuthState } from '../../util/authentication';
 import SelectedCreatedRequest from './components/SelectedCreatedRequest';
 import { AppliedRequest, CreatedRequest } from '../../api/types';
 import SelectedAppliedRequest from './components/SelectedAppliedRequest';
+import FullScreenLoadingSpinner from '../../components/FullScreenLoadingSpinner';
 
 enum HomeTab {
   APPLIED_POST = 'Applied',
@@ -127,8 +127,8 @@ export default function Sessions() {
   function renderListBasedOnTab() {
     if (isLoading) {
       return (
-        <IonContent>
-          <LoadingSpinner />
+        <IonContent fullscreen>
+          <FullScreenLoadingSpinner />
         </IonContent>
       );
     }

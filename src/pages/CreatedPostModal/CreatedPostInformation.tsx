@@ -105,7 +105,16 @@ export default function CreatedPostInformation({
       });
   }
 
+  function updateStoreIfEdited(wasEdited?: boolean) {
+    if (createdRequestWasEdited || wasEdited) {
+      dispatch(replaceNotification(createdRequestState));
+      dispatch(replaceCreatedRequest(createdRequestState));
+      dispatch(requestReloadOfPosts());
+    }
+  }
+
   function addParticipantToCreatedRequest(participant: User) {
+    console.log('117');
     const newCreatedRequest = JSON.parse(
       JSON.stringify(createdRequestState)
     ) as CreatedRequest;
@@ -115,17 +124,13 @@ export default function CreatedPostInformation({
     newCreatedRequest.post.participants.push(participant);
     setCreatedRequestState(newCreatedRequest);
     setCreatedRequestWasEdited(true);
+    if (!isMobile) {
+      updateStoreIfEdited(true);
+    }
   }
 
   function closeModal() {
-    onClose &&
-      onClose(() => {
-        if (createdRequestWasEdited) {
-          dispatch(replaceNotification(createdRequestState));
-          dispatch(replaceCreatedRequest(createdRequestState));
-          dispatch(requestReloadOfPosts());
-        }
-      });
+    onClose && onClose(updateStoreIfEdited);
   }
 
   return (

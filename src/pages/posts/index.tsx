@@ -364,7 +364,7 @@ export default function PostsPage() {
             <PostsPageBody />
           </IonContent>
         ) : (
-          <IonContent>
+          <IonContent fullscreen>
             <PostsPageBody />
           </IonContent>
         )}

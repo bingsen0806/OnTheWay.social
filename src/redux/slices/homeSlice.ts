@@ -92,11 +92,13 @@ const HomeSlice = createSlice({
     },
     */
     replaceCreatedRequest: (state, action: PayloadAction<CreatedRequest>) => {
+      console.log('homeslice called');
       const newCreatedRequests: CreatedRequest[] = [];
       for (const createdRequest of state.createdRequests) {
         if (createdRequest.post.id !== action.payload.post.id) {
           newCreatedRequests.push(createdRequest);
         } else {
+          console.log('101');
           newCreatedRequests.push(action.payload);
         }
       }

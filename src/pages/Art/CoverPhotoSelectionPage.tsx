@@ -13,7 +13,7 @@ import {
 import { useState } from 'react';
 import { setCover } from '../../api/art';
 import { Art } from '../../api/types';
-import LoadingSpinner from '../../components/LoadingSpinner';
+import FullScreenLoadingSpinner from '../../components/FullScreenLoadingSpinner';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { setProfilePhotoInRedux } from '../../redux/slices/userSlice';
 import useInfoToast from '../../util/hooks/useInfoToast';
@@ -60,7 +60,7 @@ export default function CoverPhotoSelectionPage() {
       </IonHeader>
       <IonContent className="ion-text-center">
         {isLoading ? (
-          <LoadingSpinner />
+          <FullScreenLoadingSpinner />
         ) : (
           <>
             <h2 className="ion-padding-start">

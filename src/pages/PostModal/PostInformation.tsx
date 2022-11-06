@@ -88,10 +88,12 @@ export default function PostInformation({
           logEvent(analytics, 'apply_post');
           setIsApplied(true);
           presentInfoToast('Successfully applied!');
-          void dispatch(reloadInitialData()).then(() => {
+          const callback = () => {
+            dispatch(removePost(applyPost));
             history.replace(SESSIONS);
-          });
-          !onClose && dispatch(removePost(applyPost));
+          };
+          onClose && onClose(callback);
+          !onClose && callback();
         }
       })
       .catch((error) => {
@@ -169,10 +171,10 @@ export default function PostInformation({
               {isAuthenticated && (
                 <>
                   <OtherStudyBuddies studyBuddies={applyPost.participants} />
-                  <AboutPoster poster={applyPost?.poster} />
+                  <AboutPoster poster={applyPost?.poster} post={applyPost} />
                   {isApplied ? (
                     <IonButton
-                      className={`ion-padding-horizontal ${styles['cancel-button']}`}
+                      className={`ion-padding-horizontal ion-margin-top ${styles['cancel-button']}`}
                       fill="outline"
                       color="danger"
                       expand="block"
@@ -205,7 +207,7 @@ export default function PostInformation({
                     </IonButton>
                   ) : (
                     <IonButton
-                      className={`${styles['accept-button']} ion-padding-horizontal`}
+                      className={`${styles['accept-button']} ion-padding-horizontal ion-margin-top`}
                       expand="block"
                       color="primary"
                       onClick={(

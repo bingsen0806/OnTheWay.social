@@ -14,7 +14,7 @@ import {
 } from '@ionic/react';
 import { arrowBackOutline } from 'ionicons/icons';
 import { useLayoutEffect, useState } from 'react';
-import LoadingSpinner from '../../components/LoadingSpinner';
+import FullScreenLoadingSpinner from '../../components/FullScreenLoadingSpinner';
 import { generateAndSendNotificationRegistrationToken } from '../../firebase';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { loadNotifications } from '../../redux/slices/notificationsSlice';
@@ -132,7 +132,7 @@ export default function NotificationsPage() {
       </IonHeader>
       <IonContent fullscreen>
         {isLoading ? (
-          <LoadingSpinner />
+          <FullScreenLoadingSpinner />
         ) : (
           <>
             <IonRefresher slot="fixed" onIonRefresh={refreshPage}>

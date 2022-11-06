@@ -20,3 +20,9 @@
 .art-popover-button {
   cursor: pointer;
 }
+
+@media screen and (max-width: 1024px) {
+  .mobile {
+    margin-top: 5vh;
+  }
+}

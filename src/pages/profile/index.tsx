@@ -22,10 +22,11 @@ import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
 import { persistor } from '../../redux/store';
 import { requestReloadOfHomeData } from '../../redux/slices/homeSlice';
 import { requestReloadOfPosts } from '../../redux/slices/postsSlice';
-import LoadingSpinner from '../../components/LoadingSpinner';
 import useInfoToast from '../../util/hooks/useInfoToast';
 import ProfileHeader from '../../components/ProfileHeader';
 import usePageInitialLoad from '../../util/hooks/usePageInitialLoad';
+import FullScreenLoadingSpinner from '../../components/FullScreenLoadingSpinner';
+import PublicProfileContents from '../PublicProfileModal/PublicProfileContents';
 
 interface Image {
   preview: string;
@@ -34,6 +35,8 @@ interface Image {
 
 export default function ProfilePage() {
   const history = useHistory();
+  const params = new URLSearchParams(window.location.search);
+  const userId = params.get('userId');
   const dispatch = useAppDispatch();
   const isLoading = useAppSelector((state) => state.user.isLoading);
   const handleCheckedError = useCheckedErrorHandler();
@@ -102,11 +105,21 @@ export default function ProfilePage() {
       });
   }
 
+  if (userId) {
+    return (
+      <IonPage>
+        <IonContent fullscreen>
+          <PublicProfileContents userId={userId} />
+        </IonContent>
+      </IonPage>
+    );
+  }
+
   return (
     <IonPage>
       <IonContent fullscreen>
         {isLoading ? (
-          <LoadingSpinner />
+          <FullScreenLoadingSpinner />
         ) : (
           <>
             <ProfileHeader
