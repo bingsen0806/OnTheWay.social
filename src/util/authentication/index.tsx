@@ -6,6 +6,9 @@ import {
   PropsWithChildren,
   useLayoutEffect,
 } from 'react';
+import { useAppDispatch } from '../../redux/hooks';
+import { getInitialData } from '../../redux/slices/homeSlice';
+import { getInitialPostsData } from '../../redux/slices/postsSlice';
 
 export interface AuthenticationState {
   isAuthenticated: boolean;
@@ -25,13 +28,18 @@ export const AuthProvider = ({ children, ...rest }: PropsWithChildren) => {
   const [user, setUser] = useState<User | null>();
   const [error, setError] = useState<Error | null>();
   const [loading, setLoading] = useState<boolean>(true);
+  const dispatch = useAppDispatch();
 
   useLayoutEffect(() => {
     const unsubscribe = onAuthStateChanged(
       getAuth(),
       (user) => {
         setUser(user);
-        setLoading(false);
+        const promises: Promise<any>[] = [dispatch(getInitialPostsData())];
+        if (user) {
+          promises.push(dispatch(getInitialData()));
+        }
+        void Promise.all(promises).then(() => setLoading(false));
       },
       setError
     );
