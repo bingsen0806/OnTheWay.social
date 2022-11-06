@@ -262,14 +262,6 @@ export default function CreatePostPage() {
                 label="Start"
                 onChange={(startTime) => {
                   setStartTime(startTime);
-                  setEndTime(
-                    moment
-                      .min([
-                        moment(startTime).add(2, 'hours'),
-                        moment(startTime).set('hour', 23).set('minute', 45),
-                      ])
-                      .toISOString(true)
-                  );
                 }}
                 errorMessage={errorMessages.startTime}
               ></DateTimePicker>
