@@ -99,7 +99,7 @@ export default function PostsPageBody() {
           ) : (
             <IonGrid className="ion-margin-top ion-no-padding ion-margin-bottom">
               <IonRow className="ion-justify-content-center ion-no-padding">
-                <IonCol size="12" sizeLg="5">
+                <IonCol size={isMobile ? '12' : '5'}>
                   {isMobile ? (
                     <>
                       {listOfPosts.map((data) => {

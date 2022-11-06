@@ -185,7 +185,7 @@ export default function Sessions() {
           </IonRefresher>
           <IonGrid className="ion-margin-top ion-no-padding">
             <IonRow className="ion-justify-content-center ion-no-padding">
-              <IonCol size="12" sizeLg="5">
+              <IonCol size={isMobile ? '12' : '5'}>
                 {isMobile ? (
                   <>
                     {createdPosts.map((post) => (
@@ -211,7 +211,7 @@ export default function Sessions() {
                 )}
               </IonCol>
               {!isMobile && (
-                <IonCol sizeMd="7">
+                <IonCol size="7">
                   <SelectedCreatedRequest createdRequest={selectedRequest} />
                 </IonCol>
               )}
@@ -251,7 +251,7 @@ export default function Sessions() {
           </IonRefresher>
           <IonGrid className="ion-margin-top ion-no-padding">
             <IonRow className="ion-justify-content-center ion-no-padding">
-              <IonCol size="12" sizeLg="5">
+              <IonCol size={isMobile ? '12' : '5'}>
                 {isMobile ? (
                   <>
                     {appliedPosts.map((post) => (
