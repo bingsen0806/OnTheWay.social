@@ -34,6 +34,16 @@ export default function PostsPageBody() {
   const isMobile = getPlatforms().includes('mobile');
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
 
+  if (selectedPost !== null) {
+    //do a check if post is still in list of posts
+    const listFiltered = listOfPosts.filter(
+      (post) => post.id === selectedPost.id
+    );
+    if (listFiltered.length === 0) {
+      setSelectedPost(null);
+    }
+  }
+
   const setPostOnClick = (post: Post) => setSelectedPost(post);
 
   function requestNextPageOfPosts() {

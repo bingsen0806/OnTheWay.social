@@ -62,8 +62,25 @@ export default function Sessions() {
   const setRequestOnClick = (request: CreatedRequest) =>
     setSelectedRequest(request);
 
-  const setAppliedRequestOnClick = (request: AppliedRequest) =>
-    setSelectedAppliedRequest(request);
+  if (selectedRequest !== null) {
+    //do a check if post is still in list of posts
+    const listFiltered = createdPosts.filter(
+      (req) => req.post.id === selectedRequest.post.id
+    );
+    if (listFiltered.length === 0) {
+      setSelectedRequest(null);
+    }
+  }
+
+  if (selectedAppliedRequest !== null) {
+    //do a check if post is still in list of posts
+    const listFiltered = appliedPosts.filter(
+      (req) => req.post.id === selectedAppliedRequest.post.id
+    );
+    if (listFiltered.length === 0) {
+      setSelectedAppliedRequest(null);
+    }
+  }
 
   usePageInitialLoad(() => {
     if (isAuthenticated) {

@@ -1,4 +1,4 @@
-import { IonCol, IonGrid, IonList, IonRow } from '@ionic/react';
+import { IonList } from '@ionic/react';
 import { User } from '../../api/types';
 import SingleApplicant from '../SingleApplicant';
 import styles from './styles.module.scss';
@@ -15,16 +15,10 @@ export default function ApplicantList({
   addParticipantToCreatedRequest,
 }: ApplicantListProps) {
   return (
-    <IonGrid className="ion-no-margin ion-no-padding">
-      <IonRow className="ion-justify-content-start ion-no-margin">
-        <IonCol className={styles['header']}>Applicants</IonCol>
-      </IonRow>
-      {applicants.length <= 0 ? (
-        <IonRow className="ion-justify-content-start">
-          <IonCol>
-            <p>No one has applied to your post yet. Check again later!</p>
-          </IonCol>
-        </IonRow>
+    <>
+      <p className={styles['header']}>Applicants</p>
+      {applicants.length === 0 ? (
+        <p>No one has applied to your post yet. Check again later!</p>
       ) : (
         <IonList>
           {applicants.map((applicant) => (
@@ -37,6 +31,6 @@ export default function ApplicantList({
           ))}
         </IonList>
       )}
-    </IonGrid>
+    </>
   );
 }

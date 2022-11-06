@@ -7,9 +7,18 @@
   font-weight: bold;
 }
 
-.user-info {
-  padding-top: 15px;
-  justify-content: space-between;
+.username {
+  font-weight: bold;
+  margin: 0;
+  padding: 0;
+  p {
+    margin: 0;
+    padding: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 80%;
+  }
 }
 
 .avatar {
@@ -41,7 +50,6 @@
 .accept-col {
   padding-top: 15px;
   justify-content: space-between;
-  padding-right: 30px;
 }
 
 .delete-button {

@@ -22,6 +22,7 @@ import { useEffect, useState } from 'react';
 import { cancelRequest } from '../../api/home';
 import { useAppDispatch } from '../../redux/hooks';
 import {
+  reloadInitialData,
   removeCreatedRequest,
   replaceCreatedRequest,
 } from '../../redux/slices/homeSlice';
@@ -29,7 +30,6 @@ import { analytics } from '../../firebase';
 import { logEvent } from 'firebase/analytics';
 import {
   reloadInitialPostsData,
-  requestReloadOfPosts,
 } from '../../redux/slices/postsSlice';
 import OtherStudyBuddies from '../../components/OtherStudyBuddies';
 import useInfoToast from '../../util/hooks/useInfoToast';
@@ -109,12 +109,11 @@ export default function CreatedPostInformation({
     if (createdRequestWasEdited || wasEdited) {
       dispatch(replaceNotification(createdRequestState));
       dispatch(replaceCreatedRequest(createdRequestState));
-      dispatch(requestReloadOfPosts());
+      void dispatch(reloadInitialData());
     }
   }
 
   function addParticipantToCreatedRequest(participant: User) {
-    console.log('117');
     const newCreatedRequest = JSON.parse(
       JSON.stringify(createdRequestState)
     ) as CreatedRequest;

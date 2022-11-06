@@ -88,7 +88,9 @@ export default function PostInformation({
           logEvent(analytics, 'apply_post');
           setIsApplied(true);
           presentInfoToast('Successfully applied!');
+          void dispatch(reloadInitialData());
           const callback = () => {
+            console.log('92 callback');
             dispatch(removePost(applyPost));
             history.replace(SESSIONS);
           };
