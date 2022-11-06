@@ -23,3 +23,13 @@ h4 {
 p {
   color: #000033;
 }
+
+.browse {
+  color: #ff735c;
+}
+
+.padding {
+  @media screen and (min-width: 1024px) {
+    margin-bottom: 10vh;
+  }
+}

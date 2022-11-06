@@ -11,7 +11,7 @@ import {
 } from '@ionic/react';
 import styles from './styles.module.scss';
 import { useHistory } from 'react-router';
-import { ABOUT_ART, ART, CAMPAIGN, FAQ } from '../../routes';
+import { ABOUT_ART, ART, FEEDBACK, PROFILE_FAQ } from '../../routes';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { getInitialSelf, reloadSelf } from '../../redux/slices/userSlice';
 import { logout } from '../../api/authentication';
@@ -22,14 +22,11 @@ import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
 import { persistor } from '../../redux/store';
 import { requestReloadOfHomeData } from '../../redux/slices/homeSlice';
 import { requestReloadOfPosts } from '../../redux/slices/postsSlice';
-import {
-  getUserCampaignsThunk,
-  resetCampaigns,
-} from '../../redux/slices/campaignSlice';
-import LoadingSpinner from '../../components/LoadingSpinner';
 import useInfoToast from '../../util/hooks/useInfoToast';
 import ProfileHeader from '../../components/ProfileHeader';
 import usePageInitialLoad from '../../util/hooks/usePageInitialLoad';
+import FullScreenLoadingSpinner from '../../components/FullScreenLoadingSpinner';
+import PublicProfileContents from '../PublicProfileModal/PublicProfileContents';
 
 interface Image {
   preview: string;
@@ -38,6 +35,8 @@ interface Image {
 
 export default function ProfilePage() {
   const history = useHistory();
+  const params = new URLSearchParams(window.location.search);
+  const userId = params.get('userId');
   const dispatch = useAppDispatch();
   const isLoading = useAppSelector((state) => state.user.isLoading);
   const handleCheckedError = useCheckedErrorHandler();
@@ -76,8 +75,11 @@ export default function ProfilePage() {
     void dispatch(reloadSelf());
   };
 
+  const routeToFeedback = () => {
+    window.open(FEEDBACK, '_blank');
+  };
+
   usePageInitialLoad(() => {
-    void dispatch(getUserCampaignsThunk());
     dispatch(getInitialSelf())
       .unwrap()
       .then((resp) => {
@@ -97,18 +99,27 @@ export default function ProfilePage() {
         dispatch({ type: 'USER_LOGOUT' });
         dispatch(requestReloadOfHomeData());
         dispatch(requestReloadOfPosts());
-        dispatch(resetCampaigns());
       })
       .catch((error) => {
         handleUnknownError(error);
       });
   }
 
+  if (userId) {
+    return (
+      <IonPage>
+        <IonContent fullscreen>
+          <PublicProfileContents userId={userId} />
+        </IonContent>
+      </IonPage>
+    );
+  }
+
   return (
     <IonPage>
       <IonContent fullscreen>
         {isLoading ? (
-          <LoadingSpinner />
+          <FullScreenLoadingSpinner />
         ) : (
           <>
             <ProfileHeader
@@ -145,14 +156,14 @@ export default function ProfilePage() {
                         <h1>Art</h1>
                       </IonLabel>
                     </IonItem>
-                    <IonItem button routerLink={CAMPAIGN}>
-                      <IonLabel className={styles['pointer']}>
-                        <h1>Campaigns</h1>
-                      </IonLabel>
-                    </IonItem>
-                    <IonItem button routerLink={FAQ}>
+                    <IonItem button routerLink={PROFILE_FAQ}>
                       <IonLabel className={styles['pointer']}>
                         <h1>FAQ</h1>
+                      </IonLabel>
+                    </IonItem>
+                    <IonItem button onClick={routeToFeedback}>
+                      <IonLabel className={styles['pointer']}>
+                        <h1>Feedback</h1>
                       </IonLabel>
                     </IonItem>
                     <IonItem button onClick={submitLogout}>

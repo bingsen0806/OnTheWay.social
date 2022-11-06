@@ -10,8 +10,11 @@ export const EMAIL_VERIFICATION = '/verify_email';
 export const HOME = '/home';
 export const CREATE_POST = '/create';
 
+export const BROWSE = '/browse';
+
 export const PROFILE = '/profile';
-export const FAQ = '/profile/faq';
+export const FAQ = '/faq';
+export const PROFILE_FAQ = '/profile/faq';
 export const CAMPAIGN = '/profile/campaigns';
 
 export const SESSIONS = '/sessions';
@@ -20,3 +23,8 @@ export const NOTIFICATIONS = '/notifications';
 export const ART = '/profile/art';
 export const ABOUT_ART = '/profile/art/aboutArt';
 export const CHANGE_COVER_PHOTO = '/profile/art/cover';
+
+export const PUBLIC_PROFILE = '/profile/:userId';
+
+export const INSTAGRAM = 'https://www.instagram.com/buddynus.official/';
+export const FEEDBACK = 'https://forms.gle/LX6w9MdN6xwS3RE27';

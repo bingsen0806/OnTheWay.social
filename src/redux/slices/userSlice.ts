@@ -7,12 +7,24 @@ import { getSelfUser, getUser } from '../../api/user';
 
 interface UserState {
   user: User;
+  otherUser: User;
   isLoading: boolean;
   selfLoadedOnce: boolean;
 }
 
 const initialState: UserState = {
   user: {
+    id: '',
+    name: '',
+    gender: Gender.PREFER_NOT_TO_SAY,
+    faculty: Faculty.COMPUTING,
+    telegramHandle: '',
+    year: 0,
+    profilePhoto: '',
+    thumbnailPhoto: '',
+    art: [],
+  },
+  otherUser: {
     id: '',
     name: '',
     gender: Gender.PREFER_NOT_TO_SAY,
@@ -56,7 +68,7 @@ const UserSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(getUserObject.fulfilled, (state, action) => {
       if (action.payload.success) {
-        state.user = action.payload.message as User;
+        state.otherUser = action.payload.message as User;
       }
       state.isLoading = false;
     });

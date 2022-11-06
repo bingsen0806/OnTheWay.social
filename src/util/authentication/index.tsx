@@ -6,10 +6,14 @@ import {
   PropsWithChildren,
   useLayoutEffect,
 } from 'react';
+import { useAppDispatch } from '../../redux/hooks';
+import { getInitialData } from '../../redux/slices/homeSlice';
+import { getInitialPostsData } from '../../redux/slices/postsSlice';
 
 export interface AuthenticationState {
   isAuthenticated: boolean;
   isEmailVerified: boolean;
+  isLoading: boolean;
   // firebase user object of the current authenticated user
   user?: User | null;
   error?: Error | null;
@@ -23,9 +27,22 @@ export const AuthContext = createContext<AuthenticationState>(
 export const AuthProvider = ({ children, ...rest }: PropsWithChildren) => {
   const [user, setUser] = useState<User | null>();
   const [error, setError] = useState<Error | null>();
+  const [loading, setLoading] = useState<boolean>(true);
+  const dispatch = useAppDispatch();
 
   useLayoutEffect(() => {
-    const unsubscribe = onAuthStateChanged(getAuth(), setUser, setError);
+    const unsubscribe = onAuthStateChanged(
+      getAuth(),
+      (user) => {
+        setUser(user);
+        const promises: Promise<any>[] = [dispatch(getInitialPostsData())];
+        if (user) {
+          promises.push(dispatch(getInitialData()));
+        }
+        void Promise.all(promises).then(() => setLoading(false));
+      },
+      setError
+    );
     return () => unsubscribe();
   }, []);
 
@@ -38,6 +55,7 @@ export const AuthProvider = ({ children, ...rest }: PropsWithChildren) => {
       await auth.currentUser.reload();
       auth = getAuth();
       setUser(Object.assign({}, auth.currentUser));
+      setLoading(false);
     } catch (error) {
       setError(error as Error);
     }
@@ -48,6 +66,7 @@ export const AuthProvider = ({ children, ...rest }: PropsWithChildren) => {
       value={{
         user,
         isAuthenticated: user ? true : false,
+        isLoading: loading,
         error,
         isEmailVerified: user?.emailVerified ? true : false,
         reloadUser,

@@ -1,4 +1,11 @@
-import { IonCol, IonGrid, IonIcon, IonItem, IonRow } from '@ionic/react';
+import {
+  getPlatforms,
+  IonCol,
+  IonGrid,
+  IonIcon,
+  IonItem,
+  IonRow,
+} from '@ionic/react';
 import { calendarClearOutline, timeOutline } from 'ionicons/icons';
 import { useStateWithCallbackLazy } from 'use-state-with-callback';
 import {
@@ -16,14 +23,18 @@ import styles from '../styles.module.scss';
 
 interface AppliedRequestListItemProps {
   appliedRequest: AppliedRequest;
+  selected: boolean;
+  onClick: (request: AppliedRequest) => void;
 }
 
 export default function AppliedRequestListItem({
   appliedRequest,
+  selected,
+  onClick,
 }: AppliedRequestListItemProps) {
   const [isModalOpen, setIsModalOpen] =
     useStateWithCallbackLazy<boolean>(false);
-
+  const isMobile = getPlatforms().includes('mobile');
   function closeModal(callback: () => void) {
     setIsModalOpen(false, callback);
   }
@@ -35,7 +46,9 @@ export default function AppliedRequestListItem({
         setIsModalOpen(true, () => {
           return;
         });
+        onClick(appliedRequest);
       }}
+      color={selected && !isMobile ? 'tertiary' : ''}
       detail={false}
       className={styles['item-container']}
     >
@@ -46,15 +59,15 @@ export default function AppliedRequestListItem({
             : styles['alert-line']
         }
       />
-      <IonGrid className="ion-margin-left">
+      <IonGrid>
         <IonRow className={`${styles['post-container']}`}>
-          <IonCol size="3">
+          <IonCol size="4" sizeLg="5">
             <LocationImage
               location={appliedRequest.post.location}
             ></LocationImage>
           </IonCol>
           <IonCol size="1"></IonCol>
-          <IonCol size="8">
+          <IonCol size="6">
             <p className={styles['post-text-location']}>
               {locationEnumToStr(appliedRequest.post.location)}
             </p>
@@ -73,11 +86,13 @@ export default function AppliedRequestListItem({
         </IonRow>
       </IonGrid>
 
-      <AppliedPostModal
-        isOpen={isModalOpen}
-        onClose={closeModal}
-        appliedRequest={appliedRequest}
-      />
+      {isMobile && (
+        <AppliedPostModal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          appliedRequest={appliedRequest}
+        />
+      )}
     </IonItem>
   );
 }

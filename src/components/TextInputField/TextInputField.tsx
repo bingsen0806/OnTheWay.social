@@ -18,7 +18,6 @@ interface TextInputFieldProps {
 
 export default function TextInputField({
   value,
-  autocomplete,
   onChange,
   label,
   multiline = false,
@@ -47,6 +46,7 @@ export default function TextInputField({
               }
               maxlength={maxlength}
               type={type}
+              className={styles['input-field']}
             />
           </>
         ) : (

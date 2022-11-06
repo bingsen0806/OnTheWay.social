@@ -1,14 +1,12 @@
 import {
+  getPlatforms,
   IonButton,
   IonChip,
   IonCol,
   IonContent,
-  IonFooter,
   IonGrid,
   IonHeader,
   IonIcon,
-  IonInfiniteScroll,
-  IonInfiniteScrollContent,
   IonMenu,
   IonMenuToggle,
   IonPage,
@@ -30,30 +28,24 @@ import {
   TimeOfDay,
   timeOfDayEnumToStr,
 } from '../../api/types';
-import LoadingSpinner from '../../components/LoadingSpinner';
-import PostListItem from '../../components/PostListItem';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { useAppDispatch } from '../../redux/hooks';
 import {
-  getInitialPostsData,
   getNewPageOfPostsWithFilter,
-  getNextPageOfPosts,
 } from '../../redux/slices/postsSlice';
 import { CREATE_POST, LOGIN } from '../../routes';
 import { useAuthState } from '../../util/authentication';
 import useCheckedErrorHandler from '../../util/hooks/useCheckedErrorHandler';
-import usePageInitialLoad from '../../util/hooks/usePageInitialLoad';
 import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
-import NoData from '../NoData';
+import PostsPageBody from './PostsPageBody';
 import styles from './styles.module.scss';
 
 export default function PostsPage() {
   const history = useHistory();
-  const listOfPosts = useAppSelector((state) => state.posts.posts);
-  const isLoading = useAppSelector((state) => state.posts.isLoading);
   const dispatch = useAppDispatch();
   const handleCheckedError = useCheckedErrorHandler();
   const handleUnknownError = useUnknownErrorHandler();
   const { isAuthenticated } = useAuthState();
+  const isMobile = getPlatforms().includes('mobile');
 
   const [filterLocations, setFilterLocations] = useState<{
     [key in Location]: boolean;
@@ -188,33 +180,6 @@ export default function PostsPage() {
       });
   }
 
-  function requestNextPageOfPosts() {
-    dispatch(getNextPageOfPosts())
-      .unwrap()
-      .then((resp) => {
-        if (!resp.success) {
-          handleCheckedError(resp.message as string);
-        }
-      })
-      .catch((error) => {
-        handleUnknownError(error);
-      });
-  }
-
-  // fetch the data right before this scren is opened
-  usePageInitialLoad(() => {
-    dispatch(getInitialPostsData())
-      .unwrap()
-      .then((resp) => {
-        if (!resp.success) {
-          handleCheckedError(resp.message as string);
-        }
-      })
-      .catch((error) => {
-        handleUnknownError(error);
-      });
-  });
-
   function refreshContents(event: CustomEvent<RefresherEventDetail>) {
     const newLocationFilter: Location[] = [];
     for (const location in filterLocations) {
@@ -292,7 +257,7 @@ export default function PostsPage() {
                 {dayOfTheWeekEnumToStr(dayOfTheWeek as DayOfTheWeek)}
               </IonChip>
             ))}
-          <h4 className={styles['filter-category-header']}>Times</h4>
+          <h4 className={styles['filter-category-header']}>Start Time</h4>
           {Object.values(TimeOfDay)
             .filter((v) => !isNaN(Number(v)))
             .map((time) => (
@@ -306,122 +271,87 @@ export default function PostsPage() {
                 {timeOfDayEnumToStr(time as TimeOfDay)}
               </IonChip>
             ))}
+          <IonGrid>
+            <IonRow>
+              <IonCol>
+                <IonMenuToggle>
+                  <IonButton
+                    color="medium"
+                    fill="outline"
+                    expand="block"
+                    onClick={resetFilter}
+                  >
+                    Reset
+                  </IonButton>
+                </IonMenuToggle>
+              </IonCol>
+              <IonCol>
+                <IonMenuToggle>
+                  <IonButton
+                    color="primary"
+                    expand="block"
+                    onClick={applyNewFilter}
+                  >
+                    Apply
+                  </IonButton>
+                </IonMenuToggle>
+              </IonCol>
+            </IonRow>
+          </IonGrid>
         </IonContent>
-        <IonFooter>
-          <IonToolbar>
-            <IonGrid>
-              <IonRow>
-                <IonCol>
-                  <IonMenuToggle>
-                    <IonButton
-                      color="medium"
-                      fill="outline"
-                      expand="block"
-                      onClick={resetFilter}
-                    >
-                      Reset
-                    </IonButton>
-                  </IonMenuToggle>
-                </IonCol>
-                <IonCol>
-                  <IonMenuToggle>
-                    <IonButton
-                      color="primary"
-                      expand="block"
-                      onClick={applyNewFilter}
-                    >
-                      Apply
-                    </IonButton>
-                  </IonMenuToggle>
-                </IonCol>
-              </IonRow>
-            </IonGrid>
-          </IonToolbar>
-        </IonFooter>
       </IonMenu>
       <IonPage id="main-content">
-        <IonHeader>
-          <IonToolbar>
-            <div className="ion-padding-start ion-padding-bottom" slot="start">
-              <h1>Study Sessions</h1>
-              {isAuthenticated ? (
-                <IonButton
-                  onClick={() => {
-                    history.push(CREATE_POST);
-                  }}
-                  size="small"
-                  expand="block"
-                  slot="start"
-                >
-                  Create Study Session
+        <div className={styles['header']}>
+          <IonHeader>
+            <IonToolbar>
+              <div>
+                <h1>Study Sessions</h1>
+                {isMobile && isAuthenticated && (
+                  <IonButton
+                    onClick={() => {
+                      history.replace(CREATE_POST);
+                    }}
+                    size="small"
+                    slot="start"
+                    className="ion-margin-bottom"
+                  >
+                    Create Study Session
+                  </IonButton>
+                )}
+                {isMobile && !isAuthenticated && (
+                  <IonButton
+                    onClick={() => {
+                      history.replace(LOGIN);
+                    }}
+                    size="small"
+                    slot="start"
+                    className="ion-margin-bottom"
+                  >
+                    Login
+                  </IonButton>
+                )}
+              </div>
+              <IonMenuToggle slot="end">
+                <IonButton fill="clear" color="dark">
+                  <IonIcon icon={funnelOutline} slot="start"></IonIcon>
+                  <p>Filter</p>
                 </IonButton>
-              ) : (
-                <IonButton
-                  href={LOGIN}
-                  size="small"
-                  expand="block"
-                  slot="start"
-                >
-                  Login
-                </IonButton>
-              )}
-            </div>
-            <IonMenuToggle slot="end">
-              <IonButton fill="clear" color="dark">
-                <IonIcon icon={funnelOutline} slot="start"></IonIcon>
-                <p>Filter</p>
-              </IonButton>
-            </IonMenuToggle>
-          </IonToolbar>
-        </IonHeader>
-        <IonContent
-          fullscreen
-          className={
-            listOfPosts.length === 0 ? '' : styles['posts-list-container']
-          }
-        >
-          {isLoading && <LoadingSpinner />}
-          {!isLoading && (
-            <>
-              <IonRefresher slot="fixed" onIonRefresh={refreshContents}>
-                <IonRefresherContent></IonRefresherContent>
-              </IonRefresher>
-              {listOfPosts.length === 0 ? (
-                <NoData>
-                  <div>
-                    <p>No study sessions!</p>
-                    <IonButton
-                      onClick={() => {
-                        history.replace(CREATE_POST);
-                      }}
-                      expand="block"
-                    >
-                      Create a study session
-                    </IonButton>
-                  </div>
-                </NoData>
-              ) : (
-                <IonGrid className="ion-margin-top">
-                  <IonRow className="ion-justify-content-center">
-                    <IonCol size="12" sizeMd="6">
-                      {listOfPosts.map((data) => (
-                        <PostListItem post={data} key={data.id}></PostListItem>
-                      ))}
-                    </IonCol>
-                  </IonRow>
-                </IonGrid>
-              )}
-
-              <IonInfiniteScroll
-                onIonInfinite={requestNextPageOfPosts}
-                threshold="50px"
-                disabled={listOfPosts.length < 20}
-              >
-                <IonInfiniteScrollContent loadingSpinner="circles"></IonInfiniteScrollContent>
-              </IonInfiniteScroll>
-            </>
-          )}
-        </IonContent>
+              </IonMenuToggle>
+            </IonToolbar>
+          </IonHeader>
+        </div>
+        {isMobile ? (
+          <IonContent fullscreen>
+            <IonRefresher slot="fixed" onIonRefresh={refreshContents}>
+              <IonRefresherContent></IonRefresherContent>
+            </IonRefresher>
+            <PostsPageBody />
+          </IonContent>
+        ) : (
+          <IonContent fullscreen>
+            <PostsPageBody />
+          </IonContent>
+        )}
       </IonPage>
     </>
   );

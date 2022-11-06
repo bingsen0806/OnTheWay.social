@@ -17,7 +17,7 @@ import DropdownSelection, {
 } from '../../components/DropdownSelection';
 import TextInputField from '../../components/TextInputField/TextInputField';
 import { analytics } from '../../firebase';
-import { HOME } from '../../routes';
+import { BROWSE } from '../../routes';
 import useCheckedErrorHandler from '../../util/hooks/useCheckedErrorHandler';
 import useErrorToast from '../../util/hooks/useErrorToast';
 import useInfoToast from '../../util/hooks/useInfoToast';
@@ -174,9 +174,8 @@ export default function ProfileCreationPage() {
     try {
       setIsLoading(true);
       const resp = await createUserProfile(userDetails);
-      console.log(resp);
       if (resp.success) {
-        history.replace(HOME);
+        history.replace(BROWSE);
         presentInfoToast(
           'User profile creation successful. Enjoy using BuddyNUS!'
         );

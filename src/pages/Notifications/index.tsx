@@ -14,7 +14,7 @@ import {
 } from '@ionic/react';
 import { arrowBackOutline } from 'ionicons/icons';
 import { useLayoutEffect, useState } from 'react';
-import LoadingSpinner from '../../components/LoadingSpinner';
+import FullScreenLoadingSpinner from '../../components/FullScreenLoadingSpinner';
 import { generateAndSendNotificationRegistrationToken } from '../../firebase';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { loadNotifications } from '../../redux/slices/notificationsSlice';
@@ -68,7 +68,6 @@ export default function NotificationsPage() {
   };
 
   function requestNotificationPermissionsPopup() {
-    console.log(Notification.permission);
     if (Notification.permission === 'denied') {
       presentErrorToast(
         'Notifications from BuddyNUS on your browser are currently blocked!'
@@ -132,7 +131,7 @@ export default function NotificationsPage() {
       </IonHeader>
       <IonContent fullscreen>
         {isLoading ? (
-          <LoadingSpinner />
+          <FullScreenLoadingSpinner />
         ) : (
           <>
             <IonRefresher slot="fixed" onIonRefresh={refreshPage}>
@@ -148,7 +147,9 @@ export default function NotificationsPage() {
                 ))
               ) : (
                 <NoData>
-                  <p>You have no notifications. Check again later!</p>
+                  <p className="ion-text-center">
+                    You have no notifications. Check again later!
+                  </p>
                 </NoData>
               )}
             </IonList>

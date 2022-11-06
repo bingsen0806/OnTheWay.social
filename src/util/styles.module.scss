@@ -1,0 +1,36 @@
+.footer {
+  background-color: #fff;
+  box-shadow: 0 15px 10px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.16);
+  display: flex;
+  padding: 30px;
+  justify-content: space-between;
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  height: 50px;
+}
+
+.tab {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2em;
+  margin: -2em;
+  opacity: 0.6;
+  font-size: 24px;
+  color: #000;
+}
+
+.tab-selected {
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 10px;
+  margin: 0 5px;
+  color: #ff735c;
+  padding: 2em;
+  margin: -2em;
+}

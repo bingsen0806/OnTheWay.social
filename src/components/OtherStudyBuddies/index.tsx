@@ -22,7 +22,7 @@ export default function OtherStudyBuddies({
           <p>No one is participating in this study session yet.</p>
         )}
         {!inCreatedRequest && studyBuddies.length === 0 && (
-          <IonCol>
+          <IonCol className="ion-no-padding ion-no-margin">
             <p>
               No one is participating in this study session yet. Be the first!
             </p>

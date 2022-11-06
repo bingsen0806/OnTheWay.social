@@ -15,6 +15,7 @@ import {
   IonIcon,
   IonPopover,
   useIonViewDidEnter,
+  getPlatforms,
 } from '@ionic/react';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { helpCircleOutline } from 'ionicons/icons';
@@ -24,7 +25,7 @@ import ArtCard from './ArtCard';
 export default function Art() {
   const obtainedArt = useAppSelector((state) => state.user.user.art ?? []);
   const dispatch = useAppDispatch();
-
+  const isMobile = getPlatforms().includes('mobile');
   useIonViewDidEnter(() => {
     void dispatch(reloadSelf());
   });
@@ -41,9 +42,11 @@ export default function Art() {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonButtons slot="start">
-            <IonBackButton />
-          </IonButtons>
+          {isMobile && (
+            <IonButtons slot="start">
+              <IonBackButton />
+            </IonButtons>
+          )}
           <h1
             slot="start"
             className={`ion-padding-start ${styles['art-header-text']}`}

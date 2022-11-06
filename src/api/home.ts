@@ -1,7 +1,3 @@
-/**
- * TODO: add firebase functions here for api calls
- */
-
 import { httpsCallable } from 'firebase/functions';
 import { firestoreFunctions } from '../firebase';
 import {

@@ -13,6 +13,7 @@ import {
   IonGrid,
   IonRow,
   IonCol,
+  getPlatforms,
 } from '@ionic/react';
 import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -28,10 +29,13 @@ import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
 import NoData from '../NoData';
 import AppliedRequestListItem from './components/RequesListItems/AppliedRequestListItem';
 import CreatedRequestListItem from './components/RequesListItems/CreatedRequestListItem';
-import { CREATE_POST, HOME } from '../../routes';
+import { BROWSE, CREATE_POST } from '../../routes';
 import { useHistory } from 'react-router';
-import LoadingSpinner from '../../components/LoadingSpinner';
 import { useAuthState } from '../../util/authentication';
+import SelectedCreatedRequest from './components/SelectedCreatedRequest';
+import { AppliedRequest, CreatedRequest } from '../../api/types';
+import SelectedAppliedRequest from './components/SelectedAppliedRequest';
+import FullScreenLoadingSpinner from '../../components/FullScreenLoadingSpinner';
 
 enum HomeTab {
   APPLIED_POST = 'Applied',
@@ -39,6 +43,8 @@ enum HomeTab {
 }
 
 export default function Sessions() {
+  const params = new URLSearchParams(window.location.search);
+  const page = params.get('page');
   const history = useHistory();
   const dispatch = useAppDispatch();
   const appliedPosts = useAppSelector((state) => state.home.appliedRequests);
@@ -46,9 +52,39 @@ export default function Sessions() {
   const isLoading = useAppSelector((state) => state.home.isLoading);
   const handleCheckedError = useCheckedErrorHandler();
   const handleUnknownError = useUnknownErrorHandler();
-  const [tabToShow, setTabToShow] = useState<HomeTab>(HomeTab.CREATED_POST);
-
+  const [tabToShow, setTabToShow] = useState<HomeTab>(
+    page ? HomeTab.APPLIED_POST : HomeTab.CREATED_POST
+  );
+  const isMobile = getPlatforms().includes('mobile');
   const { isAuthenticated } = useAuthState();
+  const [selectedRequest, setSelectedRequest] = useState<CreatedRequest | null>(
+    null
+  );
+  const [selectedAppliedRequest, setSelectedAppliedRequest] =
+    useState<AppliedRequest | null>(null);
+
+  const setRequestOnClick = (request: CreatedRequest) =>
+    setSelectedRequest(request);
+
+  if (selectedRequest !== null) {
+    //do a check if post is still in list of posts
+    const listFiltered = createdPosts.filter(
+      (req) => req.post.id === selectedRequest.post.id
+    );
+    if (listFiltered.length === 0) {
+      setSelectedRequest(null);
+    }
+  }
+
+  if (selectedAppliedRequest !== null) {
+    //do a check if post is still in list of posts
+    const listFiltered = appliedPosts.filter(
+      (req) => req.post.id === selectedAppliedRequest.post.id
+    );
+    if (listFiltered.length === 0) {
+      setSelectedAppliedRequest(null);
+    }
+  }
 
   usePageInitialLoad(() => {
     if (isAuthenticated) {
@@ -112,8 +148,8 @@ export default function Sessions() {
   function renderListBasedOnTab() {
     if (isLoading) {
       return (
-        <IonContent>
-          <LoadingSpinner />
+        <IonContent fullscreen>
+          <FullScreenLoadingSpinner />
         </IonContent>
       );
     }
@@ -126,7 +162,9 @@ export default function Sessions() {
             </IonRefresher>
             <NoData>
               <div>
-                <p>You have not created any posts</p>
+                <p className="ion-text-center">
+                  You have not created any posts
+                </p>
                 <IonButton
                   onClick={() => {
                     history.push(CREATE_POST);
@@ -147,14 +185,36 @@ export default function Sessions() {
           </IonRefresher>
           <IonGrid className="ion-margin-top ion-no-padding">
             <IonRow className="ion-justify-content-center ion-no-padding">
-              <IonCol size="12" sizeMd="6" sizeLg="4">
-                {createdPosts.map((post) => (
-                  <CreatedRequestListItem
-                    key={post.post.id}
-                    createdRequest={post}
-                  ></CreatedRequestListItem>
-                ))}
+              <IonCol size={isMobile ? '12' : '5'}>
+                {isMobile ? (
+                  <>
+                    {createdPosts.map((post) => (
+                      <CreatedRequestListItem
+                        key={post.post.id}
+                        createdRequest={post}
+                        onClick={setRequestOnClick}
+                        selected={selectedRequest?.post.id === post.post.id}
+                      ></CreatedRequestListItem>
+                    ))}
+                  </>
+                ) : (
+                  <IonContent fullscreen>
+                    {createdPosts.map((post) => (
+                      <CreatedRequestListItem
+                        key={post.post.id}
+                        createdRequest={post}
+                        onClick={setRequestOnClick}
+                        selected={selectedRequest?.post.id === post.post.id}
+                      ></CreatedRequestListItem>
+                    ))}
+                  </IonContent>
+                )}
               </IonCol>
+              {!isMobile && (
+                <IonCol size="7">
+                  <SelectedCreatedRequest createdRequest={selectedRequest} />
+                </IonCol>
+              )}
             </IonRow>
           </IonGrid>
         </IonContent>
@@ -168,14 +228,16 @@ export default function Sessions() {
             </IonRefresher>
             <NoData>
               <div>
-                <p>You have not applied for any study posts</p>
+                <p className="ion-text-center">
+                  You have not applied for any study session
+                </p>
                 <IonButton
                   onClick={() => {
-                    history.push(HOME);
+                    history.push(BROWSE);
                   }}
                   expand="block"
                 >
-                  Find a study buddy
+                  Find a session
                 </IonButton>
               </div>
             </NoData>
@@ -189,14 +251,42 @@ export default function Sessions() {
           </IonRefresher>
           <IonGrid className="ion-margin-top ion-no-padding">
             <IonRow className="ion-justify-content-center ion-no-padding">
-              <IonCol size="12" sizeMd="6" sizeLg="4">
-                {appliedPosts.map((post) => (
-                  <AppliedRequestListItem
-                    key={post.post.id}
-                    appliedRequest={post}
-                  />
-                ))}
+              <IonCol size={isMobile ? '12' : '5'}>
+                {isMobile ? (
+                  <>
+                    {appliedPosts.map((post) => (
+                      <AppliedRequestListItem
+                        onClick={setSelectedAppliedRequest}
+                        selected={
+                          selectedAppliedRequest?.post.id === post.post.id
+                        }
+                        key={post.post.id}
+                        appliedRequest={post}
+                      />
+                    ))}
+                  </>
+                ) : (
+                  <IonContent fullscreen>
+                    {appliedPosts.map((post) => (
+                      <AppliedRequestListItem
+                        onClick={setSelectedAppliedRequest}
+                        selected={
+                          selectedAppliedRequest?.post.id === post.post.id
+                        }
+                        key={post.post.id}
+                        appliedRequest={post}
+                      />
+                    ))}
+                  </IonContent>
+                )}
               </IonCol>
+              {!isMobile && (
+                <IonCol sizeLg="7">
+                  <SelectedAppliedRequest
+                    appliedRequest={selectedAppliedRequest}
+                  />
+                </IonCol>
+              )}
             </IonRow>
           </IonGrid>
         </IonContent>
@@ -206,10 +296,12 @@ export default function Sessions() {
 
   return (
     <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <h1 className="ion-padding-start">Your sessions</h1>
-        </IonToolbar>
+      <IonHeader className="ion-no-margin">
+        {isMobile && (
+          <IonToolbar>
+            <h1 className="ion-padding-start">Your sessions</h1>
+          </IonToolbar>
+        )}
         <IonToolbar>
           <IonSegment
             value={tabToShow}

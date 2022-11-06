@@ -3,7 +3,7 @@
 import { createElement } from 'react';
 import { Redirect, Route } from 'react-router-dom';
 import { useAuthState } from '.';
-import { EMAIL_VERIFICATION, HOME } from '../../routes';
+import { BROWSE, EMAIL_VERIFICATION, HOME } from '../../routes';
 
 interface UnauthenticatedRouteProps {
   exact?: boolean;
@@ -31,7 +31,7 @@ export default function UnauthenticatedRoute({
                 to={{
                   pathname: props.location.state?.from
                     ? props.location.state.from.pathname
-                    : HOME,
+                    : BROWSE,
                   state: { from: props.location },
                 }}
               />

@@ -6,6 +6,7 @@ import {
   isPlatform,
 } from '@ionic/react';
 import { useState } from 'react';
+import styles from './styles.module.scss';
 
 export interface DropdownItem<T> {
   label: string;
@@ -65,6 +66,7 @@ export default function DropdownSelection<T>({
               {item.label}
             </IonSelectOption>
           ))}
+          className={styles['dropdown']}
         </IonSelect>
       </IonItem>
       {shouldShowError && !isSelected && (

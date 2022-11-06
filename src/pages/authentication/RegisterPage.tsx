@@ -25,10 +25,6 @@ interface RegisterErrorMessages {
   confirmationPassword: string;
 }
 
-/**
- * Login page component.
- * TODO: forgot password functionality after MVP.
- */
 export default function RegisterPage() {
   const presentErrorToast = useErrorToast();
   const [isLoading, setIsLoading] = useState<boolean>(false);

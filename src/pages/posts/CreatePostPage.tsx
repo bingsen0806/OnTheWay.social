@@ -24,7 +24,7 @@ import TextInputField from '../../components/TextInputField/TextInputField';
 import { analytics } from '../../firebase';
 import { useAppDispatch } from '../../redux/hooks';
 import { reloadInitialData } from '../../redux/slices/homeSlice';
-import { HOME } from '../../routes';
+import { SESSIONS } from '../../routes';
 import { roundToNext15mins } from '../../util/dateUtils';
 import useCheckedErrorHandler from '../../util/hooks/useCheckedErrorHandler';
 import useInfoToast from '../../util/hooks/useInfoToast';
@@ -100,7 +100,12 @@ export default function CreatePostPage() {
   const [post, setPost] = useState<Post>({ description: '' } as Post);
   const [date, setDate] = useState<string>(moment().toISOString(true));
   const [startTime, setStartTime] = useState<string>(
-    roundToNext15mins(moment()).toISOString(true)
+    moment
+      .min([
+        roundToNext15mins(moment()),
+        moment().set('hour', 23).set('minute', 45),
+      ])
+      .toISOString(true)
   );
   const [endTime, setEndTime] = useState<string>(
     moment
@@ -194,9 +199,9 @@ export default function CreatePostPage() {
         } else {
           setPost({ description: '' } as Post);
           presentInfoToast('Successfully created new post!');
+          setIsLoading(false);
           void dispatch(reloadInitialData()).then(() => {
-            history.push(HOME);
-            setIsLoading(false);
+            history.push(SESSIONS);
           });
           logEvent(analytics, 'create_post');
         }
@@ -216,11 +221,11 @@ export default function CreatePostPage() {
           </h1>
         </IonToolbar>
         <IonToolbar>
-          <div className="ion-margin">
-            <p>
+          <div>
+            <p className="ion-no-margin ion-no-padding">
               You will be notified via email when others apply for your session.
             </p>
-            <p>
+            <p className="ion-no-margin ion-no-padding">
               Your telegram handle will only be shared with applicants after you
               accept them.
             </p>
@@ -230,7 +235,7 @@ export default function CreatePostPage() {
       <IonContent fullscreen className={styles['content-container']}>
         <IonGrid fixed className="ion-padding">
           <IonRow className="ion-justify-content-center">
-            <IonCol sizeMd="8" sizeLg="4">
+            <IonCol sizeMd="8" sizeLg="6">
               <DropdownSelection<Location>
                 placeholder="Location"
                 dropdownItems={locationDropdownItems}
@@ -242,7 +247,7 @@ export default function CreatePostPage() {
             </IonCol>
           </IonRow>
           <IonRow className="ion-justify-content-center">
-            <IonCol sizeMd="8" sizeLg="4">
+            <IonCol sizeMd="8" sizeLg="6">
               <DateTimePicker
                 value={date}
                 type="date"
@@ -255,26 +260,18 @@ export default function CreatePostPage() {
             </IonCol>
           </IonRow>
           <IonRow className="ion-justify-content-center">
-            <IonCol sizeMd="4" sizeLg="2">
+            <IonCol sizeMd="4" sizeLg="3">
               <DateTimePicker
                 value={startTime}
                 type="time"
                 label="Start"
                 onChange={(startTime) => {
                   setStartTime(startTime);
-                  setEndTime(
-                    moment
-                      .min([
-                        moment(startTime).add(2, 'hours'),
-                        moment(startTime).set('hour', 23).set('minute', 45),
-                      ])
-                      .toISOString(true)
-                  );
                 }}
                 errorMessage={errorMessages.startTime}
               ></DateTimePicker>
             </IonCol>
-            <IonCol sizeMd="4" sizeLg="2">
+            <IonCol sizeMd="4" sizeLg="3">
               <DateTimePicker
                 value={endTime}
                 type="time"
@@ -286,9 +283,8 @@ export default function CreatePostPage() {
               ></DateTimePicker>
             </IonCol>
           </IonRow>
-          <IonRow className="ion-justify-content-center"></IonRow>
           <IonRow className="ion-justify-content-center">
-            <IonCol sizeMd="8" sizeLg="4">
+            <IonCol sizeMd="8" sizeLg="6">
               <TextInputField
                 multiline
                 label="Description"
@@ -311,6 +307,7 @@ export default function CreatePostPage() {
               </IonButton>
             </IonCol>
           </IonRow>
+          {/* below for spacing for keyboard on mobile  */}
           <IonRow>
             <IonCol>
               <br></br>

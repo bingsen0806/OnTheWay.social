@@ -1,12 +1,15 @@
 import {
+  getPlatforms,
   IonContent,
   IonHeader,
   IonItem,
   IonLabel,
   IonModal,
+  IonPopover,
   IonTitle,
   IonToolbar,
 } from '@ionic/react';
+import moment from 'moment';
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import {
@@ -19,7 +22,7 @@ import {
 } from '../../../api/types';
 import { useAppDispatch } from '../../../redux/hooks';
 import { markNotification } from '../../../redux/slices/notificationsSlice';
-import { ART } from '../../../routes';
+import { ART, SESSIONS } from '../../../routes';
 import {
   convertDateRangeToTimeRangeStr,
   convertDateToDateStr,
@@ -38,6 +41,7 @@ export default function NotificationListItem({
   const dispatch = useAppDispatch();
   const history = useHistory();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const isMobile = getPlatforms().includes('mobile');
 
   function closeModal() {
     setIsModalOpen(false);
@@ -47,15 +51,49 @@ export default function NotificationListItem({
     if (notification.type === BuddyNotificationType.RECEIVED_NEW_ART) {
       history.push(ART);
     }
-    // TODO: check if need any error handling here
     void dispatch(markNotification(notification.id));
-    setIsModalOpen(true);
+    if (isMobile) {
+      setIsModalOpen(true);
+    } else {
+      if (notification.type === BuddyNotificationType.APPLIED_TO_YOUR_POST) {
+        history.push(SESSIONS);
+      } else if (
+        notification.type === BuddyNotificationType.ACCEPTED_YOUR_APPLICATION
+      ) {
+        history.push({
+          pathname: SESSIONS,
+          search: `?page=1`,
+        });
+      }
+    }
   }
 
   function getModalComponent() {
     switch (notification.type) {
       case BuddyNotificationType.APPLIED_TO_YOUR_POST:
       case BuddyNotificationType.CANCELLED_THEIR_APPLICATION:
+        if (
+          moment(
+            (notification.data as CreatedRequest).post.endDateTime,
+            true
+          ).isBefore(moment())
+        ) {
+          return (
+            <IonPopover
+              isOpen={isModalOpen}
+              onDidDismiss={() => {
+                setIsModalOpen(false);
+              }}
+            >
+              <IonContent class="ion-padding">
+                <p>
+                  The post associated with this application is already past and
+                  no longer exists.
+                </p>
+              </IonContent>
+            </IonPopover>
+          );
+        }
         return (
           <CreatedPostModal
             isOpen={isModalOpen}
@@ -64,6 +102,29 @@ export default function NotificationListItem({
           ></CreatedPostModal>
         );
       case BuddyNotificationType.ACCEPTED_YOUR_APPLICATION:
+        if (
+          moment(
+            (notification.data as AppliedRequest).post.endDateTime,
+            true
+          ).isBefore(moment())
+        ) {
+          return (
+            <IonPopover
+              isOpen={isModalOpen}
+              onDidDismiss={() => {
+                setIsModalOpen(false);
+              }}
+            >
+              <IonContent>
+                <p>
+                  The post associated with this application is already past and
+                  no longer exists.
+                </p>
+              </IonContent>
+            </IonPopover>
+          );
+        }
+
         return (
           <AppliedPostModal
             isOpen={isModalOpen}
@@ -74,7 +135,6 @@ export default function NotificationListItem({
       case BuddyNotificationType.DELETED_POST_YOU_APPLIED_FOR:
         return null;
       case BuddyNotificationType.GENERIC_MESSAGE:
-        //TODO: fill in this modal for generic message
         return (
           <IonModal>
             <IonHeader>
@@ -181,7 +241,7 @@ export default function NotificationListItem({
         <h2>{getTitleAndMessage().title}</h2>
         <p>{getTitleAndMessage().message}</p>
       </IonLabel>
-      {getModalComponent()}
+      {isMobile && getModalComponent()}
     </IonItem>
   );
 }
