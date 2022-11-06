@@ -29,5 +29,7 @@ p {
 }
 
 .padding {
-  margin-bottom: 10vh;
+  @media screen and (min-width: 1024px) {
+    margin-bottom: 10vh;
+  }
 }
