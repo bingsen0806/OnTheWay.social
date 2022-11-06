@@ -3,7 +3,6 @@ import {
   IonButton,
   IonButtons,
   IonCol,
-  IonContent,
   IonGrid,
   IonHeader,
   IonIcon,
@@ -28,9 +27,7 @@ import {
 } from '../../redux/slices/homeSlice';
 import { analytics } from '../../firebase';
 import { logEvent } from 'firebase/analytics';
-import {
-  reloadInitialPostsData,
-} from '../../redux/slices/postsSlice';
+import { reloadInitialPostsData } from '../../redux/slices/postsSlice';
 import OtherStudyBuddies from '../../components/OtherStudyBuddies';
 import useInfoToast from '../../util/hooks/useInfoToast';
 import ButtonSpinner from '../../components/ButtonSpinner';
@@ -39,7 +36,6 @@ import {
   removeNotification,
   replaceNotification,
 } from '../../redux/slices/notificationsSlice';
-import styles from './styles.module.scss';
 
 interface PosterViewRequestProps {
   onClose?: (callback: () => void) => void;
@@ -158,56 +154,55 @@ export default function CreatedPostInformation({
           </IonToolbar>
         </IonHeader>
       )}
-      <IonContent fullscreen={isMobile} className={styles['no-padding']}>
-        <IonGrid>
-          <IonRow className="ion-justify-content-center">
-            <IonCol sizeMd="11">
-              <OtherStudyBuddies
-                inCreatedRequest
-                studyBuddies={createdRequestState.post.participants}
-              ></OtherStudyBuddies>
-              <ApplicantList
-                postId={createdRequestState.post.id}
-                applicants={createdRequestState.applicants}
-                addParticipantToCreatedRequest={addParticipantToCreatedRequest}
-              />
-              <PostDetails post={createdRequestState.post} />
-              <IonButton
-                className="ion-padding-horizontal ion-margin-vertical"
-                expand="block"
-                fill="outline"
-                color="danger"
-                onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
-                  event.stopPropagation();
-                  if (isLoading) {
-                    return;
-                  }
-                  void presentAlert({
-                    header: 'Warning!',
-                    message:
-                      'You are deleting a study session. This is irreversible',
-                    buttons: [
-                      {
-                        text: 'Cancel',
-                        role: 'cancel',
+
+      <IonGrid>
+        <IonRow className="ion-justify-content-center">
+          <IonCol size="11">
+            <OtherStudyBuddies
+              inCreatedRequest
+              studyBuddies={createdRequestState.post.participants}
+            ></OtherStudyBuddies>
+            <ApplicantList
+              postId={createdRequestState.post.id}
+              applicants={createdRequestState.applicants}
+              addParticipantToCreatedRequest={addParticipantToCreatedRequest}
+            />
+            <PostDetails post={createdRequestState.post} />
+            <IonButton
+              className="ion-padding-horizontal ion-margin-vertical"
+              expand="block"
+              fill="outline"
+              color="danger"
+              onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
+                event.stopPropagation();
+                if (isLoading) {
+                  return;
+                }
+                void presentAlert({
+                  header: 'Warning!',
+                  message:
+                    'You are deleting a study session. This is irreversible',
+                  buttons: [
+                    {
+                      text: 'Cancel',
+                      role: 'cancel',
+                    },
+                    {
+                      text: 'Delete Post',
+                      role: 'confirm',
+                      handler: () => {
+                        void handleDelete(createdRequestState.post?.id);
                       },
-                      {
-                        text: 'Delete Post',
-                        role: 'confirm',
-                        handler: () => {
-                          void handleDelete(createdRequestState.post?.id);
-                        },
-                      },
-                    ],
-                  });
-                }}
-              >
-                {isLoading ? <ButtonSpinner /> : 'Delete'}
-              </IonButton>
-            </IonCol>
-          </IonRow>
-        </IonGrid>
-      </IonContent>
+                    },
+                  ],
+                });
+              }}
+            >
+              {isLoading ? <ButtonSpinner /> : 'Delete'}
+            </IonButton>
+          </IonCol>
+        </IonRow>
+      </IonGrid>
     </>
   );
 }

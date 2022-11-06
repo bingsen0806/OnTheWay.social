@@ -3,7 +3,6 @@ import {
   IonButton,
   IonButtons,
   IonCol,
-  IonContent,
   IonGrid,
   IonHeader,
   IonIcon,
@@ -164,96 +163,94 @@ export default function PostInformation({
           </IonToolbar>
         </IonHeader>
       )}
-      <IonContent fullscreen={isMobile} className={styles['no-padding']}>
-        <IonGrid>
-          <IonRow className="ion-justify-content-center">
-            <IonCol sizeMd="8" sizeLg="11">
-              <PostDetails post={applyPost} />
-              {!isAuthenticated && (
-                <UnauthenticatedPostDetails closeDialog={onClose} />
-              )}
-              {isAuthenticated && (
-                <>
-                  <OtherStudyBuddies studyBuddies={applyPost.participants} />
-                  <AboutPoster poster={applyPost?.poster} post={applyPost} />
-                  {isApplied ? (
-                    <IonButton
-                      className={`ion-padding-horizontal ion-margin-top ${
-                        isMobile ? styles['cancel-button'] : ''
-                      }`}
-                      fill="outline"
-                      color="danger"
-                      expand="block"
-                      onClick={(
-                        event: React.MouseEvent<HTMLIonButtonElement>
-                      ) => {
-                        event.stopPropagation();
-                        if (isLoading) {
-                          return;
-                        }
-                        void presentAlert({
-                          header: 'Confirm cancelllation?',
-                          buttons: [
-                            {
-                              text: 'Cancel',
-                              role: 'cancel',
-                            },
-                            {
-                              text: 'Confirm',
-                              role: 'confirm',
-                              handler: () => {
-                                sendCancellationRequest(applyPost.id);
-                              },
-                            },
-                          ],
-                        });
-                      }}
-                    >
-                      {isLoading ? <ButtonSpinner /> : 'Cancel'}
-                    </IonButton>
-                  ) : (
-                    <IonButton
-                      className={
-                        isMobile
-                          ? `${styles['accept-button']} ion-padding-horizontal ion-margin-top`
-                          : `${styles['accept-button']} ${styles['accept-button-top']} ion-padding-horizontal ion-margin-top`
+      <IonGrid>
+        <IonRow className="ion-justify-content-center">
+          <IonCol sizeMd="8" sizeLg="11">
+            <PostDetails post={applyPost} />
+            {!isAuthenticated && (
+              <UnauthenticatedPostDetails closeDialog={onClose} />
+            )}
+            {isAuthenticated && (
+              <>
+                <OtherStudyBuddies studyBuddies={applyPost.participants} />
+                <AboutPoster poster={applyPost?.poster} post={applyPost} />
+                {isApplied ? (
+                  <IonButton
+                    className={`ion-padding-horizontal ion-margin-top ${
+                      isMobile ? styles['cancel-button'] : ''
+                    }`}
+                    fill="outline"
+                    color="danger"
+                    expand="block"
+                    onClick={(
+                      event: React.MouseEvent<HTMLIonButtonElement>
+                    ) => {
+                      event.stopPropagation();
+                      if (isLoading) {
+                        return;
                       }
-                      expand="block"
-                      color="primary"
-                      onClick={(
-                        event: React.MouseEvent<HTMLIonButtonElement>
-                      ) => {
-                        event.stopPropagation();
-                        if (isLoading) {
-                          return;
-                        }
-                        void presentAlert({
-                          header: 'Confirm Application?',
-                          buttons: [
-                            {
-                              text: 'Cancel',
-                              role: 'cancel',
+                      void presentAlert({
+                        header: 'Confirm cancelllation?',
+                        buttons: [
+                          {
+                            text: 'Cancel',
+                            role: 'cancel',
+                          },
+                          {
+                            text: 'Confirm',
+                            role: 'confirm',
+                            handler: () => {
+                              sendCancellationRequest(applyPost.id);
                             },
-                            {
-                              text: 'Apply',
-                              role: 'confirm',
-                              handler: () => {
-                                handleApply(applyPost.id);
-                              },
+                          },
+                        ],
+                      });
+                    }}
+                  >
+                    {isLoading ? <ButtonSpinner /> : 'Cancel'}
+                  </IonButton>
+                ) : (
+                  <IonButton
+                    className={
+                      isMobile
+                        ? `${styles['accept-button']} ion-padding-horizontal ion-margin-top`
+                        : `${styles['accept-button']} ${styles['accept-button-top']} ion-padding-horizontal ion-margin-top`
+                    }
+                    expand="block"
+                    color="primary"
+                    onClick={(
+                      event: React.MouseEvent<HTMLIonButtonElement>
+                    ) => {
+                      event.stopPropagation();
+                      if (isLoading) {
+                        return;
+                      }
+                      void presentAlert({
+                        header: 'Confirm Application?',
+                        buttons: [
+                          {
+                            text: 'Cancel',
+                            role: 'cancel',
+                          },
+                          {
+                            text: 'Apply',
+                            role: 'confirm',
+                            handler: () => {
+                              handleApply(applyPost.id);
                             },
-                          ],
-                        });
-                      }}
-                    >
-                      {isLoading ? <ButtonSpinner /> : 'Apply'}
-                    </IonButton>
-                  )}
-                </>
-              )}
-            </IonCol>
-          </IonRow>
-        </IonGrid>
-      </IonContent>
+                          },
+                        ],
+                      });
+                    }}
+                  >
+                    {isLoading ? <ButtonSpinner /> : 'Apply'}
+                  </IonButton>
+                )}
+              </>
+            )}
+          </IonCol>
+        </IonRow>
+      </IonGrid>
     </>
   );
 }

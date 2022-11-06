@@ -3,7 +3,6 @@ import {
   IonButton,
   IonButtons,
   IonCol,
-  IonContent,
   IonGrid,
   IonHeader,
   IonIcon,
@@ -26,7 +25,6 @@ import { removeAppliedRequest } from '../../redux/slices/homeSlice';
 import useInfoToast from '../../util/hooks/useInfoToast';
 import { reloadInitialPostsData } from '../../redux/slices/postsSlice';
 import ButtonSpinner from '../../components/ButtonSpinner';
-import styles from './styles.module.scss';
 import { ErrorType } from '../../api/errors';
 import { removeNotification } from '../../redux/slices/notificationsSlice';
 import OtherStudyBuddies from '../../components/OtherStudyBuddies';
@@ -118,56 +116,54 @@ export default function AppliedPostContent({
           </IonToolbar>
         </IonHeader>
       )}
-      <IonContent fullscreen className={styles['no-padding']}>
-        <IonGrid>
-          <IonRow className="ion-justify-content-center">
-            <IonCol sizeMd="8">
-              <RequestStatus
-                status={appliedRequest.status}
-                telegramHandle={appliedRequest.post?.poster?.telegramHandle}
-              />
+      <IonGrid>
+        <IonRow className="ion-justify-content-center">
+          <IonCol sizeMd="8">
+            <RequestStatus
+              status={appliedRequest.status}
+              telegramHandle={appliedRequest.post?.poster?.telegramHandle}
+            />
 
-              <PostDetails post={appliedRequest.post} />
-              <OtherStudyBuddies
-                studyBuddies={appliedRequest.post.participants}
-              ></OtherStudyBuddies>
-              <AboutPoster
-                poster={appliedRequest.post.poster}
-                post={appliedRequest.post}
-              />
-              <IonButton
-                className="ion-padding-horizontal ion-margin-vertical"
-                expand="block"
-                fill="outline"
-                color="danger"
-                onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
-                  event.stopPropagation();
-                  if (isLoading) {
-                    return;
-                  }
-                  void presentAlert({
-                    header: 'Confirm Cancel Application?',
-                    message: 'This action is irreversible',
-                    buttons: [
-                      {
-                        text: 'Cancel',
-                        role: 'cancel',
-                      },
-                      {
-                        text: 'Confirm',
-                        role: 'confirm',
-                        handler: handleCancel,
-                      },
-                    ],
-                  });
-                }}
-              >
-                {isLoading ? <ButtonSpinner /> : 'Cancel'}
-              </IonButton>
-            </IonCol>
-          </IonRow>
-        </IonGrid>
-      </IonContent>
+            <PostDetails post={appliedRequest.post} />
+            <OtherStudyBuddies
+              studyBuddies={appliedRequest.post.participants}
+            ></OtherStudyBuddies>
+            <AboutPoster
+              poster={appliedRequest.post.poster}
+              post={appliedRequest.post}
+            />
+            <IonButton
+              className="ion-padding-horizontal ion-margin-vertical"
+              expand="block"
+              fill="outline"
+              color="danger"
+              onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
+                event.stopPropagation();
+                if (isLoading) {
+                  return;
+                }
+                void presentAlert({
+                  header: 'Confirm Cancel Application?',
+                  message: 'This action is irreversible',
+                  buttons: [
+                    {
+                      text: 'Cancel',
+                      role: 'cancel',
+                    },
+                    {
+                      text: 'Confirm',
+                      role: 'confirm',
+                      handler: handleCancel,
+                    },
+                  ],
+                });
+              }}
+            >
+              {isLoading ? <ButtonSpinner /> : 'Cancel'}
+            </IonButton>
+          </IonCol>
+        </IonRow>
+      </IonGrid>
     </>
   );
 }
