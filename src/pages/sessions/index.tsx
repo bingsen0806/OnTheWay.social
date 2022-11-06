@@ -43,6 +43,8 @@ enum HomeTab {
 }
 
 export default function Sessions() {
+  const params = new URLSearchParams(window.location.search);
+  const page = params.get('page');
   const history = useHistory();
   const dispatch = useAppDispatch();
   const appliedPosts = useAppSelector((state) => state.home.appliedRequests);
@@ -50,7 +52,9 @@ export default function Sessions() {
   const isLoading = useAppSelector((state) => state.home.isLoading);
   const handleCheckedError = useCheckedErrorHandler();
   const handleUnknownError = useUnknownErrorHandler();
-  const [tabToShow, setTabToShow] = useState<HomeTab>(HomeTab.CREATED_POST);
+  const [tabToShow, setTabToShow] = useState<HomeTab>(
+    page ? HomeTab.APPLIED_POST : HomeTab.CREATED_POST
+  );
   const isMobile = getPlatforms().includes('mobile');
   const { isAuthenticated } = useAuthState();
   const [selectedRequest, setSelectedRequest] = useState<CreatedRequest | null>(

@@ -91,7 +91,10 @@ export default function PostInformation({
           void dispatch(reloadInitialData());
           const callback = () => {
             dispatch(removePost(applyPost));
-            history.replace(SESSIONS);
+            history.replace({
+              pathname: SESSIONS,
+              search: `?page=1`,
+            });
           };
           onClose && onClose(callback);
           !onClose && callback();

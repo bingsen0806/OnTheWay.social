@@ -60,7 +60,10 @@ export default function NotificationListItem({
       } else if (
         notification.type === BuddyNotificationType.ACCEPTED_YOUR_APPLICATION
       ) {
-        history.push(SESSIONS);
+        history.push({
+          pathname: SESSIONS,
+          search: `?page=1`,
+        });
       }
     }
   }
