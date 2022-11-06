@@ -72,6 +72,7 @@ import Home from './pages/Home';
 import TabBarWrapper from './util/TabBarWrapper';
 import HomeContents from './pages/Home/HomeContents';
 import LoadingSpinner from './components/FullScreenLoadingSpinner';
+import styles from './styles.module.scss';
 setupIonicReact();
 
 export default function Main() {
@@ -106,7 +107,7 @@ export default function Main() {
           {isLoading ? (
             <LoadingSpinner />
           ) : (
-            <IonRouterOutlet>
+            <IonRouterOutlet className={styles['padding']}>
               {isMobile && (
                 <>
                   <UnauthenticatedRoute
