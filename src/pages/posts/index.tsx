@@ -30,13 +30,11 @@ import {
 } from '../../api/types';
 import { useAppDispatch } from '../../redux/hooks';
 import {
-  getInitialPostsData,
   getNewPageOfPostsWithFilter,
 } from '../../redux/slices/postsSlice';
 import { CREATE_POST, LOGIN } from '../../routes';
 import { useAuthState } from '../../util/authentication';
 import useCheckedErrorHandler from '../../util/hooks/useCheckedErrorHandler';
-import usePageInitialLoad from '../../util/hooks/usePageInitialLoad';
 import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
 import PostsPageBody from './PostsPageBody';
 import styles from './styles.module.scss';
@@ -181,20 +179,6 @@ export default function PostsPage() {
         handleUnknownError(error);
       });
   }
-
-  // fetch the data right before this scren is opened
-  usePageInitialLoad(() => {
-    dispatch(getInitialPostsData())
-      .unwrap()
-      .then((resp) => {
-        if (!resp.success) {
-          handleCheckedError(resp.message as string);
-        }
-      })
-      .catch((error) => {
-        handleUnknownError(error);
-      });
-  });
 
   function refreshContents(event: CustomEvent<RefresherEventDetail>) {
     const newLocationFilter: Location[] = [];
