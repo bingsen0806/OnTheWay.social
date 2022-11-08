@@ -9,6 +9,7 @@ import {
 import { useAppDispatch } from '../../redux/hooks';
 import { getInitialData } from '../../redux/slices/homeSlice';
 import { getInitialPostsData } from '../../redux/slices/postsSlice';
+import { getInitialSelf } from '../../redux/slices/userSlice';
 
 export interface AuthenticationState {
   isAuthenticated: boolean;
@@ -38,8 +39,11 @@ export const AuthProvider = ({ children, ...rest }: PropsWithChildren) => {
         const promises: Promise<any>[] = [dispatch(getInitialPostsData())];
         if (user) {
           promises.push(dispatch(getInitialData()));
+          promises.push(dispatch(getInitialSelf()));
         }
-        void Promise.all(promises).then(() => setLoading(false));
+        void Promise.all(promises).then(() => {
+          setLoading(false);
+        });
       },
       setError
     );
