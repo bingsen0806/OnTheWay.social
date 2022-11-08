@@ -16,6 +16,7 @@ import { reloadInitialData } from '../../redux/slices/homeSlice';
 import { reloadInitialPostsData } from '../../redux/slices/postsSlice';
 import ResetPasswordModal from './ResetPasswordModal';
 import ButtonSpinner from '../../components/ButtonSpinner';
+import { useHistory } from 'react-router-dom';
 interface LoginErrorMessages {
   email: string;
   password: string;
@@ -94,6 +95,7 @@ export default function LoginPage() {
       setIsLoading(false);
     }
   }
+  const historyObject = useHistory();
 
   return (
     <AuthenticationPageContainer pageTitle="Welcome back!">
@@ -132,6 +134,7 @@ export default function LoginPage() {
             size="10"
             sizeMd="6"
             onClick={() => {
+              historyObject.push({ search: '?modal=true' });
               setIsResetPasswordModalOpen(true);
             }}
             className={styles['forgotten-password-container']}

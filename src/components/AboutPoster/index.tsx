@@ -8,16 +8,15 @@ import {
 } from '@ionic/react';
 import { useState } from 'react';
 import { useHistory } from 'react-router';
-import { facultyEnumToStr, genderEnumToStr, Post, User } from '../../api/types';
+import { facultyEnumToStr, genderEnumToStr, User } from '../../api/types';
 import PublicProfileModal from '../../pages/PublicProfileModal';
 import styles from './styles.module.scss';
 
 interface AboutPosterProps {
   poster: User;
-  post: Post;
 }
 
-export default function AboutPoster({ poster, post }: AboutPosterProps) {
+export default function AboutPoster({ poster }: AboutPosterProps) {
   const [isOpen, setIsOpen] = useState(false);
   const closeModal = () => setIsOpen(false);
   const history = useHistory();
@@ -25,7 +24,6 @@ export default function AboutPoster({ poster, post }: AboutPosterProps) {
     if (isMobile) {
       setIsOpen(true);
     } else {
-      console.log(28);
       history.push({
         pathname: '/profile/public',
         search: `?userId=${poster.id}`,

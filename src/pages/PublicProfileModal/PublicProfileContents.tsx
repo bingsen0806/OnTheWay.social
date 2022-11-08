@@ -49,6 +49,10 @@ export default function PublicProfileContents({
     userObject = stateObject;
   }
 
+  window.onpopstate = () => {
+    onClose && onClose();
+  };
+
   useIonViewDidEnter(() => {
     if (userId) {
       void dispatch(getUserObject(userId));

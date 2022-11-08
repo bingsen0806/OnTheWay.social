@@ -22,7 +22,7 @@ import {
 } from '../../api/appliedRequests';
 import useCheckedErrorHandler from '../../util/hooks/useCheckedErrorHandler';
 import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAppDispatch } from '../../redux/hooks';
 import { removePost } from '../../redux/slices/postsSlice';
 import { logEvent } from 'firebase/analytics';
@@ -36,7 +36,7 @@ import useErrorToast from '../../util/hooks/useErrorToast';
 import { useAuthState } from '../../util/authentication';
 import UnauthenticatedPostDetails from '../../components/UnauthenticatedPostDetails';
 import { SESSIONS } from '../../routes';
-import { useHistory } from 'react-router';
+import { useHistory, useLocation } from 'react-router';
 
 interface ApplyModalProps {
   onClose?: ((callback: () => void) => void) | (() => void);
@@ -58,6 +58,12 @@ export default function PostInformation({
   const { isAuthenticated } = useAuthState();
   const isMobile = getPlatforms().includes('mobile');
   const history = useHistory();
+  const location = useLocation();
+  useEffect(() => {
+    if (!location.search.includes('modal=true') && isMobile) {
+      onCloseAction();
+    }
+  }, [location]);
 
   function handleApply(postId: string) {
     setIsLoading(true);
@@ -89,6 +95,7 @@ export default function PostInformation({
           presentInfoToast('Successfully applied!');
           void dispatch(reloadInitialData());
           const callback = () => {
+            console.log('99 called');
             dispatch(removePost(applyPost));
             history.replace({
               pathname: SESSIONS,
@@ -133,6 +140,10 @@ export default function PostInformation({
       if (isApplied) {
         dispatch(removePost(applyPost));
       }
+      if (location.search.includes('modal=true')) {
+        console.log('postmodal 30');
+        history.goBack();
+      }
     };
     onClose && onClose(callback);
     !onClose && callback();
@@ -173,7 +184,7 @@ export default function PostInformation({
             {isAuthenticated && (
               <>
                 <OtherStudyBuddies studyBuddies={applyPost.participants} />
-                <AboutPoster poster={applyPost?.poster} post={applyPost} />
+                <AboutPoster poster={applyPost?.poster} />
                 {isApplied ? (
                   <IonButton
                     className={`ion-padding-horizontal ion-margin-top ${

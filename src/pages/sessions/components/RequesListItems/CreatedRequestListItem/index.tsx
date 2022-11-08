@@ -8,6 +8,7 @@ import {
 } from '@ionic/react';
 import { calendarClearOutline, timeOutline } from 'ionicons/icons';
 import { useState } from 'react';
+import { useHistory } from 'react-router';
 import { locationEnumToStr, CreatedRequest } from '../../../../../api/types';
 import LocationImage from '../../../../../components/LocationImage';
 import {
@@ -28,6 +29,7 @@ export default function CreatedRequestListItem({
   selected,
   onClick,
 }: CreatedRequestListItemProps) {
+  const history = useHistory();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   function closeModal(callback: () => void) {
     setIsModalOpen(false);
@@ -39,6 +41,7 @@ export default function CreatedRequestListItem({
     <IonItem
       button
       onClick={() => {
+        history.push({ search: '?modal=true' });
         setIsModalOpen(true);
         onClick(createdRequest);
       }}

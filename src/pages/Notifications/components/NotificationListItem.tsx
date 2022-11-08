@@ -53,6 +53,7 @@ export default function NotificationListItem({
     }
     void dispatch(markNotification(notification.id));
     if (isMobile) {
+      history.push({ search: '?modal=true' });
       setIsModalOpen(true);
     } else {
       if (notification.type === BuddyNotificationType.APPLIED_TO_YOUR_POST) {
@@ -116,7 +117,7 @@ export default function NotificationListItem({
               }}
             >
               <IonContent>
-                <p>
+                <p className="ion-padding-horizontal">
                   The post associated with this application is already past and
                   no longer exists.
                 </p>

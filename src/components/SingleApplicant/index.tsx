@@ -109,9 +109,6 @@ export default function SingleApplicant({
         button
         className="ion-no-margin ion-no-padding"
         detail={false}
-        onClick={() => {
-          setIsOpen(true);
-        }}
       >
         <IonGrid>
           <IonRow>

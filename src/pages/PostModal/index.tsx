@@ -19,18 +19,8 @@ export default function PostModal({
   onClose,
   applyPost,
 }: ApplyModalProps) {
-  function onCloseAction() {
-    onClose(() => {
-      return;
-    });
-  }
-
   return (
-    <IonModal
-      isOpen={isOpen}
-      onWillDismiss={onCloseAction}
-      className={styles['modal-container']}
-    >
+    <IonModal isOpen={isOpen} className={styles['modal-container']}>
       <IonContent fullscreen>
         <PostInformation onClose={onClose} applyPost={applyPost} />
       </IonContent>

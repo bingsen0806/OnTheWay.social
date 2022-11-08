@@ -2,6 +2,8 @@ import { IonContent, IonModal } from '@ionic/react';
 import { User } from '../../api/types';
 import styles from './styles.module.scss';
 import PublicProfileContents from './PublicProfileContents';
+import { useEffect } from 'react';
+import { useLocation } from 'react-router';
 
 interface PublicProfileModalProps {
   isOpen: boolean;
@@ -14,9 +16,16 @@ export default function PublicProfileModal({
   onClose,
   user,
 }: PublicProfileModalProps) {
+  const location = useLocation();
   function closeModal() {
     onClose();
   }
+  useEffect(() => {
+    if (!location.search.includes('modal=true') && isOpen) {
+      onClose();
+    }
+  }, [location]);
+
   return (
     <IonModal
       isOpen={isOpen}
