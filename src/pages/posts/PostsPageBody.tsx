@@ -99,9 +99,7 @@ export default function PostsPageBody() {
               </div>
             </NoData>
           ) : (
-            <IonGrid
-              className={`${styles['margin']} ion-no-padding ion-margin-bottom`}
-            >
+            <IonGrid className={`${styles['margin']} ion-no-padding`}>
               <IonRow className="ion-justify-content-center ion-no-padding">
                 <IonCol size={isMobile ? '12' : '5'}>
                   {isMobile ? (
