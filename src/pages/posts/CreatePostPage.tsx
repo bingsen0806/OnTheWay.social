@@ -221,11 +221,11 @@ export default function CreatePostPage() {
           </h1>
         </IonToolbar>
         <IonToolbar>
-          <div>
+          <div className="ion-padding-start">
             <p className="ion-no-margin ion-no-padding">
               You will be notified via email when others apply for your session.
             </p>
-            <p className="ion-no-margin ion-no-padding">
+            <p className="ion-no-margin ion-no-padding ion-margin-vertical">
               Your telegram handle will only be shared with applicants after you
               accept them.
             </p>

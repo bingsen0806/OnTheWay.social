@@ -29,9 +29,7 @@ import {
   timeOfDayEnumToStr,
 } from '../../api/types';
 import { useAppDispatch } from '../../redux/hooks';
-import {
-  getNewPageOfPostsWithFilter,
-} from '../../redux/slices/postsSlice';
+import { getNewPageOfPostsWithFilter } from '../../redux/slices/postsSlice';
 import { CREATE_POST, LOGIN } from '../../routes';
 import { useAuthState } from '../../util/authentication';
 import useCheckedErrorHandler from '../../util/hooks/useCheckedErrorHandler';
@@ -305,7 +303,7 @@ export default function PostsPage() {
           <IonHeader>
             <IonToolbar>
               <div>
-                <h1>Study Sessions</h1>
+                <h1 className="ion-padding-horizontal">Study Sessions</h1>
                 {isMobile && isAuthenticated && (
                   <IonButton
                     onClick={() => {
@@ -313,7 +311,7 @@ export default function PostsPage() {
                     }}
                     size="small"
                     slot="start"
-                    className="ion-margin-bottom"
+                    className="ion-margin-bottom ion-padding-horizontal"
                   >
                     Create Study Session
                   </IonButton>
@@ -325,7 +323,7 @@ export default function PostsPage() {
                     }}
                     size="small"
                     slot="start"
-                    className="ion-margin-bottom"
+                    className="ion-margin-bottom ion-padding-horizontal"
                   >
                     Login
                   </IonButton>

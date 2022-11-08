@@ -12,8 +12,14 @@ import AuthenticationPageContainer from './AuthenticationPageContainer';
 import { isValidNUSEmail } from './constants';
 import styles from './styles.module.scss';
 import { useAppDispatch } from '../../redux/hooks';
-import { reloadInitialData } from '../../redux/slices/homeSlice';
-import { reloadInitialPostsData } from '../../redux/slices/postsSlice';
+import {
+  reloadInitialData,
+  requestReloadOfHomeData,
+} from '../../redux/slices/homeSlice';
+import {
+  reloadInitialPostsData,
+  requestReloadOfPosts,
+} from '../../redux/slices/postsSlice';
 import ResetPasswordModal from './ResetPasswordModal';
 import ButtonSpinner from '../../components/ButtonSpinner';
 import { useHistory } from 'react-router-dom';
@@ -74,6 +80,8 @@ export default function LoginPage() {
 
     try {
       await login(loginDetails);
+      dispatch(requestReloadOfHomeData());
+      dispatch(requestReloadOfPosts());
       const promises = [
         dispatch(reloadInitialData()),
         dispatch(reloadInitialPostsData()),
