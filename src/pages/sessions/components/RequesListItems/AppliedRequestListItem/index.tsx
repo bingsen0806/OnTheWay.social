@@ -60,7 +60,7 @@ export default function AppliedRequestListItem({
         }
       />
       <IonGrid>
-        <IonRow className={`${styles['post-container']}`}>
+        <IonRow className="ion-align-items-center">
           <IonCol size="4" sizeLg="5">
             <LocationImage
               location={appliedRequest.post.location}

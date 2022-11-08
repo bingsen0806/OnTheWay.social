@@ -53,6 +53,12 @@ export default function ProfilePage() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
+      const fileSize = file.size / 1024 / 1024;
+      console.log(57, fileSize);
+      if (fileSize > 10) {
+        presentInfoToast('File size cannot be more than 10MB', 'danger');
+        return;
+      }
       setImage({
         preview: URL.createObjectURL(e.target.files[0]),
         raw: [file],

@@ -14,6 +14,7 @@ import {
   IonRow,
   IonCol,
   getPlatforms,
+  IonList,
 } from '@ionic/react';
 import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -36,6 +37,7 @@ import SelectedCreatedRequest from './components/SelectedCreatedRequest';
 import { AppliedRequest, CreatedRequest } from '../../api/types';
 import SelectedAppliedRequest from './components/SelectedAppliedRequest';
 import FullScreenLoadingSpinner from '../../components/FullScreenLoadingSpinner';
+import styles from './styles.module.scss';
 
 enum HomeTab {
   APPLIED_POST = 'Applied',
@@ -157,9 +159,11 @@ export default function Sessions() {
       if (createdPosts.length === 0) {
         return (
           <IonContent fullscreen>
-            <IonRefresher slot="fixed" onIonRefresh={refreshCreatedRequests}>
-              <IonRefresherContent></IonRefresherContent>
-            </IonRefresher>
+            {isMobile && (
+              <IonRefresher slot="fixed" onIonRefresh={refreshCreatedRequests}>
+                <IonRefresherContent></IonRefresherContent>
+              </IonRefresher>
+            )}
             <NoData>
               <div>
                 <p className="ion-text-center">
@@ -180,10 +184,12 @@ export default function Sessions() {
       }
       return (
         <IonContent fullscreen>
-          <IonRefresher slot="fixed" onIonRefresh={refreshCreatedRequests}>
-            <IonRefresherContent></IonRefresherContent>
-          </IonRefresher>
-          <IonGrid className="ion-margin-top ion-no-padding">
+          {isMobile && (
+            <IonRefresher slot="fixed" onIonRefresh={refreshCreatedRequests}>
+              <IonRefresherContent></IonRefresherContent>
+            </IonRefresher>
+          )}
+          <IonGrid className={`${styles['margin']} ion-no-padding`}>
             <IonRow className="ion-justify-content-center ion-no-padding">
               <IonCol size={isMobile ? '12' : '5'}>
                 {isMobile ? (
@@ -223,9 +229,11 @@ export default function Sessions() {
       if (appliedPosts.length === 0) {
         return (
           <IonContent fullscreen>
-            <IonRefresher slot="fixed" onIonRefresh={refreshCreatedRequests}>
-              <IonRefresherContent></IonRefresherContent>
-            </IonRefresher>
+            {isMobile && (
+              <IonRefresher slot="fixed" onIonRefresh={refreshCreatedRequests}>
+                <IonRefresherContent></IonRefresherContent>
+              </IonRefresher>
+            )}
             <NoData>
               <div>
                 <p className="ion-text-center">
@@ -246,10 +254,12 @@ export default function Sessions() {
       }
       return (
         <IonContent fullscreen>
-          <IonRefresher slot="fixed" onIonRefresh={refreshAppliedRequests}>
-            <IonRefresherContent></IonRefresherContent>
-          </IonRefresher>
-          <IonGrid className="ion-margin-top ion-no-padding">
+          {isMobile && (
+            <IonRefresher slot="fixed" onIonRefresh={refreshAppliedRequests}>
+              <IonRefresherContent></IonRefresherContent>
+            </IonRefresher>
+          )}
+          <IonGrid className={`${styles['margin']} ion-no-padding`}>
             <IonRow className="ion-justify-content-center ion-no-padding">
               <IonCol size={isMobile ? '12' : '5'}>
                 {isMobile ? (
@@ -267,16 +277,18 @@ export default function Sessions() {
                   </>
                 ) : (
                   <IonContent fullscreen>
-                    {appliedPosts.map((post) => (
-                      <AppliedRequestListItem
-                        onClick={setSelectedAppliedRequest}
-                        selected={
-                          selectedAppliedRequest?.post.id === post.post.id
-                        }
-                        key={post.post.id}
-                        appliedRequest={post}
-                      />
-                    ))}
+                    <IonList className={styles['margin']}>
+                      {appliedPosts.map((post) => (
+                        <AppliedRequestListItem
+                          onClick={setSelectedAppliedRequest}
+                          selected={
+                            selectedAppliedRequest?.post.id === post.post.id
+                          }
+                          key={post.post.id}
+                          appliedRequest={post}
+                        />
+                      ))}
+                    </IonList>
                   </IonContent>
                 )}
               </IonCol>

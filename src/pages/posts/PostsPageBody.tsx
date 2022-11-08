@@ -127,6 +127,13 @@ export default function PostsPageBody() {
                           ></PostListItem>
                         );
                       })}
+                      <IonInfiniteScroll
+                        onIonInfinite={requestNextPageOfPosts}
+                        threshold="100px"
+                        disabled={listOfPosts.length < 20}
+                      >
+                        <IonInfiniteScrollContent loadingSpinner="circles"></IonInfiniteScrollContent>
+                      </IonInfiniteScroll>
                     </IonContent>
                   )}
                 </IonCol>
