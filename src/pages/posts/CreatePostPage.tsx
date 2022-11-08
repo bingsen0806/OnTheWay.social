@@ -267,6 +267,16 @@ export default function CreatePostPage() {
                 label="Start"
                 onChange={(startTime) => {
                   setStartTime(startTime);
+                  const isAfterEndTime = moment(startTime).isAfter(endTime);
+                  if (isAfterEndTime) {
+                    const endTime = moment
+                      .min([
+                        moment(startTime).add(1, 'hour'),
+                        moment().set('hour', 23).set('minute', 45),
+                      ])
+                      .toISOString(true);
+                    setEndTime(endTime);
+                  }
                 }}
                 errorMessage={errorMessages.startTime}
               ></DateTimePicker>
