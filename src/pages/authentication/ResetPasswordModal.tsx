@@ -13,7 +13,7 @@ import {
   IonPage,
   IonIcon,
 } from '@ionic/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './styles.module.scss';
 import TextInputField from '../../components/TextInputField/TextInputField';
 import useInfoToast from '../../util/hooks/useInfoToast';
@@ -21,6 +21,7 @@ import { resetPassword } from '../../api/authentication';
 import { isValidNUSEmail } from './constants';
 import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
 import { arrowBackOutline } from 'ionicons/icons';
+import { useHistory, useLocation } from 'react-router-dom';
 
 interface ResetPasswordModalProps {
   isOpen: boolean;
@@ -36,6 +37,13 @@ export default function ResetPasswordModal({
   const [errorMessage, setErrorMessage] = useState<string>('');
   const presentInfoToast = useInfoToast();
   const handleUnknownError = useUnknownErrorHandler();
+  const location = useLocation();
+  const history = useHistory();
+  useEffect(() => {
+    if (!location.search.includes('modal=true')) {
+      closeCallback();
+    }
+  }, [location]);
 
   function handleSubmit() {
     if (!email) {
@@ -60,7 +68,12 @@ export default function ResetPasswordModal({
     <IonModal
       isOpen={isOpen}
       className={styles['reset-password-modal']}
-      onWillDismiss={closeCallback}
+      onWillDismiss={() => {
+        if (location.search.includes('modal=true')) {
+          history.goBack();
+        }
+        closeCallback();
+      }}
       mode="ios"
     >
       <IonPage>

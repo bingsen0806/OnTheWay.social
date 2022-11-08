@@ -35,7 +35,10 @@
 }
 
 .info {
-  height: 40vh;
+  height: 60vh;
+  @media screen and (min-height: 800px) {
+    height: 40vh;
+  }
   .contents {
     opacity: 0;
   }

@@ -6,6 +6,7 @@ import {
   IonGrid,
   IonInfiniteScroll,
   IonInfiniteScrollContent,
+  IonList,
   IonRow,
 } from '@ionic/react';
 import { useState } from 'react';
@@ -24,6 +25,8 @@ import usePageInitialLoad from '../../util/hooks/usePageInitialLoad';
 import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
 import NoData from '../NoData';
 import SelectedPost from './SelectedPost';
+import styles from './styles.module.scss';
+
 export default function PostsPageBody() {
   const history = useHistory();
   const listOfPosts = useAppSelector((state) => state.posts.posts);
@@ -48,6 +51,10 @@ export default function PostsPageBody() {
 
   // eslint-disable-next-line
   function requestNextPageOfPosts(ev: any) {
+    if (listOfPosts.length < 20) {
+      ev.target.complete(); //eslint-disable-line
+      return;
+    }
     dispatch(getNextPageOfPosts())
       .unwrap()
       .then((resp) => {
@@ -96,12 +103,27 @@ export default function PostsPageBody() {
                 </IonButton>
               </div>
             </NoData>
+          ) : isMobile ? (
+            <IonList>
+              {listOfPosts.map((data) => {
+                return (
+                  <PostListItem
+                    selected={selectedPost?.id === data.id}
+                    post={data}
+                    key={data.id}
+                    onClick={setPostOnClick}
+                  ></PostListItem>
+                );
+              })}
+            </IonList>
           ) : (
-            <IonGrid className="ion-margin-top ion-no-padding ion-margin-bottom">
-              <IonRow className="ion-justify-content-center ion-no-padding">
+            <IonGrid className={`ion-no-padding ${styles['desktop-grid']}`}>
+              <IonRow
+                className={`ion-justify-content-center ion-no-padding ${styles['desktop-row']}`}
+              >
                 <IonCol size={isMobile ? '12' : '5'}>
-                  {isMobile ? (
-                    <>
+                  <IonContent>
+                    <IonList>
                       {listOfPosts.map((data) => {
                         return (
                           <PostListItem
@@ -112,36 +134,31 @@ export default function PostsPageBody() {
                           ></PostListItem>
                         );
                       })}
-                    </>
-                  ) : (
-                    <IonContent fullscreen>
-                      {listOfPosts.map((data) => {
-                        return (
-                          <PostListItem
-                            selected={selectedPost?.id === data.id}
-                            post={data}
-                            key={data.id}
-                            onClick={setPostOnClick}
-                          ></PostListItem>
-                        );
-                      })}
-                    </IonContent>
-                  )}
+                    </IonList>
+
+                    <IonInfiniteScroll
+                      onIonInfinite={requestNextPageOfPosts}
+                      threshold="100px"
+                      disabled={listOfPosts.length < 20}
+                    >
+                      <IonInfiniteScrollContent loadingSpinner="circles"></IonInfiniteScrollContent>
+                    </IonInfiniteScroll>
+                  </IonContent>
                 </IonCol>
                 {!isMobile && (
                   <IonCol size="7">
-                    <SelectedPost post={selectedPost} />
+                    <IonContent>
+                      <SelectedPost post={selectedPost} />
+                    </IonContent>
                   </IonCol>
                 )}
               </IonRow>
             </IonGrid>
           )}
-
           {isMobile && (
             <IonInfiniteScroll
               onIonInfinite={requestNextPageOfPosts}
               threshold="100px"
-              disabled={listOfPosts.length < 20}
             >
               <IonInfiniteScrollContent loadingSpinner="circles"></IonInfiniteScrollContent>
             </IonInfiniteScroll>

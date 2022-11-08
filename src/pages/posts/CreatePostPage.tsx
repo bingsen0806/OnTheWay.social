@@ -126,7 +126,7 @@ export default function CreatePostPage() {
   });
 
   function checkStartTimeBeforeEndTime() {
-    return startTime < endTime;
+    return startTime <= endTime;
   }
 
   function areAllFieldsSelected() {
@@ -221,11 +221,11 @@ export default function CreatePostPage() {
           </h1>
         </IonToolbar>
         <IonToolbar>
-          <div>
+          <div className="ion-padding-start">
             <p className="ion-no-margin ion-no-padding">
               You will be notified via email when others apply for your session.
             </p>
-            <p className="ion-no-margin ion-no-padding">
+            <p className="ion-no-margin ion-no-padding ion-margin-vertical">
               Your telegram handle will only be shared with applicants after you
               accept them.
             </p>
@@ -267,6 +267,16 @@ export default function CreatePostPage() {
                 label="Start"
                 onChange={(startTime) => {
                   setStartTime(startTime);
+                  const isAfterEndTime = moment(startTime).isAfter(endTime);
+                  if (isAfterEndTime) {
+                    const endTime = moment
+                      .min([
+                        moment(startTime).add(1, 'hour'),
+                        moment().set('hour', 23).set('minute', 45),
+                      ])
+                      .toISOString(true);
+                    setEndTime(endTime);
+                  }
                 }}
                 errorMessage={errorMessages.startTime}
               ></DateTimePicker>

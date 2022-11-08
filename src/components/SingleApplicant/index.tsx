@@ -53,7 +53,7 @@ export default function SingleApplicant({
       setIsOpen(true);
     } else {
       history.push({
-        pathname: '/profile',
+        pathname: '/profile/public',
         search: `?userId=${applicant.id}`,
         state: { user: applicant },
       });
@@ -109,9 +109,6 @@ export default function SingleApplicant({
         button
         className="ion-no-margin ion-no-padding"
         detail={false}
-        onClick={() => {
-          setIsOpen(true);
-        }}
       >
         <IonGrid>
           <IonRow>

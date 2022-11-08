@@ -21,7 +21,9 @@ import {
   Post,
 } from '../../../api/types';
 import { useAppDispatch } from '../../../redux/hooks';
+import { reloadInitialData } from '../../../redux/slices/homeSlice';
 import { markNotification } from '../../../redux/slices/notificationsSlice';
+import { reloadSelf } from '../../../redux/slices/userSlice';
 import { ART, SESSIONS } from '../../../routes';
 import {
   convertDateRangeToTimeRangeStr,
@@ -49,17 +51,21 @@ export default function NotificationListItem({
 
   function clickHandler() {
     if (notification.type === BuddyNotificationType.RECEIVED_NEW_ART) {
+      void dispatch(reloadSelf());
       history.push(ART);
     }
     void dispatch(markNotification(notification.id));
     if (isMobile) {
+      history.push({ search: '?modal=true' });
       setIsModalOpen(true);
     } else {
       if (notification.type === BuddyNotificationType.APPLIED_TO_YOUR_POST) {
+        void dispatch(reloadInitialData());
         history.push(SESSIONS);
       } else if (
         notification.type === BuddyNotificationType.ACCEPTED_YOUR_APPLICATION
       ) {
+        void dispatch(reloadInitialData());
         history.push({
           pathname: SESSIONS,
           search: `?page=1`,
@@ -116,7 +122,7 @@ export default function NotificationListItem({
               }}
             >
               <IonContent>
-                <p>
+                <p className="ion-padding-horizontal">
                   The post associated with this application is already past and
                   no longer exists.
                 </p>

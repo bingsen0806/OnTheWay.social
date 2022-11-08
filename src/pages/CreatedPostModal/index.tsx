@@ -7,6 +7,7 @@ import { requestReloadOfPosts } from '../../redux/slices/postsSlice';
 import styles from './styles.module.scss';
 import { replaceNotification } from '../../redux/slices/notificationsSlice';
 import CreatedPostInformation from './CreatedPostInformation';
+import { useHistory, useLocation } from 'react-router';
 
 interface PosterViewRequestProps {
   isOpen: boolean;
@@ -31,8 +32,12 @@ export default function CreatedPostModal({
   // simple flag to determine if we should request reload of post data if cretaed request is changed
   const [createdRequestWasEdited, setCreatedRequestWasEdited] =
     useState<boolean>(false);
-
+  const history = useHistory();
+  const location = useLocation();
   function closeModal() {
+    if (location.search.includes('modal=true')) {
+      history.goBack();
+    }
     onClose(() => {
       if (createdRequestWasEdited) {
         dispatch(replaceNotification(createdRequestState));

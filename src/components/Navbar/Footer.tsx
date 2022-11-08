@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import styles from './styles.module.scss';
-import deer from '../../assets/deer.json';
+import cat from '../../assets/cat.json';
 import snow from '../../assets/snow.json';
 import Lottie from 'lottie-react';
 import { useHistory, useLocation } from 'react-router-dom';
-import { FAQ, HOME, INSTAGRAM } from '../../routes';
+import { FAQ, FEEDBACK, HOME, INSTAGRAM } from '../../routes';
 function Footer() {
   const location = useLocation();
   const pathName = location.pathname;
@@ -23,6 +23,10 @@ function Footer() {
     }
     history.replace(HOME);
   };
+  const openFeedback = () => {
+    window.open(FEEDBACK, '_blank');
+  };
+
   return (
     <div className={styles.footer}>
       <Lottie
@@ -36,7 +40,7 @@ function Footer() {
         className={
           isAnimating ? styles['moving-animation'] : styles['animation']
         }
-        animationData={deer}
+        animationData={cat}
         loop={true}
       />
       <div slot="start" className={styles['footer-toolbar']}>
@@ -57,6 +61,12 @@ function Footer() {
           className={`${styles['footer-text']} ion-margin-horizontal`}
         >
           Instagram
+        </span>
+        <span
+          onClick={openFeedback}
+          className={`${styles['footer-text']} ion-margin-horizontal`}
+        >
+          Feedback
         </span>
       </div>
     </div>

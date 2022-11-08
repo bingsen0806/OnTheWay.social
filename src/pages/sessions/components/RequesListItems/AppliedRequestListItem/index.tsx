@@ -7,6 +7,7 @@ import {
   IonRow,
 } from '@ionic/react';
 import { calendarClearOutline, timeOutline } from 'ionicons/icons';
+import { useHistory } from 'react-router';
 import { useStateWithCallbackLazy } from 'use-state-with-callback';
 import {
   AppliedRequest,
@@ -38,11 +39,13 @@ export default function AppliedRequestListItem({
   function closeModal(callback: () => void) {
     setIsModalOpen(false, callback);
   }
+  const history = useHistory();
 
   return (
     <IonItem
       button
       onClick={() => {
+        history.push({ search: '?modal=true' });
         setIsModalOpen(true, () => {
           return;
         });
@@ -60,7 +63,7 @@ export default function AppliedRequestListItem({
         }
       />
       <IonGrid>
-        <IonRow className={`${styles['post-container']}`}>
+        <IonRow className="ion-align-items-center">
           <IonCol size="4" sizeLg="5">
             <LocationImage
               location={appliedRequest.post.location}

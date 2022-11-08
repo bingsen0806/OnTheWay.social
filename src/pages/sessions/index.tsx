@@ -14,6 +14,9 @@ import {
   IonRow,
   IonCol,
   getPlatforms,
+  IonList,
+  IonInfiniteScroll,
+  IonInfiniteScrollContent,
 } from '@ionic/react';
 import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -36,6 +39,7 @@ import SelectedCreatedRequest from './components/SelectedCreatedRequest';
 import { AppliedRequest, CreatedRequest } from '../../api/types';
 import SelectedAppliedRequest from './components/SelectedAppliedRequest';
 import FullScreenLoadingSpinner from '../../components/FullScreenLoadingSpinner';
+import styles from './styles.module.scss';
 
 enum HomeTab {
   APPLIED_POST = 'Applied',
@@ -157,9 +161,11 @@ export default function Sessions() {
       if (createdPosts.length === 0) {
         return (
           <IonContent fullscreen>
-            <IonRefresher slot="fixed" onIonRefresh={refreshCreatedRequests}>
-              <IonRefresherContent></IonRefresherContent>
-            </IonRefresher>
+            {isMobile && (
+              <IonRefresher slot="fixed" onIonRefresh={refreshCreatedRequests}>
+                <IonRefresherContent></IonRefresherContent>
+              </IonRefresher>
+            )}
             <NoData>
               <div>
                 <p className="ion-text-center">
@@ -180,52 +186,76 @@ export default function Sessions() {
       }
       return (
         <IonContent fullscreen>
-          <IonRefresher slot="fixed" onIonRefresh={refreshCreatedRequests}>
-            <IonRefresherContent></IonRefresherContent>
-          </IonRefresher>
-          <IonGrid className="ion-margin-top ion-no-padding">
-            <IonRow className="ion-justify-content-center ion-no-padding">
-              <IonCol size={isMobile ? '12' : '5'}>
-                {isMobile ? (
-                  <>
-                    {createdPosts.map((post) => (
-                      <CreatedRequestListItem
-                        key={post.post.id}
-                        createdRequest={post}
-                        onClick={setRequestOnClick}
-                        selected={selectedRequest?.post.id === post.post.id}
-                      ></CreatedRequestListItem>
-                    ))}
-                  </>
-                ) : (
-                  <IonContent fullscreen>
-                    {createdPosts.map((post) => (
-                      <CreatedRequestListItem
-                        key={post.post.id}
-                        createdRequest={post}
-                        onClick={setRequestOnClick}
-                        selected={selectedRequest?.post.id === post.post.id}
-                      ></CreatedRequestListItem>
-                    ))}
+          {isMobile && (
+            <IonRefresher slot="fixed" onIonRefresh={refreshCreatedRequests}>
+              <IonRefresherContent></IonRefresherContent>
+            </IonRefresher>
+          )}
+          {isMobile ? (
+            <IonList>
+              {createdPosts.map((post) => (
+                <CreatedRequestListItem
+                  key={post.post.id}
+                  createdRequest={post}
+                  onClick={setRequestOnClick}
+                  selected={selectedRequest?.post.id === post.post.id}
+                ></CreatedRequestListItem>
+              ))}
+            </IonList>
+          ) : (
+            <IonGrid className={`ion-no-padding ${styles['desktop-grid']}`}>
+              <IonRow
+                className={`ion-justify-content-center ion-no-padding ${styles['desktop-row']}`}
+              >
+                <IonCol size={isMobile ? '12' : '5'}>
+                  (
+                  <IonContent>
+                    <IonList>
+                      {createdPosts.map((post) => (
+                        <CreatedRequestListItem
+                          key={post.post.id}
+                          createdRequest={post}
+                          onClick={setRequestOnClick}
+                          selected={selectedRequest?.post.id === post.post.id}
+                        ></CreatedRequestListItem>
+                      ))}
+                    </IonList>
                   </IonContent>
-                )}
-              </IonCol>
-              {!isMobile && (
-                <IonCol size="7">
-                  <SelectedCreatedRequest createdRequest={selectedRequest} />
+                  )
                 </IonCol>
-              )}
-            </IonRow>
-          </IonGrid>
+                {!isMobile && (
+                  <IonCol size="7">
+                    <IonContent>
+                      <SelectedCreatedRequest
+                        createdRequest={selectedRequest}
+                      />
+                    </IonContent>
+                  </IonCol>
+                )}
+              </IonRow>
+            </IonGrid>
+          )}
+          {isMobile && (
+            <IonInfiniteScroll
+              threshold="100px"
+              onIonInfinite={(ev) => {
+                void ev.target.complete();
+              }}
+            >
+              <IonInfiniteScrollContent loadingSpinner="circles"></IonInfiniteScrollContent>
+            </IonInfiniteScroll>
+          )}
         </IonContent>
       );
     } else {
       if (appliedPosts.length === 0) {
         return (
           <IonContent fullscreen>
-            <IonRefresher slot="fixed" onIonRefresh={refreshCreatedRequests}>
-              <IonRefresherContent></IonRefresherContent>
-            </IonRefresher>
+            {isMobile && (
+              <IonRefresher slot="fixed" onIonRefresh={refreshCreatedRequests}>
+                <IonRefresherContent></IonRefresherContent>
+              </IonRefresher>
+            )}
             <NoData>
               <div>
                 <p className="ion-text-center">
@@ -246,49 +276,65 @@ export default function Sessions() {
       }
       return (
         <IonContent fullscreen>
-          <IonRefresher slot="fixed" onIonRefresh={refreshAppliedRequests}>
-            <IonRefresherContent></IonRefresherContent>
-          </IonRefresher>
-          <IonGrid className="ion-margin-top ion-no-padding">
-            <IonRow className="ion-justify-content-center ion-no-padding">
-              <IonCol size={isMobile ? '12' : '5'}>
-                {isMobile ? (
-                  <>
-                    {appliedPosts.map((post) => (
-                      <AppliedRequestListItem
-                        onClick={setSelectedAppliedRequest}
-                        selected={
-                          selectedAppliedRequest?.post.id === post.post.id
-                        }
-                        key={post.post.id}
-                        appliedRequest={post}
-                      />
-                    ))}
-                  </>
-                ) : (
-                  <IonContent fullscreen>
-                    {appliedPosts.map((post) => (
-                      <AppliedRequestListItem
-                        onClick={setSelectedAppliedRequest}
-                        selected={
-                          selectedAppliedRequest?.post.id === post.post.id
-                        }
-                        key={post.post.id}
-                        appliedRequest={post}
-                      />
-                    ))}
+          {isMobile && (
+            <IonRefresher slot="fixed" onIonRefresh={refreshAppliedRequests}>
+              <IonRefresherContent></IonRefresherContent>
+            </IonRefresher>
+          )}
+          {isMobile ? (
+            <IonList>
+              {appliedPosts.map((post) => (
+                <AppliedRequestListItem
+                  onClick={setSelectedAppliedRequest}
+                  selected={selectedAppliedRequest?.post.id === post.post.id}
+                  key={post.post.id}
+                  appliedRequest={post}
+                />
+              ))}
+            </IonList>
+          ) : (
+            <IonGrid className={`ion-no-padding ${styles['desktop-grid']}`}>
+              <IonRow
+                className={`ion-justify-content-center ion-no-padding ${styles['desktop-row']}`}
+              >
+                <IonCol size={isMobile ? '12' : '5'}>
+                  <IonContent>
+                    <IonList>
+                      {appliedPosts.map((post) => (
+                        <AppliedRequestListItem
+                          onClick={setSelectedAppliedRequest}
+                          selected={
+                            selectedAppliedRequest?.post.id === post.post.id
+                          }
+                          key={post.post.id}
+                          appliedRequest={post}
+                        />
+                      ))}
+                    </IonList>
                   </IonContent>
-                )}
-              </IonCol>
-              {!isMobile && (
-                <IonCol sizeLg="7">
-                  <SelectedAppliedRequest
-                    appliedRequest={selectedAppliedRequest}
-                  />
                 </IonCol>
-              )}
-            </IonRow>
-          </IonGrid>
+                {!isMobile && (
+                  <IonCol sizeLg="7">
+                    <IonContent>
+                      <SelectedAppliedRequest
+                        appliedRequest={selectedAppliedRequest}
+                      />
+                    </IonContent>
+                  </IonCol>
+                )}
+              </IonRow>
+            </IonGrid>
+          )}
+          {isMobile && (
+            <IonInfiniteScroll
+              threshold="100px"
+              onIonInfinite={(ev) => {
+                void ev.target.complete();
+              }}
+            >
+              <IonInfiniteScrollContent loadingSpinner="circles"></IonInfiniteScrollContent>
+            </IonInfiniteScroll>
+          )}
         </IonContent>
       );
     }

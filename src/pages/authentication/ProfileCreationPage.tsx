@@ -4,6 +4,7 @@ import {
   IonContent,
   IonPopover,
   IonRow,
+  useIonViewDidEnter,
 } from '@ionic/react';
 import { logEvent } from 'firebase/analytics';
 import { useState } from 'react';
@@ -17,6 +18,7 @@ import DropdownSelection, {
 } from '../../components/DropdownSelection';
 import TextInputField from '../../components/TextInputField/TextInputField';
 import { analytics } from '../../firebase';
+import { useAppSelector } from '../../redux/hooks';
 import { BROWSE } from '../../routes';
 import useCheckedErrorHandler from '../../util/hooks/useCheckedErrorHandler';
 import useErrorToast from '../../util/hooks/useErrorToast';
@@ -116,6 +118,12 @@ export default function ProfileCreationPage() {
   const handleCheckedError = useCheckedErrorHandler();
   const handleUnknownError = useUnknownErrorHandler();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const currentUser = useAppSelector((state) => state.user.user);
+  useIonViewDidEnter(() => {
+    if (currentUser.name) {
+      history.replace(BROWSE);
+    }
+  });
   const [userDetails, setUserDetails] = useState<User>({
     id: '',
     name: '',

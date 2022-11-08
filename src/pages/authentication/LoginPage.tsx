@@ -12,10 +12,17 @@ import AuthenticationPageContainer from './AuthenticationPageContainer';
 import { isValidNUSEmail } from './constants';
 import styles from './styles.module.scss';
 import { useAppDispatch } from '../../redux/hooks';
-import { reloadInitialData } from '../../redux/slices/homeSlice';
-import { reloadInitialPostsData } from '../../redux/slices/postsSlice';
+import {
+  reloadInitialData,
+  requestReloadOfHomeData,
+} from '../../redux/slices/homeSlice';
+import {
+  reloadInitialPostsData,
+  requestReloadOfPosts,
+} from '../../redux/slices/postsSlice';
 import ResetPasswordModal from './ResetPasswordModal';
 import ButtonSpinner from '../../components/ButtonSpinner';
+import { useHistory } from 'react-router-dom';
 interface LoginErrorMessages {
   email: string;
   password: string;
@@ -73,6 +80,8 @@ export default function LoginPage() {
 
     try {
       await login(loginDetails);
+      dispatch(requestReloadOfHomeData());
+      dispatch(requestReloadOfPosts());
       const promises = [
         dispatch(reloadInitialData()),
         dispatch(reloadInitialPostsData()),
@@ -94,6 +103,7 @@ export default function LoginPage() {
       setIsLoading(false);
     }
   }
+  const historyObject = useHistory();
 
   return (
     <AuthenticationPageContainer pageTitle="Welcome back!">
@@ -132,6 +142,7 @@ export default function LoginPage() {
             size="10"
             sizeMd="6"
             onClick={() => {
+              historyObject.push({ search: '?modal=true' });
               setIsResetPasswordModalOpen(true);
             }}
             className={styles['forgotten-password-container']}

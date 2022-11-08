@@ -8,16 +8,15 @@ import {
 } from '@ionic/react';
 import { useState } from 'react';
 import { useHistory } from 'react-router';
-import { facultyEnumToStr, genderEnumToStr, Post, User } from '../../api/types';
+import { facultyEnumToStr, genderEnumToStr, User } from '../../api/types';
 import PublicProfileModal from '../../pages/PublicProfileModal';
 import styles from './styles.module.scss';
 
 interface AboutPosterProps {
   poster: User;
-  post: Post;
 }
 
-export default function AboutPoster({ poster, post }: AboutPosterProps) {
+export default function AboutPoster({ poster }: AboutPosterProps) {
   const [isOpen, setIsOpen] = useState(false);
   const closeModal = () => setIsOpen(false);
   const history = useHistory();
@@ -26,7 +25,7 @@ export default function AboutPoster({ poster, post }: AboutPosterProps) {
       setIsOpen(true);
     } else {
       history.push({
-        pathname: '/profile',
+        pathname: '/profile/public',
         search: `?userId=${poster.id}`,
         state: { user: poster },
       });
@@ -42,14 +41,7 @@ export default function AboutPoster({ poster, post }: AboutPosterProps) {
           user={poster}
         />
       )}
-      <IonItem
-        lines="none"
-        button
-        detail={false}
-        onClick={() => {
-          setIsOpen(true);
-        }}
-      >
+      <IonItem lines="none" button detail={false} onClick={openModal}>
         <IonGrid className="ion-no-padding ion-no-margin">
           <IonRow className={styles['header'] + ' ion-justify-content-start'}>
             <IonCol>About the poster</IonCol>

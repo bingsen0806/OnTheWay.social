@@ -36,6 +36,7 @@ import {
   removeNotification,
   replaceNotification,
 } from '../../redux/slices/notificationsSlice';
+import { useLocation } from 'react-router-dom';
 
 interface PosterViewRequestProps {
   onClose?: (callback: () => void) => void;
@@ -127,6 +128,13 @@ export default function CreatedPostInformation({
   function closeModal() {
     onClose && onClose(updateStoreIfEdited);
   }
+
+  const location = useLocation();
+  useEffect(() => {
+    if (!location.search.includes('modal=true')) {
+      closeModal();
+    }
+  }, [location]);
 
   return (
     <>

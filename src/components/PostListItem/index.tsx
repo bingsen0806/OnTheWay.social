@@ -7,6 +7,7 @@ import {
   IonRow,
 } from '@ionic/react';
 import { calendarClearOutline, timeOutline } from 'ionicons/icons';
+import { useHistory } from 'react-router';
 import { useStateWithCallbackLazy } from 'use-state-with-callback';
 import { facultyEnumToStr, locationEnumToStr, Post } from '../../api/types';
 import PostModal from '../../pages/PostModal';
@@ -31,6 +32,8 @@ export default function PostListItem({
 }: PostListItemProps) {
   const [isModalOpen, setIsModalOpen] =
     useStateWithCallbackLazy<boolean>(false);
+
+  const history = useHistory();
   const closeModal = (callback: () => void) => {
     setIsModalOpen(false, callback);
   };
@@ -41,6 +44,7 @@ export default function PostListItem({
       color={selected && !isMobile ? 'tertiary' : ''}
       button
       onClick={() => {
+        history.push({ search: '?modal=true' });
         setIsModalOpen(true, () => {
           return;
         });

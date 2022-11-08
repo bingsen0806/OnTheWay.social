@@ -26,7 +26,7 @@ export default function StudyBuddy({
       setIsOpen(true);
     } else {
       history.push({
-        pathname: '/profile',
+        pathname: '/profile/public',
         search: `?userId=${buddy.id}`,
         state: { user: buddy },
       });

@@ -16,9 +16,6 @@ import Posts from '../../pages/posts';
 import Profile from '../../pages/profile';
 import Faq from '../../pages/faq';
 import styles from './styles.module.scss';
-import deer from '../../assets/deer.json';
-import snow from '../../assets/snow.json';
-import Lottie from 'lottie-react';
 import {
   ABOUT_ART,
   ART,
@@ -28,7 +25,6 @@ import {
   CREATE_POST,
   EMAIL_VERIFICATION,
   FAQ,
-  FEEDBACK,
   HOME,
   INSTAGRAM,
   LOGIN,
@@ -62,6 +58,7 @@ import { useState } from 'react';
 import Home from '../../pages/Home';
 import HomeContents from '../../pages/Home/HomeContents';
 import LoadingSpinner from '../FullScreenLoadingSpinner';
+import Footer from './Footer';
 
 function DesktopNavbar() {
   const location = useLocation();
@@ -84,9 +81,6 @@ function DesktopNavbar() {
   };
   const openInstagram = () => {
     window.open(INSTAGRAM, '_blank');
-  };
-  const openFeedback = () => {
-    window.open(FEEDBACK, '_blank');
   };
 
   return (
@@ -232,8 +226,12 @@ function DesktopNavbar() {
                   component={NotificationsPage}
                 />
                 <Route exact path={FAQ} component={Faq} />
+                <AuthenticatedRoute
+                  exact
+                  path={PUBLIC_PROFILE}
+                  component={Profile}
+                />
                 <Route exact path="/" component={Home} />
-                <Route path={PUBLIC_PROFILE} component={Profile} />
                 <IonGrid>
                   <IonRow>
                     <IonCol>
@@ -244,48 +242,8 @@ function DesktopNavbar() {
               </IonRouterOutlet>
             )}
           </IonContent>
-          <div className={styles.footer}>
-            <Lottie
-              className={styles['animation-snow']}
-              animationData={snow}
-              loop={true}
-            />
-            <Lottie
-              onClick={() => setIsAnimating(true)}
-              onAnimationEnd={() => setIsAnimating(false)}
-              className={
-                isAnimating ? styles['moving-animation'] : styles['animation']
-              }
-              animationData={deer}
-              loop={true}
-            />
-            <div slot="start" className={styles['footer-toolbar']}>
-              <span
-                className={`${styles['footer-text']} ion-margin-horizontal`}
-                onClick={routeToHome}
-              >
-                BuddyNUS
-              </span>
-              <span
-                onClick={routeToFaq}
-                className={`${styles['footer-text']} ion-margin-horizontal`}
-              >
-                FAQ
-              </span>
-              <span
-                onClick={openInstagram}
-                className={`${styles['footer-text']} ion-margin-horizontal`}
-              >
-                Instagram
-              </span>
-              <span
-                onClick={openFeedback}
-                className={`${styles['footer-text']} ion-margin-horizontal`}
-              >
-                Feedback
-              </span>
-            </div>
-          </div>
+
+          <Footer />
         </div>
       </IonContent>
     </IonPage>

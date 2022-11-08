@@ -1,0 +1,15 @@
+.margin {
+  margin-top: 2vh;
+  margin-bottom: 10vh;
+  @media screen and (min-width: 768px) {
+    margin-top: 5vh;
+  }
+  @media screen and (min-width: 1024px) {
+    margin-top: 10vh;
+  }
+}
+
+.desktop-row,
+.desktop-grid {
+  height: 100%;
+}
