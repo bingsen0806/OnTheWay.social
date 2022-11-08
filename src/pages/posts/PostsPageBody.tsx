@@ -99,8 +99,10 @@ export default function PostsPageBody() {
               </div>
             </NoData>
           ) : (
-            <IonGrid className={`${styles['margin']} ion-no-padding`}>
-              <IonRow className="ion-justify-content-center ion-no-padding">
+            <IonGrid className={`ion-no-padding ${styles['desktop-grid']}`}>
+              <IonRow
+                className={`ion-justify-content-center ion-no-padding ${styles['desktop-row']}`}
+              >
                 <IonCol size={isMobile ? '12' : '5'}>
                   {isMobile ? (
                     <>
@@ -116,7 +118,7 @@ export default function PostsPageBody() {
                       })}
                     </>
                   ) : (
-                    <IonContent fullscreen>
+                    <IonContent>
                       {listOfPosts.map((data) => {
                         return (
                           <PostListItem

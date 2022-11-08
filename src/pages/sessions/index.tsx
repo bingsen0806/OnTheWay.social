@@ -189,8 +189,10 @@ export default function Sessions() {
               <IonRefresherContent></IonRefresherContent>
             </IonRefresher>
           )}
-          <IonGrid className={`${styles['margin']} ion-no-padding`}>
-            <IonRow className="ion-justify-content-center ion-no-padding">
+          <IonGrid className={`ion-no-padding ${styles['desktop-grid']}`}>
+            <IonRow
+              className={`ion-justify-content-center ion-no-padding ${styles['desktop-row']}`}
+            >
               <IonCol size={isMobile ? '12' : '5'}>
                 {isMobile ? (
                   <>
@@ -204,7 +206,7 @@ export default function Sessions() {
                     ))}
                   </>
                 ) : (
-                  <IonContent fullscreen>
+                  <IonContent>
                     {createdPosts.map((post) => (
                       <CreatedRequestListItem
                         key={post.post.id}
@@ -259,8 +261,10 @@ export default function Sessions() {
               <IonRefresherContent></IonRefresherContent>
             </IonRefresher>
           )}
-          <IonGrid className={`${styles['margin']} ion-no-padding`}>
-            <IonRow className="ion-justify-content-center ion-no-padding">
+          <IonGrid className={`ion-no-padding ${styles['desktop-grid']}`}>
+            <IonRow
+              className={`ion-justify-content-center ion-no-padding ${styles['desktop-row']}`}
+            >
               <IonCol size={isMobile ? '12' : '5'}>
                 {isMobile ? (
                   <>
@@ -276,8 +280,8 @@ export default function Sessions() {
                     ))}
                   </>
                 ) : (
-                  <IonContent fullscreen>
-                    <IonList className={styles['margin']}>
+                  <IonContent>
+                    <IonList>
                       {appliedPosts.map((post) => (
                         <AppliedRequestListItem
                           onClick={setSelectedAppliedRequest}
