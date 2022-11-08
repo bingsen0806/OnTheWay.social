@@ -35,7 +35,6 @@ import { ErrorType } from '../../api/errors';
 import useErrorToast from '../../util/hooks/useErrorToast';
 import { useAuthState } from '../../util/authentication';
 import UnauthenticatedPostDetails from '../../components/UnauthenticatedPostDetails';
-import { SESSIONS } from '../../routes';
 import { useHistory, useLocation } from 'react-router';
 
 interface ApplyModalProps {
@@ -95,12 +94,7 @@ export default function PostInformation({
           presentInfoToast('Successfully applied!');
           void dispatch(reloadInitialData());
           const callback = () => {
-            console.log('99 called');
             dispatch(removePost(applyPost));
-            history.replace({
-              pathname: SESSIONS,
-              search: `?page=1`,
-            });
           };
           onClose && onClose(callback);
           !onClose && callback();

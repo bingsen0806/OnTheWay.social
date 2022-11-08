@@ -14,7 +14,9 @@ interface PostDetailsProps {
 export default function PostDetails({ post }: PostDetailsProps) {
   const { isAuthenticated } = useAuthState();
   return (
-    <IonGrid className={isAuthenticated ? styles['margin'] : ''}>
+    <IonGrid
+      className={`${isAuthenticated ? styles['margin'] : ''} ion-no-padding`}
+    >
       <IonRow className={styles['bold'] + ' ion-justify-content-start'}>
         <IonCol>Details</IonCol>
       </IonRow>
@@ -34,7 +36,14 @@ export default function PostDetails({ post }: PostDetailsProps) {
           {convertDateRangeToTimeRangeStr(post.startDateTime, post.endDateTime)}
         </IonCol>
       </IonRow>
-      {isAuthenticated && <p className="ion-text-center">{post.description}</p>}
+      {isAuthenticated && (
+        <IonRow className="ion-padding-top">
+          <IonCol>Description</IonCol>
+          <IonCol size="12">
+            <p>{post.description}</p>
+          </IonCol>
+        </IonRow>
+      )}
     </IonGrid>
   );
 }

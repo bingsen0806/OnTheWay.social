@@ -122,7 +122,6 @@ export default function PostsPageBody() {
                 className={`ion-justify-content-center ion-no-padding ${styles['desktop-row']}`}
               >
                 <IonCol size={isMobile ? '12' : '5'}>
-                  : (
                   <IonContent>
                     <IonList>
                       {listOfPosts.map((data) => {
@@ -145,7 +144,6 @@ export default function PostsPageBody() {
                       <IonInfiniteScrollContent loadingSpinner="circles"></IonInfiniteScrollContent>
                     </IonInfiniteScroll>
                   </IonContent>
-                  )
                 </IonCol>
                 {!isMobile && (
                   <IonCol size="7">
