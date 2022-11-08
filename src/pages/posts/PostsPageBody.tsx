@@ -24,6 +24,8 @@ import usePageInitialLoad from '../../util/hooks/usePageInitialLoad';
 import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
 import NoData from '../NoData';
 import SelectedPost from './SelectedPost';
+import styles from './styles.module.scss';
+
 export default function PostsPageBody() {
   const history = useHistory();
   const listOfPosts = useAppSelector((state) => state.posts.posts);
@@ -97,7 +99,9 @@ export default function PostsPageBody() {
               </div>
             </NoData>
           ) : (
-            <IonGrid className="ion-margin-top ion-no-padding ion-margin-bottom">
+            <IonGrid
+              className={`${styles['margin']} ion-no-padding ion-margin-bottom`}
+            >
               <IonRow className="ion-justify-content-center ion-no-padding">
                 <IonCol size={isMobile ? '12' : '5'}>
                   {isMobile ? (
