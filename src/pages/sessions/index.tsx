@@ -220,7 +220,9 @@ export default function Sessions() {
               </IonCol>
               {!isMobile && (
                 <IonCol size="7">
-                  <SelectedCreatedRequest createdRequest={selectedRequest} />
+                  <IonContent>
+                    <SelectedCreatedRequest createdRequest={selectedRequest} />
+                  </IonContent>
                 </IonCol>
               )}
             </IonRow>
@@ -298,9 +300,11 @@ export default function Sessions() {
               </IonCol>
               {!isMobile && (
                 <IonCol sizeLg="7">
-                  <SelectedAppliedRequest
-                    appliedRequest={selectedAppliedRequest}
-                  />
+                  <IonContent>
+                    <SelectedAppliedRequest
+                      appliedRequest={selectedAppliedRequest}
+                    />
+                  </IonContent>
                 </IonCol>
               )}
             </IonRow>

@@ -141,7 +141,9 @@ export default function PostsPageBody() {
                 </IonCol>
                 {!isMobile && (
                   <IonCol size="7">
-                    <SelectedPost post={selectedPost} />
+                    <IonContent>
+                      <SelectedPost post={selectedPost} />
+                    </IonContent>
                   </IonCol>
                 )}
               </IonRow>
