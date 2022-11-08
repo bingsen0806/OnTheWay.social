@@ -51,7 +51,6 @@ export default function PublicProfileContents({
 
   useIonViewDidEnter(() => {
     if (userId) {
-      console.log('dispatching');
       void dispatch(getUserObject(userId));
     }
   });

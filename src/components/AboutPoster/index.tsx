@@ -25,8 +25,9 @@ export default function AboutPoster({ poster, post }: AboutPosterProps) {
     if (isMobile) {
       setIsOpen(true);
     } else {
+      console.log(28);
       history.push({
-        pathname: '/profile',
+        pathname: '/profile/public',
         search: `?userId=${poster.id}`,
         state: { user: poster },
       });
@@ -42,14 +43,7 @@ export default function AboutPoster({ poster, post }: AboutPosterProps) {
           user={poster}
         />
       )}
-      <IonItem
-        lines="none"
-        button
-        detail={false}
-        onClick={() => {
-          setIsOpen(true);
-        }}
-      >
+      <IonItem lines="none" button detail={false} onClick={openModal}>
         <IonGrid className="ion-no-padding ion-no-margin">
           <IonRow className={styles['header'] + ' ion-justify-content-start'}>
             <IonCol>About the poster</IonCol>

@@ -69,6 +69,7 @@ export default function RegisterPage() {
       haveError = true;
     } else if (confirmationPassword !== loginDetails.password) {
       newErrorMessages.confirmationPassword = 'Passwords do not match.';
+      haveError = true;
     }
 
     setErrorMessages(newErrorMessages);

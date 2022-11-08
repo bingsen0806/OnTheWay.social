@@ -232,8 +232,12 @@ function DesktopNavbar() {
                   component={NotificationsPage}
                 />
                 <Route exact path={FAQ} component={Faq} />
+                <AuthenticatedRoute
+                  exact
+                  path={PUBLIC_PROFILE}
+                  component={Profile}
+                />
                 <Route exact path="/" component={Home} />
-                <Route path={PUBLIC_PROFILE} component={Profile} />
                 <IonGrid>
                   <IonRow>
                     <IonCol>

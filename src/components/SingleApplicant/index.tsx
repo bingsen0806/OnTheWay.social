@@ -53,7 +53,7 @@ export default function SingleApplicant({
       setIsOpen(true);
     } else {
       history.push({
-        pathname: '/profile',
+        pathname: '/profile/public',
         search: `?userId=${applicant.id}`,
         state: { user: applicant },
       });

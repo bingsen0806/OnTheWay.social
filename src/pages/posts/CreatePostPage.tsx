@@ -126,7 +126,7 @@ export default function CreatePostPage() {
   });
 
   function checkStartTimeBeforeEndTime() {
-    return startTime < endTime;
+    return startTime <= endTime;
   }
 
   function areAllFieldsSelected() {

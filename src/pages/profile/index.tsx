@@ -34,6 +34,7 @@ interface Image {
 }
 
 export default function ProfilePage() {
+  console.log(35, 'hello');
   const history = useHistory();
   const params = new URLSearchParams(window.location.search);
   const userId = params.get('userId');
