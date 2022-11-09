@@ -34,7 +34,12 @@ export default function TextInputField({
       <IonItem lines="full">
         {!multiline ? (
           <>
-            <IonLabel position="floating">{label}</IonLabel>
+            <IonLabel
+              position="floating"
+              class={styles['input-floating-label']}
+            >
+              {label}
+            </IonLabel>
             <IonInput
               name={name}
               autocomplete="on"

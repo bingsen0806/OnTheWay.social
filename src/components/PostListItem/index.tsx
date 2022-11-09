@@ -35,7 +35,6 @@ export default function PostListItem({
 
   const history = useHistory();
   const closeModal = (callback: () => void) => {
-    console.log('41 postlistitem', callback);
     setIsModalOpen(false, callback);
   };
   const isMobile = getPlatforms().includes('mobile');
