@@ -96,7 +96,7 @@ export default function Main() {
         clearInterval(notificationChecker);
       };
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, dispatch]);
 
   useNotificationForegroundHandler();
 
