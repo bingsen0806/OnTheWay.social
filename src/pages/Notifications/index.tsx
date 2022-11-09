@@ -1,4 +1,5 @@
 import {
+  getPlatforms,
   IonButton,
   IonButtons,
   IonContent,
@@ -13,7 +14,8 @@ import {
   isPlatform,
 } from '@ionic/react';
 import { arrowBackOutline } from 'ionicons/icons';
-import { useLayoutEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
+import { useHistory, useLocation } from 'react-router';
 import FullScreenLoadingSpinner from '../../components/FullScreenLoadingSpinner';
 import { generateAndSendNotificationRegistrationToken } from '../../firebase';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -46,6 +48,9 @@ export default function NotificationsPage() {
   const handleCheckedError = useCheckedErrorHandler();
   const handleUnknownError = useUnknownErrorHandler();
   const presentErrorToast = useErrorToast();
+  const location = useLocation();
+  const history = useHistory();
+  const isMobile = getPlatforms().includes('mobile');
 
   useLayoutEffect(() => {
     if (!isPlatform('ios')) {
@@ -53,6 +58,15 @@ export default function NotificationsPage() {
       setIsNotificationPermissionDenied(Notification.permission === 'denied');
     }
   }, []);
+
+  useEffect(() => {
+    if (
+      !location.search.includes('modal=true') &&
+      isNotificationPermissionModalOpen
+    ) {
+      setIsNotificationPermissionModalOpen(false);
+    }
+  }, [location]);
 
   const refreshPage = () => {
     dispatch(loadNotifications(false))
@@ -92,6 +106,7 @@ export default function NotificationsPage() {
   }
 
   function openNotificationPermissionsModal() {
+    history.push({ search: '?modal=true' });
     setIsNotificationPermissionModalOpen(true);
   }
 
@@ -155,22 +170,33 @@ export default function NotificationsPage() {
             </IonList>
           </>
         )}
-        <IonModal isOpen={isNotificationPermissionModalOpen}>
+        <IonModal
+          onWillDismiss={() => {
+            if (location.search.includes('modal=true')) {
+              history.goBack();
+            }
+          }}
+          isOpen={isNotificationPermissionModalOpen}
+        >
           <IonHeader>
             <IonToolbar>
-              <IonButtons slot="start">
-                <IonButton
-                  fill="clear"
-                  color="dark"
-                  onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
-                    event.stopPropagation();
-                    setIsNotificationPermissionModalOpen(false);
-                  }}
-                >
-                  <IonIcon icon={arrowBackOutline} slot="start" />
-                  <p>Back</p>
-                </IonButton>
-              </IonButtons>
+              {isMobile && (
+                <IonButtons slot="start">
+                  <IonButton
+                    fill="clear"
+                    color="dark"
+                    onClick={(
+                      event: React.MouseEvent<HTMLIonButtonElement>
+                    ) => {
+                      event.stopPropagation();
+                      setIsNotificationPermissionModalOpen(false);
+                    }}
+                  >
+                    <IonIcon icon={arrowBackOutline} slot="start" />
+                    <p>Back</p>
+                  </IonButton>
+                </IonButtons>
+              )}
             </IonToolbar>
           </IonHeader>
           <IonContent className="ion-padding">
