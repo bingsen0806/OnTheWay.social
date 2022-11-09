@@ -1,4 +1,5 @@
 import {
+  getPlatforms,
   IonButton,
   IonButtons,
   IonContent,
@@ -49,6 +50,7 @@ export default function NotificationsPage() {
   const presentErrorToast = useErrorToast();
   const location = useLocation();
   const history = useHistory();
+  const isMobile = getPlatforms().includes('mobile');
 
   useLayoutEffect(() => {
     if (!isPlatform('ios')) {
@@ -178,19 +180,23 @@ export default function NotificationsPage() {
         >
           <IonHeader>
             <IonToolbar>
-              <IonButtons slot="start">
-                <IonButton
-                  fill="clear"
-                  color="dark"
-                  onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
-                    event.stopPropagation();
-                    setIsNotificationPermissionModalOpen(false);
-                  }}
-                >
-                  <IonIcon icon={arrowBackOutline} slot="start" />
-                  <p>Back</p>
-                </IonButton>
-              </IonButtons>
+              {isMobile && (
+                <IonButtons slot="start">
+                  <IonButton
+                    fill="clear"
+                    color="dark"
+                    onClick={(
+                      event: React.MouseEvent<HTMLIonButtonElement>
+                    ) => {
+                      event.stopPropagation();
+                      setIsNotificationPermissionModalOpen(false);
+                    }}
+                  >
+                    <IonIcon icon={arrowBackOutline} slot="start" />
+                    <p>Back</p>
+                  </IonButton>
+                </IonButtons>
+              )}
             </IonToolbar>
           </IonHeader>
           <IonContent className="ion-padding">
