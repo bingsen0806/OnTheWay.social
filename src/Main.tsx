@@ -4,7 +4,6 @@ import {
   IonApp,
   IonContent,
   IonRouterOutlet,
-  isPlatform,
   setupIonicReact,
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
@@ -59,11 +58,7 @@ import CreatePostPage from './pages/posts/CreatePostPage';
 import Sessions from './pages/sessions';
 import Campaigns from './pages/campaigns';
 import NotificationsPage from './pages/Notifications';
-import { useAppDispatch } from './redux/hooks';
 import useNotificationForegroundHandler from './util/hooks/useNotificationForegroundHandler';
-import { useLayoutEffect } from 'react';
-import { loadNotifications } from './redux/slices/notificationsSlice';
-import { generateAndSendNotificationRegistrationToken } from './firebase';
 import Art from './pages/Art';
 import AboutArtPage from './pages/Art/AboutArt';
 import CoverPhotoSelectionPage from './pages/Art/CoverPhotoSelectionPage';
@@ -76,27 +71,8 @@ import styles from './styles.module.scss';
 setupIonicReact();
 
 export default function Main() {
-  const { isAuthenticated, isLoading } = useAuthState();
-  const dispatch = useAppDispatch();
+  const { isLoading } = useAuthState();
   const isMobile = getPlatforms().includes('mobile');
-  /**
-   * Set up a check on notifications at regular intervals of 10s.
-   */
-  useLayoutEffect(() => {
-    if (!isPlatform('ios') && Notification.permission === 'granted') {
-      generateAndSendNotificationRegistrationToken();
-    }
-
-    if (isAuthenticated) {
-      void dispatch(loadNotifications(true));
-      const notificationChecker = setInterval(() => {
-        void dispatch(loadNotifications(true));
-      }, 10000);
-      return () => {
-        clearInterval(notificationChecker);
-      };
-    }
-  }, [isAuthenticated, dispatch]);
 
   useNotificationForegroundHandler();
 
