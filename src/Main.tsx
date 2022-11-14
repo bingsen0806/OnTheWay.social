@@ -1,8 +1,7 @@
-import { Route } from 'react-router-dom';
+import { Redirect, Route } from 'react-router-dom';
 import {
   getPlatforms,
   IonApp,
-  IonContent,
   IonRouterOutlet,
   setupIonicReact,
 } from '@ionic/react';
@@ -41,11 +40,13 @@ import {
   HOME,
   LOGIN,
   NOTIFICATIONS,
+  PAGE_NOT_FOUND,
   PROFILE,
   PROFILE_CREATION,
   PROFILE_FAQ,
   REGISTER,
   SESSIONS,
+  USER_HISTORY,
 } from './routes';
 import { useAuthState } from './util/authentication';
 import AuthenticatedRoute from './util/authentication/AuthenticatedRoute';
@@ -68,6 +69,8 @@ import TabBarWrapper from './util/TabBarWrapper';
 import HomeContents from './pages/Home/HomeContents';
 import LoadingSpinner from './components/FullScreenLoadingSpinner';
 import styles from './styles.module.scss';
+import HistoryPage from './pages/History';
+import PageNotFound from './pages/PageNotFound';
 setupIonicReact();
 
 export default function Main() {
@@ -79,83 +82,84 @@ export default function Main() {
   return (
     <IonApp>
       <IonReactRouter>
-        <IonContent fullscreen>
-          {isLoading ? (
-            <LoadingSpinner />
-          ) : (
-            <IonRouterOutlet className={styles['padding']}>
-              {isMobile && (
-                <>
-                  <UnauthenticatedRoute
-                    exact
-                    path={LOGIN}
-                    component={LoginPage}
-                  />
-                  <UnauthenticatedRoute
-                    exact
-                    path={REGISTER}
-                    component={RegisterPage}
-                  />
-                  <Route exact path={HOME} component={HomeContents} />
-                  <Route exact path={BROWSE} component={Posts} />
-                  <AuthenticatedRoute exact path={ART} component={Art} />
-                  <AuthenticatedRoute
-                    exact
-                    path={ABOUT_ART}
-                    component={AboutArtPage}
-                  />
-                  <AuthenticatedRoute
-                    exact
-                    path={CHANGE_COVER_PHOTO}
-                    component={CoverPhotoSelectionPage}
-                  />
-                  <AuthenticatedRoute
-                    exact
-                    path={CAMPAIGN}
-                    component={Campaigns}
-                  />
-                  <AuthenticatedRoute
-                    exact
-                    path={EMAIL_VERIFICATION}
-                    component={EmailVerificationPage}
-                  />
-                  <AuthenticatedRoute
-                    exact
-                    path={PROFILE_CREATION}
-                    component={ProfileCreationPage}
-                  />
-                  <AuthenticatedRoute
-                    exact
-                    path={CREATE_POST}
-                    component={CreatePostPage}
-                  />
-                  <AuthenticatedRoute
-                    exact
-                    path={PROFILE}
-                    component={Profile}
-                  />
-                  <AuthenticatedRoute
-                    exact
-                    path={SESSIONS}
-                    component={Sessions}
-                  />
-                  <AuthenticatedRoute
-                    exact
-                    path={NOTIFICATIONS}
-                    component={NotificationsPage}
-                  />
-                  <AuthenticatedRoute
-                    exact
-                    path={PROFILE_FAQ}
-                    component={Faq}
-                  />
-                  <UnauthenticatedRoute exact path={FAQ} component={Faq} />
-                  <Route exact path="/" component={Home} />
-                </>
-              )}
-            </IonRouterOutlet>
-          )}
-        </IonContent>
+        {isLoading ? (
+          <LoadingSpinner />
+        ) : (
+          <IonRouterOutlet className={styles['padding']}>
+            {isMobile && (
+              <>
+                <UnauthenticatedRoute
+                  exact
+                  path={LOGIN}
+                  component={LoginPage}
+                />
+                <UnauthenticatedRoute
+                  exact
+                  path={REGISTER}
+                  component={RegisterPage}
+                />
+                <Route exact path={HOME} component={HomeContents} />
+                <Route exact path={BROWSE} component={Posts} />
+                <AuthenticatedRoute exact path={ART} component={Art} />
+                <AuthenticatedRoute
+                  exact
+                  path={ABOUT_ART}
+                  component={AboutArtPage}
+                />
+                <AuthenticatedRoute
+                  exact
+                  path={USER_HISTORY}
+                  component={HistoryPage}
+                />
+                <AuthenticatedRoute
+                  exact
+                  path={CHANGE_COVER_PHOTO}
+                  component={CoverPhotoSelectionPage}
+                />
+                <AuthenticatedRoute
+                  exact
+                  path={CAMPAIGN}
+                  component={Campaigns}
+                />
+                <AuthenticatedRoute
+                  exact
+                  path={EMAIL_VERIFICATION}
+                  component={EmailVerificationPage}
+                />
+                <AuthenticatedRoute
+                  exact
+                  path={PROFILE_CREATION}
+                  component={ProfileCreationPage}
+                />
+                <AuthenticatedRoute
+                  exact
+                  path={CREATE_POST}
+                  component={CreatePostPage}
+                />
+                <AuthenticatedRoute exact path={PROFILE} component={Profile} />
+                <AuthenticatedRoute
+                  exact
+                  path={SESSIONS}
+                  component={Sessions}
+                />
+                <AuthenticatedRoute
+                  exact
+                  path={NOTIFICATIONS}
+                  component={NotificationsPage}
+                />
+                <AuthenticatedRoute exact path={PROFILE_FAQ} component={Faq} />
+                <UnauthenticatedRoute exact path={FAQ} component={Faq} />
+                <Route
+                  exact
+                  path={PAGE_NOT_FOUND}
+                  component={PageNotFound}
+                ></Route>
+                <Route exact path="/" component={Home} />
+                <Route render={() => <Redirect to={PAGE_NOT_FOUND} />} />
+              </>
+            )}
+          </IonRouterOutlet>
+        )}
         {isMobile ? <TabBarWrapper /> : <DesktopNavbar />}
       </IonReactRouter>
     </IonApp>

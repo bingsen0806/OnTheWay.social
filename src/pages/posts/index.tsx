@@ -299,7 +299,7 @@ export default function PostsPage() {
         </IonContent>
       </IonMenu>
       <IonPage id="main-content">
-        <div className={styles['header']}>
+        {isMobile && (
           <IonHeader>
             <IonToolbar>
               <div>
@@ -337,7 +337,7 @@ export default function PostsPage() {
               </IonMenuToggle>
             </IonToolbar>
           </IonHeader>
-        </div>
+        )}
         {isMobile ? (
           <IonContent fullscreen>
             <IonRefresher slot="fixed" onIonRefresh={refreshContents}>

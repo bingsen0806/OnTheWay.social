@@ -6,6 +6,7 @@ import faq from './slices/faqSlice';
 import user from './slices/userSlice';
 import campaigns from './slices/campaignSlice';
 import notifications from './slices/notificationsSlice';
+import history from './slices/historySlice';
 
 const appReducer = combineReducers({
   home,
@@ -14,6 +15,7 @@ const appReducer = combineReducers({
   user,
   campaigns,
   notifications,
+  history,
 });
 
 export const rootReducer: typeof appReducer = (state, action) => {
