@@ -37,7 +37,7 @@ export default function StudyBuddy({
       {isMobile && (
         <PublicProfileModal isOpen={isOpen} onClose={closeModal} user={buddy} />
       )}
-      <IonRow className="ion-padding-start ion-justify-content-center ion-align-items-center">
+      <IonRow className="ion-justify-content-center ion-align-items-center">
         <IonCol size="3" sizeMd="6" onClick={openModal}>
           <IonAvatar className={styles['avatar']}>
             <img alt="profile" src={buddy.thumbnailPhoto} />

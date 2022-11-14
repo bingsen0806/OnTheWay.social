@@ -40,11 +40,13 @@ import { useHistory, useLocation } from 'react-router';
 interface ApplyModalProps {
   onClose?: ((callback: () => void) => void) | (() => void);
   applyPost: Post;
+  infoOnly?: boolean;
 }
 
 export default function PostInformation({
   onClose,
   applyPost,
+  infoOnly,
 }: ApplyModalProps) {
   const handleCheckedError = useCheckedErrorHandler();
   const handleUnknownError = useUnknownErrorHandler();
@@ -145,29 +147,30 @@ export default function PostInformation({
 
   return (
     <>
-      {isMobile && (
-        <IonHeader>
-          <IonToolbar>
-            <IonButtons slot="start">
-              <IonButton
-                fill="clear"
-                color="dark"
-                onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
-                  event.stopPropagation();
-                  onCloseAction();
-                }}
-              >
-                <IonIcon icon={arrowBackOutline} slot="start" />
-                <p>Back</p>
-              </IonButton>
-            </IonButtons>
-            <IonTitle>
-              Study Session @{' '}
-              {locationEnumToStr(applyPost.location) ?? 'UNKNOWN'}
-            </IonTitle>
-          </IonToolbar>
-        </IonHeader>
-      )}
+      {isMobile ||
+        (infoOnly && (
+          <IonHeader>
+            <IonToolbar>
+              <IonButtons slot="start">
+                <IonButton
+                  fill="clear"
+                  color="dark"
+                  onClick={(event: React.MouseEvent<HTMLIonButtonElement>) => {
+                    event.stopPropagation();
+                    onCloseAction();
+                  }}
+                >
+                  <IonIcon icon={arrowBackOutline} slot="start" />
+                  <p>Back</p>
+                </IonButton>
+              </IonButtons>
+              <IonTitle>
+                Study Session @{' '}
+                {locationEnumToStr(applyPost.location) ?? 'UNKNOWN'}
+              </IonTitle>
+            </IonToolbar>
+          </IonHeader>
+        ))}
       <IonGrid>
         <IonRow className="ion-justify-content-center">
           <IonCol sizeMd="8" sizeLg="11">
@@ -177,9 +180,11 @@ export default function PostInformation({
             )}
             {isAuthenticated && (
               <>
-                <OtherStudyBuddies studyBuddies={applyPost.participants} />
+                {!infoOnly && applyPost.participants.length > 0 && (
+                  <OtherStudyBuddies studyBuddies={applyPost.participants} />
+                )}
                 <AboutPoster poster={applyPost?.poster} />
-                {isApplied ? (
+                {infoOnly ? null : isApplied ? (
                   <IonButton
                     className={`ion-padding-horizontal ion-margin-top ${
                       isMobile ? styles['cancel-button'] : ''

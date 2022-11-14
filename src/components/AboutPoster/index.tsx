@@ -41,30 +41,38 @@ export default function AboutPoster({ poster }: AboutPosterProps) {
           user={poster}
         />
       )}
-      <IonItem lines="none" button detail={false} onClick={openModal}>
-        <IonGrid className="ion-no-padding ion-no-margin">
-          <IonRow className={styles['header'] + ' ion-justify-content-start'}>
-            <IonCol>About the poster</IonCol>
-          </IonRow>
-          <IonRow className="ion-justify-content-start ion-padding-top">
-            <IonCol size="3" sizeMd="4" sizeLg="5">
-              <IonAvatar className={styles['avatar']}>
-                <img alt="profilePic" src={poster.thumbnailPhoto} />{' '}
-              </IonAvatar>
-            </IonCol>
-            <IonCol className={styles['user-info']}>
-              <IonRow className={styles['poster-name']}>{poster.name}</IonRow>
-              <IonRow>
-                Y{poster.year ?? 0}/
-                {facultyEnumToStr(poster.faculty) ?? 'unknown faculty'}
-              </IonRow>
-              <IonRow>
-                {genderEnumToStr(poster.gender) ?? 'unknown gender'}
-              </IonRow>
-            </IonCol>
-          </IonRow>
-        </IonGrid>
-      </IonItem>
+      <IonGrid>
+        <IonRow className={styles['header'] + ' ion-justify-content-start'}>
+          <IonCol>About the poster</IonCol>
+        </IonRow>
+        <IonItem
+          lines="none"
+          button
+          detail={false}
+          onClick={openModal}
+          className={styles['post-item']}
+        >
+          <IonGrid className="ion-no-padding">
+            <IonRow className="ion-justify-content-start ion-padding-top">
+              <IonCol size="3" sizeMd="4" sizeLg="5">
+                <IonAvatar className={styles['avatar']}>
+                  <img alt="profilePic" src={poster.thumbnailPhoto} />{' '}
+                </IonAvatar>
+              </IonCol>
+              <IonCol className={styles['user-info']}>
+                <IonRow className={styles['poster-name']}>{poster.name}</IonRow>
+                <IonRow>
+                  Y{poster.year ?? 0}/
+                  {facultyEnumToStr(poster.faculty) ?? 'unknown faculty'}
+                </IonRow>
+                <IonRow>
+                  {genderEnumToStr(poster.gender) ?? 'unknown gender'}
+                </IonRow>
+              </IonCol>
+            </IonRow>
+          </IonGrid>
+        </IonItem>
+      </IonGrid>
     </>
   );
 }

@@ -8,6 +8,7 @@ import {
   IonRow,
   IonCol,
   IonImg,
+  getPlatforms,
 } from '@ionic/react';
 import styles from './styles.module.scss';
 import { useHistory } from 'react-router';
@@ -33,6 +34,8 @@ import ProfileHeader from '../../components/ProfileHeader';
 import usePageInitialLoad from '../../util/hooks/usePageInitialLoad';
 import FullScreenLoadingSpinner from '../../components/FullScreenLoadingSpinner';
 import PublicProfileContents from '../PublicProfileModal/PublicProfileContents';
+import DesktopNavbar from '../../components/Navbar/DesktopNavbar';
+import Footer from '../../components/Navbar/Footer';
 
 interface Image {
   preview: string;
@@ -50,6 +53,7 @@ export default function ProfilePage() {
   const handleUnknownError = useUnknownErrorHandler();
   const user = useAppSelector((state) => state.user.user);
   const inputFile = useRef<HTMLInputElement>(null);
+  const isMobile = getPlatforms().includes('mobile');
   const dummyImage: Image = {
     preview: '',
     raw: [],
@@ -131,6 +135,7 @@ export default function ProfilePage() {
 
   return (
     <IonPage>
+      {!isMobile && <DesktopNavbar />}
       <IonContent fullscreen>
         {isLoading ? (
           <FullScreenLoadingSpinner />
@@ -210,6 +215,7 @@ export default function ProfilePage() {
           </>
         )}
       </IonContent>
+      {!isMobile && <Footer />}
     </IonPage>
   );
 }

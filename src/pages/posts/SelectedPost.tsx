@@ -13,14 +13,14 @@ function SelectedPost({ post }: SelectedPostProps) {
   if (post === null) {
     return (
       <div className={styles['margin']}>
-        <p className="ion-text-center ion-no-margin ion-no-padding">
-          No session selected. Click on a session to find out more
-        </p>
         <Lottie
           className={styles['animation']}
           animationData={study}
           loop={true}
         />
+        <p className="ion-text-center ion-no-margin ion-no-padding">
+          No session selected. Click on a session to find out more
+        </p>
       </div>
     );
   }

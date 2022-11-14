@@ -17,6 +17,8 @@ import { arrowBackOutline } from 'ionicons/icons';
 import { useEffect, useLayoutEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router';
 import FullScreenLoadingSpinner from '../../components/FullScreenLoadingSpinner';
+import DesktopNavbar from '../../components/Navbar/DesktopNavbar';
+import Footer from '../../components/Navbar/Footer';
 import { generateAndSendNotificationRegistrationToken } from '../../firebase';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { loadNotifications } from '../../redux/slices/notificationsSlice';
@@ -112,6 +114,7 @@ export default function NotificationsPage() {
 
   return (
     <IonPage>
+      {!isMobile && <DesktopNavbar />}
       <IonHeader>
         <IonToolbar>
           <h1 className="ion-padding-start">Notifications</h1>
@@ -232,6 +235,7 @@ export default function NotificationsPage() {
           </IonContent>
         </IonModal>
       </IonContent>
+      {!isMobile && <Footer />}
     </IonPage>
   );
 }

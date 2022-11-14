@@ -5,6 +5,8 @@ import {
   IonGrid,
   IonRow,
   IonCol,
+  IonToolbar,
+  IonHeader,
 } from '@ionic/react';
 import Lottie from 'lottie-react';
 import animationData from '../../assets/404.json';
@@ -14,14 +16,23 @@ import styles from './styles.module.scss';
 export default function PageNotFound() {
   return (
     <IonPage>
+      <IonHeader>
+        <IonToolbar>
+          <h2 className="ion-text-center">Page not found</h2>
+        </IonToolbar>
+      </IonHeader>
       <IonContent fullscreen>
-        <Lottie animationData={animationData} loop={true} />
         <IonGrid className={styles['text-button-container']}>
           <IonRow className="ion-justify-content-center">
-            <IonCol className="ion-align-items-center">
-              <h2 className="ion-text-center">
-                The page you requested does not exist!
-              </h2>
+            <IonCol className="ion-align-items-center"></IonCol>
+          </IonRow>
+          <IonRow>
+            <IonCol>
+              <Lottie
+                className={styles['animation']}
+                animationData={animationData}
+                loop={true}
+              />
             </IonCol>
           </IonRow>
           <IonRow className="ion-justify-content-center">

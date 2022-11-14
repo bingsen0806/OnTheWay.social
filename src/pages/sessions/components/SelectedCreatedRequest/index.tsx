@@ -14,14 +14,14 @@ function SelectedCreatedRequest({
   if (createdRequest === null) {
     return (
       <div>
-        <p className="ion-text-center ion-no-margin ion-no-padding">
-          No session selected
-        </p>
         <Lottie
           animationData={study}
           loop={true}
           className={styles['centered']}
         />
+        <p className="ion-text-center ion-no-margin ion-no-padding">
+          No session selected
+        </p>
       </div>
     );
   }

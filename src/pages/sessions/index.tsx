@@ -40,6 +40,8 @@ import { AppliedRequest, CreatedRequest } from '../../api/types';
 import SelectedAppliedRequest from './components/SelectedAppliedRequest';
 import FullScreenLoadingSpinner from '../../components/FullScreenLoadingSpinner';
 import styles from './styles.module.scss';
+import DesktopNavbar from '../../components/Navbar/DesktopNavbar';
+import Footer from '../../components/Navbar/Footer';
 
 enum HomeTab {
   APPLIED_POST = 'Applied',
@@ -342,6 +344,7 @@ export default function Sessions() {
 
   return (
     <IonPage>
+      {!isMobile && <DesktopNavbar />}
       <IonHeader className="ion-no-margin">
         {isMobile && (
           <IonToolbar>
@@ -365,6 +368,7 @@ export default function Sessions() {
         </IonToolbar>
       </IonHeader>
       {renderListBasedOnTab()}
+      {!isMobile && <Footer />}
     </IonPage>
   );
 }

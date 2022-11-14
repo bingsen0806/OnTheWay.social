@@ -21,6 +21,8 @@ import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { helpCircleOutline } from 'ionicons/icons';
 import { reloadSelf } from '../../redux/slices/userSlice';
 import ArtCard from './ArtCard';
+import DesktopNavbar from '../../components/Navbar/DesktopNavbar';
+import Footer from '../../components/Navbar/Footer';
 
 export default function Art() {
   const obtainedArt = useAppSelector((state) => state.user.user.art ?? []);
@@ -40,6 +42,7 @@ export default function Art() {
 
   return (
     <IonPage>
+      {!isMobile && <DesktopNavbar />}
       <IonHeader>
         <IonToolbar>
           {isMobile && (
@@ -96,6 +99,7 @@ export default function Art() {
           )}
         </IonGrid>
       </IonContent>
+      {!isMobile && <Footer />}
     </IonPage>
   );
 }

@@ -28,6 +28,8 @@ import {
   TimeOfDay,
   timeOfDayEnumToStr,
 } from '../../api/types';
+import DesktopNavbar from '../../components/Navbar/DesktopNavbar';
+import Footer from '../../components/Navbar/Footer';
 import { useAppDispatch } from '../../redux/hooks';
 import { getNewPageOfPostsWithFilter } from '../../redux/slices/postsSlice';
 import { CREATE_POST, LOGIN } from '../../routes';
@@ -299,6 +301,7 @@ export default function PostsPage() {
         </IonContent>
       </IonMenu>
       <IonPage id="main-content">
+        {!isMobile && <DesktopNavbar />}
         {isMobile && (
           <IonHeader>
             <IonToolbar>
@@ -350,6 +353,7 @@ export default function PostsPage() {
             <PostsPageBody />
           </IonContent>
         )}
+        {!isMobile && <Footer />}
       </IonPage>
     </>
   );

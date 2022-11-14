@@ -1,4 +1,5 @@
 import {
+  getPlatforms,
   IonButton,
   IonCol,
   IonContent,
@@ -20,6 +21,8 @@ import DateTimePicker from '../../components/DateTimePicker';
 import DropdownSelection, {
   DropdownItem,
 } from '../../components/DropdownSelection';
+import DesktopNavbar from '../../components/Navbar/DesktopNavbar';
+import Footer from '../../components/Navbar/Footer';
 import TextInputField from '../../components/TextInputField/TextInputField';
 import { analytics } from '../../firebase';
 import { useAppDispatch } from '../../redux/hooks';
@@ -99,6 +102,7 @@ export default function CreatePostPage() {
     useState<boolean>(false);
   const [post, setPost] = useState<Post>({ description: '' } as Post);
   const [date, setDate] = useState<string>(moment().toISOString(true));
+  const isMobile = getPlatforms().includes('mobile');
   const [startTime, setStartTime] = useState<string>(
     moment
       .min([
@@ -214,6 +218,7 @@ export default function CreatePostPage() {
 
   return (
     <IonPage>
+      {!isMobile && <DesktopNavbar />}
       <IonHeader>
         <IonToolbar>
           <h1 className="ion-padding-start ion-no-margin">
@@ -340,6 +345,7 @@ export default function CreatePostPage() {
           </IonRow>
         </IonGrid>
       </IonContent>
+      {!isMobile && <Footer />}
     </IonPage>
   );
 }

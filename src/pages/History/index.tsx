@@ -1,16 +1,20 @@
 import {
+  getPlatforms,
   IonBackButton,
   IonButtons,
   IonCol,
   IonContent,
   IonGrid,
   IonHeader,
+  IonItem,
   IonList,
   IonPage,
   IonRow,
   IonToolbar,
 } from '@ionic/react';
 import FullScreenLoadingSpinner from '../../components/FullScreenLoadingSpinner';
+import DesktopNavbar from '../../components/Navbar/DesktopNavbar';
+import Footer from '../../components/Navbar/Footer';
 import PostListItem from '../../components/PostListItem';
 import StudyBuddy from '../../components/StudyBuddy';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -26,8 +30,7 @@ export default function HistoryPage() {
   const handleCheckedError = useCheckedErrorHandler();
   const handleUnknownError = useUnknownErrorHandler();
   const dispatch = useAppDispatch();
-
-  console.log(wasLoadedOnce);
+  const isMobile = getPlatforms().includes('mobile');
 
   usePageInitialLoad(() => {
     if (!wasLoadedOnce) {
@@ -46,83 +49,95 @@ export default function HistoryPage() {
 
   return (
     <IonPage>
+      {!isMobile && <DesktopNavbar />}
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">
             <IonBackButton />
           </IonButtons>
-          <h1 className="ion-padding-start ion-no-margin">About Art</h1>
+          <h1 className="ion-padding-start ion-no-margin">Your History</h1>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
         {isLoading ? (
           <FullScreenLoadingSpinner />
         ) : (
-          <IonGrid fixed>
+          <IonGrid fixed className="ion-padding">
             <IonRow>
               <IonCol>
-                <h1>Since joining BuddyNUS, you have...</h1>
+                <h2 className="ion-no-margin">
+                  Since joining BuddyNUS, you have...
+                </h2>
               </IonCol>
             </IonRow>
             <IonRow>
-              <IonCol size="12" sizeLg="6">
-                Created {userHistory.totalCreatedStudySessions} study sessions
-              </IonCol>
-              <IonCol size="12" sizeLg="6">
-                Applied for {userHistory.totalAppliedStudySessons} study
+              <IonCol size="12" sizeLg="3">
+                Created <b>{userHistory.totalCreatedStudySessions}</b> study
                 sessions
               </IonCol>
-              <IonCol size="12" sizeLg="6">
-                Met {userHistory.numPeopleMet} different people
+              <IonCol size="12" sizeLg="3">
+                Applied for <b>{userHistory.totalAppliedStudySessons}</b> study
+                sessions
               </IonCol>
-              <IonCol size="12" sizeLg="6">
-                Spent {userHistory.totalStudyHours} hours studying
+              <IonCol size="12" sizeLg="3">
+                Met <b>{userHistory.numPeopleMet}</b> different people
+              </IonCol>
+              <IonCol size="12" sizeLg="3">
+                Spent <b>{Math.floor(userHistory.totalStudyHours)}</b> hours
+                studying
               </IonCol>
             </IonRow>
-            <IonRow>
-              <IonCol>
-                <h1>Study Buddies you met recently</h1>
-              </IonCol>
-            </IonRow>
-            <IonRow>
-              <IonCol>
-                <IonList>
-                  {userHistory.recentBuddies &&
-                  userHistory.recentBuddies.length > 0
-                    ? userHistory.recentBuddies.map((buddy) => (
+            {userHistory.recentBuddies && userHistory.recentBuddies.length > 0 && (
+              <>
+                <IonRow>
+                  <IonCol>
+                    <h2>Study Buddies you met recently</h2>
+                  </IonCol>
+                </IonRow>
+                <IonRow>
+                  <IonCol className="ion-no-padding">
+                    <IonList className="ion-no-padding">
+                      {userHistory.recentBuddies.map((buddy) => (
                         <StudyBuddy buddy={buddy}></StudyBuddy>
-                      ))
-                    : 'You have not studied with anyone yet!'}
-                </IonList>
-              </IonCol>
-            </IonRow>
-            <IonRow>
-              <IonCol>
-                <h1>Recent Study Sessions</h1>
-                <p>Here are the last 5 study sessions you had.</p>
-              </IonCol>
-            </IonRow>
-            <IonRow>
-              <IonCol>
-                <IonList>
-                  {userHistory.recentStudySessions &&
-                  userHistory.recentStudySessions.length > 0
-                    ? userHistory.recentStudySessions.map((post) => (
-                        <PostListItem
-                          post={post}
-                          selected={false}
-                          onClick={() => {
-                            return;
-                          }}
-                        />
-                      ))
-                    : "You haven't had any study sessions!"}
-                </IonList>
-              </IonCol>
-            </IonRow>
+                      ))}
+                    </IonList>
+                  </IonCol>
+                </IonRow>
+              </>
+            )}
+
+            {userHistory.recentStudySessions &&
+              userHistory.recentStudySessions.length > 0 && (
+                <>
+                  <IonRow>
+                    <IonCol>
+                      <h2>Recent Study Sessions</h2>
+                      <p className="ion-no-margin">
+                        Here are the last{' '}
+                        {userHistory.recentStudySessions.length} study sessions
+                        you had.
+                      </p>
+                    </IonCol>
+                  </IonRow>
+                  <IonList className="ion-no-padding">
+                    {userHistory.recentStudySessions.map((post) => (
+                      <PostListItem
+                        infoOnly
+                        post={post}
+                        selected={false}
+                        onClick={() => {
+                          return;
+                        }}
+                      />
+                    ))}
+                    <IonItem lines="none"></IonItem>
+                  </IonList>
+                </>
+              )}
           </IonGrid>
         )}
       </IonContent>
+      {!isMobile && <Footer />}
     </IonPage>
   );
 }

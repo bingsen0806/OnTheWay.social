@@ -23,12 +23,14 @@ interface PostListItemProps {
   post: Post;
   selected: boolean;
   onClick: (post: Post) => void;
+  infoOnly?: boolean; // whether to show post with no actions, just show info
 }
 
 export default function PostListItem({
   post,
   selected,
   onClick,
+  infoOnly,
 }: PostListItemProps) {
   const [isModalOpen, setIsModalOpen] =
     useStateWithCallbackLazy<boolean>(false);
@@ -88,10 +90,15 @@ export default function PostListItem({
           </IonCol>
         </IonRow>
       </IonGrid>
-
-      {isMobile && (
-        <PostModal isOpen={isModalOpen} onClose={closeModal} applyPost={post} />
-      )}
+      {isMobile ||
+        (infoOnly && (
+          <PostModal
+            infoOnly={infoOnly}
+            isOpen={isModalOpen}
+            onClose={closeModal}
+            applyPost={post}
+          />
+        ))}
     </IonItem>
   );
 }

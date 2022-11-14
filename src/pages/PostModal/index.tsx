@@ -7,6 +7,7 @@ interface ApplyModalProps {
   isOpen: boolean;
   onClose: ((callback: () => void) => void) | (() => void);
   applyPost: Post;
+  infoOnly?: boolean; // variable representing whether to show post without any info
 }
 
 // export const mockCreatedRequest: CreatedRequest = {
@@ -18,11 +19,16 @@ export default function PostModal({
   isOpen,
   onClose,
   applyPost,
+  infoOnly,
 }: ApplyModalProps) {
   return (
     <IonModal isOpen={isOpen} className={styles['modal-container']}>
       <IonContent fullscreen>
-        <PostInformation onClose={onClose} applyPost={applyPost} />
+        <PostInformation
+          onClose={onClose}
+          applyPost={applyPost}
+          infoOnly={infoOnly}
+        />
       </IonContent>
     </IonModal>
   );

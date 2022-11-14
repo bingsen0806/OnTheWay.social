@@ -19,6 +19,8 @@ import {
 } from '@ionic/react';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { updateFaqs } from '../../redux/slices/faqSlice';
+import DesktopNavbar from '../../components/Navbar/DesktopNavbar';
+import Footer from '../../components/Navbar/Footer';
 export default function Faq() {
   const FAQs = useAppSelector((state) => state.faq.faqs);
   const isMobile = getPlatforms().includes('mobile');
@@ -40,6 +42,7 @@ export default function Faq() {
 
   return (
     <IonPage>
+      {!isMobile && <DesktopNavbar />}
       <IonHeader>
         <IonToolbar>
           <IonTitle>FAQ</IonTitle>
@@ -62,6 +65,7 @@ export default function Faq() {
           </IonRow>
         </IonGrid>
       </IonContent>
+      {!isMobile && <Footer />}
     </IonPage>
   );
 }
