@@ -14,9 +14,7 @@ function Hero() {
         <IonRow className="ion-align-items-center">
           <IonCol size="12" sizeMd="6">
             <div className={styles['contents']}>
-              <h1 className={styles['title']}>
-                Enrich your student life in NUS
-              </h1>
+              <h1 className={styles['title']}>Enrich your student life</h1>
               <p className={styles['description']}>
                 Find a fellow student for your next study session, boost your
                 productivity and make new friends
