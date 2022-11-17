@@ -28,5 +28,5 @@ export const CHANGE_COVER_PHOTO = '/profile/art/cover';
 export const PUBLIC_PROFILE = '/profile/public/';
 export const USER_HISTORY = '/profile/history';
 
-export const INSTAGRAM = 'https://www.instagram.com/buddynus.official/';
+export const INSTAGRAM = 'https://www.instagram.com/ontheway.social/';
 export const FEEDBACK = 'https://forms.gle/LX6w9MdN6xwS3RE27';
