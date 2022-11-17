@@ -10,7 +10,7 @@ import {
   SESSIONS,
 } from '../../routes';
 import { useAuthState } from '../../util/authentication';
-import logo from '../../assets/icon/logo.png';
+import logo from '../../assets/icon/logo-text.png';
 import { person } from 'ionicons/icons';
 import { useAppSelector } from '../../redux/hooks';
 import { getNumberOfUnviewedNotifications } from '../../constants';
