@@ -7,7 +7,6 @@ import {
   IonGrid,
   IonRow,
   IonCol,
-  IonImg,
   getPlatforms,
 } from '@ionic/react';
 import styles from './styles.module.scss';
@@ -193,19 +192,6 @@ export default function ProfilePage() {
                       </IonLabel>
                     </IonItem>
                   </IonList>
-                </IonCol>
-              </IonRow>
-              <IonRow>
-                <IonCol
-                  onClick={() => {
-                    history.push(ABOUT_ART);
-                  }}
-                  className={styles['profile-art-banner-container']}
-                  sizeMd="6"
-                  sizeLg="4"
-                  sizeXl="3"
-                >
-                  <IonImg src="assets/images/profile-art-banner.png"></IonImg>
                 </IonCol>
               </IonRow>
             </IonGrid>
