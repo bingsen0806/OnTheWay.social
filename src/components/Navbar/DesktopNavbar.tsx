@@ -1,11 +1,5 @@
 import { useHistory, useLocation } from 'react-router-dom';
-import {
-  IonButton,
-  IonHeader,
-  IonIcon,
-  IonText,
-  IonToolbar,
-} from '@ionic/react';
+import { IonButton, IonHeader, IonIcon, IonToolbar } from '@ionic/react';
 import styles from './styles.module.scss';
 import {
   BROWSE,
@@ -16,7 +10,7 @@ import {
   SESSIONS,
 } from '../../routes';
 import { useAuthState } from '../../util/authentication';
-import logo from '../../assets/icon/favicon.png';
+import logo from '../../assets/icon/logo.png';
 import { person } from 'ionicons/icons';
 import { useAppSelector } from '../../redux/hooks';
 import { getNumberOfUnviewedNotifications } from '../../constants';
@@ -46,9 +40,6 @@ function DesktopNavbar() {
           onClick={routeToHome}
         >
           <img src={logo} className={styles.logo} alt="logo" />
-          <IonText color="primary">
-            <span className={styles['brand-name']}>OnTheWay</span>
-          </IonText>
         </div>
         <div slot="end">
           <div className={`ion-text-center`}>
