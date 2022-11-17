@@ -2,6 +2,7 @@ import styles from './styles.module.scss';
 import Loading from '../../assets/loading.json';
 import Lottie from 'lottie-react';
 import { useEffect, useState } from 'react';
+import { IonContent, IonPage } from '@ionic/react';
 
 export default function FullScreenLoadingSpinner() {
   const [time, setTime] = useState(0);
@@ -21,9 +22,15 @@ export default function FullScreenLoadingSpinner() {
     };
   }, []);
   return (
-    <>
-      <Lottie animationData={Loading} loop={true} className={styles['icon']} />
-      <p className="ion-text-center">{message}</p>
-    </>
+    <IonPage>
+      <IonContent>
+        <Lottie
+          animationData={Loading}
+          loop={true}
+          className={styles['icon']}
+        />
+        <p className="ion-text-center">{message}</p>
+      </IonContent>
+    </IonPage>
   );
 }
