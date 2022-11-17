@@ -137,7 +137,6 @@ export default function PostInformation({
         dispatch(removePost(applyPost));
       }
       if (location.search.includes('modal=true')) {
-        console.log('postmodal 30');
         history.goBack();
       }
     };

@@ -12,6 +12,7 @@ import {
   IonRow,
   IonToolbar,
 } from '@ionic/react';
+import { useLayoutEffect } from 'react';
 import FullScreenLoadingSpinner from '../../components/FullScreenLoadingSpinner';
 import DesktopNavbar from '../../components/Navbar/DesktopNavbar';
 import Footer from '../../components/Navbar/Footer';
@@ -20,7 +21,6 @@ import StudyBuddy from '../../components/StudyBuddy';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { getUserHistory } from '../../redux/slices/historySlice';
 import useCheckedErrorHandler from '../../util/hooks/useCheckedErrorHandler';
-import usePageInitialLoad from '../../util/hooks/usePageInitialLoad';
 import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
 
 export default function HistoryPage() {
@@ -32,7 +32,7 @@ export default function HistoryPage() {
   const dispatch = useAppDispatch();
   const isMobile = getPlatforms().includes('mobile');
 
-  usePageInitialLoad(() => {
+  useLayoutEffect(() => {
     if (!wasLoadedOnce) {
       dispatch(getUserHistory())
         .unwrap()
@@ -45,7 +45,7 @@ export default function HistoryPage() {
           handleUnknownError(error);
         });
     }
-  });
+  }, [wasLoadedOnce]);
 
   return (
     <IonPage>
@@ -98,7 +98,7 @@ export default function HistoryPage() {
                   <IonCol className="ion-no-padding">
                     <IonList className="ion-no-padding">
                       {userHistory.recentBuddies.map((buddy) => (
-                        <StudyBuddy buddy={buddy}></StudyBuddy>
+                        <StudyBuddy key={buddy.id} buddy={buddy}></StudyBuddy>
                       ))}
                     </IonList>
                   </IonCol>
@@ -113,15 +113,17 @@ export default function HistoryPage() {
                     <IonCol>
                       <h2>Recent Study Sessions</h2>
                       <p className="ion-no-margin">
-                        Here are the last{' '}
-                        {userHistory.recentStudySessions.length} study sessions
-                        you had.
+                        {userHistory.recentStudySessions.length === 1
+                          ? 'Here is the last study session you had.'
+                          : `Here are the last ${userHistory.recentStudySessions.length} study sessions
+                        you had.`}
                       </p>
                     </IonCol>
                   </IonRow>
                   <IonList className="ion-no-padding">
                     {userHistory.recentStudySessions.map((post) => (
                       <PostListItem
+                        key={post.id}
                         infoOnly
                         post={post}
                         selected={false}

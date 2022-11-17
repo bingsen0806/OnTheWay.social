@@ -43,7 +43,6 @@ interface Image {
 }
 
 export default function ProfilePage() {
-  console.log(35, 'hello');
   const history = useHistory();
   const params = new URLSearchParams(window.location.search);
   const userId = params.get('userId');
@@ -64,7 +63,6 @@ export default function ProfilePage() {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
       const fileSize = file.size / 1024 / 1024;
-      console.log(57, fileSize);
       if (fileSize > 10) {
         presentInfoToast('File size cannot be more than 10MB', 'danger');
         return;
@@ -90,7 +88,6 @@ export default function ProfilePage() {
 
   const getUser = () => {
     void dispatch(reloadSelf());
-    console.log('yo');
   };
 
   const routeToFeedback = () => {
