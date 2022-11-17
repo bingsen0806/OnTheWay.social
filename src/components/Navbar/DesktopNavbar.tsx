@@ -47,7 +47,7 @@ function DesktopNavbar() {
         >
           <img src={logo} className={styles.logo} alt="logo" />
           <IonText color="primary">
-            <span className={styles['brand-name']}>BuddyNUS</span>
+            <span className={styles['brand-name']}>OnTheWay</span>
           </IonText>
         </div>
         <div slot="end">

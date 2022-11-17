@@ -36,8 +36,8 @@ export default function AboutArtPage() {
                 <p>
                   Everyday if you create, apply for a study session or accept an
                   applicant, you have the chance to receive 1 AI-generated piece
-                  of art. Your art collection is visible to other users on
-                  BuddyNUS on your profile.
+                  of art. Your art collection is visible to other users on your
+                  profile.
                 </p>
                 <p>
                   What you get every time is completely random. It could be a

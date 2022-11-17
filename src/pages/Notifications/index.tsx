@@ -86,7 +86,7 @@ export default function NotificationsPage() {
   function requestNotificationPermissionsPopup() {
     if (Notification.permission === 'denied') {
       presentErrorToast(
-        'Notifications from BuddyNUS on your browser are currently blocked!'
+        'Notifications from OnTheWay on your browser are currently blocked!'
       );
     } else if (Notification.permission === 'default') {
       Notification.requestPermission()
@@ -126,7 +126,7 @@ export default function NotificationsPage() {
               hasGivenNotificationPermission ? (
                 <p>
                   You will also receive notifications directly to your mobile or
-                  desktop when your browser/BuddyNUS app is open in the
+                  desktop when your browser/OnTheWay app is open in the
                   background!
                 </p>
               ) : (
@@ -207,8 +207,8 @@ export default function NotificationsPage() {
               <p>
                 You can opt to receive notifications directly to your android or
                 desktop, by providing permission for notifications from
-                BuddyNUS. After providing permissions, whenever your browser or
-                the BuddyNUS app is open in the background, you will receive
+                OnTheWay. After providing permissions, whenever your browser or
+                the OnTheWay app is open in the background, you will receive
                 notifications directly on your android phone or desktop.
               </p>
               <p>
@@ -218,7 +218,7 @@ export default function NotificationsPage() {
               </p>
               {isNotificationPermissionDenied && (
                 <p>
-                  You have blocked notifications from BuddyNUS! Please google
+                  You have blocked notifications from OnTheWay! Please google
                   "How to unblock notification from website in{' '}
                   {'<your browser>"'} to learn how to unblock it, then refresh
                   this page!

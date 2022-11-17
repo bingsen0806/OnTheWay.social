@@ -48,7 +48,7 @@ function Footer() {
           className={`${styles['footer-text']} ion-margin-horizontal`}
           onClick={routeToHome}
         >
-          BuddyNUS
+          OnTheWay
         </span>
         <span
           onClick={routeToFaq}

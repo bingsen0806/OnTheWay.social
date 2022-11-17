@@ -33,7 +33,7 @@ export interface ArtCardProps {
 }
 
 const shareText =
-  'Check out my AI-generated art piece that is owned exclusively by me on BuddyNUS!';
+  'Check out my AI-generated art piece that is owned exclusively by me on OnTheWay!';
 
 const title = 'Share your AI-generated art!';
 

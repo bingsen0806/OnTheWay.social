@@ -13,17 +13,17 @@ interface FaqState {
 
 const faqs: Faq[] = [
   {
-    question: 'How does BuddyNUS work?',
+    question: 'How does OnTheWay work?',
     answer:
       "It's simple! Create an account, browse the available sessions to find someone to study with. If none of the sessions fit your schedule, create a new post and wait for others to apply!",
   },
   {
-    question: 'What makes BuddyNUS different?',
+    question: 'What makes OnTheWay different?',
     answer:
-      "Being in NUS is not easy. Studying can take up a large amount of time. That doesn't mean we cant socialize! We focus on making friends while studying! BuddyNUS designs our feature such that users only use it for the intention of meeting up and studying together - not tomorrow, not next week, but right now (or the near future)",
+      "Being in NUS is not easy. Studying can take up a large amount of time. That doesn't mean we cant socialize! We focus on making friends while studying! OnTheWay designs our feature such that users only use it for the intention of meeting up and studying together - not tomorrow, not next week, but right now (or the near future)",
   },
   {
-    question: 'How does BuddyNUS ensure a safe environment?',
+    question: 'How does OnTheWay ensure a safe environment?',
     answer:
       'First, contact details are not shared until both parties accept to study together. Second, only verified NUS members can register on our platform',
   },
@@ -44,8 +44,7 @@ const faqs: Faq[] = [
   },
   {
     question: 'I have feedback or questions, who do I reach out to?',
-    answer:
-      'You can drop us an email at contact@buddynus.com or DM us at @buddynus.official on Instagram',
+    answer: 'You can fill in our feedback form ',
   },
 ];
 

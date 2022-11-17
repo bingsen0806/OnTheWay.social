@@ -1,6 +1,6 @@
 {
-	"appId": "io.ionic.starter",
-	"appName": "BuddyNUS",
-	"webDir": "build",
-	"bundledWebRuntime": false
+  "appId": "io.ionic.starter",
+  "appName": "OnTheWay",
+  "webDir": "build",
+  "bundledWebRuntime": false
 }

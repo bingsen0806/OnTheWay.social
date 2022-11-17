@@ -100,7 +100,7 @@
       "last 1 safari version"
     ]
   },
-  "description": "BuddyNUS application",
+  "description": "OnTheWay application",
   "lint-staged": {
     "*.ts": [
       "eslint --fix"

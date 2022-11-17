@@ -66,7 +66,7 @@ export default function HistoryPage() {
             <IonRow>
               <IonCol>
                 <h2 className="ion-no-margin">
-                  Since joining BuddyNUS, you have...
+                  Since joining OnTheWay, you have...
                 </h2>
               </IonCol>
             </IonRow>

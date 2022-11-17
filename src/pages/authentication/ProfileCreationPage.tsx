@@ -185,7 +185,7 @@ export default function ProfileCreationPage() {
       if (resp.success) {
         history.replace(BROWSE);
         presentInfoToast(
-          'User profile creation successful. Enjoy using BuddyNUS!'
+          'User profile creation successful. Enjoy using OnTheWay!'
         );
         logEvent(analytics, 'profile_create');
       } else {

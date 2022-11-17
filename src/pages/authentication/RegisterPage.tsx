@@ -118,7 +118,7 @@ export default function RegisterPage() {
           </p>
           <IonPopover trigger="nus-email-popover" triggerAction="click">
             <IonContent class="ion-padding">
-              BuddyNUS is currently only deployed for NUS students. To guarantee
+              OnTheWay is currently only deployed for NUS students. To guarantee
               authentic users, we require verified NUS emails during
               registration.
             </IonContent>

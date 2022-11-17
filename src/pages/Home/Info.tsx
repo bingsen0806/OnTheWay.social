@@ -33,7 +33,7 @@ function Info() {
                     A diverse community within NUS
                   </h4>
                   <p>
-                    BuddyNUS connects you to fellow students across the
+                    OnTheWay connects you to fellow students across the
                     different faculties from NUS so you can meet people from
                     diverse backgrounds
                   </p>
