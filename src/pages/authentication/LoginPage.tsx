@@ -23,6 +23,7 @@ import {
 import ResetPasswordModal from './ResetPasswordModal';
 import ButtonSpinner from '../../components/ButtonSpinner';
 import { useHistory } from 'react-router-dom';
+import { loadNotifications } from '../../redux/slices/notificationsSlice';
 interface LoginErrorMessages {
   email: string;
   password: string;
@@ -85,6 +86,7 @@ export default function LoginPage() {
       const promises = [
         dispatch(reloadInitialData()),
         dispatch(reloadInitialPostsData()),
+        dispatch(loadNotifications(true)),
       ];
       await Promise.all(promises);
       logEvent(analytics, 'login');

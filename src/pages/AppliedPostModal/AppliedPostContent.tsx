@@ -21,7 +21,10 @@ import useUnknownErrorHandler from '../../util/hooks/useUnknownErrorHandler';
 import { useState } from 'react';
 import { deleteAppliedRequest } from '../../api/appliedRequests';
 import { useAppDispatch } from '../../redux/hooks';
-import { removeAppliedRequest } from '../../redux/slices/homeSlice';
+import {
+  reloadInitialData,
+  removeAppliedRequest,
+} from '../../redux/slices/homeSlice';
 import useInfoToast from '../../util/hooks/useInfoToast';
 import { reloadInitialPostsData } from '../../redux/slices/postsSlice';
 import ButtonSpinner from '../../components/ButtonSpinner';
@@ -54,12 +57,12 @@ export default function AppliedPostContent({
           switch (resp.message) {
             case ErrorType.POST_NOT_FOUND:
               presentInfoToast('The post has already been deleted');
-              void dispatch(reloadInitialPostsData());
+              void dispatch(reloadInitialData());
               cancelAndClose();
               return;
             case ErrorType.APPLIED_REQUEST_NOT_FOUND:
               presentInfoToast('You have already cancelled this application.');
-              void dispatch(reloadInitialPostsData());
+              void dispatch(reloadInitialData());
               cancelAndClose();
               return;
             default:

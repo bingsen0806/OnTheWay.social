@@ -2,8 +2,10 @@ import { IonContent, IonModal } from '@ionic/react';
 import { CreatedRequest } from '../../api/types';
 import { useEffect, useState } from 'react';
 import { useAppDispatch } from '../../redux/hooks';
-import { replaceCreatedRequest } from '../../redux/slices/homeSlice';
-import { requestReloadOfPosts } from '../../redux/slices/postsSlice';
+import {
+  reloadInitialData,
+  replaceCreatedRequest,
+} from '../../redux/slices/homeSlice';
 import styles from './styles.module.scss';
 import { replaceNotification } from '../../redux/slices/notificationsSlice';
 import CreatedPostInformation from './CreatedPostInformation';
@@ -42,7 +44,7 @@ export default function CreatedPostModal({
       if (createdRequestWasEdited) {
         dispatch(replaceNotification(createdRequestState));
         dispatch(replaceCreatedRequest(createdRequestState));
-        dispatch(requestReloadOfPosts());
+        void dispatch(reloadInitialData());
       }
     });
   }
