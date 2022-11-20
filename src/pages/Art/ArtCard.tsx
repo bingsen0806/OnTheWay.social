@@ -13,7 +13,6 @@ import {
 } from '@ionic/react';
 import { shareOutline, shareSocialOutline, menu } from 'ionicons/icons';
 import { useState } from 'react';
-import { RWebShare } from 'react-web-share';
 import { changeArtVisibility, deleteArt, setCover } from '../../api/art';
 import { Art } from '../../api/types';
 import MultiButtonOverlay from '../../components/MultiButtonOverlay';
@@ -32,10 +31,10 @@ export interface ArtCardProps {
   isCover: boolean;
 }
 
-const shareText =
-  'Check out my AI-generated art piece that is owned exclusively by me on OnTheWay!';
+// const shareText =
+//   'Check out my AI-generated art piece that is owned exclusively by me on OnTheWay!';
 
-const title = 'Share your AI-generated art!';
+// const title = 'Share your AI-generated art!';
 
 export default function ArtCard({ art, isCover }: ArtCardProps) {
   const isIOS = getPlatforms().includes('ios');
@@ -44,6 +43,25 @@ export default function ArtCard({ art, isCover }: ArtCardProps) {
   const handleUnknownError = useUnknownErrorHandler();
   const presentInfoToast = useInfoToast();
   const dispatch = useAppDispatch();
+  const openShareDialog = async () => {
+    console.log('called 48');
+    try {
+      const blob = await fetch(art.image).then((res) => res.blob());
+      const data = {
+        files: [
+          new File([blob], 'image.png', {
+            type: blob.type,
+          }),
+        ],
+        title: 'Image',
+        text: 'image',
+      };
+      await navigator.share(data);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   const publicProfileButton = art.isPublic
     ? {
         name: 'Hide from public profile',
@@ -140,12 +158,11 @@ export default function ArtCard({ art, isCover }: ArtCardProps) {
         <IonGrid>
           <IonRow>
             <IonCol size="1" className={styles['share-button-container']}>
-              <RWebShare data={{ text: shareText, title, url: art.image }}>
-                <IonIcon
-                  icon={isIOS ? shareOutline : shareSocialOutline}
-                  className={styles['share']}
-                ></IonIcon>
-              </RWebShare>
+              <IonIcon
+                icon={isIOS ? shareOutline : shareSocialOutline}
+                onClick={() => void openShareDialog}
+                className={styles['share']}
+              ></IonIcon>
             </IonCol>
             <IonCol size="1">
               <IonButton
