@@ -13,7 +13,7 @@ function SelectedAppliedRequest({
 }: SelectedAppliedRequestProps) {
   if (appliedRequest === null) {
     return (
-      <div>
+      <div className="ion-margin-top">
         <p className="ion-text-center ion-no-margin ion-no-padding">
           No session selected
         </p>
