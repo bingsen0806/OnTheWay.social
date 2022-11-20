@@ -8,6 +8,7 @@ import {
 } from 'react';
 import { useAppDispatch } from '../../redux/hooks';
 import { getInitialData } from '../../redux/slices/homeSlice';
+import { loadNotifications } from '../../redux/slices/notificationsSlice';
 import { getInitialPostsData } from '../../redux/slices/postsSlice';
 import { getInitialSelf } from '../../redux/slices/userSlice';
 
@@ -40,6 +41,7 @@ export const AuthProvider = ({ children, ...rest }: PropsWithChildren) => {
         if (user) {
           promises.push(dispatch(getInitialData()));
           promises.push(dispatch(getInitialSelf()));
+          promises.push(dispatch(loadNotifications(true)));
         }
         void Promise.all(promises).then(() => {
           setLoading(false);
