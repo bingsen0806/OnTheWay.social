@@ -1,6 +1,6 @@
 # Entire Codebase for OnTheWay (Formerly BuddyNUS)
 
-[![Cover photo](https://i.imgur.com/3JEgzax.png)](https://www.youtube.com/watch?v=EYdJOlNlfUo 'STEPS Video')
+[![Cover photo](https://i.imgur.com/RxbDd9x.png)](https://www.youtube.com/watch?v=EYdJOlNlfUo 'STEPS Video')
 
 Main project directory contains frontend code. /backend folder is a git submodule to backend code repository.
 
