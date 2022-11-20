@@ -72,6 +72,7 @@ export default function AppliedPostContent({
           presentInfoToast('Successfully cancelled!');
           cancelAndClose();
           void dispatch(reloadInitialPostsData());
+          void dispatch(reloadInitialData());
         }
       })
       .catch((error) => {
