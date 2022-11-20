@@ -90,15 +90,14 @@ export default function PostListItem({
           </IonCol>
         </IonRow>
       </IonGrid>
-      {isMobile ||
-        (infoOnly && (
-          <PostModal
-            infoOnly={infoOnly}
-            isOpen={isModalOpen}
-            onClose={closeModal}
-            applyPost={post}
-          />
-        ))}
+      {(isMobile || infoOnly) && (
+        <PostModal
+          infoOnly={infoOnly}
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          applyPost={post}
+        />
+      )}
     </IonItem>
   );
 }
