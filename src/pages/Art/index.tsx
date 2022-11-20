@@ -79,7 +79,7 @@ export default function Art() {
           <IonRefresherContent></IonRefresherContent>
         </IonRefresher>
 
-        <IonGrid className="ion-no-padding">
+        <IonGrid className="">
           {obtainedArt.length > 0 ? (
             <IonRow className={styles['row']}>
               <IonCol sizeMd="6" sizeLg="4">

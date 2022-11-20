@@ -1,14 +1,11 @@
 import {
   IonCard,
   IonImg,
-  IonCardHeader,
-  IonCardSubtitle,
   IonCardContent,
   IonGrid,
   IonRow,
   IonCol,
   IonIcon,
-  IonButton,
   getPlatforms,
 } from '@ionic/react';
 import { shareOutline, shareSocialOutline, menu } from 'ionicons/icons';
@@ -44,7 +41,8 @@ export default function ArtCard({ art, isCover }: ArtCardProps) {
   const presentInfoToast = useInfoToast();
   const dispatch = useAppDispatch();
   const openShareDialog = async () => {
-    console.log('called 48');
+    const title = 'Check out my art in OnTheWay!';
+    const text = 'I received an AI-generated art piece unique in the world';
     try {
       const blob = await fetch(art.image).then((res) => res.blob());
       const data = {
@@ -53,8 +51,8 @@ export default function ArtCard({ art, isCover }: ArtCardProps) {
             type: blob.type,
           }),
         ],
-        title: 'Image',
-        text: 'image',
+        title,
+        text,
       };
       await navigator.share(data);
     } catch (e) {
@@ -151,29 +149,32 @@ export default function ArtCard({ art, isCover }: ArtCardProps) {
   return (
     <IonCard key={art.id} className={styles['art-card']}>
       <IonImg src={art.image} className={styles['center-image']} />
-      <IonCardHeader className={styles['description']}>
-        <IonCardSubtitle>{art.description}</IonCardSubtitle>
-      </IonCardHeader>
       <IonCardContent>
-        <IonGrid>
-          <IonRow>
+        <IonGrid className="ion-no-padding ion-no-margin">
+          <IonRow className="ion-justify-content-start ion-no-margin ion-no-padding">
             <IonCol size="1" className={styles['share-button-container']}>
               <IonIcon
-                icon={isIOS ? shareOutline : shareSocialOutline}
-                onClick={() => void openShareDialog}
                 className={styles['share']}
-              ></IonIcon>
-            </IonCol>
-            <IonCol size="1">
-              <IonButton
-                fill="clear"
-                className={styles['menu-button']}
+                color="dark"
+                icon={menu}
                 onClick={() => {
                   setIsOverlayShowing(true);
                 }}
-              >
-                <IonIcon color="dark" icon={menu} />
-              </IonButton>
+              />
+            </IonCol>
+            {navigator.share !== undefined && (
+              <IonCol size="1" className={styles['share-button-container']}>
+                <IonIcon
+                  icon={isIOS ? shareOutline : shareSocialOutline}
+                  onClick={() => {
+                    void openShareDialog();
+                  }}
+                  className={styles['share']}
+                ></IonIcon>
+              </IonCol>
+            )}
+            <IonCol size="12">
+              <p className={styles['description']}>{art.description}</p>
             </IonCol>
           </IonRow>
         </IonGrid>
